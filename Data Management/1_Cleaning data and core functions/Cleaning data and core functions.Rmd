@@ -90,38 +90,173 @@ style_mono_accent(
 2. To introduce essential R packages and functions used in data cleaning
 
 # Outline
-1. Characteristics of clean data
-2. Steps in data cleaning  
+* Characteristics of clean data
+* Steps in data cleaning  
      * Importing data
-     * Structuring a dataset
-     * Formatting data
-     * Trimming a dataset
-     * Coding values
+     * Naming and selecting columns
+     * Deduplication
+     * Column creation, transformation, and re-coding
+     * Adding and filtering rows
      * Arranging and sorting a dataset     
-
+     
 ---
 # Characteristics of clean data
 
+#### Clean data is data that has been structured and formated in a way that facilitates data analysis
+
+### Characteristics of clean data structure:  
+[Note: This and the following three slides could be moved to the pivoting data slide module]
+--
+
+1. Each variable must have its own column
+
+--
+
+2. Each observation must have its own row
+
+--
+
+3. Each value must have its own cell
+
+---
+```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+clean_data_example_1 <- data.frame(case = c("Case 1", "Case 1", "Case 2", "Case 2", "Case 3", "Case 3"), variable = c("age", "sex", "age", "sex", "age", "sex"), value = c("31", "M", "24", "F", "27", "M")) 
+
+clean_data_example_2 <- clean_data_example_1 %>%
+  pivot_wider(names_from = variable, values_from = value) 
+```
+
+### 1.  Each variable must have its own column
+
 .pull-left[
+#### Messy:
+```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 
-- Goal of data cleaning:
-  - Structure and format data in a way that facilitates data analysis
-- Characteristics of clean data structure:  
-  - Each variable must have its own column
-  - Each observation must have its own row
-  - Each value must have its own cell
-
+clean_data_example_1  %>%
+  knitr::kable()
+  
+```
 ]
 
 .pull-right[
+#### Clean:
+```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 
-Illustrations of each characteristic of clean data to be added here
+clean_data_example_2  %>%
+  knitr::kable()
 
+```
 ]
 
 ---
-class: center, middle
+```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 
-.footnote[
-Slides created via the [{xaringan}](https://github.com/yihui/xaringan) R package
+clean_data_example_3 <- data.frame(clinic = c("Clinic1", "Clinic2", "Clinic3"), cases_2017 = c(19, 65, 72), cases_2018 = c(8, 85, 32), cases_2019 = c(12, 45, 88)) 
+
+clean_data_example_4 <- clean_data_example_3 %>%
+  pivot_longer(cols=2:4, names_to="year", values_to = "cases") %>%
+  mutate(year = as.numeric(substr(year, 7,10))) 
+```
+
+### 2.  Each observation must have its own row
+
+.pull-left[
+#### Messy:
+```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+clean_data_example_3  %>%
+  knitr::kable()
+  
+```
 ]
+
+.pull-right[
+#### Clean:
+```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+clean_data_example_4  %>%
+  knitr::kable()
+
+```
+]
+
+---
+```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+clean_data_example_5 <- data.frame(case = c("Case 1", "Case 2", "Case 3", "Case 4"), age_sex = c("31, M", "24, F", "24, M", "33, F")) 
+
+clean_data_example_6 <- clean_data_example_5 %>%
+    separate(age_sex, 
+           into = c("age", "sex"), 
+           sep = ", "
+           ) %>%
+  mutate(age = as.numeric(age))
+```
+
+### 3. Each value must have its own cell
+
+.pull-left[
+#### Messy:
+```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+clean_data_example_5  %>%
+  knitr::kable()
+  
+```
+]
+
+.pull-right[
+#### Clean:
+```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+clean_data_example_6  %>%
+  knitr::kable()
+
+```
+]
+
+.pull-left[
+
+]
+---
+# Steps in Cleaning Data
+
+### Importing data
+
+[This slide will cover "8.3 Import data"]
+
+---
+# Steps in Cleaning Data
+
+### Name and Select Columns
+
+[This slide will cover "8.4 Column names" and 8.5 Select or re-order columns"]
+
+---
+# Steps in Cleaning Data
+
+### Deduplication
+
+[This slide will cover "8.6 Deduplication"]
+
+---
+# Steps in Cleaning Data
+
+### Column creation, transformation, and re-coding
+
+[This slide will cover "8.7 Column creation and transformation", "8.8 Re-code values", and "8.9 Numeric categories"]
+
+---
+# Steps in Cleaning Data
+
+### Adding and filtering rows
+
+[This slide will cover "8.10 Add rows" and "8.11 filter rows", and "8.12 row-wise calculations"]
+
+---
+# Steps in Cleaning Data
+
+### Arranging and sorting a dataset
+
+[This slide will cover "8.12 Arrange and sort"]
