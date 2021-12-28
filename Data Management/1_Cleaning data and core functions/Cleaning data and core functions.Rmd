@@ -1,0 +1,127 @@
+---
+title: "Data Management"
+subtitle: "Cleaning data and core functions"
+output:
+  xaringan::moon_reader:
+    seal: TRUE
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    css: xaringan-themer.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      fig.retina = 3  ## retina more effective than w/h (according to twitter)
+                      # fig.width = 16, 
+                      # fig.height = 10
+                      )
+
+## I dont know why this is included in the example xaringan slide 
+## but is something to do with background images
+options(htmltools.dir.version = FALSE)
+
+## install and load necessary packages 
+pacman::p_load(
+  rio,        # importing data  
+  here,       # relative file pathways  
+  janitor,    # data cleaning and tables
+  lubridate,  # working with dates
+  tidyverse,  # data management and visualization
+  gtsummary,  # summary tables
+  kableExtra, # for output tables
+  xaringanthemer  # for styling presentation 
+)
+
+```
+
+
+```{r  xaringan-themer, include = FALSE}
+
+## define presentation colours (theme) using {xaringanthemer} package 
+## https://pkg.garrickadenbuie.com/xaringanthemer/articles/xaringanthemer.html
+
+## epirhandbook logo colours: 
+  ## blue: "#00538c"
+  ## green: "#007732"
+  ## lighter green: "#48a878"
+
+## see ?style_mono_accent for all the things can customise
+style_mono_accent(
+  base_color = "#00538c", 
+  link_color = "#48a878", 
+  ## add logo to the title page (bit bigger)
+  title_slide_background_image = "https://github.com/appliedepi/epiRhandbook_eng/raw/master/images/epiRhandbook_HexSticker_500x500.png", 
+  title_slide_background_position = "100% 100%", 
+  title_slide_background_size = "25%", 
+  ## add logo to all following slides
+  background_image = "https://github.com/appliedepi/emory_training/raw/master/presentation/images/AppliedEpi_Hex.png", 
+  background_size = "10%",
+  background_position = "100% 0%"
+)
+
+```
+
+```{css, echo=F}
+    .remark-slide table{
+      border: none
+    }
+
+    .remark-slide-table {
+      
+    }
+
+    tr:first-child {
+      border-top: none;
+  }
+    tr:last-child {
+    border-bottom: none;
+  }
+
+```
+
+# Objective
+  
+1. To demonstrate common steps and best practices used in the process of cleaning a dataset
+2. To introduce essential R packages and functions used in data cleaning
+
+# Outline
+1. Characteristics of clean data
+2. Steps in data cleaning  
+     * Importing data
+     * Structuring a dataset
+     * Formatting data
+     * Trimming a dataset
+     * Coding values
+     * Arranging and sorting a dataset     
+
+---
+# Characteristics of clean data
+
+.pull-left[
+
+- Goal of data cleaning:
+  - Structure and format data in a way that facilitates data analysis
+- Characteristics of clean data structure:  
+  - Each variable must have its own column
+  - Each observation must have its own row
+  - Each value must have its own cell
+
+]
+
+.pull-right[
+
+Illustrations of each characteristic of clean data to be added here
+
+]
+
+---
+class: center, middle
+
+.footnote[
+Slides created via the [{xaringan}](https://github.com/yihui/xaringan) R package
+]
