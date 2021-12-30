@@ -383,6 +383,87 @@ clean_data &lt;- messy_data %&gt;%
             death_date = linelist::guess_dates(as.character(death_date))
 )
 ```
+
+---
+
+# Working with dates
+
+#### Common ways of working with dates:
+
+* Extracting aspects of a date, such as the year
+* Aggregating dates into other units, such as epiweek
+* Performing date arithmetic
+* Calculating date intervals
+
+---
+
+# Working with dates
+
+#### Common ways of working with dates:
+
+* Extracting aspects of a date, such as the year
+     * The **lubridate** package includes functions useful for extracting elements of a date:
+          * `month()` -&gt; month number
+          * `day()` -&gt; day (number) of the month
+          * `wday()` -&gt; day number of the week (1-7)
+     
+* Aggregating dates into other units, such as epiweek
+
+* Performing date arithmetic
+
+* Calculating date intervals
+
+---
+
+# Working with dates
+
+#### Common ways of working with dates:
+
+* Extracting aspects of a date, such as the year
+
+* Aggregating dates into other units, such as epiweek
+     * Oftentimes, date date has to be grouped into other time units for analysis or display, such as epiweeks, months, or quarter
+          * **lubridate** has a function `floor_date()` that can be useful
+          * in `floor_date()`, use the argument `unit = "week"` to round a date down to the first date of the week as defined by the argument `week_start =`. 
+          * In this way epiweeks can be defined according to your needs
+     
+* Performing date arithmetic
+
+* Calculating date intervals
+
+---
+
+# Working with dates
+
+#### Common ways of working with dates:
+
+* Extracting aspects of a date, such as the year
+
+* Aggregating dates into other units, such as epiweek
+
+* Performing date arithmetic
+     * Once the date variable is assigned to the date class, it can be treated as a number (of days) for calculations
+     * For example, adding '1' to a date object will add one day to a date.
+     
+* Calculating date intervals
+
+---
+
+# Working with dates
+
+#### Common ways of working with dates:
+
+* Extracting aspects of a date, such as the year
+
+* Aggregating dates into other units, such as epiweek
+
+* Performing date arithmetic
+
+* Calculating date intervals
+     * Intervals (in days) between two dates can be calculated using basic arithmetic so long as both dates are formatted as date objects
+     * E.g.: (date2) - (date1) = days between date1 and date2
+     * Date intervals are returned as objects with class `difftime`, typically displayed as "Time difference of X days".
+     * `as.integer()` can be used to convert a date interval with `difftime` class to `integer` class
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
