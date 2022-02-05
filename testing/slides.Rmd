@@ -67,50 +67,26 @@ style_mono_accent(
 ```
 
 
-# Header  
-## This is a subheader
 
+# testing a learnr embed
 
-- Hello our name is 
-  + blabla
-  + blabla
+```{r, echo=F, out.width="100%"}
+knitr::include_url("https://nealebatra.shinyapps.io/embed1/", height = "400px")
+```
 
-.footnote[
-[1] Something _super_ important to say 
-
-[2] Some **other** stuff 
-
-[3] bla
-]
-
-
-???
-
-- I think these are presenter notes 
-- You can see them in presenter mode 
-  + Keyboard shortcut is 'p' 
----
-
-# Sequential reveal of bullet points
-
-You can reveal stuff bit by bit using to dashes between sections 
-
---
-
-- This is my first point 
-
---
-
-- Then I move on to this fascinating point 
-
---
-
-- And finish with this blabla
 
 
 ---
-class: inverse, center, middle
 
+# iframe test
+
+```
+<iframe src ="https://nealebatra.shinyapps.io/embed1/"
+  style="border: none; width: 100%; height: 500px;"/>
+</iframe>
+```
+
+--
 # This is a section header slide
 
 ---
