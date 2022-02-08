@@ -96,6 +96,34 @@ We are going to together for several days, so let's introduce ourselves...
 .footnote[Bookmark [www.appliedepi.org](www.appliedepi.org)!]  
 
 
+
+---
+# Our team
+
+Applied Epi has 130 team members located in 33 countries.
+.pull-left[
+- Local epidemiologists and public health practitioners
+- Emergency responders
+- Data science education specialists
+- Applied researchers
+- Geospatial (GIS) experts
+]
+
+.pull-right[
+
+![](https://raw.githubusercontent.com/appliedepi/presentations/main/images/team_locations.jpg)
+
+]
+
+
+
+---
+# Our team
+
+We enjoy supporting local epis and helping them transition to R!
+
+![](https://raw.githubusercontent.com/appliedepi/presentations/main/images/team_faces.png)
+
 ---
 # Partnerships
 
@@ -109,7 +137,7 @@ We partner with global and local entities to support frontline practitioners
 
 .pull-right[
 
-![](https://raw.githubusercontent.com/appliedepi/applied_epi_website_airspace/main/assets/images/partners-blur.jpg?token=GHSAT0AAAAAABPYWORIVEXPEXRGRCXA6WF2YQCLHRQ)
+![](https://raw.githubusercontent.com/appliedepi/presentations/main/images/partners-blur.jpg)
 
 ]
 
@@ -119,95 +147,129 @@ We partner with global and local entities to support frontline practitioners
 
 
 ---
-# Our team
-
-Applied Epi has 130 team members located in 33 countries.
-.pull-left[
-- Local epidemiologists and public health practitioners
-- Emergency responders
-- Data science education specialists
-- Applied researchers
-- Geospatial (GIS) experts
-]
-
-.pull-right[
-
-![](https://raw.githubusercontent.com/appliedepi/applied_epi_website_airspace/main/assets/images/team_locations.jpg?token=GHSAT0AAAAAABPYWORI46ZELIHETAD7IBT2YQCLP4Q)
-
-]
-
-
-
----
-# Our team
-
-Applied Epi has 130 team members located in 33 countries.
-
-![](https://raw.githubusercontent.com/appliedepi/presentations/main/images/team_faces.png)
-
-.pull-left[
-- Local epidemiologists and public health practitioners
-- Emergency responders
-]
-
-.pull-right[
-- Data science education specialists
-- Applied researchers
-- Geospatial (GIS) experts
-]
-
----
 
 # Our offerings
 
+A comprehensive suite of services
 
+![](https://raw.githubusercontent.com/appliedepi/presentations/main/images/Applied_Epi_Offerings.png)
 
 
 
 
 
 ---
-# Instructor team  
+
+# The Epidemiologist R Handbook
+
+![](https://raw.githubusercontent.com/appliedepi/presentations/main/images/Epi%20R%20Handbook%20Banner%20Beige%201500x500.png)
+
+- Written by epidemiologists, for epidemiologists
+- 120,000 users globally
+- 50 chapters of best-practice code examples for public health practice
+- Available free, online and offline
+- *"An open-source unicorn"* -Github 
+
+.footnote[Access at [www.epiRhandbook.com](www.epiRhandbook.com)]
+
+
+---
+# Your instructors  
+
+.left-column[
+
+![](https://raw.githubusercontent.com/appliedepi/presentations/main/images/instructors/neale.png)
+
+
+![](https://raw.githubusercontent.com/appliedepi/presentations/main/images/instructors/paula.png)
+]
+
 
 * **Neale Batra**  
- - Founder of the Epi R Handbook.  
- - Previously @Philly, @SantaClaraCounty, @WHO, @CDC, @USAID/PEPFAR, @MSF.  
+ - President and co-founder, Applied Epi  
+ - Previously @CaliforniaEIS @Philly, @WHO, @MSF, @CDC, @USAID/PEPFAR  
 * **Alex Spina**  
- - Alum of EPIET (European EIS). Med student and epi consultant for @MSF and @WHO.  
+ - EPIET, mmed student, epi consultant for @MSF and @WHO 
 * **Mathilde Mousset**  
  - R programmer / Data manager at Epicentre (@MSF). PhD in evolutionary ecology.  
 * **Henry Laurenson-Schafer**  
- - Epi/data scientist with WHO Geneva on COVID response. PhD in molecular biology/bioinformatics.  
+ - Epi/data scientist, WHO Geneva COVID response. PhD molecular biology/bioinformatics.  
 
-...
 
 ???
 
 
 
 
----
-
-What are some of your concerns or worries about learning R?
-
-What hopes do you have about learning R?
 
 
 ---
-# Today's session   
+# Your backgrounds
 
-Today is primarily *explanation* and *demonstration*. 
+Survey results, describing the experience levels of course participants
 
-We are going to assume basic understanding of *R* syntax. 
 
-We also assume you have reviewed the Handbook pages on [R Basics](https://epirhandbook.com/r-basics.html), [Cleaning data and core functions](https://epirhandbook.com/cleaning-data-and-core-functions.html), and [Reports with R markdown](https://epirhandbook.com/reports-with-r-markdown.html) 
 
+---
+# Your hopes and fears
+
+Survey results
+
+Your objectives in learning R 
+Your concerns about learning R?
+
+
+
+---
+# Pedagogical approach   
+
+--
+
+Case study-based learning
+
+Ebola outbreak in Guinea
+
+--
+
+EDGE - Explain, Demonstrate, Guide, Evaluate
+
+***Fix image*** TODO
+
+Lecutres, Live coding demos, Guided exercises, evaluate
 ![](https://github.com/appliedepi/emory_training/blob/master/presentation/images/EDGE.png?raw=true)  
 
 
 
 ???
 - The learning process can be summarised into this acronym "EDGE". Today's session is primarily a *demonstration* with question & answer session. We assume that you have read at least some of the relevant pages in the Epi R Handbook prior to this session. We also offer trainings in which we guide you through case studies with hands-on coaching. 
+
+
+---
+# Course format
+
+
+
+---
+# Schedule
+
+```{r, echo=FALSE, warning=F, message=F}
+outline <- dplyr::tribble(
+  ~Module, ~Date, ~`Time (GMT)`, ~Topic,
+  "1", "Mo 28/3", "0900-1200", "Introduction to R for applied epidemiology",
+  "2", "Mo 28/3", "1300-1630", "Syntax",
+  "3", "Tu 29/3", "0900-1200", "More",
+  "4", "Tu 29/3", "1300-1630", "More",
+  "5", "We 30/3", "0900-1200", "More",
+  "6", "We 30/3", "1300-1630", "More",
+  "7", "Th 31/3", "0900-1200", "More",
+  "8", "Th 31/3", "1300-1630", "More"
+)
+
+outline %>% 
+  flextable::qflextable()
+```
+
+
 
 ---
 # Outline
