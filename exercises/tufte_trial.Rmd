@@ -1,0 +1,81 @@
+---
+title: "AE_exercise_tufte_book"
+author: "Applied Epi"
+date: "2/14/2022"
+output:
+  bookdown::tufte_html_book:
+    toc: false
+    toc: 
+    css: tufte.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+klippy::klippy(position = c('top', 'left'))
+
+
+# To read more about tufte handbout style, see this:
+# https://rstudio.github.io/tufte/
+
+# start each section with CAPS and non-indented paragraph
+#tufte::newthought()
+
+#You can arrange for figures to span across the entire page by using the chunk option fig.fullwidth = TRUE
+
+#If you’d like to place ancillary information in the margin without the sidenote mark (the superscript number), you can use the margin_note() function from tufte in an inline R expression. If you need to write anything in Markdown syntax, please use the marginfigure block described previously.
+
+#You can use the kable() function from the knitr package to format tables that integrate well with the rest of the Tufte handout style. The table captions are placed in the margin like figures in the HTML output.
+
+#If you want to add a right-aligned footer for the quote, you may use the function quote_footer() from tufte in an inline R expression.
+
+#generate two plots in one figure environment with the chunk option fig.show = 'hold'
+
+
+
+```
+
+# Applied Epi
+
+
+```{r, out.width = "100%", fig.align = "center", echo=F}
+knitr::include_graphics(here::here("images", "Epi R Handbook banner beige 1500x500.png"))
+# library(knitr)
+# opts_chunk$set(list(echo = FALSE, eval = FALSE))
+```
+
+
+# Begin
+
+Begin by opening the R project. 
+
+
+## Load packages
+
+```{r}
+pacman::p_load(rio, janitor, here, tidyverse)
+
+```
+
+## Import the data
+
+Now we use **rio**'s `import()` to import the data.
+
+```{r}
+
+linelist <- import(here("data", "linelist_cleaned.rds"))
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+```{r, fig.margin = T, echo = F}
+hist(linelist$age)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

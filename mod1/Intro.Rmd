@@ -1,7 +1,7 @@
 ---
-title: "New beginnings"
-subtitle: "Getting started with R:<br> an overview and demonstration"
-author: '[Applied Epi](http:://www.appliedepi.org) <br><br> `r icons::icon_style(icons::fontawesome("twitter"), fill = "white")` [epiRhandbook](https://twitter.com/epiRhandbook) <br> `r icons::icon_style(icons::fontawesome("paper-plane"), fill = "white")` [epirhandbook@gmail.com](mailto:contact@appliedepi.org)'
+title: "R for Applied Epidemiology and Public Health"
+subtitle: "<br>Welcome and course overview"
+author: '[www.appliedepi.org](http:://www.appliedepi.org) <br> `r icons::icon_style(icons::fontawesome("paper-plane"), fill = "white")` [contact@appliedepi.org](mailto:contact@appliedepi.org) <br> `r icons::icon_style(icons::fontawesome("twitter"), fill = "white")` [`@epiRhandbook`](https://twitter.com/epiRhandbook)'
 date: ""
 output:
   xaringan::moon_reader:
@@ -98,7 +98,7 @@ We are going to together for several days, so let's introduce ourselves...
 
 
 ---
-# Our team
+# Our team of frontline epis
 
 Applied Epi has 130 team members located in 33 countries.
 .pull-left[
@@ -118,7 +118,7 @@ Applied Epi has 130 team members located in 33 countries.
 
 
 ---
-# Our team
+# A global grassroots movement
 
 We enjoy supporting local epis and helping them transition to R!
 
@@ -221,9 +221,7 @@ Your concerns about learning R?
 
 
 ---
-# Pedagogical approach   
-
---
+# Case-study-based learning   
 
 Case study-based learning
 
@@ -235,7 +233,7 @@ EDGE - Explain, Demonstrate, Guide, Evaluate
 
 ***Fix image*** TODO
 
-Lecutres, Live coding demos, Guided exercises, evaluate
+Lectures, Live coding demos, Guided exercises, evaluate
 ![](https://github.com/appliedepi/emory_training/blob/master/presentation/images/EDGE.png?raw=true)  
 
 
@@ -245,9 +243,33 @@ Lecutres, Live coding demos, Guided exercises, evaluate
 
 
 ---
+# Course overview
+
+**Audience:** Epidemiologists, public health practitioners, clinicians, applied researchers.  
+
+**Objectives:** Participants learn how to use R, using standard datasets for applied epidemiology in the context of an outbreak investigation case study.
+
+**Prerequisites:**
+- Familiarity with epidemiological concepts.  
+- Participants with no prior coding experience (e.g. SAS, Stata) are advised to take 1 extra day for the course.  
+- Create account at [Applied Epi Community](www.community.appliedepi.org) (online Q&A support forum)
+
+**Take-aways** 
+- Comfort using R to import, clean, and perform basic analyses, transformations, and visualizations, and reporting on epidemiological data
+- Ability to self-learn and expand your R knowledge  
+- Certificate of participation
+
+---
 # Course format
 
+![](https://raw.githubusercontent.com/appliedepi/presentations/main/images/CourseTimeline.png)  
+35.5 hours synchronous instruction
 
+- *Comprehensive instruction:* 4 days (28 hours)
+
+- *Sustained support:* 7.5 hours of follow-up sessions to help apply the skills to your work context (5 x 1.5-hour group “office hours” sessions)
+
+Note: Applied Epi offers subscription "R Help Desk" services if you want continued on-call support in the months/years ahead. 
 
 ---
 # Schedule
@@ -255,19 +277,20 @@ Lecutres, Live coding demos, Guided exercises, evaluate
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
   ~Module, ~Date, ~`Time (GMT)`, ~Topic,
-  "1", "Mo 28/3", "0900-1200", "Introduction to R for applied epidemiology",
-  "2", "Mo 28/3", "1300-1630", "Syntax",
-  "3", "Tu 29/3", "0900-1200", "More",
-  "4", "Tu 29/3", "1300-1630", "More",
-  "5", "We 30/3", "0900-1200", "More",
-  "6", "We 30/3", "1300-1630", "More",
-  "7", "Th 31/3", "0900-1200", "More",
-  "8", "Th 31/3", "1300-1630", "More"
+  "1", "Mo 28/3", "0900-1200", "Course overview, R projects, R syntax, data import",
+  "2", "Mo 28/3", "1300-1630", "Tidy data, data cleaning, core R functions, pipes",
+  "3", "Tu 29/3", "0900-1200", "Transforming data, pivots, joins, groups, factors",
+  "4", "Tu 29/3", "1300-1630", "Data visualization with ggplot2",
+  "5", "We 30/3", "0900-1200", "Data visualization with ggplot2",
+  "6", "We 30/3", "1300-1630", "Basic statistics, summary tables, R markdown reports",
+  "7", "Th 31/3", "0900-1200", "Automated reports with R Markdown",
+  "8", "Th 31/3", "1300-1630", "Finalize case study, getting help, closing"
 )
 
 outline %>% 
   flextable::qflextable()
 ```
+
 
 
 

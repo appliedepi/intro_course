@@ -1,0 +1,10 @@
+#header.fluid-row::before {
+   content: "";
+   height: 150px;
+   width: 150px;
+   float: right;
+   background-image: url("logo-black.png");
+   background-size: contain;
+   background-position: center center;
+   background-repeat: no-repeat;
+ }
