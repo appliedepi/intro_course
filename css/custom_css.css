@@ -1,0 +1,7 @@
+h3 {
+  margin-bottom: 0.4em;
+}
+ 
+#tutorial-topic:before { 
+  content: url(img/logo.png) ;
+}

@@ -1,0 +1,220 @@
+---
+title: "R Setup and Data Import"
+output: 
+  learnr::tutorial:
+    css: css/css_custom.css
+runtime: shiny_prerendered
+description: >
+  Learn how to get started with R and RStudio, and how to import a dataset
+---
+
+<!-- Add JavaScript code for making the exercise code larger -->
+<script language="JavaScript" src="js/exercise-font-size.js"></script>
+
+```{r setup, include=FALSE}
+# load packages ----------------------------------------------------------------
+library(learnr)
+library(gradethis)
+library(tidyverse)
+library(here)
+library(rio)
+library(basket) # not sure if we need this
+library(etude) # helper functions for gradethis
+
+# set options for exercises and checking ---------------------------------------
+gradethis_setup()
+
+learnr::tutorial_options(exercise.timelimit = 60) 
+  #exercise.checker = gradethis::grade_learnr) 
+    # alternatively, submitr::null_code_checker
+
+
+# event recorder ---------------------------------------------------------------
+# see https://github.com/dtkaplan/submitr/blob/master/R/make_a_recorder.R
+tutorial_options(exercise.eval = FALSE)  # pre-evaluate exercises
+
+new_recorder <- function(tutorial_id, tutorial_version, user_id, event, data) {
+    cat(
+      tutorial_id, 
+      " (v", tutorial_version, "); ",
+      format(Sys.time(), "%Y-%M%-%D %H:%M:%S %Z"), "; ",
+      user_id, "; ",
+      event, "; ",
+      data$label, "; ",
+      data$answers, "; ",
+      data$code, "; ",
+      data$correct, "\n", sep = "",
+      
+      file = here::here("event_records", "learnr_basics.txt"),
+      append = TRUE)
+}
+
+options(tutorial.event_recorder = new_recorder)
+
+
+# hide non-exercise code chunks ------------------------------------------------
+knitr::opts_chunk$set(echo = FALSE)
+
+
+# data prep --------------------------------------------------------------------
+linelist_raw <- rio::import(here::here("data", "linelist_raw.xlsx"))
+linelist <- rio::import(here::here("data", "linelist_cleaned.rds"))
+```
+
+## Introduction to R for Applied Epidemiology and Public Health
+
+
+```{r appliedepi-banner, fig.margin = TRUE, echo = FALSE, fig.width = 3, out.width = "100%", fig.cap = ""}
+knitr::include_graphics("../images/moz-banner.png")
+```
+
+
+Write the R code required to add two plus two:
+
+<details>
+<!--
+NOTE: all within details tag collapsed
+-->
+<summary style='text-decoration: underline; color: darkgreen;'>Click here to read a hint</summary>
+
+Explanatory hint
+</details>
+
+<details>
+<!--
+NOTE: all within details tag collapsed
+-->
+<summary style='text-decoration: underline; color: red;'>Click here to see the solution (try it yourself first!)</summary>
+
+```{r eval = F, echo=T}
+pacman::p_load(here, rio, tidyverse)
+```
+
+Explanatory
+</details>
+
+
+#### Welcome
+
+
+Welcome to the course "Introduction to R for applied epidemiologists", offered for free by [Applied Epi](www.appliedepi.org) - a non-profit organisation that offers open-source tools, training, and support to frontline public health practitioners.  
+
+This interactive tutorial focuses on **setting up R for the first time, an introduction to basic R coding, and how to import your dataset into R**.
+
+If you are already comfortable with the above skills, consider taking instead our tutorials for R in applied epidemiology, on [data cleaning], [data visualisation], or [tidy data best practices].
+
+This tutorial draws from chapters of our free [Epidemiologist R handbook](https://epirhandbook.com/en/) such as [R Basics ](https://epirhandbook.com/en/r-basics.html) and [Import and Export](https://www.epirhandbook.com/en/import-and-export.html). The Epi R Handbook has over 50 chapters, has helped over 110,000 people learn R, and is also available for offline use. 
+
+
+#### Target Audience  
+
+This course is designed with the following objectives: 
+
+* To be friendly to people who have never used a programming language before
+* To teach R emphasizing examples, datasets, and challenges commonly faced by applied epidemiologists
+* To be modular - so that you can skip to section most relevant to you
+
+
+We expect that you know how to do ... TO DO
+
+
+
+#### Other languages
+This course is available...
+
+
+#### Offline / Online
+
+You can access this tutorial offline by downloading our R package ... 
+If viewing offline, you can view the videos by doing ...
+
+
+
+#### Learning goals
+
+In this tutorial you will:  
+
+* Become familiar with typing code "commands"
+* "Importing" (loading) a dataset into R to conduct cleaning and other modifications
+* View a dataset in R
+* Review and access columns in a dataset
+* Key operators and functions
+* Piping and pipe operators
+* Errors and warnings
+
+
+
+
+
+#### Data consent
+
+This tutorial is anonymously collecting your entries, for purposes of improvement... by continuing you consent to this collection and use. 
+
+
+
+#### Who made this course  
+
+This course is designed by Applied Epi ... epidemiologists with decades of ground-level experience in outbreak response and local public health work. 
+
+
+
+
+
+## Data used in this tutorial
+
+In this tutorial we will use the following datasets. Please take a few minutes to review the structure and content of each dataset before continuing.
+
+Use the arrows on the right to scroll through hidden columns. Note that these are "raw" (messy) datasets that mimic problems commonly found in real-life epidemiological datasets.  
+
+
+### **A "linelist" of cases in a fictional (not real) Ebola outbreak***
+
+A "linelist" is a term used in applied epidemiology to refer to a table that contains key information about each case or suspect case in an outbreak. Each row represents one case, and the columns contain variables such as age, sex, date of symptom onset, outcomes, etc.
+
+This dataset contains `r nrow(linelist_raw)` rows and `r ncol(linelist_raw)` columns. Below are the first 5 rows:  
+
+```{r}
+head(linelist_raw)
+```
+
+
+
+### **Aggregated data from malaria surveillance in a fictional country**  
+
+Aggregated data in epidemiology usually means a table of counts for each facility, or district, etc. Sometimes, the counts can also be per day, week, or month.  
+
+In this dataset, each facility reported *daily* case counts of rapid-test (RDT)-confirmed malaria. Thus, each row represents the number of cases for a specific facility on a specific day.  
+
+
+
+### Tidy Data
+
+We highly recommend doing our tutorial on Tidy Data in Applied Epidemiology. Collecting, formatting, and preparing your dataset *before* importing it into R is a critical step!
+
+LINK
+
+VIDEO TEASER
+
+
+### Quiz
+
+*You can include any number of single or multiple choice questions as a quiz. Use the `question` function to define a question and the `quiz` function for grouping multiple questions together.*
+
+Some questions to verify that you understand the purposes of various base and recommended R packages:
+
+```{r quiz}
+quiz(
+  question("Which package contains functions for installing other R packages?",
+    answer("base"),
+    answer("tools"),
+    answer("utils", correct = TRUE),
+    answer("codetools")
+  ),
+  question("Which of the R packages listed below are used to create plots?",
+    answer("lattice", correct = TRUE),
+    answer("tools"),
+    answer("stats"),
+    answer("grid", correct = TRUE)
+  )
+)
+```

@@ -1,11 +1,10 @@
 ---
-title: "AE_exercise_tufte_book"
+title: "Exercise 1"
 author: "Applied Epi"
 date: "2/14/2022"
 output:
   bookdown::tufte_html_book:
     toc: false
-    toc: 
     css: tufte.css
 ---
 
