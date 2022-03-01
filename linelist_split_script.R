@@ -1,12 +1,62 @@
 # convert single EVD linelist to multiple
 
-pacman::p_load(rio, here, lubriate, tidyverse)
+pacman::p_load(rio, here, lubridate, janitor, tidyverse)
 
-linelist_cleaned <- import(here::here("data", "linelist_cleaned.rds"))
+linelist_raw <- import(here::here("data", "linelist_raw.xlsx"))
 
 ggplot(data = linelist_cleaned,
        aes(x = date_onset))+
      geom_histogram()
+
+
+
+
+###############################
+# Port Hospital mortality surge
+linelist_raw %>% tabyl(hospital, outcome) %>% 
+     adorn_percentages() %>% 
+     adorn_pct_formatting()
+
+
+
+linelist_raw <- linelist_raw %>% 
+     
+     mutate(`hosp date` = ymd(`hosp date`)) %>% 
+     filter(`date onset` > as.Date("2013-06-01") | (is.na(`date onset`) & !hospital %in% c("Hospital A", "Hospital B"))) %>% 
+     mutate(outcome = ifelse(
+          str_detect(hospital, "Port") &
+          lubridate::month(`hosp date`) %in% 6:10 &
+          lubridate::year(`hosp date`) == 2014 &
+          row_number() %% 2 == 1,
+          
+          "Death",
+          outcome)
+          )
+
+
+linelist_raw %>% tabyl(hospital, outcome) %>% 
+     adorn_percentages() %>% 
+     adorn_pct_formatting()
+
+
+
+linelist_raw %>% 
+     group_by(hospital, week = floor_date(`hosp date`, unit = "week")) %>% 
+     summarise(
+          cases = sum(!is.na(outcome)),
+          death = sum(outcome == "Death", na.rm=T)) %>% 
+     complete(                                  # ensure all days appear even if no cases
+          week = seq.Date(                      # re-define date colume as daily sequence of dates
+               from = min(week, na.rm=T), 
+               to = max(week, na.rm=T),
+               by = "week"),
+          fill = list(n = 0)) %>% 
+     mutate(CFR = death / cases) %>% 
+     
+     mutate(CFR = ifelse(cases < 3, NA, CFR)) %>% 
+     
+     ggplot(aes(x = week, y = hospital, fill = CFR))+
+          geom_tile()
 
 
 
