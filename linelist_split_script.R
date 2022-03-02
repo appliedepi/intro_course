@@ -4,26 +4,160 @@ pacman::p_load(rio, here, lubridate, janitor, tidyverse)
 
 linelist_raw <- import(here::here("data", "linelist_raw.xlsx"))
 
-ggplot(data = linelist_cleaned,
-       aes(x = date_onset))+
+
+
+
+########################
+# plot distribution of dates
+ggplot(data = linelist_raw,
+       aes(x = ymd(`date onset`)))+
      geom_histogram()
 
+# filter to only the later outbreak
+linelist_raw <- linelist_raw %>% 
+     filter(`date onset` > as.Date("2013-06-01") | (is.na(`date onset`) & !hospital %in% c("Hospital A", "Hospital B"))) %>% 
+     mutate(`hosp date` = ymd(`hosp date`))
+
+# Re-look at the plot
+ggplot(data = linelist_raw, aes(x = ymd(`date onset`)))+
+     geom_histogram()
+
+
+
+# GIS
+
+# Import gis linelist (1000 random from the real linelist that has districts attached)
+######################################################################################
+ll_adm3 <- import(here("data", "linelist_cleaned_with_adm3.rds")) %>% 
+     as.data.frame() %>%  # convert to get rid of geometries
+     select(-c(geometry, days_onset_hosp, age_cat, age_cat5)) %>% 
+     
+     # remove earlier outbreak
+     filter(date_onset < as.Date("2014-12-01") & date_hospitalisation < as.Date("2014-12-01")) %>% 
+     
+     # Make Port Hospital mortality increase
+     mutate(outcome = ifelse(
+               str_detect(hospital, "Port") &
+                    lubridate::month(date_hospitalisation) %in% 8:12 &
+                    lubridate::year(date_hospitalisation) == 2014 &
+                    row_number() %% 2 == 1,
+               "Death",
+               outcome)
+     )
+     
+     
+# check dates and epicurve
+ggplot(data = ll_adm3, aes(x = ymd(date_onset)))+
+     geom_histogram()
+
+# define surveillance linelist
+phase1_surv <- ll_adm3 %>%
+     select(-c(date_hospitalisation, time_admission, outcome, date_outcome, date_infection, infector, source, generation, ct_blood)) %>% 
+     rename(
+          "onset date" = date_onset,        # make column names messy
+          "age unit" = age_unit,
+          "wt (kg)" = wt_kg,
+          "ht (cm)" = ht_cm,
+          ) 
+
+# define medical linelist
+phase1_med <- ll_adm3 %>% 
+     select(case_id, age, age_unit, gender, date_hospitalisation, time_admission, outcome, date_outcome) %>% 
+     rename(
+          "age unit" = age_unit,
+          "hospitalisation date" = date_hospitalisation,
+          "admission time" = time_admission,
+          "outcome date" = date_outcome)
+     
+# make case investigation dataset
+phase1_source <- ll_adm3 %>% 
+     select(case_id, age, age_unit, gender, date_infection, infector, source, generation) %>% 
+     rename(
+          "age unit" = age_unit,
+          "infection date" = date_infection)
+          
+# make lab dataset
+phase1_lab <- ll_adm3 %>% 
+     select(case_id, ct_blood) %>% 
+     rename(
+          "Blood CT" = ct_blood)
+
+# EXPORT
+########
+export(phase1_surv, here("data", "surveillance_linelist_12012014.xlsx"))
+export(phase1_med, here("data", "medical_linelist_12012014.xlsx"))
+export(phase1_lab, here("data", "lab_results_12012014.xlsx"))
+export(phase1_source, here("data", "case_investigations_12012014.xlsx"))
+export(phase1_surv, here("data", "district_populations.xlsx"))
+
+# CFR plot
+##########
+ll_adm3 %>% 
+     group_by(hospital, week = floor_date(date_hospitalisation, unit = "week")) %>% 
+     summarise(
+          cases = sum(!is.na(outcome)),
+          death = sum(outcome == "Death", na.rm=T)) %>% 
+     complete(                                  # ensure all days appear even if no cases
+          week = seq.Date(                      # re-define date colume as daily sequence of dates
+               from = min(week, na.rm=T), 
+               to = max(week, na.rm=T),
+               by = "week"),
+          fill = list(n = 0)) %>% 
+     mutate(CFR = death / cases) %>% 
+     
+     mutate(CFR = ifelse(cases < 3, NA, CFR)) %>% 
+     
+     ggplot(aes(x = week, y = hospital, fill = CFR))+
+     geom_tile()
+
+
+
+
+###########
+### OLD ###
+###########
+
+
+
+
+
+
+### Spatial Join
+################
+# Create sf object
+linelist_sf <- linelist_raw %>%
+     drop_na(lon, lat) %>% 
+     sf::st_as_sf(coords = c("lon", "lat"), crs = 4326)
+
+class(linelist_sf)
+
+# ADM3 level clean
+sle_adm3_raw <- sf::read_sf(here("data", "shp", "sle_adm3.shp"))
+
+sle_adm3 <- sle_adm3_raw %>%
+     clean_names() %>% # standardize column names
+     filter(admin2name %in% c("Western Area Urban", "Western Area Rural")) # filter to keep certain areas
+
+# join the administrative boundary file to the linelist, based on spatial intersection
+linelist_adm <- linelist_sf %>% 
+     sf::st_join(sle_adm3, join = st_intersects)
 
 
 
 ###############################
 # Port Hospital mortality surge
-linelist_raw %>% tabyl(hospital, outcome) %>% 
+# pre-edit CFR by week
+linelist_raw %>% 
+     tabyl(hospital, outcome) %>% 
      adorn_percentages() %>% 
      adorn_pct_formatting()
 
 
-
+# Make pot hospital more deadly in certain months of 2014
 linelist_raw <- linelist_raw %>% 
-     
-     mutate(`hosp date` = ymd(`hosp date`)) %>% 
-     filter(`date onset` > as.Date("2013-06-01") | (is.na(`date onset`) & !hospital %in% c("Hospital A", "Hospital B"))) %>% 
-     mutate(outcome = ifelse(
+        mutate(
+
+          outcome = ifelse(
           str_detect(hospital, "Port") &
           lubridate::month(`hosp date`) %in% 6:10 &
           lubridate::year(`hosp date`) == 2014 &
@@ -53,7 +187,7 @@ linelist_raw %>%
           fill = list(n = 0)) %>% 
      mutate(CFR = death / cases) %>% 
      
-     mutate(CFR = ifelse(cases < 3, NA, CFR)) %>% 
+     mutate(CFR = ifelse(cases < 5, NA, CFR)) %>% 
      
      ggplot(aes(x = week, y = hospital, fill = CFR))+
           geom_tile()
@@ -66,11 +200,11 @@ linelist_raw %>%
 ############################################################
 
 linelist1 <- linelist_raw %>% 
-     filter(date_onset < ymd("2014-09-01") &
-            date_hospitalisation < ymd("2014-09-01"))
+     filter(`date onset` < ymd("2014-09-01") &
+            `hosp date` < ymd("2014-09-01"))
 
 ggplot(data = linelist1,
-       aes(x = date_onset))+
+       aes(x = ymd(`date onset`)))+
      geom_histogram()
 
 # Make Phase 1 linelists
