@@ -19,6 +19,7 @@ pacman::p_load(
      rio,
      here,
      janitor,
+     epikit,
      gtsummary,
      flextable,
      tidyverse
@@ -28,8 +29,19 @@ pacman::p_load(
 ## Load data
 
 ```{r}
-surv_linelist_raw <- rio::import(here("data", "linelist_raw.xlsx"))
+# Import each dataset
+surv_raw <- rio::import(here("data", "surveillance_linelist_12012014.xlsx"))
 
+central <- rio::import(here("data", "Central Hospital 12012014.csv"))
+military <- rio::import(here("data", "Military Hospital 12012014.csv"))
+other <- rio::import(here("data", "Other Hospitals 12012014.csv"))
+port <- rio::import(here("data", "Port Hospital 12012014.csv"))
+stmarks <- rio::import(here("data", "SMMH 12012014.csv"))
+
+
+#med_raw <- rio::import(here("data", "medical_linelist_12012014.xlsx"))
+lab_raw <- rio::import(here("data", "lab_results_12012014.xlsx"))
+source_raw <- rio::import(here("data", "case_investigations_12012014.xlsx"))
 ```
 
 
@@ -37,24 +49,122 @@ surv_linelist_raw <- rio::import(here("data", "linelist_raw.xlsx"))
 
 Today's district is `r params$district` and today's date is `params$date`. 
 
+## Data cleaning
+
 ```{r}
-print(params$date)
+# Clean surveillance linelist
+#############################
+surv_clean <- surv_raw %>% 
+     
+     # clean column names - lowercase, underscores, etc.
+     clean_names() %>%
+     
+     # rename
+     rename( # NEW name    # OLD name
+             date_onset = "onset_date") %>%
+     
+     # deduplicate
+     distinct() %>% 
+     
+     # filter for confirmed cases only
+     filter(case_def == "Confirmed") %>% 
+     
+     # Make new columns
+     mutate(
+          # is residence different than place of detection?
+          moved = adm3_name_det != adm3_name_res,
+          
+          # prioritise place of detection, replace with residence if missing
+          location = coalesce(adm3_name_det, adm3_name_res),
+          
+          # create column with age in years
+          age_years = case_when(
+            age_unit == "years"  ~ age,       # if age is given in years
+            age_unit == "months" ~ age/12,    # if age is given in months
+            is.na(age_unit)      ~ age,       # if age unit is missing, assume years
+            TRUE                 ~ NA_real_), # any other circumstance, assign missing
+          
+          # age in age groups
+          age_cat = age_categories(                  # create new column
+               age_years,                            # numeric column to make groups from
+               lower = 0,
+               upper = 70,
+               by = 10)
+          ) 
 ```
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
+```{r}
+# Clean medical linelist
+########################
+med_clean <- med_raw %>% 
+     
+     # clean column names - lowercase, underscores, etc.
+     clean_names() %>%
+     
+     # rename
+     rename( # NEW name    # OLD name
+             date_hospitalisation = "hospitalisation_date",
+             date_outcome = "outcome_date",
+             time_admission = "admission_time") %>%
+     
+     # deduplicate
+     distinct() %>% 
+     
+     # Make new columns
+     mutate(
+          across(contains("date"), ymd)),
+
+          hour_admit = hour(strptime(time_admission, format = "%H:%M"))) %>%
+          time_period = case_when(
+              hour_admit > 06 & hour_admit < 12 ~ "Morning",
+              hour_admit >= 12 & hour_admit < 17 ~ "Afternoon",
+              hour_admit >= 17 & hour_admit < 21 ~ "Evening",
+              hour_admit >= 21 | hour_admit <= 6 ~ "Night"))
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+# Clean case investigation dataset
+##################################
+source_clean <- source_raw %>% 
+     
+     # clean column names - lowercase, underscores, etc.
+     clean_names() %>%
+     
+     # rename
+     rename( # NEW name    # OLD name
+             date_infection = "infection_date") %>%
+     
+     # deduplicate
+     distinct() %>% 
+     
+     # Make new columns
+     mutate(across(contains("date"), ymd))
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+# Clean lab dataset
+###################
+lab_clean <- lab_raw %>% 
+     
+     # clean column names - lowercase, underscores, etc.
+     clean_names() %>%
+     
+     # deduplicate
+     distinct()
+
+# TODO could put TRUE/FALSE here with some higher than 40
+```
+
+
+
+
+## Joins
+
+```{r}
+cases <- surv_clean %>% 
+     left_join(med_clean, by = c("case_id", "gender", "age", "age_unit"))
+
+```

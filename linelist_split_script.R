@@ -30,7 +30,7 @@ ggplot(data = linelist_raw, aes(x = ymd(`date onset`)))+
 ######################################################################################
 ll_adm3 <- import(here("data", "linelist_cleaned_with_adm3.rds")) %>% 
      as.data.frame() %>%  # convert to get rid of geometries
-     select(-c(geometry, days_onset_hosp, age_cat, age_cat5)) %>% 
+     select(-c(geometry, days_onset_hosp, age_cat, age_cat5, age_years)) %>% 
      
      # remove earlier outbreak
      filter(date_onset < as.Date("2014-12-01") & date_hospitalisation < as.Date("2014-12-01")) %>% 
@@ -52,17 +52,22 @@ ggplot(data = ll_adm3, aes(x = ymd(date_onset)))+
 
 # define surveillance linelist
 phase1_surv <- ll_adm3 %>%
-     select(-c(date_hospitalisation, time_admission, outcome, date_outcome, date_infection, infector, source, generation, ct_blood)) %>% 
+     select(-c(date_hospitalisation, time_admission, outcome, date_outcome, date_infection, infector, source, generation, ct_blood)) %>%
+     mutate(adm3_name_det = ifelse(row_number() %% 20 == 1, "Central II", admin3name)) %>%   # Assign 1/20 with a different district of detection
+     mutate(admin3name = ifelse(row_number() %% 60 == 1, NA, admin3name)) %>%                # Assign 1/60 with missing district of detection
+     mutate(case_def = ifelse(row_number() %% 100 == 1, "Suspect", "Confirmed")) %>%         # Assign 1/100 as suspect
+     
      rename(
           "onset date" = date_onset,        # make column names messy
           "age unit" = age_unit,
           "wt (kg)" = wt_kg,
           "ht (cm)" = ht_cm,
+          adm3_name_res = admin3name
           ) 
 
 # define medical linelist
 phase1_med <- ll_adm3 %>% 
-     select(case_id, age, age_unit, gender, date_hospitalisation, time_admission, outcome, date_outcome) %>% 
+     select(hospital, case_id, age, age_unit, gender, date_hospitalisation, time_admission, outcome, date_outcome) %>% 
      rename(
           "age unit" = age_unit,
           "hospitalisation date" = date_hospitalisation,
@@ -71,7 +76,7 @@ phase1_med <- ll_adm3 %>%
      
 # make case investigation dataset
 phase1_source <- ll_adm3 %>% 
-     select(case_id, age, age_unit, gender, date_infection, infector, source, generation) %>% 
+     select(case_id, date_infection, infector, source, generation) %>% 
      rename(
           "age unit" = age_unit,
           "infection date" = date_infection)
@@ -89,6 +94,26 @@ export(phase1_med, here("data", "medical_linelist_12012014.xlsx"))
 export(phase1_lab, here("data", "lab_results_12012014.xlsx"))
 export(phase1_source, here("data", "case_investigations_12012014.xlsx"))
 export(phase1_surv, here("data", "district_populations.xlsx"))
+
+
+# convert medical linelist into split data frames and export
+
+med_list <- phase1_med %>% 
+     group_split(hospital)
+
+names(med_list) <- med_list %>%   # Assign to names of listed data frames 
+     # Extract the names by doing the following to each data frame: 
+     map(.f = ~pull(.x, hospital)) %>%        # Pull out hospital column
+     map(.f = ~as.character(.x)) %>%          # Convert to character, just in case
+     map(.f = ~unique(.x))                    # Take the unique hospital name
+
+names(med_list) %>%
+     map(.f = ~export(med_list[[.x]], file = str_glue("{here('data')}/{.x}.csv")))
+
+
+
+
+
 
 # CFR plot
 ##########
