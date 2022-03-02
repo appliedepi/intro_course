@@ -8,7 +8,7 @@ params:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE)
 ```
 
 
@@ -20,27 +20,40 @@ pacman::p_load(
      here,
      janitor,
      epikit,
+     apyramid,
+     lubridate,
      gtsummary,
      flextable,
      tidyverse
 )
 ```
 
+```{r }
+date <- params$date
+```
+
 ## Load data
 
 ```{r}
 # Import each dataset
+
+# surveillance
 surv_raw <- rio::import(here("data", "surveillance_linelist_12012014.xlsx"))
 
-central <- rio::import(here("data", "Central Hospital 12012014.csv"))
+# hospital datasets
+central  <- rio::import(here("data", "Central Hospital 12012014.csv"))
 military <- rio::import(here("data", "Military Hospital 12012014.csv"))
-other <- rio::import(here("data", "Other Hospitals 12012014.csv"))
-port <- rio::import(here("data", "Port Hospital 12012014.csv"))
-stmarks <- rio::import(here("data", "SMMH 12012014.csv"))
-
+other    <- rio::import(here("data", "Other Hospitals 12012014.csv"))
+port     <- rio::import(here("data", "Port Hospital 12012014.csv"))
+smmh  <- rio::import(here("data", "SMMH 12012014.csv"))
+missing  <- rio::import(here("data", "Missing Hospital 12012014.csv"))
 
 #med_raw <- rio::import(here("data", "medical_linelist_12012014.xlsx"))
+
+# laboratory dataset
 lab_raw <- rio::import(here("data", "lab_results_12012014.xlsx"))
+
+# case investigation dataset
 source_raw <- rio::import(here("data", "case_investigations_12012014.xlsx"))
 ```
 
@@ -71,6 +84,9 @@ surv_clean <- surv_raw %>%
      
      # Make new columns
      mutate(
+          # convert to class date
+          across(contains("date"), ymd),
+          
           # is residence different than place of detection?
           moved = adm3_name_det != adm3_name_res,
           
@@ -98,7 +114,8 @@ surv_clean <- surv_raw %>%
 ```{r}
 # Clean medical linelist
 ########################
-med_clean <- med_raw %>% 
+             # bind together the different hospital files
+med_clean <- bind_rows(central, military, missing, smmh, port, other) %>%  
      
      # clean column names - lowercase, underscores, etc.
      clean_names() %>%
@@ -114,15 +131,18 @@ med_clean <- med_raw %>%
      
      # Make new columns
      mutate(
-          across(contains("date"), ymd)),
+          across(contains("date"), ymd),
 
-          hour_admit = hour(strptime(time_admission, format = "%H:%M"))) %>%
+          hour_admit = hour(strptime(time_admission, format = "%H:%M")), 
           time_period = case_when(
-              hour_admit > 06 & hour_admit < 12 ~ "Morning",
+              hour_admit > 06  & hour_admit < 12 ~ "Morning",
               hour_admit >= 12 & hour_admit < 17 ~ "Afternoon",
               hour_admit >= 17 & hour_admit < 21 ~ "Evening",
               hour_admit >= 21 | hour_admit <= 6 ~ "Night"))
 ```
+
+
+
 
 ```{r}
 # Clean case investigation dataset
@@ -142,6 +162,8 @@ source_clean <- source_raw %>%
      # Make new columns
      mutate(across(contains("date"), ymd))
 ```
+
+
 
 
 ```{r}
@@ -164,7 +186,114 @@ lab_clean <- lab_raw %>%
 ## Joins
 
 ```{r}
+# join other datasets to the surveillance datasets
 cases <- surv_clean %>% 
-     left_join(med_clean, by = c("case_id", "gender", "age", "age_unit"))
+     left_join(med_clean, by = c("case_id", "hospital", "gender", "age", "age_unit")) %>% 
+     left_join(lab_clean) %>% 
+     left_join(source_clean)
+```
+
+
+
+## Person
+
+```{r}
+
+age_pyramid(
+     data = cases,
+     age_group = "age_cat",
+     split_by = "gender",
+     proportional = TRUE,
+     show_midpoint = FALSE)+
+     
+     theme_minimal()+
+     
+     labs(title = str_glue("Confirmed cases"),
+          x = "",
+          y = "",
+          caption = str_glue(""),
+          fill = "Gender")+
+     
+     scale_fill_discrete(labels = c("f" = "Female",
+                                    "m" = "Male"))
+
 
 ```
+
+
+
+## Time
+
+```{r}
+
+# define weekly breaks from Monday before first case
+# Sequence of weekly Monday dates for CENTRAL HOSPITAL
+
+# Monday prior to first case
+monday_floor <- floor_date(min(cases$date_onset, na.rm=T),   "week", week_start = 1)
+
+# Monday after last case
+monday_ceiling <- ceiling_date(max(cases$date_onset, na.rm=T), "week", week_start = 1)
+
+# define sequence of Mondays for histogram breaks
+weekly_breaks <- seq.Date(
+  from = monday_floor, # monday before first case
+  to   = monday_ceiling, # monday after last case
+  by   = "week")
+
+# Make epidemic curve
+ggplot(data = cases)+
+       geom_histogram(
+          mapping = aes(x = date_hospitalisation),
+          breaks = weekly_breaks,
+          closed = "left")+
+     
+       # x-axis labels
+       scale_x_date(
+         expand            = c(0,0),           # remove excess x-axis space before and after case bars
+         date_breaks       = "4 weeks",        # date labels and major vertical gridlines appear every 3 Monday weeks
+         date_minor_breaks = "week",           # minor vertical lines appear every Monday week
+         labels = scales::label_date_short())+ # automatically efficient date labels
+       
+       # y-axis
+       scale_y_continuous(
+         expand = c(0,0))+             # remove excess y-axis space below 0 (align histogram flush with x-axis)
+       
+       # aesthetic themes
+       theme_minimal()+                # simplify plot background
+       
+       theme(
+         plot.caption = element_text(hjust = 0,        # caption on left side
+                                     face = "italic"), # caption in italics
+         axis.title = element_text(face = "bold"))+    # axis titles in bold
+       
+       # labels including dynamic caption
+       labs(
+         title    = "Weekly incidence of cases (Monday weeks)",
+         subtitle = "",
+         x        = "Week of hospitalisation",
+         y        = "Weekly incident cases reported",
+         caption  = stringr::str_glue("n = {nrow(cases)} cases; Hospitalisations range from {format(min(cases$date_onset, na.rm=T), format = '%a %d %b %Y')} to {format(max(cases$date_onset, na.rm=T), format = '%a %d %b %Y')}\n{nrow(cases %>% filter(is.na(date_onset)))} cases missing date of onset and not shown"))
+```
+
+
+
+## Place
+
+```{r}
+cases %>% 
+     mutate(location = fct_explicit_na(location, na_level = "Missing")) %>% 
+     tabyl(location) %>% 
+     arrange(desc(n)) %>% 
+     mutate(percent = scales::percent(percent, 1)) %>% 
+     qflextable()
+```
+
+
+
+
+
+
+
+
+
