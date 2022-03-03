@@ -14,6 +14,19 @@ output:
     css: xaringan-themer.css
 ---
 
+```{r, eval=F, echo=F, include = F}
+# Must do in order to render.
+
+pacman::p_load(xaringan)
+devtools::install_github("gadenbuie/xaringanExtra")
+remotes::install_github("mitchelloharawild/icons")
+icons::download_fontawesome()
+
+# Render with xaringan::infinite_moon_reader()
+# Slides will appear in viewer, and will update as you edit/save
+```
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, 
                       warning = FALSE, 
