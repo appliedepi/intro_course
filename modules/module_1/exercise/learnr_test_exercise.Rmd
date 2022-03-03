@@ -13,14 +13,24 @@ description: >
 
 ```{r setup, include=FALSE}
 # load packages ----------------------------------------------------------------
-library(learnr)
-library(gradethis)
-library(tidyverse)
-library(here)
-library(rio)
-library(basket) # not sure if we need this
-library(etude) # helper functions for gradethis
+pacman::p_load(
+     learnr,
+     gradethis,
+     basket,    # not sure if we need this
+     etude,     # help functions for gradethis
+     
+     here,
+     rio,
+     janitor,
+     gtsummary,
+     lubridate,
+     
+     tidyverse)
+```
 
+
+
+```{r, include=FALSE}
 # set options for exercises and checking ---------------------------------------
 gradethis_setup()
 
@@ -31,6 +41,7 @@ learnr::tutorial_options(exercise.timelimit = 60)
 
 # event recorder ---------------------------------------------------------------
 # see https://github.com/dtkaplan/submitr/blob/master/R/make_a_recorder.R
+
 tutorial_options(exercise.eval = FALSE)  # pre-evaluate exercises
 
 new_recorder <- function(tutorial_id, tutorial_version, user_id, event, data) {
@@ -50,12 +61,15 @@ new_recorder <- function(tutorial_id, tutorial_version, user_id, event, data) {
 }
 
 options(tutorial.event_recorder = new_recorder)
+```
 
 
+```{r, include=FALSE}
 # hide non-exercise code chunks ------------------------------------------------
 knitr::opts_chunk$set(echo = FALSE)
+```
 
-
+```{r, include=FALSE}
 # data prep --------------------------------------------------------------------
 linelist_raw <- rio::import(here::here("data", "linelist_raw.xlsx"))
 linelist <- rio::import(here::here("data", "linelist_cleaned.rds"))
@@ -65,12 +79,12 @@ linelist <- rio::import(here::here("data", "linelist_cleaned.rds"))
 
 
 ```{r appliedepi-banner, fig.margin = TRUE, echo = FALSE, fig.width = 3, out.width = "100%", fig.cap = ""}
-knitr::include_graphics("../images/moz-banner.png")
+knitr::include_graphics(here::here("images", "moz-banner.png"))
 ```
 
 
 Write the R code required to add two plus two:
-
+ 
 <details>
 <!--
 NOTE: all within details tag collapsed
