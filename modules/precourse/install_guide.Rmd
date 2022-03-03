@@ -10,7 +10,7 @@ date: 'Date revised: 2022-03-02'
 ---
 
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, include = F}
 # Put logo in upper-right of document
 htmltools::img(src = knitr::image_uri(here::here("images", "logo.png")), 
                alt = 'logo', 
@@ -31,7 +31,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Contact IT
 
-# Permissions  
+# Permissions and Network drives
 
 # R
 
@@ -39,7 +39,10 @@ Contact IT
 
 # R Packages
 
-```{r, message=FALSE}
+Instructions here on how to run this script. Note that the students may have no idea what an R package is. If they encounter any errors running the script or don't know what to do on their own, don't worry, just email the course instructor and we'll sort it out in a one-on-one troubleshooting session. 
+
+
+```{r, message=FALSE, warning=FALSE}
 #############################################################
 # Essential R packages: Intro to R for Applied Epidemiology #
 #############################################################
@@ -122,4 +125,3 @@ pacman::p_load(
 
 ```
 
-#
