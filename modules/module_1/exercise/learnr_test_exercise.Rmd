@@ -13,31 +13,25 @@ description: >
 
 ```{r setup, include=FALSE}
 # load packages ----------------------------------------------------------------
+library(learnr)
+library(gradethis)
+library(etude)      # help functions for gradethis
+
 pacman::p_load(
-     learnr,
-     gradethis,
      basket,    # not sure if we need this
-     etude,     # help functions for gradethis
-     
      here,
      rio,
      janitor,
      gtsummary,
      lubridate,
-     
      tidyverse)
-```
 
-
-
-```{r, include=FALSE}
 # set options for exercises and checking ---------------------------------------
-gradethis_setup()
+gradethis::gradethis_setup()
 
-learnr::tutorial_options(exercise.timelimit = 60) 
-  #exercise.checker = gradethis::grade_learnr) 
+learnr::tutorial_options(exercise.timelimit = 60)
+    # exercise.checker = gradethis::grade_learnr) 
     # alternatively, submitr::null_code_checker
-
 
 # event recorder ---------------------------------------------------------------
 # see https://github.com/dtkaplan/submitr/blob/master/R/make_a_recorder.R
