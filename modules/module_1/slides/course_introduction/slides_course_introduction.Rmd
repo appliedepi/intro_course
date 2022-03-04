@@ -1,0 +1,542 @@
+---
+title: "Welcome"
+subtitle: "Introduction to R for<br>Applied Epidemiology and Public Health<br>"
+author: '</br>Offered by: [Applied Epi](https:://appliedepi.org) </br> A nonprofit organization elevating frontline epidemiology <br>`r icons::icon_style(icons::fontawesome$brands$twitter, fill = "white")` [@epiRhandbook](https://twitter.com/epiRhandbook) `r icons::icon_style(icons::fontawesome("paper-plane"), fill = "white")` [contact@appliedepi.org](mailto:contact@appliedepi.org)'
+date: "March 2022"
+output:
+  xaringan::moon_reader:
+    seal: TRUE
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    css: xaringan-themer.css
+---
+
+```{r, eval=F, echo=F, include = F}
+# Must do in order to render.
+
+pacman::p_load(xaringan)
+devtools::install_github("gadenbuie/xaringanExtra")
+remotes::install_github("mitchelloharawild/icons")
+icons::download_fontawesome()
+
+# Render with xaringan::infinite_moon_reader()
+# Slides will appear in viewer, and will update as you edit/save
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      fig.retina = 3  ## retina more effective than w/h (according to twitter)
+                      # fig.width = 16, 
+                      # fig.height = 10
+                      )
+## I dont know why this is included in the example xaringan slide 
+## but is something to do with background images
+options(htmltools.dir.version = FALSE)
+
+## install and load necessary packages 
+pacman::p_load(
+  rio,        # importing data  
+  here,       # relative file pathways  
+  janitor,    # data cleaning and tables
+  lubridate,  # working with dates
+  tidyverse,  # data management and visualization
+  gtsummary,  # summary tables
+  kableExtra, # for output tables
+  xaringanthemer  # for styling presentation 
+)
+```
+
+
+```{r  xaringan-themer, include = FALSE}
+
+## define presentation colours (theme) using {xaringanthemer} package 
+## https://pkg.garrickadenbuie.com/xaringanthemer/articles/xaringanthemer.html
+
+## epirhandbook logo colours: 
+  ## blue: "#00538c"
+  ## green: "#007732"
+  ## lighter green: "#48a878"
+
+## see ?style_mono_accent for all the things can customise
+style_mono_accent(
+  base_color = "#00538c", 
+  link_color = "#48a878", 
+  ## add logo to the title page (bit bigger)
+  title_slide_background_image = "https://github.com/appliedepi/intro_course/raw/main/images/logo.png", 
+  title_slide_background_position = "90% 90%", 
+  title_slide_background_size = "25%", 
+  ## add logo to all following slides
+  background_image = "https://github.com/appliedepi/intro_course/raw/main/images/logo.png", 
+  background_size = "10%",
+  background_position = "100% 0%"
+)
+```
+
+```{css, echo=F}
+    .remark-slide table{
+      border: none
+    }
+    .remark-slide-table {
+      
+    }
+    tr:first-child {
+      border-top: none;
+  }
+    tr:last-child {
+    border-bottom: none;
+  }
+```
+
+# We are Applied Epi  
+
+![](https://github.com/appliedepi/intro_course/raw/main/images/Applied-Epi-logo.png)
+
+---
+
+We are going to together for several days, so let's introduce ourselves...
+
+
+.footnote[Bookmark [www.appliedepi.org](www.appliedepi.org)!]  
+
+
+
+---
+# Our team of frontline epis
+
+Applied Epi has 130 team members located in 33 countries.
+.pull-left[
+- Local epidemiologists and public health practitioners
+- Emergency responders
+- Data science education specialists
+- Applied researchers
+- Geospatial (GIS) experts
+]
+
+.pull-right[
+
+![](https://raw.githubusercontent.com/appliedepi/intro_course/main/images/team_locations.jpg)
+
+]
+
+
+
+---
+# A global grassroots movement
+
+We enjoy supporting local epis and helping them transition to R!
+
+![](https://raw.githubusercontent.com/appliedepi/intro_course/main/images/team_faces.png)
+
+---
+# Partnerships
+
+We partner with global and local entities to support frontline practitioners
+.pull-left[
+- TEPHINET - The global network of Field Epi Training Programs
+- Médecins sans frontières (MSF)
+- World Health Organization (WHO)
+- EPIET/EUPHEM Alumni Network (EAN)
+]
+
+.pull-right[
+
+![](https://raw.githubusercontent.com/appliedepi/intro_course/main/images/partners-blur.jpg)
+
+]
+
+
+???
+- What makes us different is that we focus on the challenges of applied epi, not academic epi. We emphasize the skills used every day by ground-level epidemiologists. 
+
+
+---
+
+# Our offerings
+
+A comprehensive suite of services
+
+![](https://raw.githubusercontent.com/appliedepi/intro_course/main/images/Applied_Epi_Offerings.png)
+
+
+
+
+
+---
+
+# The Epidemiologist R Handbook
+
+![](https://raw.githubusercontent.com/appliedepi/intro_course/main/images/Epi%20R%20Handbook%20Banner%20Beige%201500x500.png)
+
+- Written by epidemiologists, for epidemiologists
+- 120,000 users globally
+- 50 chapters of best-practice code examples for public health practice
+- Available free, online and offline
+- *"An open-source unicorn"* -Github 
+
+.footnote[Access at [www.epiRhandbook.com](www.epiRhandbook.com)]
+
+
+---
+# Your instructors  
+
+.left-column[
+
+![](https://raw.githubusercontent.com/appliedepi/intro_course/main/images/instructors/neale.png)
+
+
+![](https://raw.githubusercontent.com/appliedepi/intro_course/main/images/instructors/paula.png)
+]
+
+
+* **Neale Batra**  
+ - President and co-founder, Applied Epi  
+ - Previously @CaliforniaEIS @Philly, @WHO, @MSF, @CDC, @USAID/PEPFAR  
+* **Alex Spina**  
+ - EPIET, mmed student, epi consultant for @MSF and @WHO 
+* **Mathilde Mousset**  
+ - R programmer / Data manager at Epicentre (@MSF). PhD in evolutionary ecology.  
+* **Henry Laurenson-Schafer**  
+ - Epi/data scientist, WHO Geneva COVID response. PhD molecular biology/bioinformatics.  
+
+
+???
+
+
+
+
+
+
+---
+# Your backgrounds
+
+Survey results, describing the experience levels of course participants
+
+
+
+---
+# Your hopes and fears
+
+Survey results
+
+Your objectives in learning R 
+Your concerns about learning R?
+
+
+
+---
+# Case-study-based learning   
+
+Case study-based learning
+
+Ebola outbreak in Guinea
+
+--
+
+EDGE - Explain, Demonstrate, Guide, Evaluate
+
+***Fix image*** TODO
+
+Lectures, Live coding demos, Guided exercises, evaluate
+![](https://github.com/appliedepi/emory_training/blob/master/presentation/images/EDGE.png?raw=true)  
+
+
+
+???
+- The learning process can be summarised into this acronym "EDGE". Today's session is primarily a *demonstration* with question & answer session. We assume that you have read at least some of the relevant pages in the Epi R Handbook prior to this session. We also offer trainings in which we guide you through case studies with hands-on coaching. 
+
+
+---
+# Course overview
+
+**Audience:** Epidemiologists, public health practitioners, clinicians, applied researchers.  
+
+**Objectives:** Participants learn how to use R, using standard datasets for applied epidemiology in the context of an outbreak investigation case study.
+
+**Prerequisites:**
+- Familiarity with epidemiological concepts.  
+- Participants with no prior coding experience (e.g. SAS, Stata) are advised to take 1 extra day for the course.  
+- Create account at [Applied Epi Community](www.community.appliedepi.org) (online Q&A support forum)
+
+**Take-aways** 
+- Comfort using R to import, clean, and perform basic analyses, transformations, and visualizations, and reporting on epidemiological data
+- Ability to self-learn and expand your R knowledge  
+- Certificate of participation
+
+---
+# Course format
+
+![](https://raw.githubusercontent.com/appliedepi/presentations/main/images/CourseTimeline.png)  
+35.5 hours synchronous instruction
+
+- *Comprehensive instruction:* 4 days (28 hours)
+
+- *Sustained support:* 7.5 hours of follow-up sessions to help apply the skills to your work context (5 x 1.5-hour group “office hours” sessions)
+
+Note: Applied Epi offers subscription "R Help Desk" services if you want continued on-call support in the months/years ahead. 
+
+---
+# Course schedule
+
+```{r, echo=FALSE, warning=F, message=F}
+outline <- dplyr::tribble(
+  ~Module, ~Date, ~`Time (GMT)`, ~Topic,
+  "1", "Mo 21/3", "0900-1200", "Welcome, RStudio, basic syntax, data import",
+  "2", "Mo 21/3", "1300-1630", "Cleaning data, core R functions, piping",
+  "3", "Tu 22/3", "0900-1200", "Grouping and summarising data",
+  "4", "Tu 22/3", "1300-1630", "Data visualization with ggplot2",
+  "5", "We 23/3", "0900-1200", "Transforming data with joins and pivots",
+  "6", "We 23/3", "1300-1630", "Heat plots, epidemic curves, age/sex pyramids, GIS demo",
+  "7", "Th 24/3", "0900-1200", "R Markdown reports",
+  "8", "Th 24/3", "1300-1630", "Real-life exercise"
+)
+
+outline %>% 
+  flextable::qflextable()
+```
+
+
+---
+# Learning objectives and schedule  
+
+**Today we aim to help you:**  
+* Understand R within the ecosystem of analytical tools  
+* Navigate RStudio and R projects  
+* Write a basic R script to load packages, import data, and view a dataset  
+
+
+```{r, echo=FALSE, warning=F, message=F}
+outline <- dplyr::tribble(
+  ~Time, ~Location, ~Topic,
+  "0900-0945",     "Main",      "Welcome, course logistics, Why R?",
+  "0950-1050",     "Main",      "Lecture and live demonstration:\nRStudio tour, R projects, basic R syntax, functions & packages, data import",
+  "1100-1200",     "Breakouts", "Setting up a script, importing data, and reviewing a data frame",
+  "1205-1220",     "Main",      "Discussion"
+)
+
+outline %>% 
+  flextable::qflextable() %>% 
+  flextable::add_footer_lines("Breaks are incorporated above, but not given their own rows")
+```
+
+
+
+
+---
+# Data used in this course  
+
+* Ebola case study  
+     * Surveillance linelist  
+     * Hospital linelists from 5 hospitals  
+     * Aggregated case counts from one hospital  
+     * Case investigation dataset  
+     * Lab dataset  
+
+* Near the end of the course, you will apply your skills to a COVID dataset  
+
+
+.footnote[All data are not real. All files can be found in the course folder.]  
+
+
+
+
+---
+class: inverse, center, middle
+
+# What do you know about R? 
+### Live poll 
+
+
+---
+class: inverse, center, middle
+
+# Why R? 
+### Tagline here 
+
+---
+# Flexibility 
+
+![](https://github.com/appliedepi/emory_training/blob/master/presentation/images/interoperability.png?raw=true)  
+
+
+???
+- R can read and write to loads of different software/databases.
+- Can hold multiple datasets at once
+- Can also produce many different outputs  
+- Automated and reproducible workflows (saves you time and headache)  
+
+---
+# Popularity 
+.center[
+```{r, eval = TRUE, echo = FALSE, out.width = "60%"}
+knitr::include_graphics("https://github.com/appliedepi/emory_training/blob/master/presentation/images/r_popularity.png?raw=true")
+```
+]
+
+
+???
+- R is free - and yet can do more than what expensive licensed software can  
+- Previously limited to academic statisticians - R was not "trusted"  
+- But now even pharma companies (e.g. GSK) and regulators are making the switch  
+- It is the most widely used statistical programming language. 
+
+---
+# Learning curve 
+
+R has become easier to learn in the last 5 years
+
+.pull-left[
+- Friendlier user interface (RStudio)
+- Simpler syntax ("tidyverse")
+- Free resources & interactive tutorials available  
+    - **Epidemiologist R Handbook**
+    - **R 4 Data Science**
+    - **R epidemiology case studies**
+]
+
+.pull-right[
+
+```{r difficulty_plot, warning = FALSE, message = FALSE}
+exp <- function(x){x^2}
+lgr <- function(x){log(x) + 4}
+num <- 10000
+linwid <- 2
+ggplot() + 
+  geom_function(fun = exp,
+                n = num, 
+                size = linwid,
+                aes(colour = "Excel")) +
+  geom_function(fun = lgr, 
+                n = num, 
+                size = linwid,
+                aes(colour = "R")) + 
+  scale_y_continuous(expand = c(0, 0), 
+                     limits = c(0, 10)) + 
+  scale_x_continuous(expand = c(0, 0), 
+                     limits = c(0, 5)) + 
+  labs(x = "Code complexity", 
+       y = "Task difficulty") + 
+  theme_classic(base_size = 24) + 
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(), 
+        legend.position = "bottom", 
+        legend.title = element_blank())
+```
+
+]
+
+???
+- There is a bit of a learning curve - as with any software.  
+- But we are here to get you over that initial hump so you can keep developing. 
+
+---
+# User community 
+
+![](https://github.com/appliedepi/emory_training/blob/master/presentation/images/user_community.png?raw=true)
+
+???
+- **The internet is your friend.**  
+- Once you get to grips with the basics - people answer literally any question on **stackoverflow!**  
+- **Epi R Handbook**  
+
+---
+# Data visualization 
+
+![](https://github.com/appliedepi/emory_training/blob/master/presentation/images/visualization.png?raw=true)
+
+.footnote[
+Slide source: Paula Bianca Blomquist  
+]
+
+???
+- Data viz essential to understand disease surveillance trends and outbreaks  
+- **One of R's strongest features**  
+- Network diagrams, maps, heat maps, integrated figures, the list goes on...  
+
+---
+# Automated surveillance reports 
+
+.pull-left[
+- Daily COVID-19 reports by Public Health England  
+  - Reports sent to 317 local authorities  
+  - Guide local investigations  
+  - *R* bringing together data on:  
+      - cases, testing, mortality & many others  
+  - Caters to authorities needs  
+      - MS word to be editable  
+      - Integrated in to local reports  
+]
+
+.pull-right[
+![](https://github.com/appliedepi/emory_training/blob/master/presentation/images/automated_reports.png?raw=true)
+]
+
+.footnote[
+Slide source: Paula Bianca Blomquist  
+
+See [Epi R Handbook chapter](https://epirhandbook.com/organizing-routine-reports.html) on organizing routine reports
+]
+
+???
+- Producing reports at scale, an example from our EpiRHandbook colleague Paula
+- Not a fancy report, flat word document but caters to specific needs! 
+- **Key example of local intelligence and no way could do without the power of R**
+
+---
+# Automated surveillance outputs 
+### WHO COVID-19 interactive {shiny} dashboard
+.center[
+```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
+knitr::include_graphics("https://github.com/appliedepi/emory_training/blob/master/presentation/images/automated_dashboard.png?raw=true")
+```
+]
+
+.footnote[
+Slide source: Paula Bianca Blomquist & [World Health Organization](https://worldhealthorg.shinyapps.io/covid/)  
+
+See [Epi R Handbook chapter](https://epirhandbook.com/dashboards-with-shiny.html) on organizing shiny dashboards
+]
+
+???
+- WHO COVID-19 public-facing dashboard  
+- Made with a package called {shiny} to build interactive web apps/dashboard  
+- Can see toggles and interactive tabs here  
+- Pulls from dozens of data sources to displace data by countries/regions 
+- There is a section in the handbook on shiny
+
+---
+class: inverse, center, middle
+
+# Case study 
+### COVID-19 epidemiological report for Fulton County
+
+---
+# Setting the scene
+
+.pull-left[
+
+- You are a local epidemiologist tasked with automating the weekly situation report  
+  - We are going to reproduce [Fulton County epidemiology reports](https://www.fultoncountyga.gov/covid-19/epidemiology-reports)  
+  - We have pre-packaged an example **R-project** folder 
+  - Walk-through from start to finish 
+
+]
+
+.pull-right[
+
+![](https://github.com/appliedepi/emory_training/blob/master/presentation/images/fulton_report.PNG?raw=true)
+
+]
+
+---
+# testing a learnr embed  
+
+```{r, echo=F, out.width="100%"}
+knitr::include_url("https://nealebatra.shinyapps.io/embed1/", height = "400px")
+```
+

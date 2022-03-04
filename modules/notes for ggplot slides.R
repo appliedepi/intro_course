@@ -1,0 +1,17 @@
+
+
+For ggplot slides:
+NO need to repeat the slides
+https://irene.vrbik.ok.ubc.ca/slides/NHSRxaringan.html?panelset1=tab-12#32
+
+     Chunk 1
+{r irisplot, echo=TRUE, fig.show='hide'}
+     plot(iris[,1:2], 
+          col=iris$Species, 
+          pch=as.numeric(iris$Species)+17)
+     
+     
+Chunk 2:
+{r, ref.label="irisplot", echo=TRUE}
+
+
