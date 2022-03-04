@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Transforming and restructuring data</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Offered by: Applied Epi  A nonprofit organization elevating frontline epidemiology    [@epiRhandbook](https://twitter.com/epiRhandbook)   contact@appliedepi.org" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Transforming and restructuring data
+## Introduction to R for<br>Applied Epidemiology and Public Health<br>
+### </br>Offered by: <a href="https:://appliedepi.org">Applied Epi</a> </br> A nonprofit organization elevating frontline epidemiology <br><svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;fill:white;" xmlns="http://www.w3.org/2000/svg"> <path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"></path></svg> <span class="citation">[@epiRhandbook]</span>(<a href="https://twitter.com/epiRhandbook" class="uri">https://twitter.com/epiRhandbook</a>) <svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;fill:white;" xmlns="http://www.w3.org/2000/svg"> <path d="M440 6.5L24 246.4c-34.4 19.9-31.1 70.8 5.7 85.9L144 379.6V464c0 46.4 59.2 65.5 86.6 28.6l43.8-59.1 111.9 46.2c5.9 2.4 12.1 3.6 18.3 3.6 8.2 0 16.3-2.1 23.6-6.2 12.8-7.2 21.6-20 23.9-34.5l59.4-387.2c6.1-40.1-36.9-68.8-71.5-48.9zM192 464v-64.6l36.6 15.1L192 464zm212.6-28.7l-153.8-63.5L391 169.5c10.7-15.5-9.5-33.5-23.7-21.2L155.8 332.6 48 288 464 48l-59.4 387.3z"></path></svg> <a href="mailto:contact@appliedepi.org">contact@appliedepi.org</a>
+### March 2022
+
+---
+
+
+
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+    .remark-slide table{
+      border: none
+    }
+    .remark-slide-table {
+      
+    }
+    tr:first-child {
+      border-top: none;
+  }
+    tr:last-child {
+    border-bottom: none;
+  }
+&lt;/style&gt;
+
+---
+
+# Outline
+* ...
+* ...
+     * ...
+
+---
+class: inverse, center, middle
+
+# Join dataframes
+
+*Join, merge, unite, combine, assemble, link, match, unionize...* dataframes
+
+.footnote[Thank you to Garrick Aden-Buie for providing the gif used in these slides]
+---
+# Objectives
+  
+*Learn how to join 2 or more tables together*:   
+
+* choose between the different sort of joins  
+* choose which to use ad keys/identifier  
+* know best practices and how to perform join safely  
+     
+---
+
+# Data is scattered between dataframes
+
+
+
+
+Objectif: we want to *join* both dataframes:  
+
+
+.pull-left[
+
+**Info about patient**
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; case_id &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; age &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; age_unit &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; gender &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5fe599 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8689b7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 11f8ea &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; b8812a &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 893f25 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+]
+
+.pull-right[
+
+**Info about hospitalisation**
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; id_patient &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; hospital &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5fe599 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Other &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8689b7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Missing &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 11f8ea &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; St. Mark's Maternity Hospital (SMMH) &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+]
+
+&lt;br&gt;
+
+The **KEY** columns linking the two dataframes are **case_id** and **id_patient**
+
+
+---
+# Types of joins
+
+#### Several types of joins
+* **Mutating joins**: add new variable to a dataframe
+     * **Left join** / **Right join**: add data to a dataframe
+     * **Full join**: combine two full dataframes
+     * **Inner join**: take the intersection of two dataframes
+* **Filtering joins**: filter a dataframe based on another one
+     * **Anti join** / **semi join**
+
+#### General syntax
+* We use the `join` functions from **dplyr** package
+* Homogeneous syntax:
+
+
+```r
+xxx_join(dataframe_1, dataframe_2, 
+         by = "key_id")
+```
+
+
+
+
+---
+# Left join
+
+* Left (and right) joins are used to add information to a dataframe.
+
+* All rows from the *left* dataframe are kept, and lines with a correspondence in the *right* dataframe are merged unto it.
+
+* If no match is found, `NA` are added.
+
+* Lines from the *right* dataframe without a match are dropped.
+
+
+.left-column[
+&lt;img src="../../../images/left-join.gif" width="100%" /&gt;
+]
+
+.right-column[
+&lt;img src="../../../images/left_join.png" width="100%" /&gt;
+]
+
+
+.footnote[Sometimes called Left *outer* join]
+
+---
+# Left join
+
+
+```r
+left_join(linelist_patient,  linelist_hospit,
+*        by = c("case_id" = "id_patient"))      # KEY
+```
+
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; case_id &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; age &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; age_unit &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; gender &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; hospital &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5fe599 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Other &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8689b7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Missing &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 11f8ea &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; St. Mark's Maternity Hospital (SMMH) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; b8812a &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 893f25 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+* All lines from the first dataframe (the *left* dataframe) are kept. 
+* **Only lines with a correspondance through the key column(s)** are imported from the second (*right*) dataframe.
+
+
+---
+# Right join
+
+Does the contrary of the left join: keeps all lines from the second dataframe
+
+
+```r
+right_join(linelist_patient,  linelist_hospit,       
+*          by = c("case_id" = "id_patient"))    # KEY
+```
+
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; case_id &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; age &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; age_unit &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; gender &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; hospital &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5fe599 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Other &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8689b7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Missing &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 11f8ea &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; St. Mark's Maternity Hospital (SMMH) &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+* All lines from the second dataframe (the *right* dataframe) are kept. 
+* **Only lines with a correspondance through the key column(s)** are imported from the first (*left*) dataframe.
+
+
+---
+# Full joins
+
+* The most inclusive of joins
+* Keeps **all lines from both dataframes**
+* Add `NA` for the lines from each dataframe without matches
+
+.center[
+&lt;img src="../../../images/full-join.gif" width="40%" /&gt;
+]
+
+
+.footnote[Sometimes called *Full outer join*, or *Outer join*]
+
+
+---
+# Full joins
+
+With our data:
+
+
+```r
+full_join(linelist_patient,  linelist_hospit,       
+*          by = c("case_id" = "id_patient"))    # KEY
+```
+
+All lines from both dataset are kept:  
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; case_id &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; age &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; age_unit &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; gender &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; hospital &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5fe599 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Other &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8689b7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Missing &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 11f8ea &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; St. Mark's Maternity Hospital (SMMH) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; b8812a &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 893f25 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+---
+# Inner join 
+
+* The most restrictive of joins, takes the **intersection** between two dataframes
+* Keeps **only rows with matches accross both dataframes**
+* Discard lines without matches
+
+.center[
+&lt;img src="../../../images/inner-join.gif" width="50%" /&gt;
+]
+
+.footnote[Also called *Natural join*]
+
+
+---
+# Inner join 
+
+With our data:  
+
+
+```r
+inner_join(linelist_patient,  linelist_hospit,       
+*          by = c("case_id" = "id_patient"))    # KEY
+```
+
+* All lines with common id in both dataset are kept
+* Other lines are discarded:  
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; case_id &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; age &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; age_unit &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; gender &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; hospital &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5fe599 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Other &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8689b7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Missing &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 11f8ea &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; St. Mark's Maternity Hospital (SMMH) &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+---
+# Syntax tricks
+
+* Joins can be used in **pipelines** (the piped dataframe is the _left_ one):  
+
+```r
+*linelist_patient %&gt;%
+*    inner_join(linelist_hospit,
+           by = c("case_id" = "id_patient"))  # KEY 
+```
+
+
+* If the KEY column in both dataframes has the **same name**:  
+
+```r
+inner_join(linelist_patient, linelist_hospit,       
+*          by = "case_id")  # KEY
+```
+
+
+* One can pass **several columns** to use as unique identifiers:
+
+```r
+inner_join(dataframe1, dataframe2,       
+*          by = c("Name" = "NAME",  "Surname"))   # KEY
+```
+
+
+---
+
+# Filtering joins
+
+* Filtering joins are used to **filter rows** from the *left* dataframe depending on the matches to _right_ dataframe. 
+* Filtering joins *do not merge data*.
+
+.pull-left[
+
+#### Anti join
+
+Keeps all the rows from a dataframe **without matches in another dataframe**
+
+&lt;img src="../../../images/anti-join.gif" width="50%" /&gt;
+
+]
+
+.pull-right[
+
+#### Semi join
+
+Keeps all the rows from a dataframe **with a match in another dataframe**
+
+&lt;img src="../../../images/semi-join.gif" width="50%" /&gt;
+]
+
+Filtering joins never duplicate, they can only drop lines.
+
+---
+# Dupplicated columns
+
+
+
+**Tables have columns in common**: both columns are imported, a .x and .y is added to the variable name 
+
+.pull-left[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; ID &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; sexe &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; M &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; M &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+.pull-right[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; ID &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; age &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; sexe &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; ID &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; sexe.x &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; age &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; sexe.y &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; M &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; M &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# One-to-many lines
+
+If a row from the reference dataframe matches *multiple rows* from the second dataframe, **all combinations are returned!**
+
+
+
+
+&lt;img src="../../../images/join-one-to-many.png" width="100%" /&gt;
+
+---
+# Good practices
+
+.pull-left[
+* Use `semi_join()` and `anti_join()` to understand which lines are dropped (and _why_)
+
+
+
+```r
+semi_join(df1, df2)
+```
+
+```
+## # A tibble: 1 x 2
+##   ID    sexe 
+##   &lt;chr&gt; &lt;chr&gt;
+## 1 id_1  F
+```
+
+```r
+anti_join(df1, df2)
+```
+
+```
+## # A tibble: 3 x 2
+##   ID    sexe 
+##   &lt;chr&gt; &lt;chr&gt;
+## 1 id_2  M    
+## 2 id_3  M    
+## 3 id_4  F
+```
+]
+
+.pull-right[
+* Check size of both input tables and the merged table
+
+
+```r
+nrow(df1)
+```
+
+```
+## [1] 4
+```
+
+```r
+nrow(df1)
+```
+
+```
+## [1] 4
+```
+
+```r
+full_join(df1, df2, by = "ID") %&gt;% nrow()
+```
+
+```
+## [1] 5
+```
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
