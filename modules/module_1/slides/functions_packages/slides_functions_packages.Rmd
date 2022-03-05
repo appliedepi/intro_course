@@ -12,6 +12,8 @@ output:
       highlightLines: true
       countIncrementalSlides: false
     css: xaringan-themer.css
+params:
+  online: TRUE
 ---
 
 ```{r, eval=F, echo=F, include = F}
@@ -47,6 +49,7 @@ pacman::p_load(
   lubridate,  # working with dates
   tidyverse,  # data management and visualization
   gtsummary,  # summary tables
+  flair,       # for decorating code chunks with colors
   kableExtra, # for output tables
   xaringanthemer  # for styling presentation 
 )
@@ -93,6 +96,11 @@ style_mono_accent(
   }
 ```
 
+```{r, echo=F, include = F}
+surv_linelist <- rio::import(here::here("data", "surveillance_linelist_12012014.xlsx"))
+medical_linelist <- rio::import(here::here("data", "medical_linelist_12012014.xlsx"))
+
+```
 
 
 ---
@@ -105,8 +113,11 @@ class: inverse, center, middle
 
 .pull-right[
 
-```{r, height = "100%"}
-knitr::include_graphics("libs/images/function_tools_pliers.png")
+```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "functions_packages", "function_tools_pliers.png")))
 ```
 
 ]
@@ -115,12 +126,12 @@ knitr::include_graphics("libs/images/function_tools_pliers.png")
 # Functions   
 ### Inputs and outputs  
 
-- A function is like a machine in that:  
-     - It receives inputs
-     - It does some action with the inputs  
-     - It returns an output  
+- A function is like a machine that:  
+     - Receives inputs
+     - Does some action with the inputs  
+     - Returns an output  
 
-- Functions have a name (hopefully intuitive!), and have parentheses ( )
+- Functions have a name (*hopefully intuitive!*), and have parentheses ( )  
      * `print()` helps you print an R object
      * `mean()`  averages some values
      * `filter()` removes certain rows in a dataset using logical criteria
@@ -128,7 +139,7 @@ knitr::include_graphics("libs/images/function_tools_pliers.png")
 .footnote[functions also appear in Excel as *equations*]
 
 ---
-# Simple examples
+# Simple functions
 
 .pull-left[
 
@@ -144,8 +155,16 @@ knitr::include_graphics("libs/images/function_tools_pliers.png")
 ]
 
 .pull-right[
-```{r, echo=F, out.width="100%"}
-knitr::include_url("https://nealebatra.shinyapps.io/embed1/", height = "400px")
+```{r, echo=T, out.width="100%"}
+sqrt(49)
+```
+<br>
+```{r, echo=T, out.width="100%"}
+max(2, 10, 15, 200, 9)
+```
+<br>
+```{r, echo=T, out.width="100%"}
+c(2, 5, 9, 12, 47)
 ```
 ]
 
@@ -159,19 +178,119 @@ and numeric: `ages <- c(15, 28, 100, 15, 65, 4, 10)` then `summary(ages)` and `s
 
 
 ---
-# Named arguments  
+# Arguments  
+
+.pull-left[
+But most functions are not so simple.  
+
+--  
+
+They must be told *how* to work, and *on what* to work.  
+<br>
+You specify these values to their **"arguments"**.  
+
+--
+
+Arguments are like inputs and settings, with *names* to distinguish them:
+
+]
+
+
+.pull-right[
+
+```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "functions_packages", "arguments-buttons.png")))
+```
+
+]
+
+
+---
+# Example: tbl_cross()
+
+```{r include=FALSE}
+linelist <- surv_linelist
+```
+
+
+```{r, results = "asis", echo = FALSE}
+"Let's say we have a dataset in R which we named 'linelist'.\ntbl_cross() needs 3 arguments to create a cross-tabulation:" %>%
+  flair("dataset", color = "deeppink") %>%
+  flair("tbl_cross()", color = "cornflowerblue") %>%
+  flair("dataset", color = "deeppink") %>%
+  flair("linelist", color = "deeppink") %>%
+  flair("arguments", color = "orange") %>%
+  flair("column name", color = "green") %>%
+  flair("data =", color = "orange") %>%
+  flair("col =", color = "orange") %>%
+  flair("row =", color = "orange") %>%
+  flair_all(before = "<h4>", after = "</h4>") %>%
+  cat()
+```
+
+
+--
+
+```{r function, include = F}
+tbl_cross(data = linelist, row = gender, col = case_def)
+```
+
+```{r function_flair, echo = FALSE}
+decorate("function") %>%
+  flair("tbl_cross", color = "cornflowerblue") %>%
+  flair("data", color = "orange") %>% 
+  flair("row", color = "orange") %>% 
+  flair("col", color = "orange") %>% 
+  flair("linelist", color = "deeppink") %>% 
+  flair("gender", color = "green") %>% 
+  flair("case_def", color = "green") %>% 
+  knit_print.with_flair()
+```
+
+
+
+
+???
+gender and case_def are variables in the linelist dataset
+The colors have been added in the slides for clarity (they do not appear this way in R)
+
+---
+
+
+
+
+
+
+
+
+* `data = ` (which data to use)  
+* `row = ` (the column to put in the table's rows)  
+* `cols = ` (the column to put in the table's columns)  
+
+
+
+
+---
+# Baking example
+
+--
 
 Let us pretend that `oven_bake()` is a function we are using to bake bread.  
 What *arguments* might this function take?
-
---
 
 - hint: what *object* needs to be put in the oven? Which *settings* must be adjusted?
 
 --
 
-```{r, height = "100%"}
-knitr::include_graphics("libs/images/Function_Bread_Example.png")
+```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "functions_packages", "Function_Bread_Example.png")))
 ```
 
 
