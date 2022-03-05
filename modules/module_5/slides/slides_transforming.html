@@ -56,23 +56,44 @@ class: inverse, center, middle
 *Join, merge, unite, combine, assemble, link, match, unionize...* dataframes
 
 .footnote[Thank you to Garrick Aden-Buie for providing the gif used in these slides]
+
+???
+
+Explain that:
+- people coming from different background might have different words for this type of operation: joining, union, merging, combining, assembling...
+- In this module, we will use the word "join" to stick to the `join_` function family from tidyverse as well as well known functions from SQL. The base R equivalent is `merge`.
+
 ---
 # Objectives
   
 *Learn how to join 2 or more tables together*:   
 
-* choose between the different sort of joins  
-* choose which to use ad keys/identifier  
-* know best practices and how to perform join safely  
-     
+* Learn about the different sort of joins  
+* Choose which columns to use ad keys/identifier  
+* Know how to perform join safely  
+   
+   
 ---
 
-# Data is scattered between dataframes
+# Situation: data is scattered between dataframes
+
+
+???
+
+Provide examples of situations they might encounter to highlight how common it is: 
+- connect laboratory data to patient clinical outcomes
+- connect patient data with GIS data,
+- connectGoogle mobility data to infectious disease trends
+- other relevant example for their work hinted by participant survey
+
+---
+
+# Situation: data is scattered between dataframes
 
 
 
 
-Objectif: we want to *join* both dataframes:  
+#### Objectif: we want to *join* both dataframes:  
 
 
 .pull-left[
@@ -158,6 +179,11 @@ Objectif: we want to *join* both dataframes:
 The **KEY** columns linking the two dataframes are **case_id** and **id_patient**
 
 
+???
+For the purpose of the slides, we created two _mini_ dataframes to see what's happening, one with patient characteristics (age and gender), the other hospital the patient has been hospitalised in.
+**Note that both datasets have the ID of the patient in common, but a slightly different name (a very common situation)**. We call this column the KEY, or the identifier column. It allows to *match* observations in both dataframes.
+
+
 ---
 # Types of joins
 
@@ -180,12 +206,15 @@ xxx_join(dataframe_1, dataframe_2,
 ```
 
 
+???
+Insist that there are globally two types of joins, the mutating joins, who will add new columns, and potentially affect the number of lines, and the filtering joins, wich will not add any new columns, just change the rows in one dataset.
 
+Explain that the function are always in this form, two dataframes, the first one is nicknamed _left_ dataframe, the second is nicknamed the _right_ dataframe. The *by* argument: provide columns used for identifying matches between observations
 
 ---
 # Left join
 
-* Left (and right) joins are used to add information to a dataframe.
+* Left (and right) joins are used to **add columns** to a dataframe.
 
 * All rows from the *left* dataframe are kept, and lines with a correspondence in the *right* dataframe are merged unto it.
 
@@ -266,12 +295,13 @@ left_join(linelist_patient,  linelist_hospit,
 
 * All lines from the first dataframe (the *left* dataframe) are kept. 
 * **Only lines with a correspondance through the key column(s)** are imported from the second (*right*) dataframe.
+* NA were added for the two last lines of `linelist_patient` instead.
 
 
 ---
 # Right join
 
-Does the contrary of the left join: keeps all lines from the second dataframe
+Keeps all rows from the second dataframe and adds information from the first dataframe
 
 
 ```r
@@ -324,7 +354,7 @@ right_join(linelist_patient,  linelist_hospit,
 
 * The most inclusive of joins
 * Keeps **all lines from both dataframes**
-* Add `NA` for the lines from each dataframe without matches
+* Adds `NA` for the rows present in only one dataframe (no match)
 
 .center[
 &lt;img src="../../../images/full-join.gif" width="40%" /&gt;
@@ -397,12 +427,16 @@ All lines from both dataset are kept:
 &lt;/table&gt;
 
 
+???
+Now is a good time to insist on how consistent the arguments of the join function family are: you always write them the same way
+
 ---
 # Inner join 
 
-* The most restrictive of joins, takes the **intersection** between two dataframes
-* Keeps **only rows with matches accross both dataframes**
-* Discard lines without matches
+* The most **restrictive** of joins, 
+* Takes the **intersection** between two dataframes
+* Keeps **only rows with matches across both dataframes**
+* **Discard** rows without matches
 
 .center[
 &lt;img src="../../../images/inner-join.gif" width="50%" /&gt;
@@ -410,6 +444,8 @@ All lines from both dataset are kept:
 
 .footnote[Also called *Natural join*]
 
+???
+Well, the bullet points all sort of say the same thing, but I think it is good to make sure that everyone uderstand what it means to take the _intersection_.
 
 ---
 # Inner join 
@@ -422,8 +458,7 @@ inner_join(linelist_patient,  linelist_hospit,
 *          by = c("case_id" = "id_patient"))    # KEY
 ```
 
-* All lines with common id in both dataset are kept
-* Other lines are discarded:  
+
 
 &lt;table&gt;
  &lt;thead&gt;
@@ -460,6 +495,8 @@ inner_join(linelist_patient,  linelist_hospit,
 &lt;/tbody&gt;
 &lt;/table&gt;
 
+* All lines with common id in both dataset are kept
+* Other lines are discarded:  
 
 ---
 # Syntax tricks
@@ -473,7 +510,7 @@ inner_join(linelist_patient,  linelist_hospit,
 ```
 
 
-* If the KEY column in both dataframes has the **same name**:  
+* If the **KEY column has the same name** in both dataframes:  
 
 ```r
 inner_join(linelist_patient, linelist_hospit,       
@@ -485,15 +522,15 @@ inner_join(linelist_patient, linelist_hospit,
 
 ```r
 inner_join(dataframe1, dataframe2,       
-*          by = c("Name" = "NAME",  "Surname"))   # KEY
+           by = c("Name" = "NAME",  
+*                 "Surname"))   # KEY
 ```
 
 
 ---
-
 # Filtering joins
 
-* Filtering joins are used to **filter rows** from the *left* dataframe depending on the matches to _right_ dataframe. 
+* Filtering joins are used to **filter rows** from the *left* dataframe depending on the matches in _right_ dataframe. 
 * Filtering joins *do not merge data*.
 
 .pull-left[
@@ -515,14 +552,14 @@ Keeps all the rows from a dataframe **with a match in another dataframe**
 &lt;img src="../../../images/semi-join.gif" width="50%" /&gt;
 ]
 
-Filtering joins never duplicate, they can only drop lines.
+**Filtering joins never duplicate rows, they can only drop them**
 
 ---
-# Dupplicated columns
+# Real life: dupplicated columns
 
 
 
-**Tables have columns in common**: both columns are imported, a .x and .y is added to the variable name 
+**If both dataframes have columns with the same name**: both columns are imported, a *.x* and *.y* is added to the variable name 
 
 .pull-left[
 &lt;table&gt;
@@ -620,12 +657,24 @@ Filtering joins never duplicate, they can only drop lines.
 &lt;/tbody&gt;
 &lt;/table&gt;
 
+???
+If columns are in common, R will change their name to disambiguate them.
+- If you are sure both columns contain the same information, remove them from one of the dataframe before the join
+- If you are unsure, you can compare them easily after the join.
+Mention orally that there is a "suffix" argument and you can give it a vector to rename instead of .x and .y
+
 ---
-# One-to-many lines
+# Real life: one-to-many lines
 
 If a row from the reference dataframe matches *multiple rows* from the second dataframe, **all combinations are returned!**
 
 
+
+
+
+```r
+left_join(df1, df2, by = "ID")
+```
 
 
 &lt;img src="../../../images/join-one-to-many.png" width="100%" /&gt;
@@ -634,7 +683,7 @@ If a row from the reference dataframe matches *multiple rows* from the second da
 # Good practices
 
 .pull-left[
-* Use `semi_join()` and `anti_join()` to understand which lines are dropped (and _why_)
+Use `semi_join()` and `anti_join()` to **understand which lines are dropped** (and _why_)
 
 
 
@@ -664,7 +713,7 @@ anti_join(df1, df2)
 ]
 
 .pull-right[
-* Check size of both input tables and the merged table
+* **Check size** of dataframes before and after the merge!
 
 
 ```r
@@ -690,7 +739,12 @@ full_join(df1, df2, by = "ID") %&gt;% nrow()
 ```
 ## [1] 5
 ```
+
+Is this what was expected? Are some lines duplicated?
 ]
+
+???
+Another good check is to use the `count` function to count the number of rows for each of your identifier.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

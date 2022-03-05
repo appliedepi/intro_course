@@ -113,18 +113,39 @@ class: inverse, center, middle
 *Join, merge, unite, combine, assemble, link, match, unionize...* dataframes
 
 .footnote[Thank you to Garrick Aden-Buie for providing the gif used in these slides]
+
+???
+
+Explain that:
+- people coming from different background might have different words for this type of operation: joining, union, merging, combining, assembling...
+- In this module, we will use the word "join" to stick to the `join_` function family from tidyverse as well as well known functions from SQL. The base R equivalent is `merge`.
+
 ---
 # Objectives
   
 *Learn how to join 2 or more tables together*:   
 
-* choose between the different sort of joins  
-* choose which to use ad keys/identifier  
-* know best practices and how to perform join safely  
-     
+* Learn about the different sort of joins  
+* Choose which columns to use ad keys/identifier  
+* Know how to perform join safely  
+   
+   
 ---
 
-# Data is scattered between dataframes
+# Situation: data is scattered between dataframes
+
+
+???
+
+Provide examples of situations they might encounter to highlight how common it is: 
+- connect laboratory data to patient clinical outcomes
+- connect patient data with GIS data,
+- connectGoogle mobility data to infectious disease trends
+- other relevant example for their work hinted by participant survey
+
+---
+
+# Situation: data is scattered between dataframes
 
 
 ```{r include=FALSE, echo=F}
@@ -138,7 +159,7 @@ linelist_hospit <- linelist_surv %>%
      head(3)
 ```
 
-Objectif: we want to *join* both dataframes:  
+#### Objectif: we want to *join* both dataframes:  
 
 
 .pull-left[
@@ -170,6 +191,11 @@ linelist_hospit %>%
 The **KEY** columns linking the two dataframes are **case_id** and **id_patient**
 
 
+???
+For the purpose of the slides, we created two _mini_ dataframes to see what's happening, one with patient characteristics (age and gender), the other hospital the patient has been hospitalised in.
+**Note that both datasets have the ID of the patient in common, but a slightly different name (a very common situation)**. We call this column the KEY, or the identifier column. It allows to *match* observations in both dataframes.
+
+
 ---
 # Types of joins
 
@@ -191,12 +217,15 @@ xxx_join(dataframe_1, dataframe_2,
 ```
 
 
+???
+Insist that there are globally two types of joins, the mutating joins, who will add new columns, and potentially affect the number of lines, and the filtering joins, wich will not add any new columns, just change the rows in one dataset.
 
+Explain that the function are always in this form, two dataframes, the first one is nicknamed _left_ dataframe, the second is nicknamed the _right_ dataframe. The *by* argument: provide columns used for identifying matches between observations
 
 ---
 # Left join
 
-* Left (and right) joins are used to add information to a dataframe.
+* Left (and right) joins are used to **add columns** to a dataframe.
 
 * All rows from the *left* dataframe are kept, and lines with a correspondence in the *right* dataframe are merged unto it.
 
@@ -238,12 +267,13 @@ left_join(linelist_patient,
 
 * All lines from the first dataframe (the *left* dataframe) are kept. 
 * **Only lines with a correspondance through the key column(s)** are imported from the second (*right*) dataframe.
+* NA were added for the two last lines of `linelist_patient` instead.
 
 
 ---
 # Right join
 
-Does the contrary of the left join: keeps all lines from the second dataframe
+Keeps all rows from the second dataframe and adds information from the first dataframe
 
 ```{r echo = TRUE, eval=FALSE, include=TRUE}
 right_join(linelist_patient,  linelist_hospit,       
@@ -267,7 +297,7 @@ right_join(linelist_patient,
 
 * The most inclusive of joins
 * Keeps **all lines from both dataframes**
-* Add `NA` for the lines from each dataframe without matches
+* Adds `NA` for the rows present in only one dataframe (no match)
 
 .center[
 ```{r eval = TRUE, echo=FALSE, out.width = '40%'}
@@ -299,12 +329,16 @@ full_join(linelist_patient,
 ```
 
 
+???
+Now is a good time to insist on how consistent the arguments of the join function family are: you always write them the same way
+
 ---
 # Inner join 
 
-* The most restrictive of joins, takes the **intersection** between two dataframes
-* Keeps **only rows with matches accross both dataframes**
-* Discard lines without matches
+* The most **restrictive** of joins, 
+* Takes the **intersection** between two dataframes
+* Keeps **only rows with matches across both dataframes**
+* **Discard** rows without matches
 
 .center[
 ```{r eval = TRUE, echo=FALSE, out.width = '50%'}
@@ -314,6 +348,8 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "inner-join.gif
 
 .footnote[Also called *Natural join*]
 
+???
+Well, the bullet points all sort of say the same thing, but I think it is good to make sure that everyone uderstand what it means to take the _intersection_.
 
 ---
 # Inner join 
@@ -325,8 +361,7 @@ inner_join(linelist_patient,  linelist_hospit,
            by = c("case_id" = "id_patient"))    # KEY #<<
 ```
 
-* All lines with common id in both dataset are kept
-* Other lines are discarded:  
+
 
 ```{r include=TRUE, echo=FALSE, eval=TRUE, out.width = '80%'}
 inner_join(linelist_patient, 
@@ -335,6 +370,8 @@ inner_join(linelist_patient,
      knitr::kable()
 ```
 
+* All lines with common id in both dataset are kept
+* Other lines are discarded:  
 
 ---
 # Syntax tricks
@@ -347,7 +384,7 @@ linelist_patient %>%                  #<<
 ```
 
 
-* If the KEY column in both dataframes has the **same name**:  
+* If the **KEY column has the same name** in both dataframes:  
 ```{r echo = TRUE, eval=FALSE, include=TRUE}
 inner_join(linelist_patient, linelist_hospit,       
            by = "case_id")  # KEY #<<
@@ -357,15 +394,15 @@ inner_join(linelist_patient, linelist_hospit,
 * One can pass **several columns** to use as unique identifiers:
 ```{r echo = TRUE, eval=FALSE, include=TRUE}
 inner_join(dataframe1, dataframe2,       
-           by = c("Name" = "NAME",  "Surname"))   # KEY #<<
+           by = c("Name" = "NAME",  
+                  "Surname"))   # KEY #<<
 ```
 
 
 ---
-
 # Filtering joins
 
-* Filtering joins are used to **filter rows** from the *left* dataframe depending on the matches to _right_ dataframe. 
+* Filtering joins are used to **filter rows** from the *left* dataframe depending on the matches in _right_ dataframe. 
 * Filtering joins *do not merge data*.
 
 .pull-left[
@@ -391,17 +428,17 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "semi-join.gif"
 ```
 ]
 
-Filtering joins never duplicate, they can only drop lines.
+**Filtering joins never duplicate rows, they can only drop them**
 
 ---
-# Dupplicated columns
+# Real life: dupplicated columns
 
 ```{r eval = TRUE, echo=FALSE}
 df1 <- tibble(ID = c("id_1", "id_2", "id_3", "id_4"), sexe = c("F", "M", "M", "F"))
 df2 <- tibble(ID = c("id_1", "id_2", "id_5"), age = c(5, 5, 7), sexe = c("F", "F", "F"))
 ```
 
-**Tables have columns in common**: both columns are imported, a .x and .y is added to the variable name 
+**If both dataframes have columns with the same name**: both columns are imported, a *.x* and *.y* is added to the variable name 
 
 .pull-left[
 ```{r eval = TRUE, echo=FALSE}
@@ -420,14 +457,25 @@ df2 %>% knitr::kable()
 left_join(df1, df2, by = "ID") %>% knitr::kable()
 ```
 
+???
+If columns are in common, R will change their name to disambiguate them.
+- If you are sure both columns contain the same information, remove them from one of the dataframe before the join
+- If you are unsure, you can compare them easily after the join.
+Mention orally that there is a "suffix" argument and you can give it a vector to rename instead of .x and .y
+
 ---
-# One-to-many lines
+# Real life: one-to-many lines
 
 If a row from the reference dataframe matches *multiple rows* from the second dataframe, **all combinations are returned!**
 
 ```{r eval = TRUE, echo=FALSE}
 df1 <- tibble(ID = c("id_1", "id_2", "id_3", "id_4"), sexe = c("F", "M", "M", "F"))
 df2 <- tibble(ID = c("id_1", "id_1"), age = c(5, 5))
+```
+
+
+```{r eval = FALSE, echo=TRUE}
+left_join(df1, df2, by = "ID")
 ```
 
 
@@ -439,7 +487,7 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "join-one-to-ma
 # Good practices
 
 .pull-left[
-* Use `semi_join()` and `anti_join()` to understand which lines are dropped (and _why_)
+Use `semi_join()` and `anti_join()` to **understand which lines are dropped** (and _why_)
 
 
 ```{r eval = TRUE, echo=TRUE}
@@ -449,11 +497,16 @@ anti_join(df1, df2)
 ]
 
 .pull-right[
-* Check size of both input tables and the merged table
+* **Check size** of dataframes before and after the merge!
 
 ```{r eval = TRUE, echo=TRUE}
 nrow(df1)
 nrow(df1)
 full_join(df1, df2, by = "ID") %>% nrow()
 ```
+
+Is this what was expected? Are some lines duplicated?
 ]
+
+???
+Another good check is to use the `count` function to count the number of rows for each of your identifier.
