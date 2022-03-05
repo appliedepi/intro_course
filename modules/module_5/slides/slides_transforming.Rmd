@@ -324,7 +324,7 @@ All lines from both dataset are kept:
 ```{r include=TRUE, echo=FALSE, eval=TRUE, out.width = '80%'}
 full_join(linelist_patient, 
           linelist_hospit, 
-     by = c("case_id" = "id_patient")) %>%
+     by = c("case_id" = "id_patient")) %>% 
      knitr::kable()
 ```
 

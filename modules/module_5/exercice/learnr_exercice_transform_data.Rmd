@@ -1,0 +1,188 @@
+---
+title: "Transforming and restructuring data"
+output: 
+  learnr::tutorial:
+     progressive: false
+     css: css/css_custom.css
+runtime: shiny_prerendered
+description: >
+  Learn how to join and transform data
+---
+
+<!-- Add JavaScript code for making the exercise code larger -->
+<script language="JavaScript" src="js/exercise-font-size.js"></script>
+
+```{r setup, include=FALSE}
+# load packages ----------------------------------------------------------------
+library(learnr)
+# remotes::install_github("rstudio/gradethis")
+# remotes::install_github("dtkaplan/etude")
+library(gradethis)
+library(etude)      # help functions for gradethis
+
+pacman::p_load(
+     here,
+     rio,
+     janitor,
+     lubridate,
+     tidyverse)
+
+# set options for exercises and checking ---------------------------------------
+gradethis::gradethis_setup()
+
+# learnr::tutorial_options(exercise.timelimit = 60)
+# exercise.checker = gradethis::grade_learnr) 
+# alternatively, submitr::null_code_checker
+
+# event recorder ---------------------------------------------------------------
+# see https://github.com/dtkaplan/submitr/blob/master/R/make_a_recorder.R
+
+# tutorial_options(exercise.eval = FALSE)  # pre-evaluate exercises
+# 
+# new_recorder <- function(tutorial_id, tutorial_version, user_id, event, data) {
+#      cat(
+#           tutorial_id, 
+#           " (v", tutorial_version, "); ",
+#           format(Sys.time(), "%Y-%M%-%D %H:%M:%S %Z"), "; ",
+#           user_id, "; ",
+#           event, "; ",
+#           data$label, "; ",
+#           data$answers, "; ",
+#           data$code, "; ",
+#           data$correct, "\n", sep = "",
+#           
+#           file = here::here("event_records", "learnr_basics.txt"),
+#           append = TRUE)
+# }
+# 
+# options(tutorial.event_recorder = new_recorder)
+```
+
+
+```{r, include=FALSE}
+# hide non-exercise code chunks ------------------------------------------------
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r, include=FALSE}
+# data prep --------------------------------------------------------------------
+linelist_surv <- rio::import(here::here("data", "linelist_cleaned.rds"))
+linelist_med <- rio::import(here::here("data", "medical_linelist_12012014.xlsx"))
+```
+
+
+
+# Joins
+
+## Help, I am lost
+
+### Take home messages 
+
+* **Mutating joins**: add new variables to a dataframe
+     
+     * **Left join**: keep all rows from the first dataframe, and import lines with a correspondence from the second dataframe.
+     
+     * **Right join**: keep all rows from the second dataframe, and import lines with a correspondence from the first dataframe.
+     
+* **Full join**: combine two full dataframes, keeps all rows.
+
+* **Inner join**: take the intersection of two dataframes, keeps only rows present in both dataframes
+
+* **Filtering joins**: filter a dataframe based on another one
+
+     * **Anti join**: keep all lines from first dataframe without matches in the second dataframe
+     * **semi join**: keep all lines from first dataframe with matches in the second dataframe
+
+
+### Some resources
+
+- Tidyverse site presentation of [mutating joins](https://dplyr.tidyverse.org/articles/two-table.html#mutating-joins) and [filtering joins](https://dplyr.tidyverse.org/articles/two-table.html#filtering-joins): some explanations + exemples  
+
+- Tydiverse _reference page_ on [mutating joins](https://dplyr.tidyverse.org/reference/mutate-joins.html): here you will find the full list of arguments for the joins functions  
+
+- Epirhandbook page [on joins](https://epirhandbook.com/en/joining-data.html#joining-data)  
+
+## Exercices
+
+First we will use small and clean dataframe to understand which function to use and how, and in later steps we will try our hands on linelist data.
+
+
+### Understanding the different types of joins
+
+Consider these two mini dataframes containing patient data and lab results for patients.
+
+```{r echo = FALSE}
+df_patient <- tibble(ID = c("patient_1", "patient_2", "patient_3", 
+                            "patient_4", "patient_10"), 
+                     sexe = c("F", "M", "M", "F", "F"), 
+                     age = c(5, 10, 2, 15, 14), 
+                     age_unit = c("Year", "Year", "Year", "Year", "Year"))
+
+df_lab <- tibble(ID = c("patient_1", "patient_2", "patient_4", 
+                        "patient_5", "patient_6"), 
+                 test_result = c("positive", "negative", 
+                                 "negative", "positive", "positive"))
+```
+
+```{r echo = FALSE}
+knitr::kable(list(df_patient, df_lab),
+             align = "c",
+             booktabs = TRUE, 
+             valign = 't')
+```
+
+Which join would you use to...
+
+```{r type-join-1, echo=FALSE}
+question("Which join would you use to add the age and sex for all patients in the lab database, if available",
+         answer("left_join(df_patient, df_lab, by = 'ID')"),
+         answer("right_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
+         answer("inner_join(df_patient, df_lab, by = 'ID')", message = "An inner join would not include patients from the lab database without a match in the patient database. Rows for patient 5 and 6 would be lost"),
+         answer("full_join(df_patient, df_lab, by = 'ID')", message = "An full join would bring in rows with no lab test from the patient database and add unwanted NA. Here we want to use the lab dataframe as the reference."),
+         answer("anti_join(df_patient, df_lab, by = 'ID')"),
+         answer("semi_join(df_patient, df_lab, by = 'ID')"),
+         allow_retry = TRUE
+)
+```
+
+
+
+```{r type-join-2, echo=FALSE}
+question("Which join would you use to get a dataframe with patient for wich we both have data for age, sex and test result",
+         answer("left_join(df_patient, df_lab, by = 'ID')"),
+         answer("right_join(df_patient, df_lab, by = 'ID')"),
+         answer("inner_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
+         answer("full_join(df_patient, df_lab, by = 'ID')", message = "The full join would include all lines from the two dataframes, even if they do not have a match in the other dataframe"),
+         answer("anti_join(df_patient, df_lab, by = 'ID')"),
+         answer("semi_join(df_patient, df_lab, by = 'ID')"),
+         allow_retry = TRUE
+)
+```
+
+
+```{r type-join-3, echo=FALSE}
+question("Which join would you use to keep all the patients from the lab database for which we have personnal data (but do not import columns from the patient dataframe",
+         answer("left_join(df_patient, df_lab, by = 'ID')"),
+         answer("right_join(df_patient, df_lab, by = 'ID')"),
+         answer("inner_join(df_patient, df_lab, by = 'ID')"),
+         answer("full_join(df_patient, df_lab, by = 'ID')"),
+         answer("anti_join(df_patient, df_lab, by = 'ID')"),
+         answer("semi_join(df_lab, df_patient, by = 'ID')", correct = TRUE),
+         allow_retry = TRUE
+)
+```
+
+
+```{r type-join-4, echo=FALSE}
+question("Which join would you use to get the list of patients for whom we have personnal data (age and sex) but no test result",
+         answer("left_join(df_patient, df_lab, by = 'ID')"),
+         answer("right_join(df_patient, df_lab, by = 'ID')"),
+         answer("inner_join(df_patient, df_lab, by = 'ID')"),
+         answer("full_join(df_patient, df_lab, by = 'ID')"),
+         answer("anti_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
+         answer("semi_join(df_lab, df_patient, by = 'ID')"),
+         allow_retry = TRUE
+)
+```
+
+
