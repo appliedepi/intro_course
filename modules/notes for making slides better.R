@@ -15,3 +15,9 @@ Chunk 2:
 {r, ref.label="irisplot", echo=TRUE}
 
 
+
+######
+
+Try to embed shiny app in a slide, that reads Google Froms and makes plot
+Alternatively, just have the app open in another tab and show it
+
