@@ -25,8 +25,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 In this demonstration, especially at the beginning, it is important that you follow the code instructions exactly. The order and specific actions matter because they introduce specific concepts about how we interact with R, how R interprets commands, and R reacts to commands.  
 
-The purpose of the coding demo now is to show only simply **how R code runs** - *not to introduce any functions*.  
-
 
 # Preparation  
 
@@ -57,10 +55,6 @@ The purpose of the coding demo now is to show only simply **how R code runs** - 
      * **Open a new R project** (click through to standard and save in a **NEW directory**).  
           * **Save it** as "*intro_course*" in a pre-prepared location near where you have saved the course files.  
           * **Show the file explorer** and the new R project folder, and the .Rproj file.  
-          * **Explain the benefits of working in an R project**  
-               * An R project is like a self-contained briefcase or folder for all your project's files (data, scripts, outputs)  
-               * This reduces likelihood of broken file paths  
-               * It can be easily zipped and shared by email, or shared on sites like Github  
      * **Close RStudio, and re-open the project** by clicking the .Rproj file.  
           * Note the name of the project appears in the upper-right of RStudio. 
      * **Open a new R script**.  
@@ -97,27 +91,24 @@ The purpose of the coding demo now is to show only simply **how R code runs** - 
 
 1. **R commands**  
      * Begin typing into the R script  
-     * Type `1 + 2`note that your cursor is in this command line, and **click "Run" with your mouse**.  
-          * Show that the result appears in the R Console  
+     * Type `1 + 2`, note that your cursor is in this command line, and click "Run" with your mouse.  
+          * Show the result appear in the R Console  
           * Note the `>` that shows the original command  
-          * Note the `[1]` that precedes the answer, indicating the first element of an output. This can confuse some people.
-     * Cut & Paste the same command to a different line in the script. Run this line by clicking "Run".  
-          * Explain that lines in the command can be run one-by-one, or you can run the entire script line-after-line.
-     * Add more to the command to make `(1 + 2) * 4 / 6`.  
-          * Ask the audience what the answer will be, based on order of operations (put in the chat)  
+          * Note the `[1]` that precedes the answer. This can confuse some people.
+     * Cut & Paste the same command to a different line in the script. Run it again.  
+     * Add/change the command to make `(1 + 2) * 4 / 6`.  
+          * Ask the audience what the answer will be (put in the chat)  
           * Run the entire command and see the answer `2`  
-          * Now highlight just the segment `1 + 2` and click Run.  
-          * Explain that when some code it highlighted, only the highlighted portion is executed. 
-     * Demonstrate that you can run command by placing your cursor anywhere in the line and typing *Ctrl and Enter* (Cmd and Enter on macs)
-     * Mention the keyboard shortcut to run commands (Ctrl+Enter, or Cmd+Enter for macs)
+          * Highlight just the segment `1 + 2` and click Run.  
+          * Note that only the highlighted portion was executed. 
+     * Explain that you can run the command by placing your cursor anywhere in the line and typing *Ctrl and Enter* (Cmd and Enter on macs)  
 
 </br>
 
 2. **Define numeric object**  
-     * Explain that one reason R is powerful is its ability to save many datasets at once.  
-     * Explain that you are going to define an object, and discuss R's "assignment operator" `<-`.  
-     * Explain that it is **like an arrow** and takes the **value** of the right side, and assigns it to the **name** on the left.  
-     * The assignment operator can be used to **create** an object, or to re-assign its value:  
+     * Explain that you are going to define an object, and introduce R's "assignment operator" `<-`.  
+     * Explain that it takes the **value** of the right side, and assigns it to the **name** on the left.  
+     * The operator can be used to **create** an object, or to re-assign its value:  
           * In the script, type and run `epiweek <- 34`. Explain that you are creating an object named "epiweek" that has the numeric value 34.  
           * Explain that for anyone unfamiliar, an "epiweek" is shorthand for an "epidemiological week" and helps standardise reporting.  
           * Show how this new object appears in the **Environment Pane**.
@@ -130,8 +121,8 @@ The purpose of the coding demo now is to show only simply **how R code runs** - 
      * Write the command `epiweek - 1` in the script.  
           * Ask the audience what the value will be (enter in the chat).  
           * Run the command and note the output `33`.  
-          * Write the command `previous_week <- epiweek - 1`. Ask **"What are we asking R to do?"**  
-          * Briefly note that object names should be short, cannot have spaces, and cannot start with a number  
+          * Write the command `previous_week <- epiweek - 1`.  
+          * Briefly note that objects cannot have spaces, and cannot start with a number  
           * Ask the audience where changes will appear in RStudio when the command is run.  
           * Run it, and note Console only shows record of the command - it does not print a value in the Console (note lack of `[1]`). Note new object name and value appears in Environment Pane.  
           * Note the difference between commands that *print* a object or value, and commands that *define* an object (**"What are you asking R to do?"**)  
@@ -140,17 +131,17 @@ The purpose of the coding demo now is to show only simply **how R code runs** - 
 </br>
 
 3. **Re-define the value**  
-     * Below the former commands in the script, *write a new command*: `epiweek <- 35`, and run it.  
-          * Note the new value of `epiweek` in the **Environment Pane**  
-          * Run `epiweek` and `previous_week`.  
-          * Note that `previous_week` is still `33`. Re-run `previous_week <- epiweek - 1` and note the change, and that `previous_week` did not automatically update until the command was re-run.  
+     * *Write a new command* below the old command `epiweek <- 35` in the script, and run it.  
+          * Note the new value in the **Environment Pane**  
+          * Note that `previous_week` is still `33`. Re-run `previous_week <- epiweek - 1` and note the change.  
+     * **Edit** the previous command to read `epiweek <- 36` and run it. Note the new value in the Environment Pane.  
+          * Run just the word `epiweek` from the script. Note the value 36.  
 
 # Commenting  
 
 1. **Introduce script header**  
-     * * Explain that now that we have several commands, we should organize our script, for the sakes of ourselves and any future readers.  
-     * Explain that the "hash" # symbol is used to write freely in the script. Remind people that often the entire script is run at once, not line-by-line, and therefore some areas must be marked by #, so R knows to not try and run it. Otherwise, R will return errors.  
-     * Begin by writing these few lines at the top, and explain the importance of documentation.  
+     * * Explain that now that we have several commands, we should organize it. For ourselves and any future readers.  
+     * Begin by writing a few lines at the top:  
      
 ```{r, eval=F, echo=T}
 # Demo script for intro course
@@ -175,29 +166,46 @@ previous_week <- epiweek - 1
 3. **Right-side comments**  
      * Explain that nothing to the right of the # will be run.  
      * Re-write your comments to appear *after* and *to the right* of each command:  
-     * Use this opportunity to talk about spaces and comment alignment (readability)
 
 ```{r, eval=F, echo=T}
 epiweek <- 36                  # define epiweek  
 previous_week <- epiweek - 1   # define previous epiweek  
 ```
 
+# Another example  
+
+1. Give another example of defining objects
+     * Write the below, step-by step. Run each command sequentially.  
+
+```{r, eval=F, echo=T}
+# Suspect cases
+suspect_cases <- 2    # define
+suspect_cases         # print
+
+# Confirmed cases  
+confirmed_cases <- 10 # define
+confirmed_cases       # print
+
+# Total cases
+total_cases <- suspect_cases + confirmed_cases   # calculate
+total_cases # print
+```
 
 # Other class of objects    
 1. Define a character object  
-     * Introduce the idea of *classes* - but do not introduce `class()` yet, as we have not yet introduced the idea of functions.
+     * Introduce the idea of *classes* - but do not introduce `class()` yet.
      * Note that until now we have dealt with numbers, but you can also define "character values"
      * Write the command `district <- "Bolo"` in the script and run it.  
      * Print by running the command `district`.
-     * Note the difference between `"34"` and `34` - **note the quotation marks** - one you can use as a number, the other you should not.    
+     * Note the difference between `"34"` and `34` - one you can use as a number, the other you should not.    
      
 # Course files  
 1. **Copy course files into the R project**  
      * Toggle out of RStudio and show the File Explorer window.
-          * **Copy all the course files** and paste them into the R project  
-          * Show how they are now accessible from the RStudio **Files pane**.  
-          * Discuss the project structure (a "data" folder, a "scripts" folder, and a "outputs" folder)          
-     * Save and close "*demo.R*" in RStudio. In the File Explorer, manually move it from the project root into the "scripts" subfolder  
+          * **Copy the course files** and paste them into the R project  
+          * Show how they are accessible from the RStudio **Files pane**  
+          * Discuss the structure (a "data" folder, a "scripts" folder, and a "outputs" folder)          
+     * Save and close "*demo.R*" in RStudio. In the File Explorer, move it into the "scripts" folder manually.  
 
 # Finish
 Close RStudio.    

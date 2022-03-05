@@ -77,23 +77,6 @@ knitr::include_graphics(here::here("images", "moz-banner.png"))
 ```
 
 
-
-```{r, eval=F, echo=T}
-# Suspect cases
-suspect_cases <- 2    # define
-suspect_cases         # print
-
-# Confirmed cases  
-confirmed_cases <- 10 # define
-confirmed_cases       # print
-
-# Total cases
-total_cases <- suspect_cases + confirmed_cases   # calculate
-total_cases # print
-```
-
-
-
 Write the R code required to add two plus two:
  
 <details>
