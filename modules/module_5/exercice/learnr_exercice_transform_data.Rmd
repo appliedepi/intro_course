@@ -25,7 +25,8 @@ pacman::p_load(
      rio,
      janitor,
      lubridate,
-     tidyverse)
+     tidyverse,
+     kableExtra)
 
 # set options for exercises and checking ---------------------------------------
 gradethis::gradethis_setup()
@@ -56,6 +57,53 @@ gradethis::gradethis_setup()
 # }
 # 
 # options(tutorial.event_recorder = new_recorder)
+# 
+
+
+# Data prep --------------------------------------------------------------------
+# Import
+linelist_surv <- rio::import(here::here("data", "linelist_cleaned.rds"))
+linelist_med <- rio::import(here::here("data", "medical_linelist_12012014.xlsx"))
+hospitals <- bind_rows(rio::import(here::here("data", "Port Hospital 12012014.csv")),
+                    rio::import(here::here("data", "Central Hospital 12012014.csv")))
+
+# Make more manageable files
+linelist <- linelist_surv %>% 
+     select(case_id, hospital, case_id, age_years,  wt_kg, 
+            ht_cm,  date_infection, date_onset)
+
+hospitals <- hospitals %>%  select(hospital, id_case = case_id, 
+                                   `hospitalisation date`, outcome, `outcome date`) %>% 
+     janitor::clean_names()
+
+
+# Make the hospital information dataframe
+hosp_info = data.frame(
+  hosp_name     = c("central hospital", "military", "military", "port", "St. Mark's", "ignace", "sisters"),
+  catchment_pop = c(1950280, 40500, 10000, 50280, 12000, 5000, 4200),
+  level         = c("Tertiary", "Secondary", "Primary", "Secondary", "Secondary", "Primary", "Primary")
+)
+
+
+# Create smaller linelists for the easier exemples
+df_patient <- tibble(ID = c("patient_1", "patient_2", "patient_3", 
+                            "patient_4", "patient_10"), 
+                     sexe = c("F", "M", "M", "F", "F"), 
+                     age = c(5, 10, 2, 15, 14), 
+                     age_unit = c("Year", "Year", "Year", "Year", "Year"))
+
+df_lab <- tibble(ID = c("patient_1", "patient_2", "patient_4", 
+                        "patient_5", "patient_6"), 
+                 test_result = c("positive", "negative", 
+                                 "negative", "positive", "positive"))
+
+
+df1 <- tibble(ID = c("patient_1", "patient_2", "patient_3"),
+              sexe = c("F", "M", "M"))
+              
+df2 <- tibble(ID = c("patient_1", "patient_1", "patient_1", "patient_2", "patient_4"),
+              date_test = as.Date(c("2021-12-01", "2021-12-26", "2022-01-05", "2021-12-18", "2022-01-01")),
+                 test_result = c("positive", "negative", "negative", "positive", "positive"))
 ```
 
 
@@ -64,11 +112,6 @@ gradethis::gradethis_setup()
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r, include=FALSE}
-# data prep --------------------------------------------------------------------
-linelist_surv <- rio::import(here::here("data", "linelist_cleaned.rds"))
-linelist_med <- rio::import(here::here("data", "medical_linelist_12012014.xlsx"))
-```
 
 
 
@@ -79,19 +122,19 @@ linelist_med <- rio::import(here::here("data", "medical_linelist_12012014.xlsx")
 ### Take home messages 
 
 * **Mutating joins**: add new variables to a dataframe
-     
-     * **Left join**: keep all rows from the first dataframe, and import lines with a correspondence from the second dataframe.
-     
-     * **Right join**: keep all rows from the second dataframe, and import lines with a correspondence from the first dataframe.
-     
+
+* **Left join**: keep all rows from the first dataframe, and import lines with a correspondence from the second dataframe.
+
+* **Right join**: keep all rows from the second dataframe, and import lines with a correspondence from the first dataframe.
+
 * **Full join**: combine two full dataframes, keeps all rows.
 
 * **Inner join**: take the intersection of two dataframes, keeps only rows present in both dataframes
 
 * **Filtering joins**: filter a dataframe based on another one
 
-     * **Anti join**: keep all lines from first dataframe without matches in the second dataframe
-     * **semi join**: keep all lines from first dataframe with matches in the second dataframe
+* **Anti join**: keep all lines from first dataframe without matches in the second dataframe
+* **semi join**: keep all lines from first dataframe with matches in the second dataframe
 
 
 ### Some resources
@@ -111,78 +154,289 @@ First we will use small and clean dataframe to understand which function to use 
 
 Consider these two mini dataframes containing patient data and lab results for patients.
 
-```{r echo = FALSE}
-df_patient <- tibble(ID = c("patient_1", "patient_2", "patient_3", 
-                            "patient_4", "patient_10"), 
-                     sexe = c("F", "M", "M", "F", "F"), 
-                     age = c(5, 10, 2, 15, 14), 
-                     age_unit = c("Year", "Year", "Year", "Year", "Year"))
-
-df_lab <- tibble(ID = c("patient_1", "patient_2", "patient_4", 
-                        "patient_5", "patient_6"), 
-                 test_result = c("positive", "negative", 
-                                 "negative", "positive", "positive"))
-```
 
 ```{r echo = FALSE}
-knitr::kable(list(df_patient, df_lab),
-             align = "c",
-             booktabs = TRUE, 
-             valign = 't')
+df_patient %>% kbl() %>% kable_styling(full_width = FALSE, 
+                                       bootstrap_options = c("striped", "hover", "condensed"))
+
+df_lab %>% kbl() %>% kable_styling(full_width = FALSE, 
+                                   bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
 Which join would you use to...
 
-```{r type-join-1, echo=FALSE}
-question("Which join would you use to add the age and sex for all patients in the lab database, if available",
-         answer("left_join(df_patient, df_lab, by = 'ID')"),
-         answer("right_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
-         answer("inner_join(df_patient, df_lab, by = 'ID')", message = "An inner join would not include patients from the lab database without a match in the patient database. Rows for patient 5 and 6 would be lost"),
-         answer("full_join(df_patient, df_lab, by = 'ID')", message = "An full join would bring in rows with no lab test from the patient database and add unwanted NA. Here we want to use the lab dataframe as the reference."),
-         answer("anti_join(df_patient, df_lab, by = 'ID')"),
-         answer("semi_join(df_patient, df_lab, by = 'ID')"),
-         allow_retry = TRUE
+
+```{r quiz-joins-1}
+quiz(
+     question("Which join would you use to add the age and sex for all patients in the lab database, if available",
+              answer("left_join(df_patient, df_lab, by = 'ID')"),
+              answer("right_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
+              answer("inner_join(df_patient, df_lab, by = 'ID')", message = "An inner join would not include patients from the lab database without a match in the patient database. Rows for patient 5 and 6 would be lost"),
+              answer("full_join(df_patient, df_lab, by = 'ID')", message = "An full join would bring in rows with no lab test from the patient database and add unwanted NA. Here we want to use the lab dataframe as the reference."),
+              answer("anti_join(df_patient, df_lab, by = 'ID')"),
+              answer("semi_join(df_patient, df_lab, by = 'ID')"),
+              allow_retry = TRUE),
+     
+     question("Which join would you use to get a dataframe with patient for wich we both have data for age, sex and test result",
+              answer("left_join(df_patient, df_lab, by = 'ID')"),
+              answer("right_join(df_patient, df_lab, by = 'ID')"),
+              answer("inner_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
+              answer("full_join(df_patient, df_lab, by = 'ID')", message = "The full join would include all lines from the two dataframes, even if they do not have a match in the other dataframe"),
+              answer("anti_join(df_patient, df_lab, by = 'ID')"),
+              answer("semi_join(df_patient, df_lab, by = 'ID')"),
+              allow_retry = TRUE),
+     
+     question("Which join would you use to keep all the patients from the lab database for which we have personnal data (but do not import columns from the patient dataframe",
+              answer("left_join(df_lab, df_patient, by = 'ID')"),
+              answer("right_join(df_patient, df_lab, by = 'ID')"),
+              answer("inner_join(df_lab, df_patient, by = 'ID')", message = "You are close. But an inner join in this case would import the columns from the df_patient dataframe, which we do not want"),
+              answer("full_join(df_lab, df_patient,  by = 'ID')"),
+              answer("anti_join(df_patient, df_lab, by = 'ID')"),
+              answer("semi_join(df_lab, df_patient, by = 'ID')", correct = TRUE),
+              allow_retry = TRUE), 
+     
+     question("Which join would you use to get the list of patients for whom we have personnal data (age and sex) but no test result",
+              answer("left_join(df_patient, df_lab, by = 'ID')"),
+              answer("right_join(df_patient, df_lab, by = 'ID')"),
+              answer("inner_join(df_patient, df_lab, by = 'ID')"),
+              answer("full_join(df_patient, df_lab, by = 'ID')"),
+              answer("anti_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
+              answer("semi_join(df_lab, df_patient, by = 'ID')"),
+              allow_retry = TRUE),
+     
+     question("Which of these joins would class df_patient as the baseline?",
+              answer("left_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
+              answer("right_join(df_lab, df_patient, by = 'ID')", correct = TRUE),
+              answer("left_join(df_lab, df_patient, by = 'ID')"), correct = FALSE,
+              allow_retry = TRUE),
+     
+     question("Which of these would return only the rows found in df_patient?",
+              answer("inner_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
+              answer("full_join(df_patient, df_lab, by = 'ID')", correct = FALSE),
+              answer("left_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
+              allow_retry = TRUE),
+     
+     question("Which of these would fill in columns that didn't match with NA values?",
+              answer("full_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
+              answer("semi_join(df_patient, df_lab, by = 'ID')", correct = FALSE),
+              answer("anti_join(df_patient, df_lab, by = 'ID')", correct = FALSE),
+              answer("inner_join(df_patient, df_lab, by = 'ID')", correct = FALSE),
+              allow_retry = TRUE)
 )
 ```
 
+### Syntax
 
+The syntax of the join functions is always the same:
 
-```{r type-join-2, echo=FALSE}
-question("Which join would you use to get a dataframe with patient for wich we both have data for age, sex and test result",
-         answer("left_join(df_patient, df_lab, by = 'ID')"),
-         answer("right_join(df_patient, df_lab, by = 'ID')"),
-         answer("inner_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
-         answer("full_join(df_patient, df_lab, by = 'ID')", message = "The full join would include all lines from the two dataframes, even if they do not have a match in the other dataframe"),
-         answer("anti_join(df_patient, df_lab, by = 'ID')"),
-         answer("semi_join(df_patient, df_lab, by = 'ID')"),
-         allow_retry = TRUE
-)
+```{r echo = TRUE, eval=FALSE}
+XXX_join(dataframe1,   # "left" dataframe
+         dataframe2,   #  "right" dataframe
+         by = c("identifier1", "identifier2"))   # Columns used to match the two dataframes
+
+#Or, with a pipe:
+dataframe1 %>%             # "left" dataframe
+     XXX_join(dataframe2,  # "right" dataframe
+              by = c("identifier1", "identifier2"))   # Columns used to match the two dataframes
 ```
 
 
-```{r type-join-3, echo=FALSE}
-question("Which join would you use to keep all the patients from the lab database for which we have personnal data (but do not import columns from the patient dataframe",
-         answer("left_join(df_patient, df_lab, by = 'ID')"),
-         answer("right_join(df_patient, df_lab, by = 'ID')"),
-         answer("inner_join(df_patient, df_lab, by = 'ID')"),
-         answer("full_join(df_patient, df_lab, by = 'ID')"),
-         answer("anti_join(df_patient, df_lab, by = 'ID')"),
-         answer("semi_join(df_lab, df_patient, by = 'ID')", correct = TRUE),
-         allow_retry = TRUE
-)
+#### Left join
+
+How would you perform a left join of `df_patient` with `df_lab` (where `df_patient` is used as reference/baseline)?
+
+```{r left_join_syntax, exercise = TRUE}
+
+```
+
+```{r left_join_syntax-hint}
+Because we want `df_patient` as the baseline, it should be listed first.
+```
+
+```{r left_join_syntax-check}
+grade_this({
+     # Automatically pass if .result equal to .solution
+     pass_if_equal(message = "Excellent")
+     # Default to failing grade with feedback
+     fail()
+})
+```
+
+```{r left_join_syntax-solution}
+df_patient %>% 
+     left_join(df_lab, by = "ID")
 ```
 
 
-```{r type-join-4, echo=FALSE}
-question("Which join would you use to get the list of patients for whom we have personnal data (age and sex) but no test result",
-         answer("left_join(df_patient, df_lab, by = 'ID')"),
-         answer("right_join(df_patient, df_lab, by = 'ID')"),
-         answer("inner_join(df_patient, df_lab, by = 'ID')"),
-         answer("full_join(df_patient, df_lab, by = 'ID')"),
-         answer("anti_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
-         answer("semi_join(df_lab, df_patient, by = 'ID')"),
-         allow_retry = TRUE
-)
+#### Anti-join
+
+Write the command that returns all lines from the lab database for which we are missing age and sex.
+
+```{r anti_join_syntax, exercise = TRUE}
+
+```
+
+```{r anti_join_syntax-hint}
+Because we want `df_lab` as the baseline, it should be listed first.
+```
+
+```{r anti_join_syntax-check}
+grade_this({
+     # Automatically pass if .result equal to .solution
+     pass_if_equal(message = "Excellent")
+     # Default to failing grade with feedback
+     fail()
+})
+```
+
+```{r anti_join_syntax-solution}
+df_lab %>% 
+     anti_join(df_patient, by = "ID")
 ```
 
 
+### Line duplication
+
+Let us consider these small dataframes: 
+
+```{r echo = FALSE}
+df1 %>% kbl() %>% kable_styling(full_width = FALSE, 
+                                       bootstrap_options = c("striped", "hover", "condensed"))
+
+df2 %>% kbl() %>% kable_styling(full_width = FALSE, 
+                                   bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+
+```{r quiz-duplication-1}
+quiz(
+     question("When runing the command left_join(df1, df2, by = 'ID'), how many lines will be returned for patient 1?",
+              answer("0", message = "The left dataframe has a row for patient 1. This row could be duplicated if the right dataframe had more than one, but it cannot be dropped when using a left join."),
+              answer("1", message = "The lab dataframe has three rows for patient 1, what do you think will happen to them?"),
+              answer("2"),
+              answer("3", correct = TRUE),
+              answer("4", message = ""),
+              allow_retry = TRUE),
+     
+     question("What about patient 2?",
+              answer("0", message = "The left dataframe has a row for patient 2. This row could be duplicated if the right dataframe had more than one, but it cannot be dropped when using a left join."),
+              answer("1", correct = TRUE),
+              answer("2", message = "The right dataframe has only one row for patient 2, so it's a parfect one-on-one match"),
+              answer("3", message = "The right dataframe has only one row for patient 2, so it's a parfect one-on-one match"),
+              answer("4", message = "The right dataframe has only one row for patient 2, so it's a parfect one-on-one match"),
+              allow_retry = TRUE),
+     
+     question("When runing the command right_join(df1, df2, by = 'ID'), what do you think the values in the sexe column will be for patient 4?",
+              answer("F", message = "What is the value of sexe for patient 4 in the df1 dataframe?"),
+              answer("M", message = "What is the value of sexe for patient 4 in the df1 dataframe?"),
+              answer("There won't be a patient_4 row, it will be dropped", message = "This is a right join, so df2 is used as a reference dataframe, none of its rows will be dropped, even if no match is found in the df1 dataframe"),
+              answer("NA", correct = TRUE),
+              allow_retry = TRUE)
+     
+)
+
+```
+
+
+### Linelist data
+
+Now we will try to use these functions with linelist data. We will First guide you through joining of a subset of the linelist data with a subset of hospital patient data.
+
+```{r}
+linelist %>% 
+     head(10) %>% 
+     kbl() %>% 
+     kable_styling(full_width = FALSE, 
+                   bootstrap_options = c("striped", "hover", "condensed"))
+
+hospitals %>% 
+     head(10) %>% 
+     kbl() %>% 
+     kable_styling(full_width = FALSE, 
+                   bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+
+Fill in the blank to check the dimensions (number of lines and columns) of the two dataframe.
+
+```{r join_dim_1, exercise = TRUE, exercise.blanks = "___+"}
+____(linelist)
+____(hospitals)
+```
+
+```{r join_dim_1-solution}
+dim(linelist)
+dim(hospitals)
+```
+
+The first question to ask is which column should be used for the matching.
+
+```{r join_which_ID_1, echo=FALSE}
+question("Which column(s) should we use as a primary key",
+  answer("case_id", correct = TRUE),
+  answer("hospital", message = "While it may be used for joining, it would be good to check that hospitals were filled with the same name in both dataframes. There is a better here"),
+  answer("age_years"),
+  answer("date_onset"),
+  answer("id_case", correct = TRUE),
+  answer("hospitalisation_date"),
+  answer("outcome"),
+  answer("outcome_date")
+)
+```
+
+Do we know if the patient ID was entered in the same way in both dataframe? If data comes from a clean SQL database and is a primary key, probably. With excel data entered by many different people in emergency settings, it may be less obvious.
+
+Spend a bit of time looking at the structure of ID. Do they follow the same pattern? Are some ID common between the two databases?
+
+Let's look at a sample of IDs from both dataframes:  
+
+```{r echo = TRUE, eval = TRUE}
+linelist %>% arrange(case_id) %>% pull(case_id) %>% head(10)
+hospitals %>% arrange(id_case) %>% pull(id_case) %>% head(10)
+```
+
+They seem similar. Is there IDs in common between the two dataframes? The `intersect()` function let you know which elements are in common between two vectors.
+
+```{r echo = TRUE, eval = TRUE}
+intersect(linelist$case_id,
+          hospitals$id_case) %>% head(10)
+```
+
+There are definitely IDs in common. 
+
+With very dirty data, you would want to inspect your IDs more, especially the ones who don't match, in case several patterns of IDs were entered in the same file.
+
+Now, it would be good to understand better who are the patients in which dataframes. Are there duplicate lines?
+
+```{r}
+# Use the count and filter functions you learned about to filter patients present in more than one line
+linelist %>% 
+     count(case_id) %>% 
+     filter(n > 1)
+
+
+# linelist[duplicated(linelist$case_id), ]
+```
+
+TODO: finish exercice.
+TODO: show antijoin in both directions to understand that the hospital is a subset of the patients/
+TODO: ask them to perform a couple of joins, and check the size of the output
+
+
+```{r}
+
+left_join(linelist, hospitals, by = c("case_id" = "id_case"))
+
+right_join(linelist, hospitals, by = c("case_id" = "id_case"))
+inner_join(linelist, hospitals, by = c("case_id" = "id_case"))
+full_join(linelist, hospitals, by = c("case_id" = "id_case"))
+
+anti_join(linelist, hospitals, by = c("case_id" = "id_case"))
+anti_join(hospitals, linelist, by = c("id_case" = "case_id"))
+
+
+```
+
+
+TODO: get exos fromp the tutorial, with the dirty hospital data.
+Maybe think of an exemple with several key columns. And with duplicated lines.
