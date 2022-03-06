@@ -21,6 +21,7 @@ htmltools::img(src = knitr::image_uri(here::here("images", "logo.png")),
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
 # Notes  
 
 In this demonstration, especially at the beginning, it is important that you follow the code instructions exactly. The order and specific actions matter because they introduce specific concepts about how we interact with R, how R interprets commands, and R reacts to commands.  

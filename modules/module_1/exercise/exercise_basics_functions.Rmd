@@ -11,6 +11,9 @@ description: >
   Learn how to get started with R and RStudio, and how to import a dataset
 ---
 
+<!-- NOTES: To edit images, edit them in the "images" folder that lives NEXT TO THE RMD FILE -->
+
+
 <!-- Add JavaScript code for making the exercise code larger -->
 <script language="JavaScript" src="js/exercise-font-size.js"></script>
 
@@ -80,6 +83,9 @@ linelist_raw <- rio::import(here::here("data", "linelist_raw.xlsx"))
 linelist <- rio::import(here::here("data", "linelist_cleaned.rds"))
 ```
 
+
+
+
 ## Introduction to R for Applied Epidemiology and Public Health
 
 
@@ -87,14 +93,9 @@ linelist <- rio::import(here::here("data", "linelist_cleaned.rds"))
 
 Welcome to the live course "Introduction to R for applied epidemiologists", offered by [Applied Epi](www.appliedepi.org) - a nonprofit organisation that offers open-source tools, training, and support to frontline public health practitioners.  
 
-```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
-# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
-# It dynamically creates the ../../etc filepath.
-
-knitr::include_graphics(here::here("images", "logo.png"))
+```{r, eval = TRUE, echo = FALSE, out.width = "25%"}
+knitr::include_graphics("images/logo.png")
 ```
-
-![]("../../../images/logo.png")
 
 ### R setup, basic syntax, and importing data  
 
@@ -343,7 +344,7 @@ quiz(caption = "Quiz - R and RStudio",
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
 
-knitr::include_graphics(here::here("images", "functions_packages", "RStudio-overview.PNG"))
+knitr::include_graphics("images/RStudio-overview.png")
 ```
 
 TIP: If your RStudio displays only one left pane it is because you have no scripts open yet.
@@ -406,7 +407,7 @@ If you are working in an RStudio project, you will see the name of the project i
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
 
-knitr::include_graphics(here::here("images", "functions_packages", "Rproject_dropdown.png"))
+knitr::include_graphics("images/Rproject_dropdown.png")
 ```
 
 #### Create a new project  
@@ -415,11 +416,11 @@ Ok, let's get started!
 
 1) Click through to *File -> New Project*. Select "New Directory" and then "New Project".  
 
-```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
+```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
 
-knitr::include_graphics(here::here("images", "functions_packages", "create_project.png"))
+knitr::include_graphics("images/create_project.png")
 ```
 
 2) Give your project the name "intro_course". This will be the project for ALL of your work in this course.  
@@ -457,8 +458,8 @@ You can read more about RStudio projects in [this chapter of the Epi R Handbook]
 
 **Open a new R script** by clicking *File -> New file -> R script* (if you have not already done so). You should see a new empty tab appear in the upper-left pane of RStudio.  
 
-```{r script-new, fig.margin = TRUE, echo = FALSE, fig.width = 3, out.width = "50%", fig.cap = ""}
-knitr::include_graphics(here::here("images", "functions_packages", "new_script.jpg"))
+```{r script-new, fig.margin = TRUE, echo = FALSE, fig.width = 3, out.width = "35%", fig.cap = ""}
+knitr::include_graphics("images/new_script.jpg")
 ```
 
 Currently, the script is not saved. Click the save icon above the script, or click *File -> Save As*. Name the script "demo.R" and ensure it saves in the same folder as your R project.  
@@ -495,8 +496,8 @@ A typical R script for public health analysis/reporting might include sections l
 * Perform summary and statistical analyses
 * Display results as plots, tables, maps, etc.
 
-```{r script-example, fig.margin = TRUE, echo = FALSE, fig.width = 3, out.width = "50%", fig.cap = ""}
-knitr::include_graphics(here::here("images", "functions_packages", "example_script.png"))
+```{r script-example, fig.margin = TRUE, echo = FALSE, fig.width = 3, out.width = "75%", fig.cap = ""}
+knitr::include_graphics("images/example_script.png")
 ```
 
 
@@ -916,7 +917,7 @@ Here is a picture of a simple R script that has good commenting:
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
 
-knitr::include_graphics(here::here("images", "functions_packages", "example_script.png"))
+knitr::include_graphics("images/example_script.png")
 ```
 
 
@@ -1081,11 +1082,11 @@ Note: Even though the vector contains character values, when typing the *name* o
 
 Most functions you will encounter in R have *named arguments*, which means you need to specify the settings under which the function will operate.  
 
-```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
+```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
 
-knitr::include_graphics(here::here("images", "functions_packages", "arguments-buttons.png"))
+knitr::include_graphics("images/arguments-buttons.png")
 ```
 
 
@@ -1181,8 +1182,8 @@ A function's arguments and any default values can be read in the function's *doc
 
 The documentation details will look something like this (we can help you interpret, as they can be difficult to understand at first):  
 
-```{r, fig.margin = TRUE, echo = FALSE, fig.width = 3, out.width = "100%", fig.cap = ""}
-knitr::include_graphics(here::here("images", "functions_packages", "r-help.png"))
+```{r, fig.margin = TRUE, echo = FALSE, fig.width = 3, out.width = "50%", fig.cap = ""}
+knitr::include_graphics("images/r-help.png")
 ```
 
 
@@ -1291,8 +1292,8 @@ Once a package is **installed**, it is stored in **your R “library”**. You c
 
 Think of R as your personal library: *when you install a package, your library gains a new "book" of functions. But each time you want to use a function from that book, you must borrow (“load”) it from your library.*
 
-```{r, fig.margin = TRUE, echo = FALSE, fig.width = 3, out.width = "100%", fig.cap = ""}
-knitr::include_graphics(here::here("images", "functions_packages", "bookshelf1.png"))
+```{r, fig.margin = TRUE, echo = FALSE, fig.width = 3, out.width = "50%", fig.cap = ""}
+knitr::include_graphics("images/bookshelf1.png")
 ```
 
 In summary: to use the functions available in an R package, 2 steps must be implemented:
