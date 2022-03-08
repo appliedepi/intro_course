@@ -728,7 +728,7 @@ Newlines and indent will not impact the code, but make it more readable!
 demo %>% 
   select(case_id, age, gender, case_def) %>%         # select columns
   distinct() %>%                                     # de-duplicate
-  filter(age > 10, case_def == "Confirmed") %>%       # only young children confirmed cases
+  filter(age > 10, case_def == "Confirmed") %>%      # only young children confirmed cases
   mutate(infant = ifelse(age < 1, TRUE, FALSE))      # make new column infants
 ```
 
@@ -738,7 +738,7 @@ demo %>%
 demo %>% 
   select(case_id, age, gender, case_def) %>%         # select columns
   distinct() %>%                                     # de-duplicate
-  filter(age > 10, case_def == "Confirmed") %>%       # only young children confirmed cases
+  filter(age > 10, case_def == "Confirmed") %>%      # only young children confirmed cases
   mutate(infant = ifelse(age < 1, TRUE, FALSE)) %>%  # make new column for infants
   knitr::kable() 
 ```
@@ -824,7 +824,8 @@ demo %>%                    # print only cases under 5 years
 
 --
 
-Instead: add the assignment operator **`<-`** to define a new data frame.  
+
+To save: add the assignment operator **<-** to define a new data frame.  
 
 ```{r pipe-assign, eval=F, echo=T}
 demo_under5 <- demo %>%
@@ -843,8 +844,8 @@ Note how the column names in `demo` are old! It's because our changes have not y
 `mutate()` is used to *create* new columns
 
 ```{r, results = "asis", echo = FALSE}
-"Write the new column name, then an = symbol, and a function that creates the new values:" %>%
-  flair("new column name", color = "green") %>%
+"The syntax is: new column name = a function that creates the new values:" %>%
+  flair("new column name", color = "deeppink") %>%
   flair("function", color = "cornflowerblue") %>%
   flair_all(before = "<h4>", after = "</h4>") %>%
   cat()
@@ -864,6 +865,9 @@ decorate("mutate") %>%
   knit_print.with_flair()
 ```
 
+--
+
+`ifelse()` applies a logical criteria to each row, returns one value if true, and returns another value if false.  
 
 ---
 
