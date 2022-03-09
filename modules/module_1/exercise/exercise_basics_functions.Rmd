@@ -1842,7 +1842,7 @@ Once you get the command to run successfully, you probably saw a lot of text app
 
 You did not ask R to save the dataset as a named object. How would you do that?  
 
-**In RStudio, try again to import the data and save it as the object `surv_ll_raw` (a short name for "surveillance linelist raw").** 
+**In RStudio, try again to import the data and save it as the object `surv_raw` (a short name for "surveillance linelist raw").** 
 
 
 
@@ -1868,7 +1868,7 @@ NOTE: Below is the solution (all within details tags collapsed)
 </br>
 
 ```{r eval = F, echo=T}
-surv_ll_raw <- import("surveillance_linelist_12012014.xlsx")
+surv_raw <- import("surveillance_linelist_12012014.xlsx")
 ```
 
 </br>
@@ -1878,7 +1878,7 @@ NOTE: End of solution
 -->
 
 
-You should now see the new object `surv_ll_raw` appear in the R **Environment pane**, under the subcategory "Data". It should say "665 obs. of 19 variables". Congratulations, you have now imported a dataset into R!  
+You should now see the new object `surv_raw` appear in the R **Environment pane**, under the subcategory "Data". It should say "665 obs. of 19 variables". Congratulations, you have now imported a dataset into R!  
 
 
 ### Importing data from subfolders  
@@ -1892,7 +1892,7 @@ Any importing function needs to know *where* to look for the file that you want 
 A typical file path ("absolute" file path, or a "full" file path) may look like this:  
 
 ```{r, echo=T, eval=F}
-surv_ll_raw <- import("C:/Users/Laura/Documents/intro_course/data/surveillance_linelist_12012014.xlsx")
+surv_raw <- import("C:/Users/Laura/Documents/intro_course/data/surveillance_linelist_12012014.xlsx")
 ```
 
 The problem with this is all of the path before "intro_course" ... the C: ... the "Laura" ... etc. None of these may be present in the computer of Laura's colleague, and this command would not run. The file path would be "broken". Or, the next user may be using a Mac, so the slashes would all need to be reversed! Thankfully there is a solution:  
@@ -1944,7 +1944,7 @@ Now comes the secret combination: we insert this `here()` command *into* the `im
 
 ```{r, echo = T, eval=F}
 # import the file from the "data" and "raw" subfolders
-surv_ll_raw <- import(here("data", "raw", "surveillance_linelist_12012014.xlsx"))
+surv_raw <- import(here("data", "raw", "surveillance_linelist_12012014.xlsx"))
 ```
 
 Note the two parentheses at the end - one for each function. The file path returned by `here()` is passed to the first argument of `import()` as a character value.  
@@ -1966,6 +1966,50 @@ On a Mac:
 You do not know who will be using your script later, or what kind of computer they will have. Therefore, it is easier to simply go with: `here("data", "linelist_20141201.csv")`.  
 
 
+### Import from a subfolder  
+
+`r icons::icon_style(icons::fontawesome("window-restore", style = "solid"), scale = 2, fill = "darkgrey")`  
+Now, go to your File Explorer to the root folder of the R project. Cut the file *"surveillance_linelist_12012014.xlsx"* from the root folder, and paste it into the "data/raw" subfolder.  
+
+
+`r icons::icon_style(icons::fontawesome("terminal", style = "solid"), scale = 2, fill = "black")` 
+Now in RStudio, write a command to import the "surveillance_linelist_12012014.xlsx" dataset and save it as `surv_raw`.  
+
+
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+
+<summary style='text-decoration: underline; color: darkgreen;'>`r icons::icon_style(icons::fontawesome("lightbulb", style = "solid"), scale = 1, fill = "darkgold")` Click to read a hint</summary>
+</br>
+
+Begin the command with the object name that you want to assign, then the assignment operator, and then the `import()` command. Within the `import()` parentheses, place the `here()` function, which should list the names of the sub-folders (in quotes) and include the file name with extension (.xlsx).  
+</br>
+</details>
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv_raw <- import(here("data", "raw", "surveillance_linelist_12012014.xlsx"))
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+
+
 
 
 ```{r quiz-data-import}
@@ -1980,6 +2024,14 @@ quiz(caption = "Quiz - importing",
 )
 ```
 
+
+
+
+
+
+
+
+
 ## Review a dataset  
 
 Now that you have imported the data, let's take a look!  
@@ -1993,7 +2045,7 @@ The dataset is now saved as a data frame object in the RStudio **Environment pan
 
 The expanded area beneath the data frame is an overview of all the columns in the data frame. After the name of the column, there is a colon, then an abbreviation that indicates the "class" of the column (we'll discuss this more later), and then the first few values in the column. How exciting!  
 
-For even more detail, collapse this overview and **click on the name of the data frame itself (`surv_ll_raw`).**  
+For even more detail, collapse this overview and **click on the name of the data frame itself (`surv_raw`).**  
 
 This should open a new tab in the upper-left pane, next to the R script. This tab will display the data frame! You can scroll through the data frame, and even apply filters (see the icon in the upper-left of the display).  
 
@@ -2029,7 +2081,43 @@ quiz(caption = "Quiz - data review",
 
 
 
+### Skim  
 
+You can return a good summary of the dataset using the R package {skimr} and its function `skim()`.  
+
+Install this package and load it for use.  
+
+Place the name of the linelist in `skim()` and run. What content appears in the R console? If it is not easily readible, try expanding your Console pane to be larger, and run the command again.  
+
+**What does the output show?**  
+
+```{r quiz-skim}
+quiz(caption = "Quiz - reviewing the data",
+  question("How many columns has R classified as numeric?",
+    allow_retry = T,
+    answer("32", message = "No, this is more than the columns in the dataset!"),
+    answer("5", correct = TRUE, message = "Yes this is correct!"),
+    answer("13", message = "No, this is the number of columns of class character"),
+    answer("1", message = "No, this is the number of columns that are POSIXct - a type of date format")
+  ),
+
+  question("Review the information on character columns. What is the number of unique values in the hospital column?",
+    allow_retry = T,
+    answer("6", correct = TRUE),
+    answer("Port Hospital"),
+    answer("3"),
+    answer("8")
+  ),
+
+  question("Review the information on numeric columns. What is the median age?",
+    allow_retry = T,
+        answer("32.2"),
+        answer("6", correct = TRUE),
+        answer("1250"),
+        answer("99.0")
+  )
+)
+```
 
 
 

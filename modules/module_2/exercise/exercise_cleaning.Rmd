@@ -1,0 +1,1754 @@
+---
+title: "Applied Epi - Data cleaning"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css: css/css_custom.css
+    theme: "paper"
+runtime: shiny_prerendered
+description: >
+  Learn how to get started with R and RStudio, and how to import a dataset
+---
+
+<!-- NOTES: To edit images, edit them in the "images" folder that lives NEXT TO THE RMD FILE -->
+
+
+<!-- Add JavaScript code for making the exercise code larger -->
+<script language="JavaScript" src="js/exercise-font-size.js"></script>
+
+```{r setup, include=FALSE}
+# load packages ----------------------------------------------------------------
+library(learnr)
+library(gradethis)
+library(etude)      # help functions for gradethis
+library(flair)
+
+# Cran packages
+pacman::p_load(
+     basket,    # not sure if we need this
+     here,
+     rio,
+     janitor,
+     gtsummary,
+     lubridate,
+     flair,
+     fontawesome,
+     tidyverse)
+
+# github packages
+pacman::p_load_gh(
+     "hadley/emo"
+)
+
+# set options for exercises and checking ---------------------------------------
+gradethis::gradethis_setup()
+
+learnr::tutorial_options(exercise.timelimit = 60)
+    # exercise.checker = gradethis::grade_learnr) 
+    # alternatively, submitr::null_code_checker
+
+# event recorder ---------------------------------------------------------------
+# see https://github.com/dtkaplan/submitr/blob/master/R/make_a_recorder.R
+
+tutorial_options(exercise.eval = FALSE)  # pre-evaluate exercises
+
+# new_recorder <- function(tutorial_id, tutorial_version, user_id, event, data) {
+#     cat(
+#       tutorial_id, 
+#       " (v", tutorial_version, "); ",
+#       format(Sys.time(), "%Y-%M%-%D %H:%M:%S %Z"), "; ",
+#       user_id, "; ",
+#       event, "; ",
+#       data$label, "; ",
+#       data$answers, "; ",
+#       data$code, "; ",
+#       data$correct, "\n", sep = "",
+#       
+#       file = here::here("event_records", "learnr_basics.txt"),
+#       append = TRUE)
+# }
+
+#options(tutorial.event_recorder = new_recorder)
+```
+
+
+```{r, include=FALSE}
+# hide non-exercise code chunks ------------------------------------------------
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r, include=FALSE}
+# data prep --------------------------------------------------------------------
+surv_raw <- rio::import(here::here("data", "surveillance_linelist_12012014.csv"))
+```
+
+
+
+
+## Introduction to R for Applied Epidemiology and Public Health
+
+
+### Welcome
+
+Welcome to the live course "Introduction to R for applied epidemiologists", offered by [Applied Epi](www.appliedepi.org) - a nonprofit organisation that offers open-source tools, training, and support to frontline public health practitioners.  
+
+```{r, eval = TRUE, echo = FALSE, out.width = "25%"}
+knitr::include_graphics("images/logo.png")
+```
+
+### Data cleaning  
+
+This exercise focuses on **cleaning data, including filter rows, selecting columns, deduplicating rows, creating new columns, creating categorical variables, and cleaning dates**.
+
+### Format
+
+This exercise will guide you through a set of tasks.  
+*You should perform these tasks in RStudio and on your local computer*.  
+
+#### Getting Help  
+
+There are several ways to get help:  
+
+1) Look for the "helpers" (see below)
+2) Ask your live course instructor/facilitator for help  
+3) Ask a colleague or other participant in the course for tips  
+4) Post a question in [Applied Epi Community](www.community.appliedepi.org) in the category for questions about Applied Epi Training  
+
+Here is what those "helpers" will look like:
+
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+
+<summary style='text-decoration: underline; color: darkgreen;'>`r icons::icon_style(icons::fontawesome("lightbulb", style = "solid"), scale = 1, fill = "darkgold")` Click to read a hint</summary>
+</br>
+
+Here you will see a helpful hint!  
+
+</br>
+</details>
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+linelist %>% 
+  filter(
+    age > 25,
+    district == "Bolo"
+  )
+```
+
+Here is more explanation about why the solution works.  
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+#### Quiz questions  
+
+Please complete the quiz questions that you encounter throughout the tutorial. **Answering will help you** to comprehend the material, and will also help us to improve the exercises for future students.  
+
+To practice, please answer the following questions:  
+
+
+```{r quiz-use-helper, echo=F}
+quiz(
+  question_radio("When should I view the red 'helper' code?",
+    answer("After trying to write the code myself", correct = TRUE),
+    answer("Before I try coding", correct = FALSE),
+    correct = "Reviewing best-practice code after trying to write yourself can help you improve",
+    incorrect = "Please attempt the exercise yourself, or use the hint, before viewing the answer."
+  )
+)
+```
+
+
+```{r quiz-anxious, echo = FALSE}
+question_numeric(
+ "How anxious are you about beginning this tutorial - on a scale from 1 (least anxious) to 10 (most anxious)?",
+ answer(10, message = "Try not to worry, we will help you succeed!", correct = T),
+ answer(9, message = "Try not to worry, we will help you succeed!", correct = T),
+ answer(8, message = "Try not to worry, we will help you succeed!", correct = T),
+ answer(7, message = "Try not to worry, we will help you succeed!", correct = T),
+ answer(6, message = "Ok, we will get there together", correct = T),
+ answer(5, message = "Ok, we will get there together", correct = T),
+ answer(4, message = "I like your confidence!", correct = T),
+ answer(3, message = "I like your confidence!", correct = T),
+ answer(2, message = "I like your confidence!", correct = T),
+ answer(1, message = "I like your confidence!", correct = T),
+ allow_retry = TRUE,
+ correct = "Thanks for sharing. ",
+ min = 1,
+ max = 10,
+ step = 1
+)
+```
+
+
+
+#### Icons  
+
+You will see these icons throughout the exercises:
+
+Icon  |Meaning
+------|--------------------
+`r icons::icon_style(icons::fontawesome("eye", style = "solid"), scale = 2, fill = "darkblue")`|Observe  
+`r icons::icon_style(icons::fontawesome("exclamation", style = "solid"), scale = 2, fill = "red")`|Alert!  
+`r icons::icon_style(icons::fontawesome("pen", style = "solid"), scale = 2, fill = "brown")`|An informative note  
+`r icons::icon_style(icons::fontawesome("terminal", style = "solid"), scale = 2, fill = "black")`|Time for you to code!  
+`r icons::icon_style(icons::fontawesome("window-restore", style = "solid"), scale = 2, fill = "darkgrey")`|Change to another window  
+`r icons::icon_style(icons::fontawesome("bookmark", style = "solid"), scale = 2, fill = "orange")`|Remember this for later  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Learning objectives
+
+In this exercise you will:  
+
+* Import data into R and inspect it  
+* Apply a series of {dplyr} functions to clean a messy raw dataset  
+* Begin writing an R script to clean and prepare data for analysis  
+* Communicate the steps of a cleaning pipe by writing clear comments in an R script  
+
+
+
+
+
+
+
+
+
+
+
+
+## Prepare for data cleaning  
+
+### Open your RStudio project  
+
+`r icons::icon_style(icons::fontawesome("window-restore", style = "solid"), scale = 2, fill = "darkgrey")`  
+
+**Open the "intro_course" R project that you created in the previous exercise.**  
+
+You can do this by navigating to the "intro_course" folder, and double-clicking on the blue ".Rproj" file in the folder. RStudio should open.
+
+### Begin a new R script  
+
+**Start a new R script**  
+
+Either click the new script icon in the upper-left corner of RStudio, or select *File -> New File -> R Script*.  
+
+
+**Save your script**  
+
+This will be the primary R script that you work in for the next 2 days. Name it something like **"ebola_analysis.R"** and **save it into the "scripts" subfolder of the R proejct.  
+
+**Prepare your script**
+
+Write # comment lines in the top to document:  
+
+* The purpose of the script  
+* The author(s) of the script  
+* The date the script was last updated  
+
+ 
+
+## Load packages  
+
+The first coding step of any script is to install and/or load the packages for the entire script. It is best to do this at the very top, so that any reviewer can see which packages are used. 
+
+Write a # comment line that demarcates a section of the script for loading packages.  
+
+Now write a command using {pacman} and its function `p_load()` that will install/load the following packages:  
+
+* rio  (for importing data)  
+* here (for relative filepaths) 
+* skimr (for reviewing the data)
+* janitor (for cleaning data)  
+* lubridate (for date cleaning)  
+* epikit (for creating age categories)  
+* gtsummary (for creating tables)  
+* tidyverse (for data management and visualization)  
+
+Write your command vertically so that you can add comments for each package.  
+Try to write this command first, and then check the solution code below.  
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+pacman::p_load(
+  rio,          # for importing data
+  here,         # for locating files
+  skimr,        # for reviewing the data
+  janitor,      # for data cleaning  
+  lubridate,    # for date cleaning  
+  epikit,       # creating age categories
+  gtsummary,    # creating tables  
+  tidyverse     # for data management and visualization
+)
+```
+
+Don't forget to write `pacman::p_load()`, which loads the {pacman} package to be able to load all the other packages.  
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+
+## Import data
+
+The next segment of your script will import the data.  
+
+
+**Write a command that imports the *"surveillance_linelist_12012014.csv"* from the "data/raw" subfolder of the R project. Use `here()` and `import()`, and name the dataset `surv_raw`.  
+
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv_raw <- import(here("data", "raw", "surveillance_linelist_12012014.csv"))
+```
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+
+
+
+
+## Conduct exploratory analysis  
+
+First let's run some code to look at the different values in the dataset. 
+
+As we have not yet taught you this code, simply copy the code and paste it into your RStudio console. Then, answer the questions about the outputs that appear in the R Console and plots Pane.  
+
+
+### Column names  
+
+We pipe the linelist in the {base} function `names()`, which prints the column names for us to review.  
+
+```{r, echo=T, eval=F}
+surv_raw %>% names()
+```
+
+
+Which of the column names contain non-standard syntax and will need to be cleaned?  
+
+```{r quiz-column-names}
+quiz(caption = "Quiz - column names",
+  question("",
+    allow_retry = T,
+    answer("onset date", correct = T, message = "This one contains a space"),
+    answer("wt (kg)", correct = T, message = "Spaces and parentheses need to be removed"),
+    answer("hospital", message = "Spaces and parentheses need to be removed"),
+    answer("age unit", correct = T, message = "space needs to be removed"),
+    answer("ht (cm)", correct = T, message = "Spaces and parentheses need to be removed")
+  )
+)
+```
+
+
+### Gender  
+
+The package {janitor} and its function `tabyl()` can be used to make a rapid tabulation of values:  
+
+```{r, echo=T, eval=F}
+# tabulate gender
+surv_raw %>% 
+  tabyl(gender)
+```
+
+
+```{r quiz-gender, echo = FALSE}
+quiz(caption = "Quiz - Gender",
+  question_numeric(
+    "How many rows are missing a value for gender?",
+    answer(25, message = "NA means 'missing' in R!", correct = T),
+    allow_retry = TRUE,
+    correct = "Correct, nice work.",
+    min = 1,
+    max = 700,
+    step = 1
+  )
+)
+```
+
+
+### Age  
+
+Let's review the age distribution
+
+```{r, echo=T, eval=F, message=F, warning=F}
+# a histogram of the case ages 
+ggplot(data = surv_raw, mapping = aes(x = age))+
+  geom_histogram()
+```
+
+
+```{r, echo=T, eval=F, message=F, warning=F}
+# a boxplot of the case age distribution
+ggplot(data = surv_raw, mapping = aes(x = age))+
+  geom_boxplot()
+```
+
+
+```{r quiz-age-distribution}
+quiz(caption = "Quiz - age distribution",
+  question("The median age is:",
+    allow_retry = T,
+    answer("Below 20", correct = T, message = ""),
+    answer("Above 20", message = "The median age can be found in the boxplot")
+  )
+)
+```
+
+Ah! But some of the rows have recorded age in *months*.  
+
+```{r, echo=T, eval=F}
+surv_raw %>% 
+  tabyl(`age unit`)
+```
+
+```{r quiz-age-unit, echo = FALSE}
+quiz(caption = "Quiz - age unit",
+  question_numeric(
+    "How many rows contain age recorded in months?",
+    answer(5, message = "", correct = T),
+    allow_retry = TRUE,
+    correct = "Correct, nice work.",
+    min = 1,
+    max = 700,
+    step = 1
+  )
+)
+```
+
+
+### Date of onset
+
+The `class()` command is a {base} function that returns the class of an object.
+
+Note the class of the object `surv_raw`, our linelist.  
+
+```{r, echo=T, eval=F}
+class(surv_raw)
+```
+
+Note the class of the column `hospital`. Here we use the `$` operator to specify that *within* the data frame `surv_raw`, we want to use the column `age`. 
+
+Type this command letter-by-letter. When you type the $, you should see a list appear of all the columns in the data frame (this is an auto-complete feature, which can be adjusted in *RStudio -> Tools -> Global Options*).  
+
+```{r, echo=T, eval=F}
+class(surv_raw$age)
+```
+
+Now let's see what the class of the column `onset date` is:  
+
+```{r, echo=T, eval=F}
+class(surv_raw$`onset date`)
+```
+
+During the import of the data, R read this column as character values (e.g. "11/03/2014") and did not assume that it was a date. Indeed - how would R know which digits referred to months, or days? In CSV files in particular, these columns are usually imported as character values. It is best if this column is properly recognized as class "date". We will addresses in the cleaning steps.  
+
+
+
+### Numeric columns  
+
+We can also use histograms to examine other numeric columns like weight, height, temperature, etc.
+
+Does anything seem amiss? Are there any values to clean?
+
+This code is for the weight column.  
+
+```{r, echo=T, eval=F}
+ggplot(data = surv_raw, mapping = aes(x = `wt (kg)`))+
+     geom_histogram()
+```
+
+This code is for the height column.  
+
+```{r, echo=T, eval=F}
+ggplot(data = surv_raw, mapping = aes(x = `ht (cm)`))+
+     geom_histogram()
+```
+
+
+
+### Location  
+
+There are two columns in the dataset that describe the district of the case:  
+
+* `adm3_name_res` - this is the case's district of *residence*  
+* `adm3_name_det` - this is the case's district of *detection*  
+
+How well do these two align? We can run a cross-tabulation:  
+
+```{r, echo=T, eval=F}
+surv_raw %>% 
+  tabyl(adm3_name_res, adm3_name_det)
+```
+
+```{r quiz-residence}
+quiz(caption = "Quiz - residence",
+  question("Which district has the most variety of case origins?",
+    allow_retry = T,
+    answer("Central I"),
+    answer("Central II", correct = T, message = "Cases who lives in every district were detected in Central II"),
+    answer("East I"),
+    answer("East II"),
+    answer("East III"),
+    answer("Mountain Rural"),
+    answer("West I"),
+    answer("West II"),
+    answer("West III")
+  )
+)
+```
+
+
+
+
+
+
+
+
+## Cleaning pipe chain  
+
+Now that you have reviewed the data, you can begin to build a "pipe chain" in your R script that will clean the data.
+
+A pipe chain refers to the use of the "pipe" operator `%>%` to chain together operations (such as cleaning, reordering and manipulating) for altering a dataset. 
+
+This allows us to carry out several different alterations of the dataframe in a single operation. It can be helpful to think of the pipe operator `%>%` as telling the computer "and then" between your operational commands.  
+
+The order of this pipeline is important as operations occur sequentially, and so improperly ordered arguments may fail or (potentially more dangerously!) give incorrect values or unwanted outcomes.
+
+Remember - it may be tempting to exit and go clean up the dataset in the Excel file... but in almost all circumstances it is more reproducible and more efficient to record the changes in code. More than likely, you will receive another version of the "raw" data and all the cleaning work in the Excel will be lost. However, if you have the R script you will have a record of all the adjustments.  
+
+
+
+### Begin  
+
+Begin your command with the "raw" data set, pass it through a series of cleaning functions with the `%>%` pipe operator, and save the result as **`surv`** - a new, clean, data frame.
+
+Because your command uses the assignment operator **`<-`**, the modified dataset will not be printed to the R Console. Instead, the changes will be reflected in the new object **`surv`**. You can click on it to review the new dataset and see changes.  
+
+Here is a simplified example of potential cleaning code, with only a few (empty) functions. In the coming sections of this exercise, we will build a chain like this together.   
+
+```{r, echo=T, eval=F}
+
+# Clean surveillance linelist
+#############################
+# Save a clean dataset 'surv' after cleaning the raw dataset
+
+surv <- surv_raw %>% 
+  clean_names() %>% 
+  rename(___) %>% 
+  select(___) %>% 
+  distinct(___) %>% 
+  mutate(___) %>% 
+  mutate(___) %>% 
+  filter(___)
+
+```
+
+
+
+## Standardize column names
+
+Often, the first task is to clean the column names. This make the rest of the code easier, as you can reference columns by their clean syntax.
+
+Insert the function `clean_names()` into the pipe chain. This is a very easy function to use - you do not need to put anything in the parentheses!
+
+`clean_names()` will ensure all column names are lowercase, that spaces are converted to underscores, and that special characters are removed.  
+
+Run your pipe chain with `clean_names()` and save the result to **`surv`**.
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv <- surv_raw %>% 
+  clean_names()
+```
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+View **`surv`** by clicking on it in RStudio. **Note that some column names have changed!**
+
+```{r quiz-clean-names}
+quiz(caption = "Quiz - clean_names()",
+  question("How is the column name 'ht (cm)' written after using clean_names()?",
+    allow_retry = T,
+    answer("height"),
+    answer("ht_cm", correct = T),
+    answer("ht_(cm)"),
+    answer("HT-CM")
+  ),
+
+  question("What is the new name of the column that contains date of symptom onset?",
+    allow_retry = T,
+    answer("onset date"),
+    answer("date-of-onset"),
+    answer("onset_date", correct = T),
+    answer("onset")
+  )
+)
+```
+
+
+That was easy! But there is more cleaning to do...
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Manually clean column names  
+
+When you reviewed the data, there was at least one other column that needs cleaning.
+
+Let's make the following changes manually:  
+
+* Change `onset_date` to `date_onset` (it is more standardized to put "date" at the front, especially when there are more date columns)  
+
+Simplify the location columns for easier reading (and typing!)  
+
+* Change `adm3_name_res` to `district_res`  
+* Change `adm3_name_det` to `district_det`  
+
+The primary mechanism for these manual changes is with `rename()`. Here is the basic syntax:  
+
+```{r, echo=T, eval=F}
+surv <- surv_raw %>% 
+  clean_names() %>% 
+  rename(
+    NEWname = OLDname,
+    NEWname = OLDname
+  )
+```
+
+A few things to note:  
+
+* Each change is entered using the pattern NEW = OLD. 
+* If changing multiple column names, separate the pairs with a comma. Don't put a comma after the last pair.  
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv <- surv_raw %>% 
+  clean_names() %>% 
+  rename(
+    date_onset = onset_date,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det
+  )
+```
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+Review **`surv`** once you have successfully run your expanded pipe chain. Verify that the desired changes did take place.  
+
+
+
+
+
+## Select columns  
+
+The `select()` function is versatile:  
+
+**The primary purpose is to select columns to keep in the dataset.**  
+
+Any column not included in the parentheses will be dropped. Try the below command in your R console. It takes your partially-clean data set `surv` and selects only a few columns, printing the result.    
+
+```{r, echo=T, eval=F}
+surv %>% 
+  select(case_def, age, gender, case_def)
+```
+
+What did you notice about the new ordering of the columns? `select()` also **re-orders** columns.  
+
+It may be taxing to list every column individually. You can use a colon ( : ) to keep the two named columns and all those inbetween.  
+
+```{r, echo=T, eval=F}
+# keeps fever, vomit, and the columns in between them 
+surv %>% 
+  select(fever:vomit)
+```
+
+**You can drop columns by name**
+
+Use a minus symbol ( - ) to drop the column `case_def`. All other columns are retained.  
+
+```{r, echo=T, eval=F}
+surv %>% 
+  select(-case_def)
+```
+
+Try dropping multiple columns by wrapping all their names in a vector with `c()` - this applies the negative sign to all of them.  
+
+```{r, echo=T, eval=F}
+# Removes these three columns
+surv %>% 
+  select(-c(case_def, district_det, age))
+
+# an equivalent command to above
+surv %>% 
+  select(-case_def, -district_det, -age)
+
+```
+
+**You can re-name columns**  
+
+Yes, you can actually use `select()` to rename columns! It uses the same syntax as `rename()`, but (!) remember that it only keeps the columns that you write.  
+
+`r icons::icon_style(icons::fontawesome("terminal", style = "solid"), scale = 2, fill = "black")` 
+
+
+Now, add to your pipe chain a step that remove the column `row_num` from the dataset. It is not necessary for our analyses.  
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv <- surv_raw %>% 
+  
+  # automatically clean column names
+  clean_names() %>% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %>%
+     
+  # remove unnecessary column
+  select(-row_num)
+```
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+
+
+## Deduplicate  
+
+At this point, we should check for duplicates in our data. This can be done with the `distinct()` function. If run with empty parentheses, it will remove rows that are 100% duplicates (the value in every column is different).
+
+**Add `distinct()` to the pipe chain and run it. Were any rows removed?**  
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv <- surv_raw %>% 
+  
+  # automatically clean column names
+  clean_names() %>% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %>%
+     
+  # remove unnecessary column
+  select(-row_num) %>% 
+
+  # de-duplicate rows  
+  distinct()
+```
+
+Hint: Compare the number of rows in `surv` to the number of rows in `surv_raw` (in the Environment pane).  
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+`distinct()` can be used in more advanced ways, such as only considering certain columns when evaluation duplicates (e.g. remove rows that have the same age, gender, and first name). You can read more about it in the [function documentation](https://dplyr.tidyverse.org/reference/distinct.html), and in the [Epi R Handbook cleaning chaper](https://epirhandbook.com/en/cleaning-data-and-core-functions.html#deduplication).  
+
+
+
+
+
+## Column classes
+
+We recognized that the column `date_onset` (previously named "onset date" in the raw dataset) is recognized by R as class "character". Often, dates in Excel worksheets arrive in this class, or in numeric (e.g. 48256), or in an even stranger class called "POSIXct". Either way, we want to designate this column as a normal and dependable class "date".  
+
+We can do this with functions from {lubridate}. We need to tell the function *how* the date is currently written - otherwise it cannot tell the month and day apart!  
+
+{lubridate} has several helper functions designed to convert character objects to dates in a more intuitive and lenient way. These functions are specific to the rough date format, but allow for a variety of separators, and synonyms for dates (e.g. 01 vs Jan vs January) - they are named after abbreviations of date formats.
+
+The `ymd()` function converts date values supplied as year, month, day.  
+
+* `ymd("2020-10-11")`  
+* `ymd("20201011")`  
+
+The `mdy()` does the same but in the order of month, day, year.  
+
+* `mdy("Oct 11 20")`  
+
+and the `dmy()` in the format as day, month , year  
+
+* `dmy("11 October 2020")`  
+
+Within a pipe chain, it may look like this:  
+
+```{r, eval = F, echo = T}
+surv <- surv_raw %>%
+  mutate(date_onset = ymd(date_onset))
+```
+ 
+Above, the code is in effect saying: "change (mutate) the `date_onset` column, such that it becomes the `date_onset` column as modified by the function `ymd()`.  
+
+**The most important thing to remember is to use the function that matches the *current* (raw) date format**
+
+Now back to our coding. Use the function `head()` to quickly see the first 6 rows of `surv` printed to the R console.  
+
+```{r, eval=F, echo=T}
+head(surv)
+```
+
+
+```{r quiz-date-format}
+quiz(caption = "Quiz - date format",
+  question("Which function should be used to convert the column date_onset?",
+    allow_retry = T,
+    answer("ymd()", correct = T),
+    answer("dmy()"),
+    answer("mdy()")
+  )
+)
+```
+
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv <- surv_raw %>% 
+  
+  # automatically clean column names
+  clean_names() %>% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %>%
+     
+  # remove unnecessary column
+  select(-row_num) %>% 
+
+  # de-duplicate rows  
+  distinct() %>% 
+     
+  # convert date_onset to date class
+  mutate(date_onset = mdy(date_onset))
+```
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+Now we can inspect the date column, and use it in plotting functions like a continuous variable. 
+We give you this code below not to learn, but simply to test in RStudio. You will learn how to make plots with {ggplot} later in the course.  
+
+```{r, echo=T, eval=F, warning=F, message=F}
+# plot a histogram of dates using the cleaned dataset and date column
+ggplot(data = surv, mapping = aes(x = date_onset))+
+  geom_histogram()
+
+```
+
+
+```{r quiz-dates}
+quiz(caption = "Quiz - Date",
+  question("In the most recent weeks, what is the apparent trend in the number of reported cases",
+    allow_retry = T,
+    answer("Increasing"),
+    answer("Decreasing", correct = T)
+  )
+)
+```
+
+
+
+
+### Age as numeric
+
+There is another column that we should check the class of: `age`. What is the class of this column?  
+
+```{r, echo=T, eval=F}
+class(surv$age)
+```
+
+Your RStudio should have returned "integer". While this is OK for the moment... we may want to perform calculations with this column that would result in it needing to accept decimal values. As class "integer", this column cannot accept decimals, but as class "numeric" it can.  
+
+Thankfully in {base} R there are functions like `as.numeric()`, `as.character()`, and `as.integer()` to easily convert columns from one class to another. Simply put the column name within the parentheses, and it is converted.  
+
+**Write a `mutate()` command that converts this column using the `as.numeric()` function.**  
+
+
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+
+<summary style='text-decoration: underline; color: darkgreen;'>`r icons::icon_style(icons::fontawesome("lightbulb", style = "solid"), scale = 1, fill = "darkgold")` Click to read a hint</summary>
+</br>
+
+In the `mutate()` function, re-define `age` as equal to itself as wrapped within the `as.numeric()` function.  
+
+</br>
+</details>
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv <- surv_raw %>% 
+  
+  # automatically clean column names
+  clean_names() %>% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %>%
+     
+  # remove unnecessary column
+  select(-row_num) %>% 
+
+  # de-duplicate rows  
+  distinct() %>% 
+     
+  # convert date_onset to date class
+  mutate(date_onset = mdy(date_onset)) %>% 
+     
+  # convert age to numeric class
+  mutate(age = as.numeric(age))
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+
+
+`r icons::icon_style(icons::fontawesome("exclamation", style = "solid"), scale = 2, fill = "red")`
+**Have you saved your script lately?**  
+
+
+
+
+
+
+## Simple recoding  
+
+In the weight column `wt_kg`, there are some negative values. Open the data frame in the viewer (by clicking the data frame name in Environment) and sort to identify these values.  
+
+This must be some data entry error. To avoid errors in any calculations, convert these values to `NA` (missing). Remember, you should make edits like this here in the script. It is better than edit in Excel because here there is a record of changes performed.  
+
+The logic we want to apply is simple: "If negative, convert to `NA`, otherwise remain the same." Therefore, we can use the `ifelse()` function within `mutate()`.  
+
+The syntax is: `ifelse(CONDITION APPLIED TO ROW, OUTCOME IF TRUE, OUTCOME IF FALSE)`  
+
+```{r, echo=T, eval=F}
+surv %>% 
+  mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg))
+```
+
+**Add this to your pipe chain and verify that it worked correctly**
+
+**Now make a second command that does the same operation for the column `bmi`, which also contains some negative values.**  
+
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv <- surv_raw %>% 
+  
+  # automatically clean column names
+  clean_names() %>% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %>%
+     
+  # remove unnecessary column
+  select(-row_num) %>% 
+
+  # de-duplicate rows  
+  distinct() %>% 
+     
+  # convert date_onset to date class
+  mutate(date_onset = mdy(date_onset)) %>% 
+     
+  # convert age to numeric class
+  mutate(age = as.numeric(age)) %>% 
+     
+  # convert negative values to NA
+  mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
+         bmi   = ifelse(bmi < 0,   NA, bmi)) 
+     
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+### Review logical operators  
+
+As you clean, it is important to know these logical and relational operators. There is no need to memorize them (see the [Epi R Handbook basics chapter](https://epirhandbook.com/en/r-basics.html)), but they are here for you review quickly.  
+
+
+
+#### Relation operators  
+
+Relational operators compare values and are often used when defining new variables and subsets of datasets. Here are the common relational operators in R:
+
++--------------------------+------------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Meaning                  | Operator   | Example      | Example Result                                                                                                                                         |
++==========================+============+==============+========================================================================================================================================================+
+| Equal to                 | `==`       | `"A" == "a"` | `FALSE` (because R is case sensitive) *Note that == (double equals) is different from = (single equals), which acts like the assignment operator `<-`* |
++--------------------------+------------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Not equal to             | `!=`       | `2 != 0`     | `TRUE`                                                                                                                                                 |
++--------------------------+------------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Greater than             | `>`        | `4 > 2`      | `TRUE`                                                                                                                                                 |
++--------------------------+------------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Less than                | `<`        | `4 < 2`      | `FALSE`                                                                                                                                                |
++--------------------------+------------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Greater than or equal to | `>=`       | `6 >= 4`     | `TRUE`                                                                                                                                                 |
++--------------------------+------------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Less than or equal to    | `<=`       | `6 <= 4`     | `FALSE`                                                                                                                                                |
++--------------------------+------------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Value is missing         | `is.na()`  | `is.na(7)`   | `FALSE` (we will discuss missing data in R, later)                                                                                                                   |
++--------------------------+------------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Value is not missing     | `!is.na()` | `!is.na(7)`  | `TRUE`                                                                                                                                                 |
++--------------------------+------------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+#### Logical operators  
+
+Logical operators, such as AND and OR, are often used to connect relational operators and create more complicated criteria. Complex statements might require parentheses ( ) for grouping and order of application.
+
++---------------------+-----------------------------------------------------------------------+
+| Meaning             | Operator                                                              |
++=====================+=======================================================================+
+| AND                 | `&`                                                                   |
++---------------------+-----------------------------------------------------------------------+
+| OR                  | `|` (vertical bar)                                                    |
++---------------------+-----------------------------------------------------------------------+
+| Parentheses         | `( )` Used to group criteria together and clarify order of operations |
++---------------------+-----------------------------------------------------------------------+
+
+
+
+
+
+
+
+
+
+
+## `case_when()` complex recoding  
+
+Our next task is to recode the values in the column `gender`: "m" to "male" and "f" to "female".  
+
+This logic is slightly more complex than when we used `ifelse()`. Instead, we will use `case_when()` within the `mutate()`. `case_when()` is a slightly more complex function, so it is important to understand how exactly it works:  
+
+* `case_when()` commands consist of statements that have a Right-Hand Side (RHS) and a Left-Hand Side (LHS), separated by a “tilde” ~.  
+* The logic criteria are in the left side, and the outcome values are in the right side of each statement. Statements are separated by commas.  
+
+**Add this `mutate()` command to your pipe chain, and observe the resulting transformation in `surv` in the `gender` column.**
+
+```{r, eval = F, echo=T}
+# Example of mutate() with case_when() to edit values in gender column
+surv %>% 
+  mutate(gender = case_when(     # re-define gender as: 
+     gender == 'm' ~ 'male',     # when "m", change to "male"   
+     gender == 'f' ~ 'female',   # when "f", change to "female" 
+     TRUE          ~ gender))    # any other value, remain as before
+```
+
+Notably, the criteria are applied to each row in the dataset **in the order they are written in the `case_when()` command (top-to-bottom).** So, if for a given dataset row the first criteria is met (e.g., `gender` == "m"), then the remaining criteria are not tested. It is therefore important to order your arguments correctly, from most specific to generic.
+
+Along those lines, in your *final statement*, it is advised to place TRUE on the left-side, which will capture any row that did not meet any of the previous criteria. The right-side of this statement could be assigned a value like “check me!”, or missing, or as in the example above to the column name to revert to the original value.  
+
+`r icons::icon_style(icons::fontawesome("exclamation", style = "solid"), scale = 2, fill = "red")`
+*DANGER: All outcome values on the RIGHT-side must all be the same class - either numeric, integer, character, date, logical, etc. Sometimes, this requires assigning variations of `NA` such as `NA_character_`, `NA_real_` (for numeric or POSIX), and `as.Date(NA)`. Read more in the dates chapter of [the Epi R Handbook](https://www.epirhandbook.com/en/working-with-dates.html).*  
+
+
+
+
+
+### Create column `age_years`  
+
+Now apply your `case_when()` knowledge to a slightly more difficult scenario.  
+
+Create a new column `age_years` that converts the value in `age` correctly, depending on whether the value in `age_unit` is "years" or "months".  
+
+Try it first, see the hint if necessary, then check the answer below.  
+
+
+
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+
+<summary style='text-decoration: underline; color: darkgreen;'>`r icons::icon_style(icons::fontawesome("lightbulb", style = "solid"), scale = 1, fill = "darkgold")` Click to read a hint</summary>
+</br>
+
+Begin as before by piping to a `mutate()`. Within the `mutate()` parentheses, write the name of the new column to create `age_years` and an equals sign. On the right side of the equals sign, you write the function `case_when()`. Within the parentheses of `case_when()`, you are writing logical criteria that will be assessed for each row in the dataset (on the left side of the ~), and on the right side of the ~ you write the resulting value to returned.  
+
+You know that age should be treated differently if it was recorded in months. Therefore, your logical criteria should be: "is `age_unit` equal to "months"? In code, this is written `age_unit == "months"` (note the double equals, which asks the question of equivalence). One the right side of the ~, you would write an equation that would produce the correct outcome in the new column `age_years`. In this case, it would be the value in `age` divided by 12. In code this would be written as: `age_unit == "months" ~ age / 12`. Don't forget a comma at the end, and to continue on to the next logical criteria.  
+
+In `case_when()` it is best-practice to have a final logical criteria which has `TRUE` on the left-side, which will apply for any row in the dataset that did not meet any of the logical criteria above. The right-hand side for this criteria can be "Missing" or "Check Me" if the column you are creating is a character column. But in this case we are creating a numeric column - so we cannot have values like "Missing" - instead we put `NA` (R's value for Missing). In this circumstance, we use a special value of `NA` called `NA_real_`.  
+
+If you encounter this error: `'names' attribute [1] must be the same length as the vector [0]`, then confirm that you converted the `age` column to class numeric earlier in the pipe chain. This error is because by dividing by 12, we are introducing decimals, which is not acceptable if the column is still "integer" class.  
+
+</br>
+</details>
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv <- surv_raw %>% 
+  
+  # automatically clean column names
+  clean_names() %>% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %>%
+     
+  # remove unnecessary column
+  select(-row_num) %>% 
+
+  # de-duplicate rows  
+  distinct() %>% 
+     
+  # convert date_onset to date class
+  mutate(date_onset = mdy(date_onset)) %>% 
+     
+  # convert age to numeric class
+  mutate(age = as.numeric(age)) %>% 
+     
+  # convert negative values to NA
+  mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
+         bmi   = ifelse(bmi < 0,   NA, bmi)) %>% 
+     
+  # convert gender values to full words
+  mutate(gender = case_when(          # re-define gender as: 
+    gender == 'm' ~ 'male',           # when "m", change to "male"   
+    gender == 'f' ~ 'female',         # when "f", change to "female" 
+    TRUE          ~ gender)) %>%      # any other value, remain as before
+     
+  # create age-in-years
+  mutate(age_years = case_when(
+    age_unit == "years"  ~ age,       # if age is given in years
+    age_unit == "months" ~ age/12,    # if age is given in months
+    is.na(age_unit)      ~ age,       # if age unit is missing, assume years
+    TRUE                 ~ NA_real_)) # any other circumstance, assign missing
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+That was difficult! If the above exercise with `case_when()` was very challenging for you, do not despair! `case_when()` can be difficult, but will come with practice. Talk with your facilitator about the errors or difficulties you encountered. It will come!  
+
+
+
+## Age categories  
+
+Now that we have a valid `age_years` column, let's create a categorical column for "age category".
+
+There are several ways to do this (see [this chapter of the Epi R Handbook](https://epirhandbook.com/en/cleaning-data-and-core-functions.html#num_cats) for details), but here we just apply the most simple method.  
+
+The function `age_categories()` from {epikit} can be used within `mutate()` to define a new column `age_cat5`.  
+
+The arguments for `age_categories` are:  
+
+1) The numeric column to divide into categories (`age_years`)  
+2) `lower = ` A number that is the lower numeric boundary (0)  
+3) `upper = ` A number that is the upper numeric boundary for categories (e.g. if 70, all above 70 are lumped into "70+")  
+4) `by = ` A number for the width of the categories (5 or 10)  
+
+
+Is that enough information for you to try adding this to the pipe chain?
+
+**Try adding this command to the pipe chain** To see if the code is correct, compare the values in `age_years` and `age_cat5`.  
+If you get stuck, see the solution code hidden below.  
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv <- surv_raw %>% 
+  
+  # automatically clean column names
+  clean_names() %>% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %>%
+     
+  # remove unnecessary column
+  select(-row_num) %>% 
+
+  # de-duplicate rows  
+  distinct() %>% 
+     
+  # convert date_onset to date class
+  mutate(date_onset = mdy(date_onset)) %>% 
+     
+  # convert age to numeric class
+  mutate(age = as.numeric(age)) %>% 
+     
+  # convert negative values to NA
+  mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
+         bmi   = ifelse(bmi < 0,   NA, bmi)) %>% 
+     
+  # convert gender values to full words
+  mutate(gender = case_when(               # re-define gender as: 
+    gender == 'm' ~ 'male',                # when "m", change to "male"   
+    gender == 'f' ~ 'female',              # when "f", change to "female" 
+    TRUE          ~ gender)) %>%           # any other value, remain as before
+     
+  # create age-in-years
+  mutate(age_years = case_when(
+    age_unit == "years"  ~ age,            # if age is given in years
+    age_unit == "months" ~ age/12,         # if age is given in months
+    is.na(age_unit)      ~ age,            # if age unit is missing, assume years
+    TRUE                 ~ NA_real_)) %>%  # any other circumstance, assign missing
+       
+  # create age category column
+  mutate(age_cat = age_categories(         # create new column
+    age_years,                             # numeric column to make groups from
+    lower = 0,
+    upper = 70,
+    by = 10))
+
+```
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+`r icons::icon_style(icons::fontawesome("exclamation", style = "solid"), scale = 2, fill = "red")`
+**Have you saved your script lately?**  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Location  
+
+We have two columns that express districts (locations) - of the cases's residence, and where they were detected as a case.  
+
+**How similar are these two columns?**
+
+One way to assess how similar the columns are, is to *create a new column* that indicates whether the two values are different. They, you can tabulate this new column.  
+
+The syntax is actually quite simple, using `mutate()` and the `!=` operator (which means NOT EQUAL TO).  
+
+
+```{r, eval=F, echo=T}
+surv %>% 
+  # New column will be TRUE if the two values are different
+  mutate(moved = district_res != district_det)
+```
+
+Try this in your RStudio. Then **open the `surv` dataset in the viewer** (by clicking on it) and filter new column to show rows that are TRUE. Was the logic for the new column applied correctly? Are TRUE and FALSE appearing where they should be?  
+
+```{r quiz-moved, echo = FALSE}
+quiz(caption = "Quiz - Moving cases",
+  question_numeric(
+    "How many cases have different districts of residence and of detection?",
+    answer(34, correct = T),
+    allow_retry = TRUE,
+    correct = "Correct, nice work.",
+    min = 1,
+    max = 700,
+    step = 1
+  )
+)
+```
+
+Now that you know there is some discrepancy, which of these values should be prioritized? District of residence, or district of detection?  
+
+This is a question that each outbreak epidemiology team must answer given their knowledge of the data collection process, and of the outbreak itself. **For this exercise, we will prioritize location of detection**.  
+
+**Create a new column in the data simply named `district`.** Create it using the `coalesce()` function, which will take its first value if it is available, else it will take its second value. This function allows us to "fill-in" missing values by using the first non-missing value (given a preference order), or to prioritize one value over another if they differ.  
+
+```{r, echo=T, eval=F}
+surv <- surv %>% 
+  mutate(district = coalesce(district_det, district_res))
+```
+
+**View the dataset again, and verify that this code worked as expected**  
+
+Use the filters in the dataset viewer to answer this question:  
+
+```{r quiz-moved-home, echo = FALSE}
+quiz(caption = "Quiz - Moving cases origin",
+  question_numeric(
+    "Of cases with different residence and detection locations, how many had residence in 'Mountain Rural' district?",
+    answer(4, correct = T),
+    allow_retry = TRUE,
+    correct = "Correct, nice work.",
+    min = 1,
+    max = 700,
+    step = 1
+  )
+)
+```
+
+
+Below, you can see this code incorporated into the pipe chain:  
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv <- surv_raw %>% 
+  
+  # automatically clean column names
+  clean_names() %>% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %>%
+     
+  # remove unnecessary column
+  select(-row_num) %>% 
+
+  # de-duplicate rows  
+  distinct() %>% 
+     
+  # convert date_onset to date class
+  mutate(date_onset = mdy(date_onset)) %>% 
+     
+  # convert age to numeric class
+  mutate(age = as.numeric(age)) %>% 
+     
+  # convert negative values to NA
+  mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
+         bmi   = ifelse(bmi < 0,   NA, bmi)) %>% 
+     
+  # convert gender values to full words
+  mutate(gender = case_when(               # re-define gender as: 
+    gender == 'm' ~ 'male',                # when "m", change to "male"   
+    gender == 'f' ~ 'female',              # when "f", change to "female" 
+    TRUE          ~ gender)) %>%           # any other value, remain as before
+     
+  # create age-in-years
+  mutate(age_years = case_when(
+    age_unit == "years"  ~ age,            # if age is given in years
+    age_unit == "months" ~ age/12,         # if age is given in months
+    is.na(age_unit)      ~ age,            # if age unit is missing, assume years
+    TRUE                 ~ NA_real_)) %>%  # any other circumstance, assign missing
+       
+  # create age category column
+  mutate(age_cat = age_categories(         # create new column
+    age_years,                             # numeric column to make groups from
+    lower = 0,
+    upper = 70,
+    by = 10)) %>% 
+     
+  # create column marking TRUE if district of residence and detection differ
+  mutate(moved = district_res != district_det) %>% 
+  
+  # create new column that prioritizes district of detection
+  mutate(district = coalesce(district_det, district_res))
+
+```
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+`r icons::icon_style(icons::fontawesome("exclamation", style = "solid"), scale = 2, fill = "red")`
+**Have you saved your script lately?**  
+
+
+
+
+
+
+## Re-coding hospital  
+
+Our pipe chain is getting quite long! Each step is important, and thankfully it is all well-documented in our code. This transparency is useful for ourselves, anyone reviewing our code later, and for scientific integrity!  
+
+Now we turn to the column `hospital`. Try this code below. It will print a tabulation of all the values in this column:  
+
+```{r, echo=T, eval=F}
+surv %>% 
+  tabyl(hospital)
+```
+
+It seems there is some cleaning to be done!  
+
+You could use `case_when()`, but an easier option in this circumstance is `recode()`. The syntax is more simple when we want to simply exchange one value for another:  
+
+```{r, echo=T, eval=F}
+surv %>% 
+  mutate(hospital = recode(hospital,
+    "OLD value" = "NEW value",
+    "OLD value" = "NEW value",
+    "OLD value" = "NEW value"))
+```
+
+The above code can be read as: "Re-define `hospital` as `hospital` with these recodes applied". 
+
+**Using the above code as a template, try to write a command that aligns hospital names to the following:**  
+
+* Military Hospital  
+* Port Hospital  
+* Central Hospital
+* SMMH
+* Other  
+* Missing  
+
+
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+
+<summary style='text-decoration: underline; color: darkgreen;'>`r icons::icon_style(icons::fontawesome("lightbulb", style = "solid"), scale = 1, fill = "darkgold")` Click to read a hint</summary>
+</br>
+
+Begin as before by piping to a `mutate()`. Within the `mutate()` parentheses, write the name of the column to re-define `hospital` and an equals sign. On the right side of the equals sign, you write the function `recode()`. Within the parentheses of `recode()`, the first argument is again the name of the column to re-define.
+
+After a comma, continue with one line per change, with the new value on the left, and the old value on the right. As these are character values, put them in quotes. Don't forget commas between each line, and to close with the correct number of parentheses.  
+
+</br>
+</details>
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv <- surv_raw %>% 
+  
+  # automatically clean column names
+  clean_names() %>% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %>%
+     
+  # remove unnecessary column
+  select(-row_num) %>% 
+
+  # de-duplicate rows  
+  distinct() %>% 
+     
+  # convert date_onset to date class
+  mutate(date_onset = mdy(date_onset)) %>% 
+     
+  # convert age to numeric class
+  mutate(age = as.numeric(age)) %>% 
+     
+  # convert negative values to NA
+  mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
+         bmi   = ifelse(bmi < 0,   NA, bmi)) %>% 
+     
+  # convert gender values to full words
+  mutate(gender = case_when(               # re-define gender as: 
+    gender == 'm' ~ 'male',                # when "m", change to "male"   
+    gender == 'f' ~ 'female',              # when "f", change to "female" 
+    TRUE          ~ gender)) %>%           # any other value, remain as before
+     
+  # create age-in-years
+  mutate(age_years = case_when(
+    age_unit == "years"  ~ age,            # if age is given in years
+    age_unit == "months" ~ age/12,         # if age is given in months
+    is.na(age_unit)      ~ age,            # if age unit is missing, assume years
+    TRUE                 ~ NA_real_)) %>%  # any other circumstance, assign missing
+  
+  # re-code hospital column
+  mutate(hospital = recode(hospital,
+    # for reference: OLD = NEW
+    "Mitilary Hospital"  = "Military Hospital",
+    "Port"               = "Port Hospital",
+    "Port Hopital"       = "Port Hospital",
+    "St. Marks Maternity Hopital (SMMH)" = "SMMH"))
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+
+
+
+## Filter rows  
+
+Sub-setting rows is done with the function `filter()`. Inside the parentheses you write logical criteria that are applied to each row. Rows that meet the criteria are kept.   
+
+### Remove suspect cases  
+
+For the purposes of this exercise, we will remove any "suspect" cases from the dataset.
+
+The simplest way of filtering, is to use a logical condition ("==", "!=", ">", "<", etc), so that only rows where the logical statement is `TRUE` are kept. For example here, we are only keeping rows where the gender is equal to "f".
+
+```{r, echo = T, eval = FALSE}
+surv %>% 
+  filter(gender == "f")
+```
+
+Multiple logical criteria can be combined using & (and), | (or), and parentheses.  
+
+**Add a `filter()` command that restricts the dataset to only cases where `case_def` is "Confirmed".**  
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv <- surv_raw %>% 
+  
+  # automatically clean column names
+  clean_names() %>% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %>%
+     
+  # remove unnecessary column
+  select(-row_num) %>% 
+
+  # de-duplicate rows  
+  distinct() %>% 
+     
+  # convert date_onset to date class
+  mutate(date_onset = mdy(date_onset)) %>% 
+     
+  # convert age to numeric class
+  mutate(age = as.numeric(age)) %>% 
+     
+  # convert negative values to NA
+  mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
+         bmi   = ifelse(bmi < 0,   NA, bmi)) %>% 
+     
+  # convert gender values to full words
+  mutate(gender = case_when(               # re-define gender as: 
+    gender == 'm' ~ 'male',                # when "m", change to "male"   
+    gender == 'f' ~ 'female',              # when "f", change to "female" 
+    TRUE          ~ gender)) %>%           # any other value, remain as before
+     
+  # create age-in-years
+  mutate(age_years = case_when(
+    age_unit == "years"  ~ age,            # if age is given in years
+    age_unit == "months" ~ age/12,         # if age is given in months
+    is.na(age_unit)      ~ age,            # if age unit is missing, assume years
+    TRUE                 ~ NA_real_)) %>%  # any other circumstance, assign missing
+  
+  # re-code hospital column
+  mutate(hospital = recode(hospital,
+    # for reference: OLD = NEW
+    "Mitilary Hospital"  = "Military Hospital",
+    "Port"               = "Port Hospital",
+    "Port Hopital"       = "Port Hospital",
+    "St. Marks Maternity Hopital (SMMH)" = "SMMH")) %>% 
+     
+  # remove suspect cases
+  filter(case_def == "Confirmed")
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
