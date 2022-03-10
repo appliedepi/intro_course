@@ -31,6 +31,7 @@ pacman::p_load(
      rio,
      janitor,
      gtsummary,
+     epikit,
      lubridate,
      flair,
      fontawesome,
@@ -314,7 +315,6 @@ pacman::p_load(
   janitor,      # for data cleaning  
   lubridate,    # for date cleaning  
   epikit,       # creating age categories
-  gtsummary,    # creating tables  
   tidyverse     # for data management and visualization
 )
 ```
@@ -390,6 +390,25 @@ quiz(caption = "Quiz - column names",
 )
 ```
 
+### Missing values in R  
+
+As we conduct our exploratory analysis, we need to be aware of how R handles missing values.  
+
+In R, missing values are represented by a reserved (special) value - `NA`. `NA` is treated differently by certain functions, and having missingness properly recognized is important.  
+
+Note that this is typed without quotes. “NA” is different and is just a normal character value (also a Beatles lyric from the song Hey Jude).
+
+Your data may have other ways of representing missingness, such as 99, “Missing”, or “Unknown”.  
+
+When you import data, empty cells in a CSV or XLSX may import into R with a blank space - it will look empty but actually there is a " " space!  
+
+You may even have an *empty character value* which will look blank but would actually be written like this: "".  
+
+`r icons::icon_style(icons::fontawesome("eye", style = "solid"), scale = 2, fill = "darkblue")`
+
+Let's keep an eye out for how missing values have been imported in our data set, as we begin to clean.  
+
+
 
 ### Gender  
 
@@ -406,7 +425,7 @@ surv_raw %>%
 quiz(caption = "Quiz - Gender",
   question_numeric(
     "How many rows are missing a value for gender?",
-    answer(25, message = "NA means 'missing' in R!", correct = T),
+    answer(25, correct = T),
     allow_retry = TRUE,
     correct = "Correct, nice work.",
     min = 1,
@@ -415,6 +434,12 @@ quiz(caption = "Quiz - Gender",
   )
 )
 ```
+
+In the previous section we noted that missing values should be listed as `NA`. Is that the case here?  
+
+**No. The missing values have been read as "" - an empty character space**.  
+
+We will need to address this in our cleaning steps later.  
 
 
 ### Age  
@@ -549,8 +574,7 @@ quiz(caption = "Quiz - residence",
 ```
 
 
-
-
+See the first row of the tabulation - it appears that again, missing values were read into R as a blank character space. This may be a problem in all of the columns that are class "character". Don't worry, we will address this when cleaning the data.  
 
 
 
@@ -722,6 +746,15 @@ Review **`surv`** once you have successfully run your expanded pipe chain. Verif
 
 
 
+
+
+
+
+
+
+
+
+
 ## Select columns  
 
 The `select()` function is versatile:  
@@ -809,6 +842,16 @@ NOTE: End of solution
 
 
 
+
+
+
+
+
+
+
+
+
+
 ## Deduplicate  
 
 At this point, we should check for duplicates in our data. This can be done with the `distinct()` function. If run with empty parentheses, it will remove rows that are 100% duplicates (the value in every column is different).
@@ -851,6 +894,15 @@ NOTE: End of solution
 -->
 
 `distinct()` can be used in more advanced ways, such as only considering certain columns when evaluation duplicates (e.g. remove rows that have the same age, gender, and first name). You can read more about it in the [function documentation](https://dplyr.tidyverse.org/reference/distinct.html), and in the [Epi R Handbook cleaning chaper](https://epirhandbook.com/en/cleaning-data-and-core-functions.html#deduplication).  
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1047,7 +1099,112 @@ NOTE: End of solution
 
 
 
+
+
+
+
+
+
+
+
+
 ## Simple recoding  
+
+### Missing values  
+
+As identified earlier, when R imported the "raw" file it recorded missing values in "character" columns as an empty character `""`, instead of as the special symbol `NA` for missing values. This is a somewhat common occurrence when importing from CSV and XLSX.  
+
+**Run the code below, which creates a counts table of the unique values in the column `gender`.**  
+
+```{r, echo=T}
+surv_raw %>% 
+  tabyl(gender)
+```
+
+We need to tell R that if the value in `gender` is empty "" then R should change the value to `NA`.  
+
+**Use `mutate()` on the column `gender` and set it equal to the function `na_if()`.** In the parentheses of `na_if()`, again write `gender`, then a comma, and then two quote marks with no space in between: `na_if(gender, "")`.
+
+This code is saying: "Change `gender`, such that its values are equivalent to the column `gender` as changed by the function `na_if()` so that any instances of `""` are replaced by `NA`.  
+
+```{r, echo=T, eval=F}
+surv_raw <- surv %>% 
+  mutate(gender = na_if(gender, ""))
+```
+
+**Run your pipe chain with this new command added, and the re-tabulate (using the clean dataset `surv`).**  
+
+```{r, echo=T}
+surv_raw %>% 
+  tabyl(gender)
+```
+
+We need to apply this change for *all* the columns in the dataset that are class "character" (gender, hospital, gender, wt_kg, ht_cm, fever, chills, cough...). It is a long list...  
+
+It is totally possible to write one `mutate()` command for each of these columns, but that would take a long time. Below we give you some advanced R code that automatically applies this change across all columns that are of class "character".  
+
+```{r, echo=T, eval=F}
+surv <- surv_raw %>% 
+  mutate(across(.cols = where(is.character), .fns = na_if, ""))
+```
+
+We have added this code to the pipe chain in the solution below.  
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv <- surv_raw %>% 
+  
+  # automatically clean column names
+  clean_names() %>% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %>%
+     
+  # remove unnecessary column
+  select(-row_num) %>% 
+
+  # de-duplicate rows  
+  distinct() %>% 
+     
+  # convert date_onset to date class
+  mutate(date_onset = mdy(date_onset)) %>% 
+     
+  # convert age to numeric class
+  mutate(age = as.numeric(age)) %>% 
+     
+  # properly record missing values
+  mutate(across(.cols = where(is.character), .fns = na_if, ""))
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+`r icons::icon_style(icons::fontawesome("bookmark", style = "solid"), scale = 2, fill = "orange")`
+
+**Please note the below commands related to missingness in R,** as they will come in useful later.  
+
+* `is.na()` is used to assess whether a value is `NA`  
+* `!is.na()` is used to assess whether a value is NOT `NA`  
+
+These will come in useful when you need to count the number of missing values.  
+
+
+
+
+### Negative values  
 
 In the weight column `wt_kg`, there are some negative values. Open the data frame in the viewer (by clicking the data frame name in Environment) and sort to identify these values.  
 
@@ -1099,6 +1256,9 @@ surv <- surv_raw %>%
      
   # convert age to numeric class
   mutate(age = as.numeric(age)) %>% 
+     
+  # properly record missing values
+  mutate(across(.cols = where(is.character), .fns = na_if, "")) %>% 
      
   # convert negative values to NA
   mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
@@ -1259,6 +1419,9 @@ surv <- surv_raw %>%
   # convert age to numeric class
   mutate(age = as.numeric(age)) %>% 
      
+  # properly record missing values
+  mutate(across(.cols = where(is.character), .fns = na_if, "")) %>% 
+     
   # convert negative values to NA
   mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
          bmi   = ifelse(bmi < 0,   NA, bmi)) %>% 
@@ -1341,6 +1504,9 @@ surv <- surv_raw %>%
      
   # convert age to numeric class
   mutate(age = as.numeric(age)) %>% 
+     
+  # properly record missing values
+  mutate(across(.cols = where(is.character), .fns = na_if, "")) %>% 
      
   # convert negative values to NA
   mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
@@ -1487,6 +1653,9 @@ surv <- surv_raw %>%
   # convert age to numeric class
   mutate(age = as.numeric(age)) %>% 
      
+  # properly record missing values
+  mutate(across(.cols = where(is.character), .fns = na_if, "")) %>% 
+     
   # convert negative values to NA
   mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
          bmi   = ifelse(bmi < 0,   NA, bmi)) %>% 
@@ -1615,6 +1784,9 @@ surv <- surv_raw %>%
   # convert age to numeric class
   mutate(age = as.numeric(age)) %>% 
      
+  # properly record missing values
+  mutate(across(.cols = where(is.character), .fns = na_if, "")) %>% 
+     
   # convert negative values to NA
   mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
          bmi   = ifelse(bmi < 0,   NA, bmi)) %>% 
@@ -1631,6 +1803,19 @@ surv <- surv_raw %>%
     age_unit == "months" ~ age/12,         # if age is given in months
     is.na(age_unit)      ~ age,            # if age unit is missing, assume years
     TRUE                 ~ NA_real_)) %>%  # any other circumstance, assign missing
+       
+  # create age category column
+  mutate(age_cat = age_categories(         # create new column
+    age_years,                             # numeric column to make groups from
+    lower = 0,
+    upper = 70,
+    by = 10)) %>% 
+     
+  # create column marking TRUE if district of residence and detection differ
+  mutate(moved = district_res != district_det) %>% 
+  
+  # create new column that prioritizes district of detection
+  mutate(district = coalesce(district_det, district_res)) %>% 
   
   # re-code hospital column
   mutate(hospital = recode(hospital,
@@ -1702,6 +1887,9 @@ surv <- surv_raw %>%
   # convert age to numeric class
   mutate(age = as.numeric(age)) %>% 
      
+  # properly record missing values
+  mutate(across(.cols = where(is.character), .fns = na_if, "")) %>% 
+     
   # convert negative values to NA
   mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
          bmi   = ifelse(bmi < 0,   NA, bmi)) %>% 
@@ -1718,6 +1906,19 @@ surv <- surv_raw %>%
     age_unit == "months" ~ age/12,         # if age is given in months
     is.na(age_unit)      ~ age,            # if age unit is missing, assume years
     TRUE                 ~ NA_real_)) %>%  # any other circumstance, assign missing
+       
+  # create age category column
+  mutate(age_cat = age_categories(         # create new column
+    age_years,                             # numeric column to make groups from
+    lower = 0,
+    upper = 70,
+    by = 10)) %>% 
+     
+  # create column marking TRUE if district of residence and detection differ
+  mutate(moved = district_res != district_det) %>% 
+  
+  # create new column that prioritizes district of detection
+  mutate(district = coalesce(district_det, district_res)) %>% 
   
   # re-code hospital column
   mutate(hospital = recode(hospital,
@@ -1739,8 +1940,28 @@ NOTE: End of solution
 
 
 
+`r icons::icon_style(icons::fontawesome("eye", style = "solid"), scale = 2, fill = "darkblue")`  
+
+**Review your cleaning pipe chain, and the one in the solution.** Ensure that all the cleaning steps in the solution are also present in your R script "ebola_analysis.R".    
 
 
+
+### Save as RDS file  
+
+Now that we have cleaned this dataset, we should save it in our file directory for later use.  
+
+Because saving as xlsx or csv can re-introduce formatting challenges, we save it as a ".rds" file. RDS is a file format specific to R, and is very useful if you know you will work with the exported data again in R. 
+
+Most importantly, the classes of columns are stored, so you don’t have do to cleaning again.
+
+For example, if you work in an Epidemiology team and need to send files to a GIS team for mapping, and they use R as well, just send them the .rds file! Then all the column classes are retained and they have less cleaning work to do.
+
+```{r, echo=T, eval=F}
+# Export cleaned file  
+export(surv, here("data", "clean", "surveillance_linelist_clean.rds"))
+```
+
+Above, we write the name of the R object (`surv`), and then the filepath that we want to save it to (using the same `here()` syntax that we used to import data). Note the file extension ".rds".  
 
 
 

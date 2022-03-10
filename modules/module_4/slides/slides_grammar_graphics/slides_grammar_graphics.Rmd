@@ -1,0 +1,374 @@
+---
+title: "Data Vizualization"
+subtitle: "An introduction to {ggplot2}<br><br>"
+author: '</br>Offered by: [Applied Epi](https:://appliedepi.org) </br> A nonprofit organization elevating frontline epidemiology <br>`r icons::icon_style(icons::fontawesome$brands$twitter, fill = "white")` [@epiRhandbook](https://twitter.com/epiRhandbook) `r icons::icon_style(icons::fontawesome("paper-plane"), fill = "white")` [contact@appliedepi.org](mailto:contact@appliedepi.org)'
+date: "March 2022"
+output:
+  xaringan::moon_reader:
+    seal: TRUE
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    css: xaringan-themer.css
+---
+
+```{r, eval=F, echo=F, include = F}
+# Must do in order to render.
+
+pacman::p_load(xaringan)
+devtools::install_github("gadenbuie/xaringanExtra")
+remotes::install_github("mitchelloharawild/icons")
+icons::download_fontawesome()
+
+# Render with xaringan::infinite_moon_reader()
+# Slides will appear in viewer, and will update as you edit/save
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      fig.retina = 3  ## retina more effective than w/h (according to twitter)
+                      # fig.width = 16, 
+                      # fig.height = 10
+                      )
+## I dont know why this is included in the example xaringan slide 
+## but is something to do with background images
+options(htmltools.dir.version = FALSE)
+
+## install and load necessary packages 
+pacman::p_load(
+  rio,        # importing data  
+  here,       # relative file pathways  
+  janitor,    # data cleaning and tables
+  lubridate,  # working with dates
+  tidyverse,  # data management and visualization
+  gtsummary,  # summary tables
+  kableExtra, # for output tables
+  xaringanthemer  # for styling presentation 
+)
+  
+  
+## install and load necessary packages 
+pacman::p_load(
+  rio,        # importing data  
+  here,       # relative file pathways  
+  skimr,      # review data
+  janitor,    # data cleaning and tables
+  epikit,     # age categories
+  lubridate,  # working with dates
+  incidence2, # epidemic curves
+  ggrepel,    # smart labels
+  ggExtra,    # extras
+  esquisse,   # point-and-click for simple ggplots
+  apyramid,   # age pyramids
+  scales,     # formatting of scales
+  plotly,     # interactive plots
+  cowplot,    # combine plots
+  tidyverse,  # data management and visualization
+  xaringanthemer,  # for styling presentation 
+  sf,         # spatial data
+  ggspatial  # basemaps and scalebars 
+)
+
+
+```
+
+
+```{r  xaringan-themer, include = FALSE}
+
+## define presentation colours (theme) using {xaringanthemer} package 
+## https://pkg.garrickadenbuie.com/xaringanthemer/articles/xaringanthemer.html
+
+## epirhandbook logo colours: 
+  ## blue: "#00538c"
+  ## green: "#007732"
+  ## lighter green: "#48a878"
+
+## see ?style_mono_accent for all the things can customise
+style_mono_accent(
+  base_color = "#00538c", 
+  link_color = "#48a878", 
+  ## add logo to the title page (bit bigger)
+  title_slide_background_image = "https://github.com/appliedepi/intro_course/raw/main/images/logo.png", 
+  title_slide_background_position = "90% 90%", 
+  title_slide_background_size = "25%", 
+  ## add logo to all following slides
+  background_image = "https://github.com/appliedepi/intro_course/raw/main/images/logo.png", 
+  background_size = "10%",
+  background_position = "100% 0%"
+)
+
+options(htmltools.dir.version = FALSE)
+
+```
+
+```{r, include=FALSE}
+# data prep --------------------------------------------------------------------
+surv <- rio::import(here::here("data", "surveillance_linelist_clean.rds"))
+```
+
+
+```{css, echo=F}
+    .remark-slide table{
+      border: none
+    }
+    .remark-slide-table {
+      
+    }
+    tr:first-child {
+      border-top: none;
+  }
+    tr:last-child {
+    border-bottom: none;
+  }
+```
+
+
+
+```{css, echo = F}
+/* THIS IS A CSS CHUNK - THIS IS A COMMENT */
+/* Size of font in code echo. E.g. 10px or 50% */
+.remark-code {
+  font-size: 70%;
+}
+/* Size of font in text */
+.medium-text {
+  font-size: 75%;     
+}
+/* Size of font in tables */
+.small-table table {
+  font-size: 6px;     
+}
+.medium-table table {
+  font-size: 8px;     
+}
+.medium-large-table table {
+  font-size: 10px;     
+}
+```
+
+
+
+
+---
+# Day timeline
+
+
+---
+# Objectives 
+
+
+
+
+---
+# Visualization options in R  
+
+Today we focus on **ggplot2** because it:  
+
+* is good for fast data exploration of multi-dimensional data  
+* produces very **high quality** final outputs  
+* has well-structured grammar => **high consistency**  
+* is accompanied by many packages that expand functionality  
+
+See the [R graph gallery](https://www.r-graph-gallery.com/ggplot2-package.html) for inspiration.  
+
+.footnote[Other plotting options include [**base** R](https://towardsdatascience.com/base-plotting-in-r-eb365da06b22), [**lattice**](https://www.statmethods.net/advgraphs/trellis.html), and [**plotly**](https://plotly.com/r/).]  
+
+
+
+
+
+---
+# gg-what??  
+
+--
+
+- The **ggplot2** *package* is the most popular data visualization tool in R  
+
+--
+
+- Its `ggplot()` *function* is at the core of the package  
+
+--
+
+- This whole approach is colloquially known as “ggplotting”  
+
+--
+
+- Resulting figures are sometimes affectionately called “ggplots”  
+
+--
+
+**ggplot2** benefits from a wide variety of supplementary R packages that extends its functionalities, such as **gganimate**, **ggthemr**, **ggdendro**, **gghighlight**, **ggforce**...  
+
+.footnote[
+*Bonus question:* What does the "gg” in these names represent?
+]
+
+???
+- "gg" represents the “grammar of graphics” used to construct the figures 
+
+
+
+
+
+---
+# Syntax overview  
+
+Build a plot object by “adding” commands on top of one another that specify plot layers and design elements  
+
+
+--
+
+The order of layers will usually look like this:
+
+1) **"Open" the plot** with the `ggplot()` command and specify the dataset  
+
+--
+
+2) **"Map" data columns** to "aesthetic" features of the plot such as axes, color, size, shape, fill, transparency  
+
+--
+
+3) **Add (`+`) “geom” layers** that visualize data geometrically as shapes  
+
+--
+
+4) **Modify "scales"**, such as a color scale or y-axis breaks  
+
+--
+
+5) **Add "theme" plot design elements** such as axis labels, title, caption, fonts, text sizes, background themes, or axes rotation  
+
+--
+
+These layers are "added" sequentially with `+` symbols.  
+**ggplot2** commands can be quite long!  
+
+
+???
+Remember that although the commands may be long, it is infinitely easier to edit and recycle than in Excel  
+
+
+
+
+
+
+
+---
+# Open the plot  
+
+.pull-left[
+
+`ggplot()` creates an empty canvas. Assign the data frame to use.  
+
+```{r, echo = TRUE, eval = FALSE, tidy = FALSE}
+ggplot(data = surv)                   
+```
+
+Alternatively, use the `%>%` pipe operator to "pipe" a data frame *into* `ggplot()`  
+
+```{r , echo = TRUE, eval = FALSE, tidy = FALSE}
+surv %>%
+  ggplot()
+```
+
+]
+
+.pull-right[
+
+```{r , echo = FALSE, eval = TRUE}
+ggplot(data = surv)
+```
+] 
+
+???
+This is only a blank canvas, we have not defined what should be in the x and y axes. 
+If several data frames are needed, they can be added in their own geoms.
+Piping is useful to make one-time changes to a dataset prior to plotting.  
+
+
+
+
+
+---
+# Mappings with `aes()`  
+
+.pull-left[
+
+```{r, eval=F, echo=T}
+ggplot(
+  data = surv,
+* mapping = aes(
+*  x = age,
+*  y = ht_cm))
+```
+
+"Aesthetics" are features *whose display could vary for each data point* (position, color, shape...)  
+
+`mapping = aes()` assigns plot "aesthetics" to columns in the data. Inputs must be placed within `aes()`.  
+
+Two basic aesthetic mappings are axes, via `x=` and `y=`.  
+
+
+]
+
+.pull-right[
+
+```{r , echo = FALSE, eval = TRUE}
+ggplot(
+  data = surv,
+  mapping = aes(
+   x = age,
+   y = ht_cm))+
+theme_grey(base_size = 16)
+```
+] 
+
+
+
+---
+# Add geometry  
+
+.pull-left[
+
+```{r eval=F, echo=T}
+ggplot(
+  data = surv,
+  mapping = aes(
+    x = age,
+    y = ht_cm)) +
+*geom_point()
+```
+
+Data are visualized using "geom" commands, such as `geom_point()`.  
+
+These commands are "added" with a `+` to the `ggplot()` command.  
+
+]
+
+
+.pull-right[
+
+```{r eval=T, echo=F, message=F, warning=F}
+ggplot(
+  data = surv,
+  mapping = aes(
+   x = age,
+   y = ht_cm)) +
+geom_point() + 
+theme_grey(base_size = 16)
+```
+
+]
+
+
+
+
+
+
+

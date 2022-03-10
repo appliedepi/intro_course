@@ -1,0 +1,2152 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Welcome</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Offered by: Applied Epi  A nonprofit organization elevating frontline epidemiology    @epiRhandbook   contact@appliedepi.org" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/tabwid/tabwid.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Welcome
+## Introduction to R for<br>Applied Epidemiology and Public Health<br>
+### </br>Offered by: <a href="https:://appliedepi.org">Applied Epi</a>
+</br> A nonprofit organization elevating frontline epidemiology
+<br><svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;fill:white;" xmlns="http://www.w3.org/2000/svg">
+<path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"></path></svg>
+<a href="https://twitter.com/epiRhandbook"><span
+class="citation">@epiRhandbook</span></a>
+<svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;fill:white;" xmlns="http://www.w3.org/2000/svg">
+<path d="M440 6.5L24 246.4c-34.4 19.9-31.1 70.8 5.7 85.9L144 379.6V464c0 46.4 59.2 65.5 86.6 28.6l43.8-59.1 111.9 46.2c5.9 2.4 12.1 3.6 18.3 3.6 8.2 0 16.3-2.1 23.6-6.2 12.8-7.2 21.6-20 23.9-34.5l59.4-387.2c6.1-40.1-36.9-68.8-71.5-48.9zM192 464v-64.6l36.6 15.1L192 464zm212.6-28.7l-153.8-63.5L391 169.5c10.7-15.5-9.5-33.5-23.7-21.2L155.8 332.6 48 288 464 48l-59.4 387.3z"></path></svg>
+<a href="mailto:contact@appliedepi.org">contact@appliedepi.org</a>
+### March 2022
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+    .remark-slide table{
+      border: none
+    }
+    .remark-slide-table {
+      
+    }
+    tr:first-child {
+      border-top: none;
+  }
+    tr:last-child {
+    border-bottom: none;
+  }
+&lt;/style&gt;
+
+
+
+&lt;style type="text/css"&gt;
+/* THIS IS A CSS CHUNK - THIS IS A COMMENT */
+/* Size of font in code echo. E.g. 10px or 50% */
+.remark-code {
+  font-size: 70%;
+}
+/* Size of font in text */
+.medium-text {
+  font-size: 75%;     
+}
+/* Size of font in tables */
+.small-table table {
+  font-size: 6px;     
+}
+.medium-table table {
+  font-size: 8px;     
+}
+.medium-large-table table {
+  font-size: 10px;     
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+class: inverse, center, middle
+
+## Grouping data 
+
+
+&lt;img src="../../../../images/grouping/Grouping_1500x500.png" width="100%" /&gt;
+
+
+
+---
+
+# Daily timeline
+
+
+---
+
+# Objectives  
+
+
+
+---
+class: inverse, center, middle
+
+## {tidyverse} - flexibility  
+
+## {janitor} - speed  
+
+## {gtsummary} - beauty
+
+
+---
+class: inverse, center, middle
+
+## {tidyverse} - flexibility  
+
+&lt;img src="../../../../images/grouping/Grouping_1500x500.png" width="100%" /&gt;
+
+
+
+
+
+---
+
+# Functions  
+
+Common grouping/summarising functions, all from the {tidyverse}:  
+
+* `count()`  
+* `group_by()`  
+* `summarise()`  
+* `arrange()`  
+
+
+
+
+---
+# `count()`  
+
+Pipe to `count()`, with a column name, to get the number of rows per group
+
+--
+
+
+
+```r
+surv %&gt;% 
+* count(district)
+```
+
+```
+##          district   n
+## 1       Central I  37
+## 2      Central II  44
+## 3          East I  31
+## 4         East II  76
+## 5        East III  12
+## 6  Mountain Rural 203
+## 7          West I  17
+## 8         West II 125
+## 9        West III 114
+## 10           &lt;NA&gt;   2
+```
+
+???
+Very quick and fast
+
+
+---
+# `count()`  
+
+You can include multiple grouping columns  
+
+--
+
+
+```r
+surv %&gt;% 
+* count(district, gender)
+```
+
+```
+##          district gender   n
+## 1       Central I female  19
+## 2       Central I   male  16
+## 3       Central I   &lt;NA&gt;   2
+## 4      Central II female  21
+## 5      Central II   male  22
+## 6      Central II   &lt;NA&gt;   1
+## 7          East I female  12
+## 8          East I   male  17
+## 9          East I   &lt;NA&gt;   2
+## 10        East II female  37
+## 11        East II   male  38
+## 12        East II   &lt;NA&gt;   1
+## 13       East III female   4
+## 14       East III   male   7
+## 15       East III   &lt;NA&gt;   1
+## 16 Mountain Rural female 111
+## 17 Mountain Rural   male  85
+## 18 Mountain Rural   &lt;NA&gt;   7
+## 19         West I female  10
+## 20         West I   male   5
+## 21         West I   &lt;NA&gt;   2
+## 22        West II female  60
+## 23        West II   male  62
+## 24        West II   &lt;NA&gt;   3
+## 25       West III female  52
+## 26       West III   male  56
+## 27       West III   &lt;NA&gt;   6
+## 28           &lt;NA&gt; female   1
+## 29           &lt;NA&gt;   male   1
+```
+
+???
+Very quick and fast
+
+
+---
+# group_by() and summarise()  
+
+But what if you want more than just the counts?  
+
+--
+
+"What is mean age in each group?"  
+
+--
+
+"What is the latest date of symptom onset in each group?"  
+
+--
+
+`group_by()` and `summarise()` together allow the flexibility to create a  
+**new, summary data frame** with **statistics by group**.  
+
+
+.footnote[`summarise()` and `summarize()` are equivalent]  
+
+
+
+
+---
+# group_by() and summarise()  
+
+
+```r
+surv %&gt;% 
+  group_by(district)
+```
+
+No perceptible change to the dataset *until* another {dplyr} function is applied.  
+
+--
+
+If printed, the `Groups:` are listed above the data.
+
+
+```
+## # A tibble: 661 x 23
+## # Groups:   district [10]
+##    case_id date_onset gender   age age_unit hospital      wt_kg ht_cm fever chills cough aches vomit  temp   bmi
+##    &lt;chr&gt;   &lt;date&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;         &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 86340d  2014-10-30 female     1 years    Port Hospital    18    29 yes   no     yes   no    no     39.4 214. 
+##  2 92d002  2014-08-16 female    16 years    &lt;NA&gt;             59   133 yes   no     yes   no    yes    39.3  33.4
+##  3 544bd1  2014-08-29 female    10 years    &lt;NA&gt;             39   106 yes   no     yes   no    yes    39.3  34.7
+##  4 6056ba  2014-10-20 female     0 years    &lt;NA&gt;             NA    24 yes   yes    yes   no    yes    38.6  NA  
+##  5 eb5aeb  2014-10-28 female     8 years    Port Hospital    34   104 yes   no     yes   no    yes    38.2  31.4
+##  6 e64e04  2014-10-06 female     7 years    &lt;NA&gt;             32    91 no    no     yes   yes   yes    36.5  38.6
+##  7 5a65bb  2014-09-21 male       4 years    Port Hospital    41    74 yes   yes    yes   no    yes    39.1  74.9
+##  8 2ae019  2014-05-06 male      37 years    Other            81   167 yes   no     yes   no    no     39.5  29.0
+##  9 7ca4c0  2014-09-29 male      11 years    Port Hospital    56   163 yes   no     yes   no    no     38.9  21.1
+## 10 699d82  2014-11-27 male      27 years    Port Hospital    76   178 yes   yes    yes   no    no     39.4  24.0
+## # ... with 651 more rows, and 8 more variables: district_res &lt;chr&gt;, admin3pcod &lt;chr&gt;, district_det &lt;chr&gt;,
+## #   case_def &lt;chr&gt;, age_years &lt;dbl&gt;, age_cat &lt;fct&gt;, moved &lt;lgl&gt;, district &lt;chr&gt;
+```
+
+
+
+???
+Note the `groups: district`, at the top of the tibble
+
+
+
+
+---
+# group_by() and summarise()  
+
+Within `summarise()`, *create columns in a **new**, summarized dataset.*  
+
+--
+
+&lt;h4&gt;summarise(&lt;span style='color:deeppink'&gt;new column name&lt;/span&gt; = &lt;span style='color:cornflowerblue'&gt;a function&lt;/span&gt; to apply to each group of rows)&lt;/h4&gt;
+
+--
+
+
+
+
+&lt;code class ='r hljs remark-code'&gt;surv %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;group_by(district) %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;summarise()&lt;/code&gt;
+
+```
+
+## # A tibble: 10 x 1
+##    district      
+##    &lt;chr&gt;         
+##  1 Central I     
+##  2 Central II    
+##  3 East I        
+##  4 East II       
+##  5 East III      
+##  6 Mountain Rural
+##  7 West I        
+##  8 West II       
+##  9 West III      
+## 10 &lt;NA&gt;
+
+```
+
+
+
+
+
+---
+# group_by() and summarise()  
+
+Within the parentheses, *create columns in a **new**, summarized dataset.*  
+
+&lt;h4&gt;summarise(&lt;span style='color:deeppink'&gt;new column name&lt;/span&gt; = &lt;span style='color:cornflowerblue'&gt;a function&lt;/span&gt; to apply to each group of rows)&lt;/h4&gt;
+
+
+
+
+&lt;code class ='r hljs remark-code'&gt;surv %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;group_by(district) %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;summarise(&lt;span style='color:deeppink'&gt;n_rows&lt;/span&gt; = &lt;span style='color:cornflowerblue'&gt;n()&lt;/span&gt;) &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;# use function &lt;span style='color:cornflowerblue'&gt;n()&lt;/span&gt; to count the number of rows&lt;/code&gt;
+
+```
+
+## # A tibble: 10 x 2
+##    district       n_rows
+##    &lt;chr&gt;           &lt;int&gt;
+##  1 Central I          37
+##  2 Central II         44
+##  3 East I             31
+##  4 East II            76
+##  5 East III           12
+##  6 Mountain Rural    203
+##  7 West I             17
+##  8 West II           125
+##  9 West III          114
+## 10 &lt;NA&gt;                2
+
+```
+
+
+
+
+---
+# group_by() and summarise()  
+
+Within the parentheses, *create columns in a **new**, summarized dataset.*  
+
+&lt;h4&gt;summarise(&lt;span style='color:deeppink'&gt;new column name&lt;/span&gt; = &lt;span style='color:cornflowerblue'&gt;a function&lt;/span&gt; to apply to each group of rows)&lt;/h4&gt;
+
+
+
+
+&lt;code class ='r hljs remark-code'&gt;surv %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;group_by(district) %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;summarise(&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;span style='color:deeppink'&gt;n_rows&lt;/span&gt; &amp;nbsp;= &lt;span style='color:cornflowerblue'&gt;n()&lt;/span&gt;, &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;# use function &lt;span style='color:cornflowerblue'&gt;n()&lt;/span&gt; to count the number of rows&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;span style='color:deeppink'&gt;age_avg&lt;/span&gt; = &lt;span style='color:cornflowerblue'&gt;mean(age_years, na.rm = T)&lt;/span&gt;) &amp;nbsp;&amp;nbsp;# mean age in the group&lt;/code&gt;
+
+```
+
+## # A tibble: 10 x 3
+##    district       n_rows age_avg
+##    &lt;chr&gt;           &lt;int&gt;   &lt;dbl&gt;
+##  1 Central I          37    20.7
+##  2 Central II         44    17.3
+##  3 East I             31    16.0
+##  4 East II            76    16.6
+##  5 East III           12    19.7
+##  6 Mountain Rural    203    14  
+##  7 West I             17    13.4
+##  8 West II           125    17.7
+##  9 West III          114    15.3
+## 10 &lt;NA&gt;                2     9.5
+
+```
+
+
+
+
+---
+# group_by() and summarise()  
+
+Within the parentheses, *create columns in a **new**, summarized dataset.*  
+
+&lt;h4&gt;summarise(&lt;span style='color:deeppink'&gt;new column name&lt;/span&gt; = &lt;span style='color:cornflowerblue'&gt;a function&lt;/span&gt; to apply to each group of rows)&lt;/h4&gt;
+
+
+
+
+&lt;code class ='r hljs remark-code'&gt;surv %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;group_by(district) %&gt;% &lt;br&gt;&amp;nbsp;&amp;nbsp;summarise(&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;span style='color:deeppink'&gt;n_rows&lt;/span&gt; &amp;nbsp;= &lt;span style='color:cornflowerblue'&gt;n()&lt;/span&gt;, &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;# use function &lt;span style='color:cornflowerblue'&gt;n()&lt;/span&gt; to count the number of rows&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;span style='color:deeppink'&gt;age_avg&lt;/span&gt; = &lt;span style='color:cornflowerblue'&gt;mean(age_years, na.rm = T)&lt;/span&gt;, &amp;nbsp;&amp;nbsp;&amp;nbsp;# mean age in the group&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;span style='color:deeppink'&gt;max_onset&lt;/span&gt; = &lt;span style='color:cornflowerblue'&gt;max(date_onset, na.rm=T)&lt;/span&gt;) &amp;nbsp;&amp;nbsp;&amp;nbsp;# latest onset date&lt;/code&gt;
+
+```
+
+## # A tibble: 10 x 4
+##    district       n_rows age_avg max_onset 
+##    &lt;chr&gt;           &lt;int&gt;   &lt;dbl&gt; &lt;date&gt;    
+##  1 Central I          37    20.7 2014-11-27
+##  2 Central II         44    17.3 2014-11-26
+##  3 East I             31    16.0 2014-11-26
+##  4 East II            76    16.6 2014-11-26
+##  5 East III           12    19.7 2014-11-14
+##  6 Mountain Rural    203    14   2014-11-28
+##  7 West I             17    13.4 2014-11-14
+##  8 West II           125    17.7 2014-11-28
+##  9 West III          114    15.3 2014-11-27
+## 10 &lt;NA&gt;                2     9.5 2014-10-23
+
+```
+
+
+
+
+---
+
+# `arrange()`
+
+Sort the table by placing the column(s) for sorting within `arrange()`  
+
+
+```r
+surv %&gt;% 
+  group_by(district) %&gt;% 
+  summarise(
+    n_rows  = n(),                             
+    age_avg = mean(age_years, na.rm = T),      
+    max_onset = max(date_onset, na.rm=T)) %&gt;%  
+* arrange(n_rows)
+```
+
+```
+## # A tibble: 10 x 4
+##    district       n_rows age_avg max_onset 
+##    &lt;chr&gt;           &lt;int&gt;   &lt;dbl&gt; &lt;date&gt;    
+##  1 &lt;NA&gt;                2     9.5 2014-10-23
+##  2 East III           12    19.7 2014-11-14
+##  3 West I             17    13.4 2014-11-14
+##  4 East I             31    16.0 2014-11-26
+##  5 Central I          37    20.7 2014-11-27
+##  6 Central II         44    17.3 2014-11-26
+##  7 East II            76    16.6 2014-11-26
+##  8 West III          114    15.3 2014-11-27
+##  9 West II           125    17.7 2014-11-28
+## 10 Mountain Rural    203    14   2014-11-28
+```
+
+
+
+
+---
+
+# `arrange()`
+
+Wrap the column(s) in `desc()` to reverse the sorting  
+
+
+```r
+surv %&gt;% 
+  group_by(district) %&gt;% 
+  summarise(
+    n_rows  = n(),                             
+    age_avg = mean(age_years, na.rm = T),      
+    max_onset = max(date_onset, na.rm=T)) %&gt;%  
+* arrange(desc(n_rows))
+```
+
+```
+## # A tibble: 10 x 4
+##    district       n_rows age_avg max_onset 
+##    &lt;chr&gt;           &lt;int&gt;   &lt;dbl&gt; &lt;date&gt;    
+##  1 Mountain Rural    203    14   2014-11-28
+##  2 West II           125    17.7 2014-11-28
+##  3 West III          114    15.3 2014-11-27
+##  4 East II            76    16.6 2014-11-26
+##  5 Central II         44    17.3 2014-11-26
+##  6 Central I          37    20.7 2014-11-27
+##  7 East I             31    16.0 2014-11-26
+##  8 West I             17    13.4 2014-11-14
+##  9 East III           12    19.7 2014-11-14
+## 10 &lt;NA&gt;                2     9.5 2014-10-23
+```
+
+
+
+---
+# `arrange()`  
+
+On data that are grouped, you can `arrange` *within groups*:  
+
+--
+
+No sorting in effect  
+
+
+```r
+surv %&gt;% 
+  group_by(hospital) %&gt;% 
+  arrange()
+```
+
+```
+## # A tibble: 661 x 23
+## # Groups:   hospital [6]
+##    case_id date_onset gender   age age_unit hospital      wt_kg ht_cm fever chills cough aches vomit  temp   bmi
+##    &lt;chr&gt;   &lt;date&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;         &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 86340d  2014-10-30 female     1 years    Port Hospital    18    29 yes   no     yes   no    no     39.4 214. 
+##  2 92d002  2014-08-16 female    16 years    &lt;NA&gt;             59   133 yes   no     yes   no    yes    39.3  33.4
+##  3 544bd1  2014-08-29 female    10 years    &lt;NA&gt;             39   106 yes   no     yes   no    yes    39.3  34.7
+##  4 6056ba  2014-10-20 female     0 years    &lt;NA&gt;             NA    24 yes   yes    yes   no    yes    38.6  NA  
+##  5 eb5aeb  2014-10-28 female     8 years    Port Hospital    34   104 yes   no     yes   no    yes    38.2  31.4
+##  6 e64e04  2014-10-06 female     7 years    &lt;NA&gt;             32    91 no    no     yes   yes   yes    36.5  38.6
+##  7 5a65bb  2014-09-21 male       4 years    Port Hospital    41    74 yes   yes    yes   no    yes    39.1  74.9
+##  8 2ae019  2014-05-06 male      37 years    Other            81   167 yes   no     yes   no    no     39.5  29.0
+##  9 7ca4c0  2014-09-29 male      11 years    Port Hospital    56   163 yes   no     yes   no    no     38.9  21.1
+## 10 699d82  2014-11-27 male      27 years    Port Hospital    76   178 yes   yes    yes   no    no     39.4  24.0
+## # ... with 651 more rows, and 8 more variables: district_res &lt;chr&gt;, admin3pcod &lt;chr&gt;, district_det &lt;chr&gt;,
+## #   case_def &lt;chr&gt;, age_years &lt;dbl&gt;, age_cat &lt;fct&gt;, moved &lt;lgl&gt;, district &lt;chr&gt;
+```
+???
+Note that we are back to the original linelist here, not a summarised dataframe  
+
+
+---
+# `arrange()`  
+
+On data that are grouped, you can `arrange` *within groups*:  
+
+Sorting by `date_onset` (ascending)  
+
+
+```r
+surv %&gt;% 
+  group_by(hospital) %&gt;% 
+  arrange(date_onset, .by_group = TRUE)
+```
+
+```
+## # A tibble: 661 x 23
+## # Groups:   hospital [6]
+##    case_id   date_onset gender   age age_unit hospital         wt_kg ht_cm fever chills cough aches vomit  temp   bmi
+##    &lt;chr&gt;     &lt;date&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;            &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 62638     2014-07-25 male      13 years    Central Hospital    61   125 no    no     yes   no    yes    37.5  39.0
+##  2 ae4a36    2014-07-25 female     7 years    Central Hospital    32    87 yes   no     no    yes   no     38.7  42.3
+##  3 5b1d5e    2014-08-06 female    22 years    Central Hospital    65   151 yes   no     yes   no    yes    38.4  28.5
+##  4 9.20E+130 2014-08-10 female    12 years    Central Hospital    51   125 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;   36.6  32.6
+##  5 f13395    2014-08-13 female     7 years    Central Hospital    43    96 yes   no     no    no    no     39.9  46.7
+##  6 b016e0    2014-08-14 male      45 years    Central Hospital    97   217 yes   no     yes   no    no     38.4  20.6
+##  7 7d25a6    2014-08-16 &lt;NA&gt;      27 years    Central Hospital    67   157 no    no     yes   no    yes    37.9  27.2
+##  8 0afd15    2014-08-27 male      17 years    Central Hospital    60   165 yes   no     yes   no    yes    39.1  22.0
+##  9 5a7acc    2014-09-01 female    13 years    Central Hospital    63   148 no    yes    yes   yes   yes    36.2  28.8
+## 10 bf302f    2014-09-08 male      14 years    Central Hospital    64   156 yes   no     yes   no    yes    39    26.3
+## # ... with 651 more rows, and 8 more variables: district_res &lt;chr&gt;, admin3pcod &lt;chr&gt;, district_det &lt;chr&gt;,
+## #   case_def &lt;chr&gt;, age_years &lt;dbl&gt;, age_cat &lt;fct&gt;, moved &lt;lgl&gt;, district &lt;chr&gt;
+```
+
+---
+# `arrange()`  
+
+On data that are grouped, you can `arrange` *within groups*:  
+
+Sorting by `date_onset` (*descending*)  
+
+
+```r
+surv %&gt;% 
+  group_by(hospital) %&gt;% 
+  arrange(desc(date_onset), .by_group = TRUE)
+```
+
+```
+## # A tibble: 661 x 23
+## # Groups:   hospital [6]
+##    case_id date_onset gender   age age_unit hospital         wt_kg ht_cm fever chills cough aches vomit  temp   bmi
+##    &lt;chr&gt;   &lt;date&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;            &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 d05a15  2014-11-26 female     8 years    Central Hospital    33   118 yes   yes    yes   no    no     38.5  23.7
+##  2 0d8a0a  2014-11-24 male      27 years    Central Hospital    60   152 yes   no     no    no    yes    40    26.0
+##  3 a4585b  2014-11-23 male      23 years    Central Hospital    65   162 yes   no     yes   no    no     39.6  24.8
+##  4 e5e4e7  2014-11-22 female    12 years    Central Hospital    53   133 yes   no     yes   no    yes    38.7  30.0
+##  5 f52668  2014-11-18 male      12 years    Central Hospital    64   154 yes   no     yes   no    no     38.8  27.0
+##  6 6f8014  2014-11-17 male      16 years    Central Hospital    63   141 yes   no     yes   no    no     38.7  31.7
+##  7 e88337  2014-11-16 male      41 years    Central Hospital    87   211 yes   yes    yes   no    yes    39.4  19.5
+##  8 da8bdb  2014-11-14 female    12 years    Central Hospital    51   140 yes   yes    yes   no    yes    38.7  26.0
+##  9 bc475c  2014-11-08 female     4 years    Central Hospital    35    63 yes   no     yes   no    yes    39.4  88.2
+## 10 9c5424  2014-11-07 male       1 years    Central Hospital    17    50 yes   no     yes   no    yes    38.8  68  
+## # ... with 651 more rows, and 8 more variables: district_res &lt;chr&gt;, admin3pcod &lt;chr&gt;, district_det &lt;chr&gt;,
+## #   case_def &lt;chr&gt;, age_years &lt;dbl&gt;, age_cat &lt;fct&gt;, moved &lt;lgl&gt;, district &lt;chr&gt;
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+class: inverse, center, middle
+
+## {janitor} - speed  
+
+&lt;img src="../../../../images/grouping/Grouping_1500x500.png" width="100%" /&gt;
+
+
+
+
+---
+
+# `tabyl()`  
+
+.pull-left[
+
+
+```r
+surv %&gt;% 
+* tabyl(district)
+```
+
+]
+
+--
+
+.pull-right[
+
+
+```
+##        district   n     percent valid_percent
+##       Central I  37 0.055975794    0.05614568
+##      Central II  44 0.066565809    0.06676783
+##          East I  31 0.046898638    0.04704097
+##         East II  76 0.114977307    0.11532625
+##        East III  12 0.018154312    0.01820941
+##  Mountain Rural 203 0.307110439    0.30804249
+##          West I  17 0.025718608    0.02579666
+##         West II 125 0.189107413    0.18968134
+##        West III 114 0.172465961    0.17298938
+##            &lt;NA&gt;   2 0.003025719            NA
+```
+
+]
+
+
+---
+
+# `adorn_()` functions  
+
+.pull-left[
+
+
+```r
+surv %&gt;% 
+  tabyl(district) %&gt;% 
+* adorn_totals()
+```
+
+]
+
+.pull-right[
+
+
+```
+##        district   n     percent valid_percent
+##       Central I  37 0.055975794    0.05614568
+##      Central II  44 0.066565809    0.06676783
+##          East I  31 0.046898638    0.04704097
+##         East II  76 0.114977307    0.11532625
+##        East III  12 0.018154312    0.01820941
+##  Mountain Rural 203 0.307110439    0.30804249
+##          West I  17 0.025718608    0.02579666
+##         West II 125 0.189107413    0.18968134
+##        West III 114 0.172465961    0.17298938
+##            &lt;NA&gt;   2 0.003025719            NA
+##           Total 661 1.000000000    1.00000000
+```
+
+]
+
+
+
+
+---
+
+# `adorn_()` functions  
+
+.pull-left[
+
+
+```r
+surv %&gt;% 
+  tabyl(district) %&gt;% 
+  adorn_totals() %&gt;% 
+* adorn_pct_formatting()
+```
+
+]
+
+
+.pull-right[
+
+
+```
+##        district   n percent valid_percent
+##       Central I  37    5.6%          5.6%
+##      Central II  44    6.7%          6.7%
+##          East I  31    4.7%          4.7%
+##         East II  76   11.5%         11.5%
+##        East III  12    1.8%          1.8%
+##  Mountain Rural 203   30.7%         30.8%
+##          West I  17    2.6%          2.6%
+##         West II 125   18.9%         19.0%
+##        West III 114   17.2%         17.3%
+##            &lt;NA&gt;   2    0.3%             -
+##           Total 661  100.0%        100.0%
+```
+
+]
+
+
+
+---
+
+# `tabyl()` cross-tabulation   
+
+
+.pull-left[
+
+
+```r
+surv %&gt;% 
+* tabyl(district, gender)
+```
+
+]
+
+--
+
+.pull-right[
+
+
+```
+##        district female male NA_
+##       Central I     19   16   2
+##      Central II     21   22   1
+##          East I     12   17   2
+##         East II     37   38   1
+##        East III      4    7   1
+##  Mountain Rural    111   85   7
+##          West I     10    5   2
+##         West II     60   62   3
+##        West III     52   56   6
+##            &lt;NA&gt;      1    1   0
+```
+
+]
+
+
+
+---
+
+# `tabyl()` cross-tabulation   
+
+
+.pull-left[
+
+
+```r
+surv %&gt;% 
+* tabyl(district, gender, show_na = FALSE)
+```
+
+Remove missing values from the table.  
+
+]
+
+
+.pull-right[
+
+
+```
+##        district female male
+##       Central I     19   16
+##      Central II     21   22
+##          East I     12   17
+##         East II     37   38
+##        East III      4    7
+##  Mountain Rural    111   85
+##          West I     10    5
+##         West II     60   62
+##        West III     52   56
+```
+
+]
+
+
+
+---
+
+# `adorn_()` cross-tabulation  
+
+.pull-left[
+
+
+```r
+surv %&gt;% 
+  tabyl(district, gender, show_na = FALSE) %&gt;% 
+* adorn_totals(where = "both")
+```
+
+Add totals for both rows and columns.  
+
+]
+
+
+
+.pull-right[
+
+
+```
+##        district female male Total
+##       Central I     19   16    35
+##      Central II     21   22    43
+##          East I     12   17    29
+##         East II     37   38    75
+##        East III      4    7    11
+##  Mountain Rural    111   85   196
+##          West I     10    5    15
+##         West II     60   62   122
+##        West III     52   56   108
+##           Total    326  308   634
+```
+
+]
+
+---
+
+# `adorn_()` cross-tabulation  
+
+.pull-left[
+
+
+```r
+surv %&gt;% 
+  tabyl(district, gender, show_na = FALSE) %&gt;% 
+  adorn_totals(where = "both") %&gt;% 
+* adorn_percentages() %&gt;%
+* adorn_pct_formatting()
+```
+
+Add formatted percents with these two commands.  
+
+]
+
+
+
+.pull-right[
+
+
+```
+##        district female  male  Total
+##       Central I  54.3% 45.7% 100.0%
+##      Central II  48.8% 51.2% 100.0%
+##          East I  41.4% 58.6% 100.0%
+##         East II  49.3% 50.7% 100.0%
+##        East III  36.4% 63.6% 100.0%
+##  Mountain Rural  56.6% 43.4% 100.0%
+##          West I  66.7% 33.3% 100.0%
+##         West II  49.2% 50.8% 100.0%
+##        West III  48.1% 51.9% 100.0%
+##           Total  51.4% 48.6% 100.0%
+```
+
+]
+
+
+---
+
+# `adorn_()` cross-tabulation  
+
+.pull-left[
+
+
+```r
+surv %&gt;% 
+  tabyl(district, gender, show_na = FALSE) %&gt;% 
+  adorn_totals(where = "both") %&gt;% 
+  adorn_percentages() %&gt;%     
+* adorn_pct_formatting(digits = 0)
+```
+
+Set the number of decimal digits.  
+
+]
+
+
+
+.pull-right[
+
+
+```
+##        district female male Total
+##       Central I    54%  46%  100%
+##      Central II    49%  51%  100%
+##          East I    41%  59%  100%
+##         East II    49%  51%  100%
+##        East III    36%  64%  100%
+##  Mountain Rural    57%  43%  100%
+##          West I    67%  33%  100%
+##         West II    49%  51%  100%
+##        West III    48%  52%  100%
+##           Total    51%  49%  100%
+```
+
+]
+
+
+???
+This may look ugly, but you can make this into pretty image very easily  
+
+---
+
+# {flextable}
+
+Easily pipe the table to `qflextable()` to print nicely as html.  
+
+.pull-left[
+
+```r
+surv %&gt;% 
+  tabyl(district, gender, show_na = FALSE) %&gt;% 
+  adorn_totals(where = "both") %&gt;% 
+  adorn_percentages() %&gt;%     
+  adorn_pct_formatting(digits = 0) %&gt;% 
+* qflextable()
+```
+]
+
+.pull-right[
+
+&lt;template id="2305bbad-679e-49a1-8156-f328bfbfc83a"&gt;&lt;style&gt;
+.tabwid table{
+  border-spacing:0px !important;
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+&lt;/style&gt;&lt;div class="tabwid"&gt;&lt;style&gt;.cl-c5a5f5a6{}.cl-c59be214{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-c59be215{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-c59be216{width:53.5pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59be217{width:44.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59be218{width:95.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59be219{width:48.7pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59be21a{width:48.7pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59be21b{width:95.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59be21c{width:53.5pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59be21d{width:44.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59be21e{width:95.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59ca6fe{width:53.5pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59ca6ff{width:44.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59ca700{width:48.7pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-c5a5f5a6'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be21e"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;district&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59ca6fe"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;female&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59ca6ff"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;male&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59ca700"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;Total&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be218"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;Central I&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be216"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;54%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be217"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;46%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be219"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be218"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;Central II&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be216"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;49%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be217"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;51%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be219"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be218"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;East I&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be216"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;41%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be217"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;59%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be219"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be218"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;East II&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be216"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;49%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be217"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;51%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be219"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be218"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;East III&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be216"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;36%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be217"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;64%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be219"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be218"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;Mountain Rural&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be216"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;57%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be217"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;43%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be219"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be218"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;West I&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be216"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;67%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be217"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;33%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be219"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be218"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;West II&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be216"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;49%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be217"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;51%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be219"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be218"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;West III&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be216"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;48%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be217"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;52%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be219"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be21b"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;Total&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be21c"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;51%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be21d"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;49%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be21a"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/template&gt;
+&lt;div class="flextable-shadow-host" id="404a7721-fac9-42bd-ba1b-3f5221a13342"&gt;&lt;/div&gt;
+&lt;script&gt;
+var dest = document.getElementById("404a7721-fac9-42bd-ba1b-3f5221a13342");
+var template = document.getElementById("2305bbad-679e-49a1-8156-f328bfbfc83a");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+&lt;/script&gt;
+
+]
+
+.footnote[`qflextable()` means "quick flextable"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+class: inverse, center, middle
+
+## {gtsummary} - beauty  
+
+&lt;img src="../../../../images/grouping/Grouping_1500x500.png" width="100%" /&gt;
+
+
+---
+
+# `tbl_summary()`  
+
+* Default output is meant to be *publication ready*  
+
+--
+
+.pull-left[
+
+
+```r
+surv %&gt;% 
+* select(hospital, age_years)
+```
+
+Select the columns to summarise.  
+For demonstration:  
+* One character column (`hospital`)  
+* One numeric column (`age_years`)  
+
+]
+
+
+
+---
+
+# `tbl_summary()`  
+
+* Default output is meant to be *publication ready*  
+
+.pull-left[
+
+
+```r
+surv %&gt;% 
+  select(hospital, age_years) %&gt;% 
+* tbl_summary()
+```
+
+Select the columns to summarise.  
+For demonstration:  
+* One character column (`hospital`)  
+* One numeric column (`age_years`)  
+
+]
+
+--
+
+.pull-right[
+
+<div id="znghkcoyfd" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#znghkcoyfd .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#znghkcoyfd .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#znghkcoyfd .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#znghkcoyfd .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#znghkcoyfd .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#znghkcoyfd .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#znghkcoyfd .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#znghkcoyfd .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#znghkcoyfd .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#znghkcoyfd .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#znghkcoyfd .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#znghkcoyfd .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#znghkcoyfd .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#znghkcoyfd .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#znghkcoyfd .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#znghkcoyfd .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#znghkcoyfd .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#znghkcoyfd .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#znghkcoyfd .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#znghkcoyfd .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#znghkcoyfd .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#znghkcoyfd .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#znghkcoyfd .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#znghkcoyfd .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#znghkcoyfd .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#znghkcoyfd .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#znghkcoyfd .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#znghkcoyfd .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#znghkcoyfd .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#znghkcoyfd .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#znghkcoyfd .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#znghkcoyfd .gt_left {
+  text-align: left;
+}
+
+#znghkcoyfd .gt_center {
+  text-align: center;
+}
+
+#znghkcoyfd .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#znghkcoyfd .gt_font_normal {
+  font-weight: normal;
+}
+
+#znghkcoyfd .gt_font_bold {
+  font-weight: bold;
+}
+
+#znghkcoyfd .gt_font_italic {
+  font-style: italic;
+}
+
+#znghkcoyfd .gt_super {
+  font-size: 65%;
+}
+
+#znghkcoyfd .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#znghkcoyfd .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#znghkcoyfd .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#znghkcoyfd .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#znghkcoyfd .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>N = 661</strong><sup class="gt_footnote_marks">1</sup></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left">hospital</td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Central Hospital</td>
+<td class="gt_row gt_center">52 (10%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Military Hospital</td>
+<td class="gt_row gt_center">97 (20%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Other</td>
+<td class="gt_row gt_center">99 (20%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Port Hospital</td>
+<td class="gt_row gt_center">207 (42%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">St. Mark's Maternity Hospital (SMMH)</td>
+<td class="gt_row gt_center">41 (8.3%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Unknown</td>
+<td class="gt_row gt_center">165</td></tr>
+    <tr><td class="gt_row gt_left">age_years</td>
+<td class="gt_row gt_center">13 (6, 22)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Unknown</td>
+<td class="gt_row gt_center">9</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="2"><sup class="gt_footnote_marks">1</sup> n (%); Median (IQR)</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+
+]
+
+
+
+
+---
+
+# `tbl_summary()`  
+
+* Stratify by another variable  
+
+.pull-left[
+
+
+```r
+surv %&gt;% 
+  select(hospital, age_years) %&gt;% 
+* tbl_summary(by = gender)
+```
+
+See tips on customization in the [Epi R Handbook chapter on Descriptive tables](https://epirhandbook.com/en/descriptive-tables.html#tbl_gt)
+]
+
+--
+
+.pull-right[
+
+<div id="vnutwqtebi" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#vnutwqtebi .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#vnutwqtebi .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vnutwqtebi .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#vnutwqtebi .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#vnutwqtebi .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vnutwqtebi .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vnutwqtebi .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#vnutwqtebi .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#vnutwqtebi .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#vnutwqtebi .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#vnutwqtebi .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#vnutwqtebi .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#vnutwqtebi .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#vnutwqtebi .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#vnutwqtebi .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#vnutwqtebi .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#vnutwqtebi .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vnutwqtebi .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#vnutwqtebi .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#vnutwqtebi .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vnutwqtebi .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#vnutwqtebi .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#vnutwqtebi .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vnutwqtebi .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vnutwqtebi .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#vnutwqtebi .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#vnutwqtebi .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vnutwqtebi .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vnutwqtebi .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vnutwqtebi .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vnutwqtebi .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vnutwqtebi .gt_left {
+  text-align: left;
+}
+
+#vnutwqtebi .gt_center {
+  text-align: center;
+}
+
+#vnutwqtebi .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#vnutwqtebi .gt_font_normal {
+  font-weight: normal;
+}
+
+#vnutwqtebi .gt_font_bold {
+  font-weight: bold;
+}
+
+#vnutwqtebi .gt_font_italic {
+  font-style: italic;
+}
+
+#vnutwqtebi .gt_super {
+  font-size: 65%;
+}
+
+#vnutwqtebi .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#vnutwqtebi .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#vnutwqtebi .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#vnutwqtebi .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#vnutwqtebi .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>female</strong>, N = 327<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>male</strong>, N = 309<sup class="gt_footnote_marks">1</sup></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left">age_years</td>
+<td class="gt_row gt_center">11 (5, 18)</td>
+<td class="gt_row gt_center">17 (7, 28)</td></tr>
+    <tr><td class="gt_row gt_left">hospital</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Central Hospital</td>
+<td class="gt_row gt_center">20 (8.2%)</td>
+<td class="gt_row gt_center">30 (13%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Military Hospital</td>
+<td class="gt_row gt_center">42 (17%)</td>
+<td class="gt_row gt_center">49 (21%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Other</td>
+<td class="gt_row gt_center">50 (20%)</td>
+<td class="gt_row gt_center">45 (19%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Port Hospital</td>
+<td class="gt_row gt_center">108 (44%)</td>
+<td class="gt_row gt_center">92 (40%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">St. Mark's Maternity Hospital (SMMH)</td>
+<td class="gt_row gt_center">24 (9.8%)</td>
+<td class="gt_row gt_center">16 (6.9%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Unknown</td>
+<td class="gt_row gt_center">83</td>
+<td class="gt_row gt_center">77</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="3"><sup class="gt_footnote_marks">1</sup> Median (IQR); n (%)</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+
+]
+
+
+
+
+---
+class: inverse, center, middle
+
+## Which to use?  
+
+In R, you have many choices.  
+Get comfortable with a tool that works for you.  
+
+&lt;img src="../../../../images/choices.png" width="90%" /&gt;
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
