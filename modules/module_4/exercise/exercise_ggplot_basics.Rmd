@@ -872,8 +872,8 @@ NOTE: End of solution
 
 ## Scatter plots  
 
+Use 
 
-## 
  
 
 

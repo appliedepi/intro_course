@@ -385,10 +385,15 @@ quiz(caption = "Quiz - column names",
     answer("wt (kg)", correct = T, message = "Spaces and parentheses need to be removed"),
     answer("hospital", message = "Spaces and parentheses need to be removed"),
     answer("age unit", correct = T, message = "space needs to be removed"),
-    answer("ht (cm)", correct = T, message = "Spaces and parentheses need to be removed")
+    answer("ht (cm)", correct = T, message = "Spaces and parentheses need to be removed"),
+    answer("date of report", correct = T, message = "Spaces need to be removed or converted")
+
   )
 )
 ```
+
+
+
 
 ### Missing values in R  
 
@@ -517,6 +522,10 @@ class(surv_raw$`onset date`)
 ```
 
 During the import of the data, R read this column as character values (e.g. "11/03/2014") and did not assume that it was a date. Indeed - how would R know which digits referred to months, or days? In CSV files in particular, these columns are usually imported as character values. It is best if this column is properly recognized as class "date". We will addresses in the cleaning steps.  
+
+
+**What is the class of the column `date of report`?**  
+
 
 
 
@@ -693,7 +702,8 @@ When you reviewed the data, there was at least one other column that needs clean
 
 Let's make the following changes manually:  
 
-* Change `onset_date` to `date_onset` (it is more standardized to put "date" at the front, especially when there are more date columns)  
+* Change `onset_date` to `date_onset` (it is more standardized to put "date" at the front, especially when there are more than one date columns)  
+* Change `date_of_report` to `date_report`
 
 Simplify the location columns for easier reading (and typing!)  
 
@@ -730,6 +740,7 @@ surv <- surv_raw %>%
   clean_names() %>% 
   rename(
     date_onset = onset_date,
+    date_report = date_of_report,
     district_res = adm3_name_res,
     district_det = adm3_name_det
   )
@@ -765,7 +776,7 @@ Any column not included in the parentheses will be dropped. Try the below comman
 
 ```{r, echo=T, eval=F}
 surv %>% 
-  select(case_def, age, gender, case_def)
+  select(case_def, age, gender)
 ```
 
 What did you notice about the new ordering of the columns? `select()` also **re-orders** columns.  
@@ -827,6 +838,7 @@ surv <- surv_raw %>%
   # manually clean column names   
   rename(
     date_onset = onset_date,
+    date_report = date_of_report,
     district_res = adm3_name_res,
     district_det = adm3_name_det) %>%
      
@@ -875,6 +887,7 @@ surv <- surv_raw %>%
   # manually clean column names   
   rename(
     date_onset = onset_date,
+    date_report = date_of_report,
     district_res = adm3_name_res,
     district_det = adm3_name_det) %>%
      
@@ -959,6 +972,7 @@ quiz(caption = "Quiz - date format",
 ```
 
 
+**Now add two `mutate()` commands to the pipe chain, that convert `date_onset` and `date_report` to class "date".**  
 
 <!--
 NOTE: Below is the solution (all within details tags collapsed)
@@ -977,6 +991,7 @@ surv <- surv_raw %>%
   # manually clean column names   
   rename(
     date_onset = onset_date,
+    date_report = date_of_report,
     district_res = adm3_name_res,
     district_det = adm3_name_det) %>%
      
@@ -987,7 +1002,8 @@ surv <- surv_raw %>%
   distinct() %>% 
      
   # convert date_onset to date class
-  mutate(date_onset = mdy(date_onset))
+  mutate(date_onset = mdy(date_onset)) %>% 
+  mutate(date_report = mdy(date_report))
 ```
 </br>
 </details>
@@ -1016,6 +1032,79 @@ quiz(caption = "Quiz - Date",
   )
 )
 ```
+
+
+
+
+
+
+### Epi weeks  
+
+Now that we have date columns with the correct "date" class, we can create a column to represent the "epiweek" (epidemiological week).  
+
+Different countries in the world formulate epiweeks differently (e.g. starting on Sundays, Mondays, or Fridays), but most of the world uses weeks that begin on Mondays.  
+
+To create this, we use the function `floor_date()` from the package {lubridate}, with the following argument settings:  
+
+1) the column of dates (e.g. `date_onset`)  
+2) `unit = "week"` (this can be set to other values such as "month")  
+
+This will return a *date*, that is the Monday prior to the onset or report date - the "floor" Monday.  
+
+If you are in the US and need to create weeks that begin on Sundays, you can set the argument `week_start = 7`.  
+
+
+**Try adding two `mutate()` commands that create epiweeks from `date_onset` and `date_report`**  
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv <- surv_raw %>% 
+  
+  # automatically clean column names
+  clean_names() %>% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    date_report = date_of_report,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %>%
+     
+  # remove unnecessary column
+  select(-row_num) %>% 
+
+  # de-duplicate rows  
+  distinct() %>% 
+     
+  # convert date_onset to date class
+  mutate(date_onset = mdy(date_onset)) %>% 
+  mutate(date_report = mdy(date_report)) %>% 
+     
+  # create epiweek columns  
+  mutate(week_onset = floor_date(date_onset, unit = "week")) %>% 
+  mutate(week_report = floor_date(date_report, unit = "week"))
+```
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+
+For more details, see the [Dates chapter of the Epi R Handbook](https://epirhandbook.com/en/working-with-dates.html#dates_epi_wks).  
+
+
+
+
 
 
 
@@ -1066,6 +1155,7 @@ surv <- surv_raw %>%
   # manually clean column names   
   rename(
     date_onset = onset_date,
+    date_report = date_of_report,
     district_res = adm3_name_res,
     district_det = adm3_name_det) %>%
      
@@ -1077,6 +1167,11 @@ surv <- surv_raw %>%
      
   # convert date_onset to date class
   mutate(date_onset = mdy(date_onset)) %>% 
+  mutate(date_report = mdy(date_report)) %>% 
+     
+  # create epiweek columns  
+  mutate(week_onset = floor_date(date_onset, unit = "week")) %>% 
+  mutate(week_report = floor_date(date_report, unit = "week")) %>% 
      
   # convert age to numeric class
   mutate(age = as.numeric(age))
@@ -1093,8 +1188,6 @@ NOTE: End of solution
 
 `r icons::icon_style(icons::fontawesome("exclamation", style = "solid"), scale = 2, fill = "red")`
 **Have you saved your script lately?**  
-
-
 
 
 
@@ -1167,6 +1260,7 @@ surv <- surv_raw %>%
   # manually clean column names   
   rename(
     date_onset = onset_date,
+    date_report = date_of_report,
     district_res = adm3_name_res,
     district_det = adm3_name_det) %>%
      
@@ -1178,6 +1272,11 @@ surv <- surv_raw %>%
      
   # convert date_onset to date class
   mutate(date_onset = mdy(date_onset)) %>% 
+  mutate(date_report = mdy(date_report)) %>% 
+     
+  # create epiweek columns  
+  mutate(week_onset = floor_date(date_onset, unit = "week")) %>% 
+  mutate(week_report = floor_date(date_report, unit = "week")) %>% 
      
   # convert age to numeric class
   mutate(age = as.numeric(age)) %>% 
@@ -1194,12 +1293,105 @@ NOTE: End of solution
 
 `r icons::icon_style(icons::fontawesome("bookmark", style = "solid"), scale = 2, fill = "orange")`
 
-**Please note the below commands related to missingness in R,** as they will come in useful later.  
+**Please note the below commands related to missingness in R**.  
 
 * `is.na()` is used to assess whether a value is `NA`  
 * `!is.na()` is used to assess whether a value is NOT `NA`  
 
-These will come in useful when you need to count the number of missing values.  
+
+</br>
+</br>
+
+We have two date columns: `date_onset` and `date_report`. The first is the date of symptom onset, as recorded by the surveillance team. The second is the date the case was reported to the surveillance team.  
+
+**Which one should we be primarily using?**  
+
+There are many factors that go into a decision like this, such as the purpose of the analysis, the audience, etc. One important factor is data quality and missingness.  
+
+Missingness in R is represented by `NA` - or at least it should be - as we discussed above. The function to assess missingness is `is.na()` (`!is.na()` is used to test for non-missingness).  
+
+To count the number of rows that meet a certain logical criteria, you can wrap them in `sum()`, as below:  
+
+```{r, echo=T, eval=F}
+sum(is.na(surv$date_onset))
+sum(is.na(surv$date_report))
+```
+
+**Run these two command** (not in your pipe chain, just as stand-alone commands)  
+
+**Which column has more missing data?**  
+
+**What percent of `date_onset` is missing?**  
+
+
+
+
+
+### Date difference  
+
+Now that both of the date columns are corretly classified as "date", we can do math on them with simple + and - operators.  
+
+**Add a `mutate()` command to the pipe chain, to create a new column named `diff` that records the number of days between `date_onset` and `date_report` for each case.  
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv <- surv_raw %>% 
+  
+  # automatically clean column names
+  clean_names() %>% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    date_report = date_of_report,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %>%
+     
+  # remove unnecessary column
+  select(-row_num) %>% 
+
+  # de-duplicate rows  
+  distinct() %>% 
+     
+  # convert date_onset to date class
+  mutate(date_onset = mdy(date_onset)) %>% 
+  mutate(date_report = mdy(date_report)) %>% 
+     
+  # create epiweek columns  
+  mutate(week_onset = floor_date(date_onset, unit = "week")) %>% 
+  mutate(week_report = floor_date(date_report, unit = "week")) %>% 
+     
+  # convert age to numeric class
+  mutate(age = as.numeric(age)) %>% 
+     
+  # properly record missing values
+  mutate(across(.cols = where(is.character), .fns = na_if, "")) %>% 
+     
+  # Make date-difference column  
+  mutate(diff = date_report - date_onset)
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+Check the calculation for a few rows, manually. Is it how you expect? In some circumstances, you may want to add a `-1` to the end of the command.  
+
+Note that this column's values appear like "4 days" - this is a special class called "difftime". If you want the result to be purely numeric, you have to wrap the result in `as.numeric()`. That would look like this:  
+
+```{r, echo=T, eval=F}
+mutate(diff = as.numeric(date_report - date_onset))
+```
+
+
+
+
 
 
 
@@ -1242,6 +1434,7 @@ surv <- surv_raw %>%
   # manually clean column names   
   rename(
     date_onset = onset_date,
+    date_report = date_of_report,
     district_res = adm3_name_res,
     district_det = adm3_name_det) %>%
      
@@ -1253,12 +1446,21 @@ surv <- surv_raw %>%
      
   # convert date_onset to date class
   mutate(date_onset = mdy(date_onset)) %>% 
+  mutate(date_report = mdy(date_report)) %>% 
+     
+  # create epiweek columns  
+  mutate(week_onset = floor_date(date_onset, unit = "week")) %>% 
+  mutate(week_report = floor_date(date_report, unit = "week")) %>% 
      
   # convert age to numeric class
   mutate(age = as.numeric(age)) %>% 
      
   # properly record missing values
   mutate(across(.cols = where(is.character), .fns = na_if, "")) %>% 
+     
+       
+  # Make date-difference column  
+  mutate(diff = date_report - date_onset) %>% 
      
   # convert negative values to NA
   mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
@@ -1404,6 +1606,7 @@ surv <- surv_raw %>%
   # manually clean column names   
   rename(
     date_onset = onset_date,
+    date_report = date_of_report,
     district_res = adm3_name_res,
     district_det = adm3_name_det) %>%
      
@@ -1415,12 +1618,20 @@ surv <- surv_raw %>%
      
   # convert date_onset to date class
   mutate(date_onset = mdy(date_onset)) %>% 
+  mutate(date_report = mdy(date_report)) %>% 
+     
+  # create epiweek columns  
+  mutate(week_onset = floor_date(date_onset, unit = "week")) %>% 
+  mutate(week_report = floor_date(date_report, unit = "week")) %>% 
      
   # convert age to numeric class
   mutate(age = as.numeric(age)) %>% 
      
   # properly record missing values
   mutate(across(.cols = where(is.character), .fns = na_if, "")) %>% 
+     
+  # Make date-difference column  
+  mutate(diff = date_report - date_onset) %>% 
      
   # convert negative values to NA
   mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
@@ -1490,6 +1701,7 @@ surv <- surv_raw %>%
   # manually clean column names   
   rename(
     date_onset = onset_date,
+    date_report = date_of_report,
     district_res = adm3_name_res,
     district_det = adm3_name_det) %>%
      
@@ -1501,6 +1713,11 @@ surv <- surv_raw %>%
      
   # convert date_onset to date class
   mutate(date_onset = mdy(date_onset)) %>% 
+  mutate(date_report = mdy(date_report)) %>% 
+     
+  # create epiweek columns  
+  mutate(week_onset = floor_date(date_onset, unit = "week")) %>% 
+  mutate(week_report = floor_date(date_report, unit = "week")) %>% 
      
   # convert age to numeric class
   mutate(age = as.numeric(age)) %>% 
@@ -1508,7 +1725,10 @@ surv <- surv_raw %>%
   # properly record missing values
   mutate(across(.cols = where(is.character), .fns = na_if, "")) %>% 
      
-  # convert negative values to NA
+  # Make date-difference column  
+  mutate(diff = date_report - date_onset) %>% 
+     
+    # convert negative values to NA
   mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
          bmi   = ifelse(bmi < 0,   NA, bmi)) %>% 
      
@@ -1638,6 +1858,7 @@ surv <- surv_raw %>%
   # manually clean column names   
   rename(
     date_onset = onset_date,
+    date_report = date_of_report,
     district_res = adm3_name_res,
     district_det = adm3_name_det) %>%
      
@@ -1649,6 +1870,11 @@ surv <- surv_raw %>%
      
   # convert date_onset to date class
   mutate(date_onset = mdy(date_onset)) %>% 
+  mutate(date_report = mdy(date_report)) %>% 
+     
+  # create epiweek columns  
+  mutate(week_onset = floor_date(date_onset, unit = "week")) %>% 
+  mutate(week_report = floor_date(date_report, unit = "week")) %>% 
      
   # convert age to numeric class
   mutate(age = as.numeric(age)) %>% 
@@ -1656,7 +1882,10 @@ surv <- surv_raw %>%
   # properly record missing values
   mutate(across(.cols = where(is.character), .fns = na_if, "")) %>% 
      
-  # convert negative values to NA
+  # Make date-difference column  
+  mutate(diff = date_report - date_onset) %>% 
+     
+    # convert negative values to NA
   mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
          bmi   = ifelse(bmi < 0,   NA, bmi)) %>% 
      
@@ -1769,6 +1998,7 @@ surv <- surv_raw %>%
   # manually clean column names   
   rename(
     date_onset = onset_date,
+    date_report = date_of_report,
     district_res = adm3_name_res,
     district_det = adm3_name_det) %>%
      
@@ -1780,12 +2010,20 @@ surv <- surv_raw %>%
      
   # convert date_onset to date class
   mutate(date_onset = mdy(date_onset)) %>% 
+  mutate(date_report = mdy(date_report)) %>% 
+     
+  # create epiweek columns  
+  mutate(week_onset = floor_date(date_onset, unit = "week")) %>% 
+  mutate(week_report = floor_date(date_report, unit = "week")) %>% 
      
   # convert age to numeric class
   mutate(age = as.numeric(age)) %>% 
      
   # properly record missing values
   mutate(across(.cols = where(is.character), .fns = na_if, "")) %>% 
+     
+  # Make date-difference column  
+  mutate(diff = date_report - date_onset) %>% 
      
   # convert negative values to NA
   mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
@@ -1872,6 +2110,7 @@ surv <- surv_raw %>%
   # manually clean column names   
   rename(
     date_onset = onset_date,
+    date_report = date_of_report,
     district_res = adm3_name_res,
     district_det = adm3_name_det) %>%
      
@@ -1883,12 +2122,20 @@ surv <- surv_raw %>%
      
   # convert date_onset to date class
   mutate(date_onset = mdy(date_onset)) %>% 
+  mutate(date_report = mdy(date_report)) %>% 
+     
+  # create epiweek columns  
+  mutate(week_onset = floor_date(date_onset, unit = "week")) %>% 
+  mutate(week_report = floor_date(date_report, unit = "week")) %>% 
      
   # convert age to numeric class
   mutate(age = as.numeric(age)) %>% 
      
   # properly record missing values
   mutate(across(.cols = where(is.character), .fns = na_if, "")) %>% 
+     
+  # Make date-difference column  
+  mutate(diff = date_report - date_onset) %>% 
      
   # convert negative values to NA
   mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
@@ -1946,7 +2193,7 @@ NOTE: End of solution
 
 
 
-### Save as RDS file  
+## Save as RDS file  
 
 Now that we have cleaned this dataset, we should save it in our file directory for later use.  
 
@@ -1965,6 +2212,46 @@ Above, we write the name of the R object (`surv`), and then the filepath that we
 
 
 
+
+## Set report parameters  
+
+Finally, now that we our cleaned data, let's use it to define a few parameters which could change as the data are updated.  
+
+**Write one line of code for each of the below items, that defines these values as stored R objects:**  
+
+The most recent dates present in the data:  
+
+* An object `last_date_onset` as equal to `max(surv$date_onset, na.rm=T)` (the last date of symptom onset present in the data)  
+* An object `last_date_report` as equal to `max(surv$date_report, na.rm=T)` (the last date of case report present in the data)  
+
+The most recent epiweeks present in the data:  
+
+* An object `last_wk_onset` as equal to `max(surv$week_onset, na.rm=T)` (the last week of symptom onset present in the data)  
+* An object `last_wk_report` as equal to `max(surv$week_report, na.rm=T)` (the last date of symptom onset present in the data)  
+
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+last_date_onset <- max(surv$date_onset, na.rm=T)
+last_date_report <- max(surv$date_report, na.rm=T)
+
+last_week_onset <- max(surv$week_onset, na.rm=T)
+last_week_report <- max(surv$week_report, na.rm=T)
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
 
 
 

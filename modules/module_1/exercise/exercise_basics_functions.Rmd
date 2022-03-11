@@ -430,7 +430,7 @@ knitr::include_graphics("images/create_project.png")
 `r icons::icon_style(icons::fontawesome("exclamation", style = "solid"), scale = 2, fill = "red")` 
 >For this course, do NOT save the R project to a shared drive such as Sharepoint, OneDrive, Google Drive, etc. for this course. Save this project to your desktop or a drive that is local to your computer only. While hosting projects on drives like this is possible (and important for team work), it requires some testing and coordination between team members.    
 
-4) Make sure the remaining boxes are *unchecked* and click "Create project".  
+4) Make sure any remaining boxes are *unchecked* and click "Create project".  
 
 Voila! Does your screen look different? It should not look very different. See if the upper-right corner of RStudio now shows that you are in your RStudio project.  
 
@@ -1684,11 +1684,7 @@ quiz(caption = "Quiz - file names",
 
 `r icons::icon_style(icons::fontawesome("window-restore", style = "solid"), scale = 2, fill = "darkgrey")`
 
-#### Copy course files into the R project  
-
-In your File Explorer, view the "course_files" folder that we gave to you at the beginning of the course.  
-
-**Copy each sub-folder and file over to the "intro_course" R project.**  
+In your File Explorer, view the "intro_course" folder that we gave to you at the beginning of the course, in which you have created the R project.  
 
 Here is how your folder structure should look:  
 
@@ -1703,7 +1699,7 @@ Here is how your folder structure should look:
      * `r emo::ji("folder")` learning materials  
           * `r emo::ji("folder")` slides
           * `r emo::ji("folder")` exercises  
-     * `r emo::ji("document")` surveillance_linelist_12012014.xlsx
+     * `r emo::ji("document")` surveillance_linelist_12012014.csv
      * intro_course.Rproj  
 
 `r emo::ji("warning")` You may also have some other files like ".Rhistory" - do NOT delete these. Just leave them.  
@@ -1816,7 +1812,7 @@ There are **base R** functions for importing data, but they can be confusing and
 
 **Let us find our data file**  
 
-Do you see the file "*surveillance_linelist.xlsx*" that is saved in the "root" project folder? This is the baseline folder - the same folder as the "*intro_course.Rproj*" file. To access the root folder from the R project file you do *not* need to click into any sub-directories (sub-folders).  
+Do you see the file "*surveillance_linelist.csv*" that is saved in the "root" project folder? This is the baseline folder - the same folder as the "*intro_course.Rproj*" file. To access the root folder from the R project file you do *not* need to click into any sub-directories (sub-folders).  
 
 **Run the `import()` command**  
 
@@ -1824,7 +1820,7 @@ In its most simple form, the `import()` function accepts a character value - the
 
 
 ```{r, echo=T, eval=F}
-import("surveillance_linelist.xlsx")
+import("surveillance_linelist_12012014.csv")
 ```
 
 
@@ -1832,7 +1828,7 @@ import("surveillance_linelist.xlsx")
 
 >Did you see this error?  
 >  
->Error in import("surveillance_linelist.xlsx") :  could not find function "import"  
+>Error in import("surveillance_linelist_12012014.csv") :  could not find function "import"  
 >  
 >If so, it means that you did not install and load the **rio** package. If you need help, review the previous section and look for the `pacman::p_load()` command that loads several packages including **rio**.  
 
@@ -1855,6 +1851,7 @@ NOTE: Below is the hint (all within details tags collapsed)
 </br>
 
 Use the assignment operator `<-` before the function. Don't forget quotation marks around the name of the file.  
+
 </br>
 </details>
 
@@ -1868,7 +1865,7 @@ NOTE: Below is the solution (all within details tags collapsed)
 </br>
 
 ```{r eval = F, echo=T}
-surv_raw <- import("surveillance_linelist_12012014.xlsx")
+surv_raw <- import("surveillance_linelist_12012014.csv")
 ```
 
 </br>
@@ -1878,7 +1875,7 @@ NOTE: End of solution
 -->
 
 
-You should now see the new object `surv_raw` appear in the R **Environment pane**, under the subcategory "Data". It should say "665 obs. of 19 variables". Congratulations, you have now imported a dataset into R!  
+You should now see the new object `surv_raw` appear in the R **Environment pane**, under the subcategory "Data". It should have a short description of the number of observations and variables. Congratulations, you have now imported a dataset into R!  
 
 
 ### Importing data from subfolders  
@@ -1892,7 +1889,7 @@ Any importing function needs to know *where* to look for the file that you want 
 A typical file path ("absolute" file path, or a "full" file path) may look like this:  
 
 ```{r, echo=T, eval=F}
-surv_raw <- import("C:/Users/Laura/Documents/intro_course/data/surveillance_linelist_12012014.xlsx")
+surv_raw <- import("C:/Users/Laura/Documents/intro_course/data/surveillance_linelist_12012014.csv")
 ```
 
 The problem with this is all of the path before "intro_course" ... the C: ... the "Laura" ... etc. None of these may be present in the computer of Laura's colleague, and this command would not run. The file path would be "broken". Or, the next user may be using a Mac, so the slashes would all need to be reversed! Thankfully there is a solution:  
@@ -1931,20 +1928,20 @@ This would produce the file path:
 Ending the `here()` command with a file **name and extension** could look like this:  
 
 ```{r, echo=T, eval=F}
-here("data", "raw", "surveillance_linelist_12012014.xlsx")
+here("data", "raw", "surveillance_linelist_12012014.csv")
 ```
 
 This would produce the file path:  
 
 ```{r, echo=T, eval=F}
-"C:/Users/Laura/Documents/intro_course/data/raw/surveillance_linelist_12012014.xlsx")
+"C:/Users/Laura/Documents/intro_course/data/raw/surveillance_linelist_12012014.csv")
 ```
 
 Now comes the secret combination: we insert this `here()` command *into* the `import()` command! We nest one function inside another one! Take a look at this:  
 
 ```{r, echo = T, eval=F}
 # import the file from the "data" and "raw" subfolders
-surv_raw <- import(here("data", "raw", "surveillance_linelist_12012014.xlsx"))
+surv_raw <- import(here("data", "raw", "surveillance_linelist_12012014.csv"))
 ```
 
 Note the two parentheses at the end - one for each function. The file path returned by `here()` is passed to the first argument of `import()` as a character value.  
@@ -1969,11 +1966,11 @@ You do not know who will be using your script later, or what kind of computer th
 ### Import from a subfolder  
 
 `r icons::icon_style(icons::fontawesome("window-restore", style = "solid"), scale = 2, fill = "darkgrey")`  
-Now, go to your File Explorer to the root folder of the R project. Cut the file *"surveillance_linelist_12012014.xlsx"* from the root folder, and paste it into the "data/raw" subfolder.  
+Now, go to your File Explorer to the root folder of the R project. Cut the file *"surveillance_linelist_12012014.csv"* from the root folder, and paste it into the "data/raw" subfolder.  
 
 
 `r icons::icon_style(icons::fontawesome("terminal", style = "solid"), scale = 2, fill = "black")` 
-Now in RStudio, write a command to import the "surveillance_linelist_12012014.xlsx" dataset and save it as `surv_raw`.  
+Now in RStudio, write a command to import the "surveillance_linelist_12012014.csv" dataset and save it as `surv_raw`.  
 
 
 <!--
@@ -1998,7 +1995,7 @@ NOTE: Below is the solution (all within details tags collapsed)
 </br>
 
 ```{r eval = F, echo=T}
-surv_raw <- import(here("data", "raw", "surveillance_linelist_12012014.xlsx"))
+surv_raw <- import(here("data", "raw", "surveillance_linelist_12012014.csv"))
 ```
 
 </br>
