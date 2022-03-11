@@ -1926,7 +1926,7 @@ surv <- surv_raw %>%
     "Mitilary Hospital"  = "Military Hospital",
     "Port"               = "Port Hospital",
     "Port Hopital"       = "Port Hospital",
-    "St. Marks Maternity Hopital (SMMH)" = "SMMH")) %>% 
+    "St. Mark's Maternity Hospital (SMMH)" = "SMMH")) %>% 
      
   # remove suspect cases
   filter(case_def == "Confirmed")
@@ -1958,7 +1958,7 @@ For example, if you work in an Epidemiology team and need to send files to a GIS
 
 ```{r, echo=T, eval=F}
 # Export cleaned file  
-export(surv, here("data", "clean", "surveillance_linelist_clean.rds"))
+rio::export(surv, here("data", "clean", "surveillance_linelist_clean.rds"))
 ```
 
 Above, we write the name of the R object (`surv`), and then the filepath that we want to save it to (using the same `here()` syntax that we used to import data). Note the file extension ".rds".  

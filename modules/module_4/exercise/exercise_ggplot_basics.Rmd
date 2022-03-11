@@ -1,0 +1,973 @@
+---
+title: "Fundamentals of ggplot2"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css: css/css_custom.css
+    theme: "paper"
+runtime: shiny_prerendered
+description: >
+  Learn how to get started with R and RStudio, and how to import a dataset
+---
+
+<!-- NOTES: To edit images, edit them in the "images" folder that lives NEXT TO THE RMD FILE -->
+
+
+<!-- Add JavaScript code for making the exercise code larger -->
+<script language="JavaScript" src="js/exercise-font-size.js"></script>
+
+```{r setup, include=FALSE}
+# load packages ----------------------------------------------------------------
+library(learnr)
+library(gradethis)
+library(etude)      # help functions for gradethis
+library(flair)
+
+# Cran packages
+pacman::p_load(
+     basket,    # not sure if we need this
+     here,
+     rio,
+     janitor,
+     gtsummary,
+     lubridate,
+     flair,
+     flextable,
+     scales,
+     fontawesome,
+     tidyverse)
+
+# github packages
+pacman::p_load_gh(
+     "hadley/emo"
+)
+
+# set options for exercises and checking ---------------------------------------
+gradethis::gradethis_setup()
+
+learnr::tutorial_options(exercise.timelimit = 60)
+    # exercise.checker = gradethis::grade_learnr) 
+    # alternatively, submitr::null_code_checker
+
+# event recorder ---------------------------------------------------------------
+# see https://github.com/dtkaplan/submitr/blob/master/R/make_a_recorder.R
+
+tutorial_options(exercise.eval = FALSE)  # pre-evaluate exercises
+
+# new_recorder <- function(tutorial_id, tutorial_version, user_id, event, data) {
+#     cat(
+#       tutorial_id, 
+#       " (v", tutorial_version, "); ",
+#       format(Sys.time(), "%Y-%M%-%D %H:%M:%S %Z"), "; ",
+#       user_id, "; ",
+#       event, "; ",
+#       data$label, "; ",
+#       data$answers, "; ",
+#       data$code, "; ",
+#       data$correct, "\n", sep = "",
+#       
+#       file = here::here("event_records", "learnr_basics.txt"),
+#       append = TRUE)
+# }
+
+#options(tutorial.event_recorder = new_recorder)
+```
+
+
+```{r, include=FALSE}
+# hide non-exercise code chunks ------------------------------------------------
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r, include=FALSE}
+# data prep --------------------------------------------------------------------
+surv <- rio::import(here::here("data", "surveillance_linelist_clean.rds"))
+```
+
+
+
+
+## Introduction to R for Applied Epidemiology and Public Health
+
+
+### Welcome
+
+Welcome to the live course "Introduction to R for applied epidemiologists", offered by [Applied Epi](www.appliedepi.org) - a nonprofit organisation that offers open-source tools, training, and support to frontline public health practitioners.  
+
+```{r, eval = TRUE, echo = FALSE, out.width = "25%"}
+knitr::include_graphics("images/logo.png")
+```
+
+### Data visualization  
+
+This exercise focuses on **the fundamentals of using {ggplot2} for data visualization**.
+
+### Format
+
+This exercise will guide you through a set of tasks.  
+*You should perform these tasks in RStudio and on your local computer*.  
+
+#### Getting Help  
+
+There are several ways to get help:  
+
+1) Look for the "helpers" (see below)
+2) Ask your live course instructor/facilitator for help  
+3) Ask a colleague or other participant in the course for tips  
+4) Post a question in [Applied Epi Community](www.community.appliedepi.org) in the category for questions about Applied Epi Training  
+
+Here is what those "helpers" will look like:
+
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+
+<summary style='text-decoration: underline; color: darkgreen;'>`r icons::icon_style(icons::fontawesome("lightbulb", style = "solid"), scale = 1, fill = "darkgold")` Click to read a hint</summary>
+</br>
+
+Here you will see a helpful hint!  
+
+</br>
+</details>
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+linelist %>% 
+  filter(
+    age > 25,
+    district == "Bolo"
+  )
+```
+
+Here is more explanation about why the solution works.  
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+#### Quiz questions  
+
+Please complete the quiz questions that you encounter throughout the tutorial. **Answering will help you** to comprehend the material, and will also help us to improve the exercises for future students.  
+
+To practice, please answer the following questions:  
+
+
+```{r quiz-use-helper, echo=F}
+quiz(
+  question_radio("When should I view the red 'helper' code?",
+    answer("After trying to write the code myself", correct = TRUE),
+    answer("Before I try coding", correct = FALSE),
+    correct = "Reviewing best-practice code after trying to write yourself can help you improve",
+    incorrect = "Please attempt the exercise yourself, or use the hint, before viewing the answer."
+  )
+)
+```
+
+
+```{r quiz-anxious, echo = FALSE}
+question_numeric(
+ "How anxious are you about beginning this tutorial - on a scale from 1 (least anxious) to 10 (most anxious)?",
+ answer(10, message = "Try not to worry, we will help you succeed!", correct = T),
+ answer(9, message = "Try not to worry, we will help you succeed!", correct = T),
+ answer(8, message = "Try not to worry, we will help you succeed!", correct = T),
+ answer(7, message = "Try not to worry, we will help you succeed!", correct = T),
+ answer(6, message = "Ok, we will get there together", correct = T),
+ answer(5, message = "Ok, we will get there together", correct = T),
+ answer(4, message = "I like your confidence!", correct = T),
+ answer(3, message = "I like your confidence!", correct = T),
+ answer(2, message = "I like your confidence!", correct = T),
+ answer(1, message = "I like your confidence!", correct = T),
+ allow_retry = TRUE,
+ correct = "Thanks for sharing. ",
+ min = 1,
+ max = 10,
+ step = 1
+)
+```
+
+
+
+#### Icons  
+
+You will see these icons throughout the exercises:
+
+Icon  |Meaning
+------|--------------------
+`r icons::icon_style(icons::fontawesome("eye", style = "solid"), scale = 2, fill = "darkblue")`|Observe  
+`r icons::icon_style(icons::fontawesome("exclamation", style = "solid"), scale = 2, fill = "red")`|Alert!  
+`r icons::icon_style(icons::fontawesome("pen", style = "solid"), scale = 2, fill = "brown")`|An informative note  
+`r icons::icon_style(icons::fontawesome("terminal", style = "solid"), scale = 2, fill = "black")`|Time for you to code!  
+`r icons::icon_style(icons::fontawesome("window-restore", style = "solid"), scale = 2, fill = "darkgrey")`|Change to another window  
+`r icons::icon_style(icons::fontawesome("bookmark", style = "solid"), scale = 2, fill = "orange")`|Remember this for later  
+
+
+
+
+
+
+
+
+
+
+## Learning objectives
+
+In this exercise you will:  
+
+* Learn the "grammar of graphics" syntax used by {ggplot2}  
+* Make simple histograms, box plots, bar plots, scatter plots, and line plotss  
+* Adjust the color, fill, and shape by adjusting plot aesthetic parameters  
+* Save ggplots as PNG files  
+
+
+
+
+
+
+
+
+
+## Prepare  
+
+### Prepare your script  
+
+Open the R project, as usual, and your script "ebola_analysis.R". Create a new section below the other code for "simple plots".  
+
+### Load packages  
+
+Run the code to install your R packages. The {ggplot2} package does not need to be listed explicitly, because it is included in the {tidyverse} mega-package (which should already be in your list of packages).  
+
+### Import data  
+
+A the top of the "simple plots" section of code, write a command to import the clean dataset ("surveillance_linelist_clean.rds") and define it as `surv`.  
+
+You should already have this code, from a previous module, that you can copy and paste.  
+
+
+
+
+
+
+
+
+
+
+
+
+## Build a plot
+
+Do you know much information about each district, such as the age distribution, or the number of cases? Let's build some plots that tell us more.  
+
+
+### Open the plot  
+
+Any `ggplot()` command begins with the function `ggplot()`. Within this function, the first argument is `data = `. Provide the name of the dataset to this argument.  
+
+**Run the command below**  
+
+```{r, echo=T}
+ggplot(data = surv)
+```
+
+This has "opened" the plotting canvas for us to build further plot elements.  
+
+
+
+
+### Map columns to "aesthetics"  
+
+Now that we have a canvas, we need to tell R what we want on the X-axis and on the Y-axis. The columns that we will **map** to the axes are simple examples of the plot's "aesthetics". Note this word "**aes**thetics" - the root **aes** becomes part of the next R command.  
+
+The second argument of `ggplot()` is `mapping = `, and this is where you **map columns in the data to components of the plot that may vary for each row of data**.  
+
+For example, if we "map" the Y-axis to the column `age_years`, then every row in the data will be evaluated and may be placed on a different height on the Y-axis.  
+
+**`aes()`**  
+
+The `mapping = ` function is atypical in that you must provide the values to it **within the `aes()` function.**  
+
+`mapping = aes(x = COLUMN, y = COLUMN)`  
+
+Remember that this code above is occurring *within* the `ggplot()` function.  
+
+Try to write a `ggplot()` command where you map the X-axis to the column `district`, and Y-axis to the column `age_years`.  
+
+
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+ggplot(data = surv, mapping = aes(x = district, y = age_years))
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+
+```{r quiz-aes-district}
+quiz(caption = "Quiz - aesthetics",
+  question("How many breaks are there in the X-axis?",
+    allow_retry = T,
+    answer("12"),
+    answer("9"),
+    answer("10", correct = T),
+    answer("4")
+  ),
+  question("What is the default Y-axis label interval?",
+    allow_retry = T,
+    answer("5"),
+    answer("20", correct = T),
+    answer("30"),
+    answer("10")
+  )
+)
+```
+
+
+
+
+### Add geom layers  
+
+Now that we have our canvas, and we have designated our axes... we can begin to visualize the data!  
+
+This is done by adding `geom_()` commands, which each create a different kind of visualization.  
+
+We have completed one full component of the `ggplot()` command - the parentheses are closed, and the command can run without error. So how do we add additional components to the plot? 
+
+**Add the +**  
+
+The plus symbol connects the different lines of the `ggplot()` command. In some ways, it is like the pipe operator, but links commands *within* the ggplot.  
+
+**Add the plus, and on the new line write `geom_point()`, run the command**  
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+ggplot(data = surv, mapping = aes(x = district, y = age_years))+
+  geom_point()
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+You can choose to indent the new command, so indicate to a reader that it is a sub-component of the `ggplot()`, but the command will run either way.  
+
+The `geom_point()` has visualized all of the data as points.  
+
+
+```{r quiz-geom-points}
+quiz(caption = "Quiz - points",
+  question("How many cases were reported in Central I district?",
+    allow_retry = T,
+    answer("25"),
+    answer("35"),
+    answer("Not possible to know", correct = T),
+    answer("21")
+  )
+)
+```
+
+With a discrete variable on the X-axis and a continuous distribution on the Y-axis, it is difficult to know exactly how many cases there are! Each point may represent one case, but it could also represent 5 with same exact age value, with overlapping points.  
+
+Let's try another geom to solve this problem. **Replace `geom_point()` with `geom_jitter()` and re-run the command.**  
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+ggplot(data = surv, mapping = aes(x = district, y = age_years))+
+     geom_jitter()
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+**Go to the Help pane of RStudio (by the Plots pane) and search for "geom_jitter" in the search bar in the upper-right**.  
+
+**Read the "Description"** to understand exactly what the function is doing to avoid overlapping points.  
+
+**Review the "Aesthetics"** list near the bottom. These are other plot aesthetics that you can adjust to vary the appearance of this geom layer.  
+
+Within the `geom_jitter()` function, enter a few of these aesthetics and try adjusting them as follows:  
+
+* `color = "blue"`  
+* `size = 5`  
+* `shape = 4`  
+
+
+```{r quiz-geom-aes}
+quiz(caption = "Quiz - aesthetics",
+  question("What do you think the plot aesthetic `alpha` adjusts?",
+    allow_retry = T,
+    answer("Alphabetical ordering"),
+    answer("Axis color"),
+    answer("Transparency", correct = T),
+    answer("Size")
+  ),
+  question("What shape is produced by setting `shape = 3` within geom_jitter()?",
+    allow_retry = T,
+    answer("Alphabetical ordering"),
+    answer("Axis color"),
+    answer("Transparency", correct = T),
+    answer("Size")
+  )
+)
+```
+
+
+### Add more geoms  
+
+The jitter plot is nice, but let's add some statistical display to it. **Add `geom_boxplot()` below the `geom_jitter()` command**.  
+
+
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+
+<summary style='text-decoration: underline; color: darkgreen;'>`r icons::icon_style(icons::fontawesome("lightbulb", style = "solid"), scale = 1, fill = "darkgold")` Click to read a hint</summary>
+</br>
+
+Don't forget to add a + at the end of `geom_jitter()`
+</br>
+</details>
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+ggplot(data = surv, mapping = aes(x = district, y = age_years))+
+     geom_jitter()+
+     geom_boxplot()
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+We can now see where summary statistical values lie for each district, such as the median and inter-quartile ranges. But the points are now hidden by the boxplots. **Add and adjust the `alpha = ` aesthetic for the boxplots only. What value allows you to see the plots?  
+
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+
+<summary style='text-decoration: underline; color: darkgreen;'>`r icons::icon_style(icons::fontawesome("lightbulb", style = "solid"), scale = 1, fill = "darkgold")` Click to read a hint</summary>
+</br>
+
+Try several values between 0 and 1.  
+
+</br>
+</details>
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+ggplot(data = surv, mapping = aes(x = district, y = age_years))+
+     geom_jitter()+
+     geom_boxplot(alpha = 0.7)
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+### Violin plots  
+
+As alternative, replace the `geom_boxplot()` with `geom_violin()`, and use the same `alpha = ` level as before to have some transparency.  
+
+```{r eval = F, echo=T}
+ggplot(data = surv, mapping = aes(x = district, y = age_years))+
+     geom_jitter()+
+     geom_violin(alpha = 0.7)
+```
+
+There is not much difference in the case ages between each district... let's try a violin plot on another topic. Try this code:  
+
+```{r eval = F, echo=T}
+ggplot(data = surv, mapping = aes(x = gender, y = ht_cm))+
+     geom_violin(alpha = 0.7, size = 2)
+```
+
+```{r quiz-geom-violin}
+quiz(caption = "Quiz - violin plot",
+  question("What is aes(x = gender, y = ht_cm) doing in this command?",
+    allow_retry = T,
+    answer("Sets gender as the Y axis, and height as the X axis", message = "Almost... but check again - which axes?"),
+    answer("Sets the Automated Esoteric Settings (AES)", message = "No, this does not exist."),
+    answer("Sets gender as the X axis, and height as the Y axis", correct = T)
+  ),
+  question("What did the 'size = ' aesthetic adjust for these violin plots?",
+    allow_retry = T,
+    answer("Size of the violin"),
+    answer("Size of the border line", correct = T),
+    answer("Size of the plot"),
+    answer("Size of the plot labels")
+  )
+)
+```
+
+
+What does the violin plot communicate that the boxplot does not?  
+
+What does the box plot communicate that the violin plot does not?  
+
+What do the points show that either the box or violin plot do not?  
+
+**What do you think is the best combination of these three geoms (points, boxplots, violins)?**  
+
+
+## Dynamic aesthetics  
+
+Until now, you have been editing aesthetics like `color`, `alpha`, `size`, and `shape` by assigning them to **static values** such as 3, "blue", or 0.2.  
+
+**Now, we will assign them to columns, and the display for each point in the data will vary**  
+
+### 
+
+Let's re-build our old boxplot, **with the aesthetic `color` statically-assigned to "blue", and `alpha` statically-assigned to 0.5**:  
+
+```{r eval = F, echo=T}
+ggplot(data = surv, mapping = aes(x = district, y = age_years))+
+     geom_jitter()+
+     geom_boxplot(fill = "blue", alpha = 0.5)
+```
+
+Let's change the command so that `fill` is assigned to the column `district`.  
+
+```{r quiz-aes-dynamic}
+quiz(caption = "Quiz - Dynamic aesthetic assignments",
+  question("What happens if you run the command above, but replace 'blue' with the column name: district?",
+    allow_retry = T,
+    answer("The boxplots re-arrange by district"),
+    answer("The boxes become the geographical shape of the district"),
+    answer("The boxes fill (color) become different for each district", message = "No... this is what we wanted, but it should not have happened."),
+    answer("There is an R error saying 'object district not found'", correct = T)
+  ),
+  question("What needs to change in order to make each boxplot a different fill?",
+    allow_retry = T,
+    answer("Try another column name"),
+    answer("Move this part of the command ('fill = district') inside the aes()", correct = T),
+    answer("Try the command five more times, as written"),
+    answer("Restart R and try again")
+  )
+)
+```
+
+You have discovered that if you **map** an aesthetic to a column name, it must be located *within* the **`mapping = aes()`** for the change to be applied.  
+
+Remember how we assigned columns to the X-axis and the Y-axis? Those assignments were dynamic as well, and they are located within the `mapping = aes()`.  
+
+**Note the legend that has automatically appeared on the right side of the plot**. How have missing values been treated in this plot? How are they marked? Which color was automatically assigned to them? Where in the order do they appear, along the X-axis and in the legend?  
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+ggplot(data = surv, mapping = aes(x = district, y = age_years, fill = district))+
+     geom_jitter()+
+     geom_boxplot(alpha = 0.5)
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+**How would you change the color of the points?**  
+
+Be aware of this nuance: For shapes that have *area*, such as boxplots, histograms, etc, the *inside* color is changed with the `fill` aesthetic. However, points (including `geom_jitter()`) are changed with the aesthetic `color`.  
+
+**Change the color of the points to also vary by district, and set the boxplot's `alpha = 0`**.  
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+ggplot(data = surv, mapping = aes(x = district, y = age_years, fill = district, color = district))+
+     geom_jitter()+
+     geom_boxplot(alpha = 0.5)
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+**Remove the `color = district` from the aes()** - return the points to their original black.  
+
+
+
+
+### Labels  
+
+Let's add a few quick labels to make our plot more clear.  
+
+
+**Add `labs()` to the bottom of the command** (using a + symbol), and provide the following arguments:  
+
+* `title = "My title`  
+* `subtitle = "Subtitle here"` 
+* `x = "District"`  
+* `y = "Age (years)"`  
+* `caption = "Among an Ebola outbreak, 2014"`  
+* `fill = "District"`  
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+ggplot(data = surv, mapping = aes(x = district, y = age_years, fill = district))+
+     geom_jitter()+
+     geom_boxplot(alpha = 0.5)+
+     labs(
+       title = "My title",
+       subtitle = "Subtitle here",
+       x = "District",
+       y = "Age (years)",
+       caption = "Among an Ebola outbreak, 2014",
+       fill = "District"
+      )
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+```{r quiz-labels}
+quiz(caption = "Quiz - Plot labels",
+  question("What side of the plot is the caption on, by default?",
+    allow_retry = T,
+    answer("Top-center"),
+    answer("Lower-left"),
+    answer("Lower-right", correct = T),
+    answer("Top-right'")
+  ),
+  question("Why did we use the fill argument to adjust the legend title?",
+    allow_retry = T,
+    answer("Because fill always adjusts the legend", message = "No, try again. You would actually adjust the legend using a different parameter, if it had been created another way."),
+    answer("Because the legend was created when we mapped fill to a column", correct = T),
+    answer("Because the world 'fill' means 'legend' in old English", message = "No, this is not true.")
+  )
+)
+```
+
+
+## Bar plots  
+
+
+Now that you have explored points, jittered points, boxplots, and violins, let's try some other **geoms**:  
+
+  
+
+A bar plot could be used to show the number of cases reported in each district.  
+
+**Try a command using the geom `geom_bar()`. Note that you should only supply an `x = ` aesthetic - there is no need for `y = ` as the number of rows in the dataset will be counted individually.  
+
+
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+
+<summary style='text-decoration: underline; color: darkgreen;'>`r icons::icon_style(icons::fontawesome("lightbulb", style = "solid"), scale = 1, fill = "darkgold")` Click to read a hint</summary>
+</br>
+
+In this new ggplot command, remove the `geom_jitter()` and `geom_boxplot()` commands. Replace them with one `geom_bar()` command.  
+
+</br>
+</details>
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+ggplot(data = surv, mapping = aes(x = district))+
+     geom_bar()
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+The rows in the data have now been displayed as a bar plot!  
+
+Can you change the bars to all be the color "lightblue" using the `fill` argument?  
+
+
+
+
+
+### Set the fill aesthetic dynamically  
+
+The previous plot examined age as a continuous variable (on the Y-axis).  
+
+**How would we show the age distribution using the bar plot?**  
+
+**Change the plot so that the `fill` aesthetic is assigned dynamically, to a *categorical* column in the dataset**.  
+
+
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+
+<summary style='text-decoration: underline; color: darkgreen;'>`r icons::icon_style(icons::fontawesome("lightbulb", style = "solid"), scale = 1, fill = "darkgold")` Click to read a hint</summary>
+</br>
+
+Assign `fill` to the column `age_cat`.  
+
+</br>
+</details>
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+ggplot(data = surv, mapping = aes(x = district, fill = age_cat))+
+  geom_bar()
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+Now we can see the age categories in the legend, and bars are "stacked".  
+
+
+### Order of stacked bars  
+
+**What if you want to reverse the order of the bars? Perhaps you want the youngest age category on the bottom: we'll give you this code:  
+
+```{r eval = F, echo=T}
+ggplot(data = surv, mapping = aes(x = district, fill = fct_rev(age_cat)))+
+  geom_bar()
+```
+
+In the above code we've used the `fct_rev()` function, which comes from the {forcats} package. We'll explain more later, but this package contains functions that create explicit ordering of values. By wrapping the `fct_rev()` around the column `age_cat`, ggplot reverses the default ordering of that variable.  
+
+If the colors look ugly to you, don't worry. We'll learn later how to adjust the colors.  
+
+### Adjacent bars  
+
+`geom_bar()` accepts the argument `position = `, which can be assigned to the value "dodge". Try to add this argument to `geom_bar()` and see what happens (don't forget the quotation marks).  
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+ggplot(data = surv, mapping = aes(x = district, fill = age_cat))+
+  geom_bar(position = "dodge")
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+
+
+
+## Scatter plots  
+
+
+## 
+ 
+
+
+
+## Histogram  
+
+```{r}
+ggplot(
+  data = surv,
+  mapping = aes(x = age_years))+
+  geom_histogram()
+```
+
+```{r}
+ggplot(
+  data = surv,
+  mapping = aes(x = ht_cm))+
+  geom_histogram()
+```
+
+
+
+## Line plots  
+
+
+
+
+
+## Facets
+
+
+```{r}
+ggplot(
+  data = surv,
+  mapping = aes(x = date_onset))+
+  geom_histogram()+
+facet_wrap(~district)
+```
+
+
+
+Which district has the earliest cases?  
+
+gghighlight
+
+```{r}
+ggplot(
+  data = surv,
+  mapping = aes(x = date_onset, fill = district))+
+  geom_histogram()+
+facet_wrap(~district)+
+gghighlight::gghighlight()
+```
+
+##
+
+
+
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+pacman::p_load(
+  rio,          # for importing data
+  here,         # for locating files
+  skimr,        # for reviewing the data
+  janitor,      # for data cleaning  
+  lubridate,    # for date cleaning  
+  epikit,       # creating age categories
+  gtsummary,    # creating tables  
+  scales,       # percents in tables  
+  flextable,    # for making pretty tables
+  tidyverse     # for data management and visualization
+)
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+
+
+
+
+
+
+
