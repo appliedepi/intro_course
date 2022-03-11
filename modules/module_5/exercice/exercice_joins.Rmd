@@ -2,12 +2,17 @@
 title: "Transforming and restructuring data"
 output: 
   learnr::tutorial:
-     progressive: false
-     css: css/css_custom.css
+    progressive: true
+    allow_skip: true
+    css: css/css_custom.css
+    theme: "paper"
 runtime: shiny_prerendered
 description: >
   Learn how to join and transform data
 ---
+
+<!-- NOTES: To edit images, edit them in the "images" folder that lives NEXT TO THE RMD FILE -->
+
 
 <!-- Add JavaScript code for making the exercise code larger -->
 <script language="JavaScript" src="js/exercise-font-size.js"></script>
@@ -62,28 +67,42 @@ gradethis::gradethis_setup()
 
 # Data prep --------------------------------------------------------------------
 # Import
-linelist_surv <- rio::import(here::here("data", "linelist_cleaned.rds"))
-linelist_med <- rio::import(here::here("data", "medical_linelist_12012014.xlsx"))
+linelist_surv <- rio::import(here::here("data", "surveillance_linelist_clean.rds"))
 hospitals <- bind_rows(rio::import(here::here("data", "Port Hospital 12012014.csv")),
                     rio::import(here::here("data", "Central Hospital 12012014.csv")))
+geo_data <- rio::import(here::here("data", "sle_admpop_adm3_2020.csv"))
+
 
 # Make more manageable files
 linelist <- linelist_surv %>% 
      select(case_id, hospital, case_id, age_years,  wt_kg, 
-            ht_cm,  date_infection, date_onset)
+            ht_cm,  date_onset, admin3pcod)
 
 hospitals <- hospitals %>%  select(hospital, id_case = case_id, 
                                    `hospitalisation date`, outcome, `outcome date`) %>% 
      janitor::clean_names()
 
+geo_data <- geo_data %>% select(-c(Female, Male), 
+                                -starts_with("T"))
 
 # Make the hospital information dataframe
-hosp_info = data.frame(
+hospital_dirty = data.frame(
   hosp_name     = c("central hospital", "military", "military", "port", "St. Mark's", "ignace", "sisters"),
   catchment_pop = c(1950280, 40500, 10000, 50280, 12000, 5000, 4200),
   level         = c("Tertiary", "Secondary", "Primary", "Secondary", "Secondary", "Primary", "Primary")
 )
 
+hospital_clean <- hospital_dirty %>% 
+  mutate(
+    hosp_name = case_when(
+      # criteria                         # new value
+      hosp_name == "military"          ~ "Military Hospital",
+      hosp_name == "port"              ~ "Port Hospital",
+      hosp_name == "St. Mark's"        ~ "St. Mark's Maternity Hospital (SMMH)",
+      hosp_name == "central hospital"  ~ "Central Hospital",
+      TRUE                             ~ hosp_name
+      )
+    )
 
 # Create smaller linelists for the easier exemples
 df_patient <- tibble(ID = c("patient_1", "patient_2", "patient_3", 
@@ -115,9 +134,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 
 
-# Joins
-
-## Help, I am lost
+## In summary
 
 ### Take home messages 
 
@@ -137,6 +154,11 @@ knitr::opts_chunk$set(echo = FALSE)
 * **semi join**: keep all lines from first dataframe with matches in the second dataframe
 
 
+```{r eval = TRUE, echo=FALSE, out.width = '100%'}
+knitr::include_graphics(xfun::relative_path(here::here("images", "summary_joins.png")))
+```
+
+
 ### Some resources
 
 - Tidyverse site presentation of [mutating joins](https://dplyr.tidyverse.org/articles/two-table.html#mutating-joins) and [filtering joins](https://dplyr.tidyverse.org/articles/two-table.html#filtering-joins): some explanations + exemples  
@@ -145,15 +167,12 @@ knitr::opts_chunk$set(echo = FALSE)
 
 - Epirhandbook page [on joins](https://epirhandbook.com/en/joining-data.html#joining-data)  
 
-## Exercices
 
-First we will use small and clean dataframe to understand which function to use and how, and in later steps we will try our hands on linelist data.
+## Understanding the different types of joins
 
-
-### Understanding the different types of joins
+First we will use small and clean dataframes to understand which function to use and how, and in later steps we will try our hands on linelist data.
 
 Consider these two mini dataframes containing patient data and lab results for patients.
-
 
 ```{r echo = FALSE}
 df_patient %>% kbl() %>% kable_styling(full_width = FALSE, 
@@ -162,6 +181,7 @@ df_patient %>% kbl() %>% kable_styling(full_width = FALSE,
 df_lab %>% kbl() %>% kable_styling(full_width = FALSE, 
                                    bootstrap_options = c("striped", "hover", "condensed"))
 ```
+
 
 Which join would you use to...
 
@@ -177,7 +197,8 @@ quiz(
               answer("semi_join(df_patient, df_lab, by = 'ID')"),
               allow_retry = TRUE),
      
-     question("Which join would you use to get a dataframe with patient for wich we both have data for age, sex and test result",
+     
+     question("Which join would you use to get a dataframe with patients for wich we both have data for age, sex and test result",
               answer("left_join(df_patient, df_lab, by = 'ID')"),
               answer("right_join(df_patient, df_lab, by = 'ID')"),
               answer("inner_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
@@ -185,6 +206,7 @@ quiz(
               answer("anti_join(df_patient, df_lab, by = 'ID')"),
               answer("semi_join(df_patient, df_lab, by = 'ID')"),
               allow_retry = TRUE),
+     
      
      question("Which join would you use to keep all the patients from the lab database for which we have personnal data (but do not import columns from the patient dataframe",
               answer("left_join(df_lab, df_patient, by = 'ID')"),
@@ -195,6 +217,7 @@ quiz(
               answer("semi_join(df_lab, df_patient, by = 'ID')", correct = TRUE),
               allow_retry = TRUE), 
      
+     
      question("Which join would you use to get the list of patients for whom we have personnal data (age and sex) but no test result",
               answer("left_join(df_patient, df_lab, by = 'ID')"),
               answer("right_join(df_patient, df_lab, by = 'ID')"),
@@ -204,17 +227,20 @@ quiz(
               answer("semi_join(df_lab, df_patient, by = 'ID')"),
               allow_retry = TRUE),
      
+     
      question("Which of these joins would class df_patient as the baseline?",
               answer("left_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
               answer("right_join(df_lab, df_patient, by = 'ID')", correct = TRUE),
               answer("left_join(df_lab, df_patient, by = 'ID')"), correct = FALSE,
               allow_retry = TRUE),
      
+     
      question("Which of these would return only the rows found in df_patient?",
               answer("inner_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
               answer("full_join(df_patient, df_lab, by = 'ID')", correct = FALSE),
               answer("left_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
               allow_retry = TRUE),
+     
      
      question("Which of these would fill in columns that didn't match with NA values?",
               answer("full_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
@@ -225,25 +251,29 @@ quiz(
 )
 ```
 
+
+## Using joins on simple datasets
+
 ### Syntax
 
-The syntax of the join functions is always the same:
+The syntax of the join functions is always the same:  
 
 ```{r echo = TRUE, eval=FALSE}
 XXX_join(dataframe1,   # "left" dataframe
          dataframe2,   #  "right" dataframe
          by = c("identifier1", "identifier2"))   # Columns used to match the two dataframes
 
-#Or, with a pipe:
+
+# Or, with a pipe:
 dataframe1 %>%             # "left" dataframe
      XXX_join(dataframe2,  # "right" dataframe
               by = c("identifier1", "identifier2"))   # Columns used to match the two dataframes
 ```
 
 
-#### Left join
+### Left join
 
-How would you perform a left join of `df_patient` with `df_lab` (where `df_patient` is used as reference/baseline)?
+How would you perform a *left join* of `df_patient` with `df_lab` (where `df_patient` is used as reference/baseline)?
 
 ```{r left_join_syntax, exercise = TRUE}
 
@@ -268,9 +298,9 @@ df_patient %>%
 ```
 
 
-#### Anti-join
+### Anti-join
 
-Write the command that returns all lines from the lab database for which we are missing age and sex.
+Write the command that returns *all lines from the lab database for which we are missing age and sex*.
 
 ```{r anti_join_syntax, exercise = TRUE}
 
@@ -295,7 +325,9 @@ df_lab %>%
 ```
 
 
-### Line duplication
+### Troubleshooting line duplication
+
+When one dataframe has **several lines for some of the patients**, duplications may occur (depending on the join).
 
 Let us consider these small dataframes: 
 
@@ -307,6 +339,37 @@ df2 %>% kbl() %>% kable_styling(full_width = FALSE,
                                    bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
+
+How would you *count the number of lines for each patient*? Try it for the `df2` dataframe:  
+
+```{r nb_lines, exercise = TRUE}
+
+```
+
+```{r nb_lines-hint}
+There are several ways, but a very quick way is to use the ``count` function.
+```
+
+```{r nb_lines-check}
+grade_this({
+     # Automatically pass if .result equal to .solution
+     pass_if_equal(message = "Excellent")
+     # Default to failing grade with feedback
+     fail()
+})
+```
+
+```{r nb_lines-solution}
+count(df2, ID)
+```
+
+And if we do this for the `df1` dataframe:  
+
+```{r eval = TRUE, echo = FALSE}
+count(df1, ID)
+```
+
+So we see that in the lab dataframes, some patients have several lines (they were tested more than once). This will affect our joins.
 
 ```{r quiz-duplication-1}
 quiz(
@@ -338,11 +401,13 @@ quiz(
 ```
 
 
-### Linelist data
+## Using joins on linelist data
 
-Now we will try to use these functions with linelist data. We will First guide you through joining of a subset of the linelist data with a subset of hospital patient data.
+### Add hospital data
 
-```{r}
+Now we will try to use these functions with linelist data. We will first guide you through joining of a subset of the linelist data with a subset of hospital patient data.
+
+```{r eval = TRUE, echo = FALSE}
 linelist %>% 
      head(10) %>% 
      kbl() %>% 
@@ -357,7 +422,7 @@ hospitals %>%
 ```
 
 
-Fill in the blank to check the dimensions (number of lines and columns) of the two dataframe.
+Fill in the blank to *check the dimensions (number of lines and columns) of the two dataframe*.
 
 ```{r join_dim_1, exercise = TRUE, exercise.blanks = "___+"}
 ____(linelist)
@@ -374,7 +439,7 @@ The first question to ask is which column should be used for the matching.
 ```{r join_which_ID_1, echo=FALSE}
 question("Which column(s) should we use as a primary key",
   answer("case_id", correct = TRUE),
-  answer("hospital", message = "While it may be used for joining, it would be good to check that hospitals were filled with the same name in both dataframes. There is a better here"),
+  answer("hospital"),
   answer("age_years"),
   answer("date_onset"),
   answer("id_case", correct = TRUE),
@@ -384,7 +449,11 @@ question("Which column(s) should we use as a primary key",
 )
 ```
 
-Do we know if the patient ID was entered in the same way in both dataframe? If data comes from a clean SQL database and is a primary key, probably. With excel data entered by many different people in emergency settings, it may be less obvious.
+Before joining, it is extremely important to consider whether the column(s) used to match the two dataframes are clean. The `join` functions from **dplyr** are using _exact matching_: the values need to be _exactly the same_ in both dataframes to be matched. 
+
+Note: There are packages that perform probabilistic ("_fuzzy_") matching, but we will not see them today (refer to the [chapter on joining in the epirhandbook](https://epirhandbook.com/en/joining-data.html#probabalistic-matching)).
+
+In our case, do we know if patient ID were entered in the same way in both dataframe? If data comes from a clean SQL database and is a primary key, probably. With excel data entered by many different people in emergency settings, maybe not. **In general, it is a good rule to scrutinize the columns you want to use as identifer/keys to join your dataframes**.
 
 Spend a bit of time looking at the structure of ID. Do they follow the same pattern? Are some ID common between the two databases?
 
@@ -404,39 +473,239 @@ intersect(linelist$case_id,
 
 There are definitely IDs in common. 
 
-With very dirty data, you would want to inspect your IDs more, especially the ones who don't match, in case several patterns of IDs were entered in the same file.
+With very dirty data, you would want to inspect your IDs more, especially the ones who don't match, in case several patterns of IDs were used within the same file.
 
-Now, it would be good to understand better who are the patients in which dataframes. Are there duplicate lines?
+Now, it would be good to understand better who are the patients in which dataframes. Are there duplicated lines? 
 
-```{r}
-# Use the count and filter functions you learned about to filter patients present in more than one line
+Show the *IDs from the linelist dataframe with more than one row per patient*:  
+
+```{r nb_lines2, exercise = TRUE}
+linelist %>% 
+```
+
+```{r nb_lines2-hint-1}
+There are several ways, but a very quick way is to use the `count()` function.
+```
+
+```{r nb_lines2-hint-2}
+To only keep lines with that satisfy a condition in one or several columns you can use the `filter()` function. 
+```
+
+```{r nb_lines2-check}
+grade_this({
+     # Automatically pass if .result equal to .solution
+     pass_if_equal(message = "Excellent")
+     # Default to failing grade with feedback
+     fail()
+})
+```
+
+```{r nb_lines2-solution}
 linelist %>% 
      count(case_id) %>% 
      filter(n > 1)
-
-
-# linelist[duplicated(linelist$case_id), ]
 ```
 
-TODO: finish exercice.
-TODO: show antijoin in both directions to understand that the hospital is a subset of the patients/
-TODO: ask them to perform a couple of joins, and check the size of the output
+Now, do the same for the hospital dataframe: 
+
+```{r nb_lines3, exercise = TRUE}
+
+```
 
 
-```{r}
+So we know that there some patients have several rows in the linelist file. Ideally we would go and investigate these duplicates to see if they correspond to different visits, or if some patients were wrongly entered twice, but since our focus is on joining, let's keep them all for now.
 
-left_join(linelist, hospitals, by = c("case_id" = "id_case"))
 
-right_join(linelist, hospitals, by = c("case_id" = "id_case"))
-inner_join(linelist, hospitals, by = c("case_id" = "id_case"))
-full_join(linelist, hospitals, by = c("case_id" = "id_case"))
+Now, to understand how the two datasets relate to each other, you can perform an `anti_join()` in both directions.
 
+```{r anti_join_exo1, exercise = TRUE}
+# Perform an anti-join to see the rows from the linelist dataframe that have no match in the hospitals dataframe
+
+
+```
+
+
+```{r anti_join_exo1-hint}
+anti_join(df1, df2, by = "ID")
+```
+
+
+```{r anti_join_exo1-check}
+grade_this({
+     # Automatically pass if .result equal to .solution
+     pass_if_equal(message = "Excellent")
+     # Default to failing grade with feedback
+     fail()
+})
+```
+
+
+```{r anti_join_exo1-solution}
 anti_join(linelist, hospitals, by = c("case_id" = "id_case"))
-anti_join(hospitals, linelist, by = c("id_case" = "case_id"))
+```
+
+
+Now in the other direction: 
+
+```{r anti_join_exo2, exercise = TRUE}
+# Perform an anti-join to see the rows from the hospital dataframe that have no match in the linelist dataframe
 
 
 ```
 
 
-TODO: get exos fromp the tutorial, with the dirty hospital data.
-Maybe think of an exemple with several key columns. And with duplicated lines.
+```{r anti_join_exo2-hint}
+anti_join(df1, df2, by = "ID")
+```
+
+
+```{r anti_join_exo2-check}
+grade_this({
+     # Automatically pass if .result equal to .solution
+     pass_if_equal(message = "Excellent")
+     # Default to failing grade with feedback
+     fail()
+})
+```
+
+
+```{r anti_join_exo2-solution}
+anti_join(hospitals, linelist, by = c("id_case" = "case_id"))
+```
+
+
+So we see that the `linelist` dataframe has many patients that are not in the `hospitals`  dataframe, and that the `hospitals` dataframe is mostly a subset of the linelist patients (except for three rows).
+
+Now, we feel safe in joining the `linelist` to the `hospitals` data. *Perform a full join of both datasets*.
+
+```{r full_join, exercise = TRUE}
+# Perform a full join of hospitals unto linelist
+
+
+```
+
+
+```{r full_join-check}
+grade_this({
+     # Automatically pass if .result equal to .solution
+     pass_if_equal(message = "Excellent")
+     # Default to failing grade with feedback
+     fail()
+})
+```
+
+
+```{r full_join-solution}
+full_join(linelist, hospitals, by = c("case_id" = "id_case"))
+```
+
+Now let's check the size of the output:
+
+```{r echo = FALSE}
+full_join(linelist, hospitals, by = c("case_id" = "id_case")) %>%  dim()
+```
+
+We can see that the output dataset is  slightly longer than the original `linelist` dataset, which is normal since a couple of rows from the `hospitals` dataframe had no matches in the `linelist` dataframe.
+
+
+### Add geo data
+
+We now want to add administrative data to patient data in the linelist, using the `geo_data` dataframe. Here is the ten first lines of this new dataframe:
+
+
+```{r  eval = TRUE, echo = FALSE}
+geo_data %>% 
+     head(10) %>% 
+     kbl() %>% 
+     kable_styling(full_width = FALSE, 
+                   bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+Exercice: *add administrative data to each patient of the linelist*.
+
+```{r join_geo, exercise = TRUE}
+# Add administrative data to each patient of the linelist.
+
+```
+
+
+```{r join_geo-hint-1}
+Unsure of what to do? Which sort of join would fit most the wording of the question?
+```
+
+
+```{r join_geo-hint-2}
+Have you picked one or several identifier columns? Do they have the same name in both datasets? Inspect the content of the columns, will the match work?
+```
+
+```{r join_geo-hint-3}
+Have you picked one or several identifier columns? Do they have the same name in both datasets? Inspect the content of the columns, will the match work?
+```
+
+
+```{r join_geo-check}
+grade_this({
+     # Automatically pass if .result equal to .solution
+     pass_if_equal(message = "Excellent")
+     # Default to failing grade with feedback
+     fail()
+})
+```
+
+
+```{r join_geo-solution}
+# Solution
+left_join(linelist, geo_data, by = c("admin3pcod" = "ADM3_PCODE"))
+```
+
+
+## Extra : dirty identifiers
+
+What happen when the identifiers columns are dirty?
+
+Well, it depends on how many different values there are, and how much they differ between the two datasets. Sometimes you may be able to clean one of the columns by hand quickly. If that is not a viable solution, you can try [probabilistic/fuzzy](https://epirhandbook.com/en/joining-data.html#probabilistic-matching) matching with packages such as [fastLink](https://github.com/kosukeimai/fastLink) or [fuzzyjoin](https://varianceexplained.org/fuzzyjoin/index.html).
+
+Here you want to add some hospital data to the `linelist` dataframe. Here is what the dataframe looks like: 
+
+```{r  eval = TRUE, echo = FALSE}
+hospital_dirty %>% 
+     kbl() %>% 
+     kable_styling(full_width = FALSE, 
+                   bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+Now, join the hospital data to the linelist data.
+
+```{r dirty_hospit, exercise = TRUE}
+
+```
+
+```{r dirty_hospit-hint-1}
+You can use the `unique()` or `distinct()` functions to identify differences in the columns to match
+```
+
+```{r dirty_hospit-hint-2}
+How can you clean the hospital_dirty hospital names?
+```
+
+```{r dirty_hospit-hint-3}
+You can use such functions as `replace()` and `case_when()` to rename values within a column using `mutate()`.
+```
+
+```{r dirty_hospit-hint-4}
+Sometimes it can easiest to convert a column to all lowercase or all uppercase. If you need to convert all values in a column to UPPER or lower case, use `mutate()` and wrap the column with one of these functions from stringr such as `str_to_upper()`, `str_to_lower()`, `str_to_title()`.
+```
+
+
+```{r dirty_hospit-check}
+grade_this({
+     # Automatically pass if .result equal to .solution
+     pass_if_equal(message = "Excellent")
+     # Default to failing grade with feedback
+     fail()
+})
+```
+
+```{r dirty_hospit-solution}
+left_join(linelist, hospital_clean, by = c("hospital" = "hosp_name"))
+```
