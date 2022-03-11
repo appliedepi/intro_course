@@ -1370,7 +1370,7 @@ One solution is **pacman**'s function `p_load()`. You can list the names of pack
 
 Here is what a **pacman** command can look like. The syntax quite simple. Just list the names of the packages within the `p_load()` parentheses, separated by commas. Note that package names are case-sensitive.  
 
-```{r, echo=T}
+```{r, echo=T, eval=F}
 pacman::p_load(rio, here, janitor, lubridate, tidyverse)
 ```
 
@@ -1378,7 +1378,7 @@ The syntax `pacman::p_load()` explicitly writes the package name (**pacman**) pr
 
 This command can also be written vertically. **In any R command, the newlines and indenting will not impact the execution of the code.** But it can dramatically improve readability!  
 
-```{r, echo=T}
+```{r, echo=T, eval=F}
 # Load all the packages needed, installing if necessary
 pacman::p_load(
      rio,          # for importing data
