@@ -510,3 +510,35 @@ Is this what was expected? Are some lines duplicated?
 
 ???
 Another good check is to use the `count` function to count the number of rows for each of your identifier.
+
+
+
+---
+class: inverse, center, middle
+
+# Restructuring data
+
+*pivoting, reshaping, melting, casting, transforming...* dataframes
+
+
+---
+
+# What is pivoting?
+
+* *Excel pivot tables* are a way of summarizing and aggregating data
+
+* In R, **pivoting** a dataframe has a **different meaning**
+
+* Think of it as *restructuring*, or *reshaping* the dataframe
+
+* We will use the `pivot_wider` and `pivot_larger` functions from the **tidyr** package
+
+* You will often see examples using alternative functions from other packages: 
+     * `melt` and `cast` from **reshape2**
+     * `gather` and `spread` from **tidyr** (the ancestors of the pivot_xxx functions)
+     * `melt` and `dcast` from **data.table**
+     
+  
+---
+
+# Wide and long data?
