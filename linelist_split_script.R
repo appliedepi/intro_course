@@ -89,11 +89,18 @@ phase1_lab <- ll_adm3 %>%
 
 # EXPORT
 ########
-export(phase1_surv, here("data", "surveillance_linelist_12012014.xlsx"))
+export(phase1_surv, here("data", "surveillance_linelist_12012014.csv"))
 export(phase1_med, here("data", "medical_linelist_12012014.xlsx"))
 export(phase1_lab, here("data", "lab_results_12012014.xlsx"))
 export(phase1_source, here("data", "case_investigations_12012014.xlsx"))
 export(phase1_surv, here("data", "district_populations.xlsx"))
+
+
+# !!!!!!!   EXCEL STEPS ON SURVEILLANCE LINELIST AFTER EXPORT
+# - Add a "row_num" column
+# - Copy about 20 rows and duplicate them
+# - Mess up some hospital names 
+
 
 
 # convert medical linelist into split data frames and export

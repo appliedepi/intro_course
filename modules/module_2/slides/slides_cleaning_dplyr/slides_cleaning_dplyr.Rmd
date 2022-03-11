@@ -1,0 +1,1016 @@
+---
+title: "Cleaning data with R"
+subtitle: "An introduction to {dplyr} and other cleaning tools<br><br>"
+author: '</br>Offered by: [Applied Epi](https:://appliedepi.org) </br> A nonprofit organization elevating frontline epidemiology <br>`r icons::icon_style(icons::fontawesome$brands$twitter, fill = "white")` [@epiRhandbook](https://twitter.com/epiRhandbook) `r icons::icon_style(icons::fontawesome("paper-plane"), fill = "white")` [contact@appliedepi.org](mailto:contact@appliedepi.org)'
+date: "March 2022"
+output:
+  xaringan::moon_reader:
+    seal: TRUE
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    css: xaringan-themer.css
+params:
+  online: TRUE
+---
+
+```{r, eval=F, echo=F, include = F}
+# Must do in order to render.
+
+pacman::p_load(xaringan)
+devtools::install_github("gadenbuie/xaringanExtra")
+remotes::install_github("mitchelloharawild/icons")
+icons::download_fontawesome()
+
+# Render with xaringan::infinite_moon_reader()
+# Slides will appear in viewer, and will update as you edit/save
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      fig.retina = 3  ## retina more effective than w/h (according to twitter)
+                      # fig.width = 16, 
+                      # fig.height = 10
+                      )
+## I dont know why this is included in the example xaringan slide 
+## but is something to do with background images
+options(htmltools.dir.version = FALSE)
+
+## install and load necessary packages 
+pacman::p_load(
+  rio,        # importing data  
+  here,       # relative file pathways  
+  janitor,    # data cleaning and tables
+  lubridate,  # working with dates
+  tidyverse,  # data management and visualization
+  gtsummary,  # summary tables
+  flair,       # for decorating code chunks with colors
+  kableExtra, # for output tables
+  xaringanthemer  # for styling presentation 
+)
+```
+
+
+```{r  xaringan-themer, include = FALSE}
+
+## define presentation colours (theme) using {xaringanthemer} package 
+## https://pkg.garrickadenbuie.com/xaringanthemer/articles/xaringanthemer.html
+
+## epirhandbook logo colours: 
+  ## blue: "#00538c"
+  ## green: "#007732"
+  ## lighter green: "#48a878"
+
+## see ?style_mono_accent for all the things can customise
+style_mono_accent(
+  base_color = "#00538c", 
+  link_color = "#48a878", 
+  ## add logo to the title page (bit bigger)
+  title_slide_background_image = "https://github.com/appliedepi/intro_course/raw/main/images/logo.png", 
+  title_slide_background_position = "90% 90%", 
+  title_slide_background_size = "25%", 
+  ## add logo to all following slides
+  background_image = "https://github.com/appliedepi/intro_course/raw/main/images/logo.png", 
+  background_size = "10%",
+  background_position = "100% 0%"
+)
+```
+
+```{css, echo=F}
+    .remark-slide table{
+      border: none
+    }
+    .remark-slide-table {
+      
+    }
+    tr:first-child {
+      border-top: none;
+  }
+    tr:last-child {
+    border-bottom: none;
+  }
+```
+
+
+
+```{css, echo = F}
+/* THIS IS A CSS CHUNK - THIS IS A COMMENT */
+/* Size of font in code echo. E.g. 10px or 50% */
+.remark-code {
+  font-size: 70%;
+}
+/* Size of font in text */
+.medium-text {
+  font-size: 75%;     
+}
+/* Size of font in tables */
+.small-table table {
+  font-size: 6px;     
+}
+.medium-table table {
+  font-size: 8px;     
+}
+.medium-large-table table {
+  font-size: 10px;     
+}
+```
+
+
+```{r, echo=F, include = F}
+surv_raw <- rio::import(here::here("data", "surveillance_linelist_12012014.xlsx"))
+medical_linelist <- rio::import(here::here("data", "medical_linelist_12012014.xlsx"))
+
+```
+
+
+
+
+
+---
+class: inverse, center, middle
+
+.pull-left[
+## Tidy data 
+]
+
+.pull-right[
+
+```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "data_cleaning", "tidy_shelves.png")))
+```
+
+]
+
+---
+# Today: objectives & schedule  
+
+**In this module we aim to help you:**  
+* Gain familiarity of {dplyr} functions used to clean public health data  
+* Apply a series of functions to a data frame using the pipe operator  
+* Begin writing an R script to analyze outbreak data  
+
+
+```{r, echo=FALSE, warning=F, message=F}
+outline <- dplyr::tribble(
+  ~Time, ~Location, ~Topic,
+  "0900-0945",     "Main",      "TODO",
+  "0950-1050",     "Main",      "TODO",
+  "1100-1200",     "Breakouts", "TODO",
+  "1205-1220",     "Main",      "TODO"
+)
+
+outline %>% 
+  flextable::qflextable() %>% 
+  flextable::add_footer_lines("Breaks are incorporated above, but not shown as rows")
+```
+
+??? Note stretch breaks throughout.
+
+
+
+---
+# Clean data, messy data   
+
+- What is involved in "cleaning" a dataset?  
+
+
+.pull-left[
+```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "data_cleaning", "tidy_broom.png")))
+```
+]
+
+--
+
+.pull-right[
+
+- Prepare for analysis and visualization  
+
+- Standardize column names 
+
+- Subset rows and columns  
+
+- Align spellings  
+
+- Create categorical and calculated variables  
+
+- Join with other data  
+
+- Remove duplicates... 
+ 
+]
+
+
+.footnote[]
+
+???
+Ask the participants to quickly write what makes a dataset clean, in their view, in the chat
+
+
+
+---
+# Tidy data
+
+Clean data should also be "tidy". Below are 3 core principles of "tidy data":  
+
+--
+
+1. Each **value** must have its own **cell**
+
+--
+
+2. Each **variable** must have its own **column**
+
+--
+
+3. Each **observation** must have its own **row**  
+
+
+
+
+.footnote[Source: [R for Data Science](https://r4ds.had.co.nz/tidy-data.html)]
+
+???
+
+
+
+
+---
+# Messy values  
+
+
+```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+# CREATE EXAMPLE DATA
+#####################
+clean_data_example_5 <- data.frame(case = c("Case 1", "Case 2", "Case 3", "Case 4"), age = c("31, years", "24, years", "18, months", "33, years")) 
+
+clean_data_example_6 <- clean_data_example_5 %>%
+    separate(age, 
+           into = c("age", "age_unit"), 
+           sep = ", "
+           ) %>%
+  mutate(age = as.numeric(age))
+```
+
+.pull-left[
+
+**Messy:** What changes would make this dataset more tidy?  
+
+
+```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+clean_data_example_5  %>%
+  knitr::kable()
+  
+```
+
+]
+
+--
+
+.pull-right[
+
+**Tidy:** Age and the age unit are separated into distinct cells  
+
+```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+clean_data_example_6  %>%
+  knitr::kable()
+
+```
+]
+
+
+???
+Let's start with an easy one...  
+
+
+
+
+---
+
+# Terminology  
+
+Structurally, "data frames" in R consist of **columns** and **rows**.  
+
+--
+
+However, **"variables"** and **"observations"** are more *abstract* concepts:  
+
+* **Variables** measure one *underlying attribute* (age, outcome, or date of onset)  
+* **Observations** relate to a *unit of analysis*  
+
+--
+
+Ideally, they align: **columns = variables** and **rows = observations**  
+
+```{r, eval = TRUE, echo = FALSE, out.height = "65%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+knitr::include_graphics(xfun::relative_path(here::here("images", "data_cleaning", "tidy_image.png")))
+```
+
+.footnote[Image source: [R for Data Science](https://r4ds.had.co.nz/tidy-data.html)]
+
+
+
+
+
+---
+# But it is not always clear...  
+
+.pull-left[
+
+```{r}
+long_example <- tribble(
+     ~country, ~January, ~February, ~March, 
+     "Mozambique", 3200,    3300,      4100,  
+     "Lesotho", 500,     750,       900,   
+     "South Africa", 5100, 6200, 8100,)
+          
+long_example %>%
+  knitr::kable()
+```
+
+* Is "January" a variable?  
+* Where is the variable "month"?  
+* Does it have its own column?  
+* Is each observation a row?  
+
+
+]
+
+--
+
+.pull-right[
+
+```{r}
+long_example %>%
+  pivot_longer(cols=2:4, names_to="month", values_to = "cases") %>% 
+     knitr::kable()
+```
+
+]
+
+
+---
+class: inverse, center, middle
+
+## Cleaning data in R 
+
+
+```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "data_cleaning", "data_cleaning.png")))
+```
+
+
+
+
+
+---
+
+class: medium-large-table
+
+# Review your data  
+
+We will begin working with the *"surveillance_linelist_12012014.xlsx"*  
+We assigned it the name `surv_raw` once imported to R.    
+
+```{r}
+head(surv_raw, 25) %>% 
+  tibble() %>% 
+  DT::datatable(
+    options = list(
+      scrollY = 300,
+      scrollX = 600,
+      pageLength = 25,
+      fontSize = '25%',
+      dom = "ti",
+      ordering = FALSE,
+      rownames = FALSE,
+      options = list(pageLength = 5, scrollX=T),
+      class = 'white-space: nowrap' 
+    )
+  )
+```
+
+???
+Table shows just the first 25 rows, to load faster.  
+
+
+---
+
+# Demo dataset  
+
+Let's use a smaller version to practice with, and explore some core R functions
+```{r, echo=F}
+demo <- surv_raw %>% 
+     head(5) %>% 
+     select(case_id, age, gender, case_def, `onset date`, `wt (kg)`, `ht (cm)`)
+```
+
+```{r, eval=T}
+demo %>% 
+  knitr::kable()
+     
+```
+
+
+
+---
+
+# The {dplyr} package  
+
+.pull-left[
+```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "data_cleaning", "dplyr_hex.png")))
+```
+]
+
+.pull-right[
+
+
+* The easiest and most versatile package for data cleaning  
+
+* This package is installed in a universe of {tidyverse} R packages  
+
+* Introduction of the {tidyverse} has transformed R in the last 5 years  
+
+
+]
+
+.footnote["dplyr" is shorthand for "data plier" - a plier is the handheld tool pictured above]
+
+???
+Tidyverse has made R coding much more user-friendly, intuitive, and accessible to beginner coders  
+
+
+---
+
+# The {dplyr} package  
+
+Some of the {dplyr} functions we will use:  
+
+
+Function       | Utility                               
+---------------|---------------------------------------
+`filter()`|subset rows
+`select()`|subset columns
+`rename()`|rename columns 
+`mutate()`|create and transform columns 
+`case_when()`|re-code values using logical criteria  
+
+
+
+---
+
+# `filter()` rows  
+
+* 1st argument: a data frame
+
+```{r, eval=F, echo=T}
+filter(demo, ___)
+```
+
+--
+
+* 2nd+ arguments: logical criteria to apply, to keep rows
+
+```{r eval=FALSE, echo=TRUE}
+filter(demo, age > 10)
+```
+
+--
+
+```{r eval=FALSE, echo=TRUE}
+filter(demo, age > 10, gender == "m")
+```
+
+
+--
+
+The logic can get complex using `&` (AND), `|` (OR), and parentheses
+
+```{r eval=FALSE, echo=TRUE}
+filter(demo, age > 10 & (gender == "m" | case_def == "Suspect"))
+```
+
+.footnote[Note use of double equals == to test equivalence]
+---
+
+# `filter()` rows  
+
+```{r, eval=F, echo=T}
+# complete demo data
+filter(demo, ___)
+```
+
+```{r, eval=T, echo=F}
+demo %>% knitr::kable()
+```
+
+
+
+---
+
+# `filter()` rows  
+
+
+```{r eval = F, echo=T}
+# filter applied  
+filter(demo, age > 10)
+```
+
+```{r eval = T, echo=F}
+filter(demo, age > 10) %>% knitr::kable()
+```
+
+
+
+
+---
+
+# `select()` columns 
+
+`select()` also expects a data frame as the first argument
+
+--
+
+```{r, eval=F, echo=T}
+# complete demo data
+select(demo, ___)
+```
+
+--
+
+```{r, eval=T, echo=F}
+demo %>% knitr::kable()
+```
+
+
+---
+
+# `select()` columns 
+
+You can provide `select()` with column names to *keep*
+
+```{r, eval=F, echo=T}
+# select() to keep case_id and age columns only
+select(demo, case_id, age)
+```
+
+
+```{r, eval=T, echo=F}
+select(demo, case_id, age) %>% knitr::kable()
+```
+
+---
+
+# `select()` columns 
+
+You can provide `select()` with column names to *keep*
+
+```{r, eval=F, echo=T}
+# add gender column
+select(demo, case_id, age, gender)
+```
+
+
+```{r, eval=T, echo=F}
+select(demo, case_id, age, gender) %>% knitr::kable()
+```
+
+
+---
+
+# `select()` columns 
+
+Or you can provide the columns to *remove* (-)
+
+```{r, eval=F, echo=T}
+# remove case_id and case_def columns from original dataset
+select(demo, -case_id, -case_def)
+```
+
+
+```{r, eval=T, echo=F}
+select(demo, -case_id, -case_def) %>% knitr::kable()
+```
+
+
+
+
+---
+
+# `filter()` *and* `select()`?
+
+Yes! You can do both (and many more) with the **%>%** "pipe operator".
+
+--
+
+.pull-left[
+
+Most data cleaning happens in a *sequence* of linked steps
+
+* Import  
+* Rename columns  
+* Filter rows  
+* Select columns  
+* Deduplicate  
+* Clean values...
+
+**You can "pipe" (pass) the dataset from one function to the next with the "pipe" operator `%>%`**
+]
+
+
+.pull-right[
+
+```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "data_cleaning", "cleaning.png")))
+```
+
+]
+
+
+
+
+---
+# Piping data
+
+Previously, the 1st argument in `filter()` and in `select()` was the data frame
+
+`filter(`**demo**`, age > 10)`
+
+
+--
+
+
+Using pipes, this is now written as:  
+
+**demo** `%>% filter(age > 10)`
+
+--
+
+You can pipe the data through *multiple* functions  
+
+```{r, eval=F, echo=T}
+demo %>% filter(age > 10) %>% select(case_id, age, gender)
+```
+
+```{r, eval=T, echo=F}
+demo %>% filter(age > 10) %>% select(case_id, age, gender) %>% knitr::kable()
+```
+
+
+---
+# Vertical coding sytle
+
+Eventually, it is better to write in a *vertical* style  
+Newlines and indent will not impact the code, but do make it more readable!
+
+```{r, eval=F, echo=T}
+demo %>% 
+  select(case_id, age, gender, case_def)
+```
+
+
+---
+# Vertical coding sytle
+
+Eventually, it is better to write in a *vertical* style:  
+Newlines and indent will not impact the code, but do make it more readable!
+
+
+```{r, eval=F, echo=T}
+demo %>% 
+  select(case_id, age, gender, case_def) %>% 
+  distinct()
+```
+
+---
+# Vertical coding sytle
+
+Eventually, it is better to write in a *vertical* style:  
+Newlines and indent will not impact the code, but do make it more readable!
+
+
+```{r, eval=F, echo=T}
+demo %>% 
+  select(case_id, age, gender, case_def) %>% 
+  distinct() %>% 
+  filter(age > 10, case_def == "Confirmed")
+```
+
+
+
+
+---
+# Vertical coding sytle
+
+Eventually, it is better to write in a *vertical* style:  
+Newlines and indent will not impact the code, but do make it more readable!
+
+
+```{r, eval=F, echo=T}
+demo %>% 
+  select(case_id, age, gender, case_def) %>% 
+  distinct() %>% 
+  filter(age > 10, case_def == "Confirmed") %>% 
+  mutate(infant = ifelse(age < 1, TRUE, FALSE))
+```
+
+
+
+---
+# Vertical coding sytle
+
+When piping, it is better to write code in a *vertical* style:  
+Newlines and indent will not impact the code, but make it more readable!
+
+
+```{r, eval=F, echo=T}
+demo %>% 
+  select(case_id, age, gender, case_def) %>%         # select columns
+  distinct() %>%                                     # de-duplicate
+  filter(age > 10, case_def == "Confirmed") %>%      # only young children confirmed cases
+  mutate(infant = ifelse(age < 1, TRUE, FALSE))      # make new column infants
+```
+
+--
+
+```{r, eval=T, echo=F}
+demo %>% 
+  select(case_id, age, gender, case_def) %>%         # select columns
+  distinct() %>%                                     # de-duplicate
+  filter(age > 10, case_def == "Confirmed") %>%      # only young children confirmed cases
+  mutate(infant = ifelse(age < 1, TRUE, FALSE)) %>%  # make new column for infants
+  knitr::kable() 
+```
+
+
+
+
+---
+# Clean column names  
+
+Let's print the column names in `demo` by piping to the function `names()`:  
+
+```{r, echo=T}
+demo %>% 
+  names()
+```
+
+--
+
+Pipe `demo` into `clean_names()` from {janitor} package to standardize  
+
+* removes spaces and special characters  
+* all to lowercase  
+
+```{r, echo=T}
+demo %>% 
+  clean_names() %>%     #<<
+  names()
+```
+(*see the change to final two columns*)  
+
+--
+
+But how do we *edit* the column names?  
+
+---
+
+# Renaming columns
+
+You can either use `rename()`, or make the changes within `select()`:  
+
+--
+
+1) Using `rename()`  
+
+```{r, echo=T}
+demo %>% 
+  clean_names() %>% 
+  rename(date_onset = "onset_date",    # syntax: New = "Old" #<<
+         age_years  = "age") %>%                             #<<
+  names()
+```
+
+--
+
+2) Within `select()` (Be careful! Only the columns you write are kept.)  
+
+```{r, echo=T}
+demo %>% 
+  clean_names() %>% 
+  select(date_onset = "onset_date",  # change names... and keep ONLY those listed #<<
+         age_years  = "age") %>%                                                  #<<
+  names()
+```
+
+
+---
+
+# Printing vs. saving  
+
+Our pipes have only *printed* the modified `demo` - the data frame has **not** changed!  
+
+```{r, echo=T, eval=F}
+demo %>%                    # PRINT only cases under 5 years
+  filter(age > 10)
+```
+
+```{r, echo=F, eval=T}
+demo %>%                    # print only cases under 5 years
+  filter(age > 10) %>% 
+  knitr::kable()
+```
+
+--
+
+
+To save: add the assignment operator **<-** to define a new data frame.  
+
+```{r pipe-assign, eval=F, echo=T}
+demo_under5 <- demo %>%
+  filter(age > 10)
+```
+
+(No output to the R console, but a new object in the Environment pane)  
+
+???
+Note how the column names in `demo` are old! It's because our changes have not yet been saved.  
+
+---
+
+# `mutate()` to create columns  
+ 
+`mutate()` is used to *create* new columns
+
+```{r, results = "asis", echo = FALSE}
+"The syntax is: new column name = a function that creates the new values:" %>%
+  flair("new column name", color = "deeppink") %>%
+  flair("function", color = "cornflowerblue") %>%
+  flair_all(before = "<h4>", after = "</h4>") %>%
+  cat()
+```
+
+--
+
+```{r mutate, include = F}
+demo %>% 
+  mutate(adult = ifelse(age >= 18, TRUE, FALSE)) # creates new T/F column
+```
+
+```{r mutate_flair, echo=F}
+decorate("mutate") %>%
+  flair("adult", color = "deeppink") %>%
+  flair("ifelse(age >= 18, TRUE, FALSE)", color = "cornflowerblue") %>% 
+  knit_print.with_flair()
+```
+
+--
+
+`ifelse()` applies a logical criteria to each row, returns one value if true, and returns another value if false.  
+
+---
+
+# `mutate()` to edit columns  
+ 
+`mutate()` is also used to *edit* existing columns, such as *recoding* values
+
+Below, `case_when()` is used inside `mutate()` to recode the gender column  
+
+--
+
+```{r, results = "asis", echo = FALSE}
+"The case_when() syntax is: logical criteria for row ~ outcome if met" %>%
+  flair("logical criteria for row", color = "orange") %>%
+  flair("~", color = "deeppink") %>%
+  flair("outcome if met", color = "cornflowerblue") %>%
+  flair_all(before = "<h4>", after = "</h4>") %>%
+  cat()
+```
+
+```{r mutate2, include = F}
+demo %>% 
+  mutate(gender = case_when(     # re-define gender as: 
+     gender == 'm' ~ 'male',     # when "m", change to "male"   
+     gender == 'f' ~ 'female',   # when "f", change to "female" 
+     TRUE          ~ gender))    # any other value, remain as before
+```
+
+```{r mutate2_flair, echo=F}
+decorate("mutate2") %>%
+  flair("'male", color = "cornflowerblue") %>%
+  flair("'female'", color = "cornflowerblue") %>%
+  flair("gender)", color = "cornflowerblue") %>%
+  flair("~", color = "deeppink") %>%
+  flair("gender == 'm'", color = "orange") %>%
+  flair("gender == 'f'", color = "orange") %>%
+  flair("TRUE", color = "orange") %>%
+  knit_print.with_flair()
+```
+
+Every row in the dataset is evaluated for the criteria (from top-to-bottom).  
+The bottom `TRUE` criteria catches rows that did not meet any other criteria.  
+
+???
+Explain that there are many nuances to case_when() which you will practice in the breakout exercise
+
+---
+# What about dates?
+
+It is important that R understands dates correctly - as dates (not character values!)  
+
+.pull-left[
+
+The easiest method is to use functions from the {lubridate} package  
+
+**End goal**:  
+
+* YYYY-MM-DD  
+* `class()` of the column is "date" 
+
+More details in this [Epi R Handbook chapter](https://epirhandbook.com/en/working-with-dates.html)
+
+]
+
+.pull-right[
+```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "data_cleaning", "Dates_500x500.png")))
+```
+
+]
+
+
+---
+# {lubridate} functions  
+
+Use the {lubridate} function that aligns with the *current format*:  
+
+* `ymd()` for YYYY-MM-DD  
+* `dmy()` for DD-MM-YYYY  
+* `mdy()` for MM-DD-YYYY 
+
+Using the `tibble()` view, you can see the class of each column above the values
+
+--
+
+.pull-left[
+
+```{r, eval=T, echo=T}
+demo %>% 
+  select(case_id, `onset date`) %>% 
+  tibble()
+```
+
+]
+
+--
+
+.pull-right[
+ 
+```{r, eval=T, echo=T}
+demo %>% 
+  select(case_id, `onset date`) %>% 
+  mutate(`onset date` = ymd(`onset date`)) %>%  #<<
+  tibble()
+```
+
+]
+
+.footnote[]
+
+
+
+
+
+

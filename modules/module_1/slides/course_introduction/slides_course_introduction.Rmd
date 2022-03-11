@@ -93,141 +93,11 @@ style_mono_accent(
   }
 ```
 
-# We are Applied Epi  
-
-```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
-# Using here() alone won't work because Rmd folder becomes the rendering root.
-# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
-# It dynamically creates the ../../etc filepath.
-knitr::include_graphics(xfun::relative_path(here::here("images", "logo.png")))
-```
-
-
-
----
-
-We are going to together for several days, so let's introduce ourselves...
-
-
-.footnote[Bookmark [www.appliedepi.org](www.appliedepi.org)!]  
-
-
-
----
-# Our team of frontline epis
-
-Applied Epi has 130 team members located in 33 countries.
-.pull-left[
-- Local epidemiologists and public health practitioners
-- Emergency responders
-- Data science education specialists
-- Applied researchers
-- Geospatial (GIS) experts
-]
-
-.pull-right[
-
-```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
-# Using here() alone won't work because Rmd folder becomes the rendering root.
-# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
-# It dynamically creates the ../../etc filepath.
-
-knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "team_locations.jpg")))
-```
-
-]
-
-
-
----
-# A global grassroots movement
-
-We enjoy supporting local epis and helping them transition to R!
-
-```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
-# Using here() alone won't work because Rmd folder becomes the rendering root.
-# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
-# It dynamically creates the ../../etc filepath.
-
-knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "team_faces.png")))
-```
-
-
----
-# Partnerships
-
-We partner with global and local entities to support frontline practitioners
-.pull-left[
-- TEPHINET - The global network of Field Epi Training Programs
-- Médecins sans frontières (MSF)
-- World Health Organization (WHO)
-- EPIET/EUPHEM Alumni Network (EAN)
-]
-
-.pull-right[
-```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
-# Using here() alone won't work because Rmd folder becomes the rendering root.
-# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
-# It dynamically creates the ../../etc filepath.
-
-knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "partners-blur.jpg")))
-```
-
-]
-
-
-???
-- What makes us different is that we focus on the challenges of applied epi, not academic epi. We emphasize the skills used every day by ground-level epidemiologists. 
-
-
----
-
-# Our offerings
-
-A comprehensive suite of services
-
-```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
-# Using here() alone won't work because Rmd folder becomes the rendering root.
-# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
-# It dynamically creates the ../../etc filepath.
-
-knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "Applied_Epi_Offerings.png")))
-```
-
-
-
-
-
----
-
-# The Epidemiologist R Handbook
-
-```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
-# Using here() alone won't work because Rmd folder becomes the rendering root.
-# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
-# It dynamically creates the ../../etc filepath.
-
-knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "Epi R Handbook Banner Beige 1500x500.png")))
-```
-
-
-- Written by epidemiologists, for epidemiologists
-- 120,000 users globally
-- 50 chapters of best-practice code examples for public health practice
-- Available free, online and offline
-- *"An open-source unicorn"* -Github 
-
-.footnote[Access at [www.epiRhandbook.com](www.epiRhandbook.com)]
-
-
-
-
----
-# Your instructors  
+# Thank you for joining us  
 
 .left-column[
 
-```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
+```{r, eval = TRUE, echo = FALSE, out.width = "65%"}
 # Using here() alone won't work because Rmd folder becomes the rendering root.
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
@@ -237,7 +107,7 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "instructors", 
 
 </br>
 
-```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
+```{r, eval = TRUE, echo = FALSE, out.width = "65%"}
 # Using here() alone won't work because Rmd folder becomes the rendering root.
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
@@ -247,7 +117,7 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "instructors", 
 
 </br>
 
-```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
+```{r, eval = TRUE, echo = FALSE, out.width = "65%"}
 # Using here() alone won't work because Rmd folder becomes the rendering root.
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
@@ -260,149 +130,121 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "instructors", 
 
 * **Neale Batra**  
 President and co-founder, Applied Epi  
+@MSF @WHO @CDC @USAID @Philly @CaliforniaEIS
 </br>
+</br>
+
 * **Paula Blomquist**  
 Bio here  
+@PHE @EPIET @WHO @PHRST
 </br>
+</br>
+
 
 * **Arran Hamlet**  
 Bio here  
+@Imperial @WHO  
+
+
+.footnote[**Thank you for your service** *to your community in these busy times for public health. We are glad that you are taking the time to learn R with us.*]
 
 ???
 
 
 
-
-
-
 ---
-# Your backgrounds
+# Learning R is...    
 
-Survey results, describing the experience levels of course participants
-
-
-
----
-# Your hopes and fears
-
-Survey results
-
-Your objectives in learning R 
-Your concerns about learning R?
-
-
-
----
-# Case-study-based learning   
-
-Case study-based learning
-
-Ebola outbreak in Guinea
-
---
-
-
-???
-- The learning process can be summarised into this acronym "EDGE". Today's session is primarily a *demonstration* with question & answer session. We assume that you have read at least some of the relevant pages in the Epi R Handbook prior to this session. We also offer trainings in which we guide you through case studies with hands-on coaching. 
-
-
----
-# Course overview
-
-**Audience:** Epidemiologists, public health practitioners, clinicians, applied researchers.  
-
-**Objectives:** Participants learn how to use R, using standard datasets for applied epidemiology in the context of an outbreak investigation case study.
-
-**Prerequisites:**
-- Familiarity with epidemiological concepts.  
-- Participants with no prior coding experience (e.g. SAS, Stata) are advised to take 1 extra day for the course.  
-- Create account at [Applied Epi Community](www.community.appliedepi.org) (online Q&A support forum)
-
-**Take-aways** 
-- Comfort using R to import, clean, and perform basic analyses, transformations, and visualizations, and reporting on epidemiological data
-- Ability to self-learn and expand your R knowledge  
-- Certificate of participation
-
----
-# Course format
+## ...really useful  
 
 ```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
 # Using here() alone won't work because Rmd folder becomes the rendering root.
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
 
-knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "CourseTimeline.png")))
+knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "stop_epidemic_dominoes2.png")))
 ```
 
-35.5 hours synchronous instruction
-
-- *Comprehensive instruction:* 4 days (28 hours)
-
-- *Sustained support:* 7.5 hours of follow-up sessions to help apply the skills to your work context (5 x 1.5-hour group “office hours” sessions)
-
-Note: Applied Epi offers subscription "R Help Desk" services if you want continued on-call support in the months/years ahead. 
+???
+Mention marketable skill as well as technically for epidemic response
 
 ---
-# Course schedule
+# Learning R is...    
 
-```{r, echo=FALSE, warning=F, message=F}
-outline <- dplyr::tribble(
-  ~Module, ~Date, ~`Time (GMT)`, ~Topic,
-  "1", "Mo 21/3", "0900-1200", "Welcome, RStudio, basic syntax, data import",
-  "2", "Mo 21/3", "1300-1630", "Cleaning data, core R functions, piping",
-  "3", "Tu 22/3", "0900-1200", "Grouping and summarising data",
-  "4", "Tu 22/3", "1300-1630", "Data visualization with ggplot2",
-  "5", "We 23/3", "0900-1200", "Transforming data with joins and pivots",
-  "6", "We 23/3", "1300-1630", "Heat plots, epidemic curves, age/sex pyramids, GIS demo",
-  "7", "Th 24/3", "0900-1200", "R Markdown reports",
-  "8", "Th 24/3", "1300-1630", "Real-life exercise"
-)
+## ...freeing  
 
-outline %>% 
-  flextable::qflextable()
+```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "freedom_bird.png")))
 ```
 
 
 ---
-# Learning objectives and schedule  
+# Learning R is...    
 
-**Today we aim to help you:**  
-* Understand R within the ecosystem of analytical tools  
-* Navigate RStudio and R projects  
-* Write a basic R script to load packages, import data, and view a dataset  
+## ...sometimes hard work  
 
+```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
 
-```{r, echo=FALSE, warning=F, message=F}
-outline <- dplyr::tribble(
-  ~Time, ~Location, ~Topic,
-  "0900-0945",     "Main",      "Welcome, course logistics, Why R?",
-  "0950-1050",     "Main",      "Lecture and live demonstration:\nRStudio tour, R projects, basic R syntax, functions & packages, data import",
-  "1100-1200",     "Breakouts", "Setting up a script, importing data, and reviewing a data frame",
-  "1205-1220",     "Main",      "Discussion"
-)
+knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "missing_puzzle.png")))
+```
 
-outline %>% 
-  flextable::qflextable() %>% 
-  flextable::add_footer_lines("Breaks are incorporated above, but not given their own rows")
+---
+# Learning R is...    
+
+## ...occassional moments of pure joy  
+
+```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "joy.png")))
 ```
 
 
+---
+# Learning R is...    
+
+## ...calling upon your creative side  
+
+```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "artistic.png")))
+```
+
+???
+Many people think about coding as creating artwork... for example creating pottery, writing poems, painting, etc.  
 
 
 ---
-# Data used in this course  
+# Learning R is...    
 
-* Ebola case study  
-     * Surveillance linelist  
-     * Hospital linelists from 5 hospitals  
-     * Aggregated case counts from one hospital  
-     * Case investigation dataset  
-     * Lab dataset  
+## ...joining an adventure with...
 
-* Near the end of the course, you will apply your skills to a COVID dataset  
+--
 
+## ...an inspiring community of millions
 
-.footnote[All data are not real. All files can be found in the course folder.]  
+```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "many_people.png")))
+```
+
+???
+Community of people who support free software, open-access tools, and democratizing and equalizing data science
 
 
 
@@ -418,7 +260,7 @@ class: inverse, center, middle
 class: inverse, center, middle
 
 # Why R? 
-### Tagline here 
+### Tagline here (TODO) 
 
 ---
 # Flexibility 
@@ -611,29 +453,326 @@ See [Epi R Handbook chapter](https://epirhandbook.com/dashboards-with-shiny.html
 - Pulls from dozens of data sources to displace data by countries/regions 
 - There is a section in the handbook on shiny
 
----
-class: inverse, center, middle
 
-# Case study 
-### COVID-19 epidemiological report for Fulton County
 
 ---
-# Setting the scene
+## About Applied Epi
+
+We are **elevating frontline epidemiology**
+
+Our team of **150 practitioners** live in over **35 countries**. 
 
 .pull-left[
-
-- You are a local epidemiologist tasked with automating the weekly situation report  
-  - We are going to reproduce [Fulton County epidemiology reports](https://www.fultoncountyga.gov/covid-19/epidemiology-reports)  
-  - We have pre-packaged an example **R-project** folder 
-  - Walk-through from start to finish 
+- Local government epidemiologists and public health practitioners
+- Emergency responders
+- Data science educators
+- Applied researchers
+- Clinicians
+- GIS experts...
 
 ]
 
 .pull-right[
 
-![](https://github.com/appliedepi/emory_training/blob/master/presentation/images/fulton_report.PNG?raw=true)
+```{r, eval = TRUE, echo = FALSE, out.width = "200%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "team_locations.jpg")))
+```
 
 ]
+
+
+We too have been working overtime on COVID response...<br>*and we believe that accelerating public health's transition to R is really important.*
+
+---
+# A global grassroots movement
+
+Some faces from our broader team
+
+```{r, eval = TRUE, echo = FALSE, out.width = "120%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "team_faces.png")))
+```
+
+
+---
+# Partnerships
+
+We work closely with local and global entities to support people doing the hard work of public health practice
+.pull-left[
+- TEPHINET and the US CDC
+     * A global network of Field Epi Training Programs (FETPs)
+- Médecins sans frontières/<br>Doctors without Borders (MSF)
+- World Health Organization (WHO)
+- EPIET/EUPHEM Alumni Network (EAN)
+]
+
+.pull-right[
+
+```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "partners-blur.jpg")))
+```
+
+]
+
+
+???
+- What makes us different is that we focus on the challenges of applied epi, not academic epi. We emphasize the skills used every day by ground-level epidemiologists. 
+
+
+---
+
+# Our offerings
+
+A comprehensive suite of services
+
+```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "Applied_Epi_Offerings.png")))
+```
+
+
+
+
+
+---
+
+# The Epidemiologist R Handbook
+
+```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "Epi R Handbook Banner Beige 1500x500.png")))
+```
+
+- 50 chapters of free best-practice code examples - available online and offline
+- 130,000 users globally (35,000 in low & middle-income countries)
+- Being translated into 10 languages
+
+
+> *"The epidemiologist greatest companion"* <br> - Epidemiologist, Nigeria CDC
+
+> *"[It] weaves together so much, so succinctly, and so incredibly clearly"* <br> - Epidemiologist, US CDC
+
+
+
+
+
+
+---
+# Your backgrounds
+
+Pre-course survey results, describing the experience levels of course participants
+
+
+
+---
+# Your hopes and fears
+
+Pre-course survey results
+
+Your objectives in learning R 
+Your concerns about learning R
+
+
+
+---
+# Course objectives
+
+We want to help you:  
+
+- Achieve a basic competency to use R for data management and visualization  
+
+--
+
+- Understand how R evolves and be equipped for sustained self-learning  
+
+--
+
+- Have experience applying R to a variety of datasets
+
+--
+
+- Feel comfortable producing basic automated reports with R Markdown  
+
+
+
+---
+# Course format
+
+```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "IntroCourseTimeline2.png")))
+```
+
+35 hours of synchronous time together  
+
+- **Part 1. Classroom instruction** 8 half-day modules
+
+- **Part 2. Sustained support** Five 1.5-hour follow-up group support sessions to help you apply R to your work context
+
+.footnote[We offer subscription **"R Help Desk"** services for further on-call support]
+
+---
+# Course schedule
+
+```{r, echo=FALSE, warning=F, message=F}
+outline <- dplyr::tribble(
+  ~Module, ~Date, ~`Time (GMT)`, ~Topic,
+  "1", "Mo 21/3", "0830-1200", "Welcome, RStudio, basic syntax, data import",
+  "2", "Mo 21/3", "1300-1630", "Cleaning data, core R functions, piping",
+  "3", "Tu 22/3", "0830-1200", "Grouping and summarising data",
+  "4", "Tu 22/3", "1300-1630", "Data visualization with ggplot2",
+  "5", "We 23/3", "0830-1200", "Transforming data with joins and pivots",
+  "6", "We 23/3", "1300-1630", "Heat plots, epi curves, age/sex pyramids, GIS demo",
+  "7", "Th 24/3", "0830-1200", "R Markdown reports",
+  "8", "Th 24/3", "1300-1630", "Real-life exercise"
+)
+
+outline %>% 
+  flextable::qflextable()
+```
+
+- Each module will begin with a brief review of the previous module, and will end with a debrief.  
+- Between modules, you will be asked to write answers to two self-reflective questions in the [Applied Epi Community](www.community.appliedepi.org) class thread.  
+
+
+---
+# Today: objectives & schedule  
+
+**In this module we aim to help you:**  
+* Understand R within the ecosystem of analytical tools  
+* Navigate RStudio and R projects  
+* Write a basic R script to load packages, import data, and view a dataset  
+
+
+```{r, echo=FALSE, warning=F, message=F}
+outline <- dplyr::tribble(
+  ~Time, ~Location, ~Topic,
+  "0900-0945",     "Main",      "Welcome, course logistics, Why R?",
+  "0950-1050",     "Main",      "Lecture and live demonstration:\nRStudio tour, R projects, basic R syntax, functions & packages, data import",
+  "1100-1200",     "Breakouts", "Setting up a script, importing data, and reviewing a data frame",
+  "1205-1220",     "Main",      "Debrief"
+)
+
+outline %>% 
+  flextable::qflextable() %>% 
+  flextable::add_footer_lines("Breaks are incorporated above, but not shown as rows")
+```
+
+??? Note stretch breaks throughout.
+
+
+---
+# Data used in this course  
+
+* Ebola case study  
+     * Surveillance linelist  
+     * Hospital linelists from 5 hospitals  
+     * Aggregated case counts from one hospital  
+     * Case investigation dataset  
+     * Lab dataset  
+
+* Near the end of the course, you will apply your skills to a COVID dataset  
+
+.footnote[All data are not real. All files can be found in the course folder.]  
+
+
+
+---
+# Breakouts and support  
+
+- **General pattern:** Brief explanation -> Demonstration -> Exercises in breakouts  
+
+--
+
+- **Facilitators will rotate** slowly between breakout groups throughout the course.   
+
+--
+
+- **Screen fatigue is real** - you are welcome to turn off your video, but we wish that you keep video on when your breakouts are discussing
+
+--
+
+- **You can post questions in the Q&A tool**. An instructor will be monitoring the questions and will answer them in the chat or verbally.   
+
+--
+
+- **Extra support** will be available during lunch, in a breakout room, for participants who are very confused. 
+
+
+
+
+
+---
+# Agreement with each other 
+
+**Our team will:**  
+
+--
+
+- Create an affirming, supportive learning space
+
+--
+
+- Provide personalized attention, as much as possible  
+
+--
+
+- Allow you space to explore and "tinker" as you learn
+
+--
+
+- Appreciate your expertise
+
+--
+
+**We hope that you will:**  
+
+--
+
+- Reach outside of your comfort zone *(you might discover a new passion!)*  
+
+--
+
+- Try to attend all the sessions, and catch-up if you miss  
+
+--
+
+- Keep trying  
+
+--
+
+- Tell us if you do not understand  
+
+--
+
+- Be supportive of fellow participants  
+
+???
+We are in this course to succeed, together
+
+
+
+
 
 ---
 # testing a learnr embed  
