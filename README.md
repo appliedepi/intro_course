@@ -5,10 +5,10 @@
 
 <img src = "https://github.com/appliedepi/epiRhandbook_eng/raw/master/images/Applied_Epi_logo.png" height = "200" align = "right">
 
-[This website](https://appliedepi.github.io/emory_training) hosts
-training materials for “Introduction to R for Applied Epidemiologists”.
-This course teaches the fundamentals of R for applied epidemiologists
-and public health practitioners.
+[This website](https://appliedepi.github.io/intro_course) hosts training
+materials for “Introduction to R for Applied Epidemiologists”. This
+course teaches the fundamentals of R for applied epidemiologists and
+public health practitioners.
 
 [**Applied Epi**](www.appliedepi.org) is a nonprofit organization
 supporting frontline practitioners through open-course analytical tools,
