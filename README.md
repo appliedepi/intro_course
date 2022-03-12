@@ -16,7 +16,7 @@ training, and support. Our [Epidemiologist R
 Handbook](www.epirhandbook.com) is a free R reference manual which has
 been used by 130,000 people around the world.
 
-# Course resources
+# Course materials
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -58,10 +58,10 @@ Instructors and authors from **Applied Epi** included:
 -   
 -   
 
-Thank you to the Fulton County Board of Health, that provided example
-data (anonymized and scrambled) for the case study.  
-Thank you to the {outbreak} package, which provided the basis for the
-dataset for the Ebola case study.
+The Fulton County Board of Health graciously provided example data
+(anonymized and scrambled) for a case study.  
+The {outbreaks} package formed the basis for the dataset in the Ebola
+case study.
 
 # Terms of Use and License
 
@@ -71,9 +71,8 @@ work is licensed under a
 Commons Attribution-NonCommercial-ShareAlike 4.0 International
 License</a>.
 
-Academic courses and epidemiologist training programs are welcome to use
-this material with their students. If you have questions about your
-intended use, email **<epirhandbook@gmail.com>**.
+Please email <contact@appliedepi.org> if you could like to use these
+materials for an academic course or epidemiologist training program.
 
 # Contribution
 
