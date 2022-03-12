@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 <img src = "https://github.com/appliedepi/epiRhandbook_eng/raw/master/images/Epi%20R%20Handbook%20Banner%20Beige%201500x500.png" width = "800" height="300">
 
 
-# R Demonstration for Emory COVID-19 Response Collaborative  
+# Intro to R for Applied Epidemiology  
 
 <!-- badges: start -->
 <!-- badges: end -->
