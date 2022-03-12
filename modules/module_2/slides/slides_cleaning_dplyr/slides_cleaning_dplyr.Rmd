@@ -1,8 +1,8 @@
 ---
-title: "Cleaning data with R"
-subtitle: "An introduction to {dplyr} and other cleaning tools<br><br>"
-author: '</br>Offered by: [Applied Epi](https:://appliedepi.org) </br> A nonprofit organization elevating frontline epidemiology <br>`r icons::icon_style(icons::fontawesome$brands$twitter, fill = "white")` [@epiRhandbook](https://twitter.com/epiRhandbook) `r icons::icon_style(icons::fontawesome("paper-plane"), fill = "white")` [contact@appliedepi.org](mailto:contact@appliedepi.org)'
-date: "March 2022"
+title: "Introduction to R for Applied Epidemiology"
+subtitle: "<br>Cleaning data with R"
+author: "March 2022"
+date: '[contact@appliedepi.org](mailto:contact@appliedepi.org)'
 output:
   xaringan::moon_reader:
     seal: TRUE
@@ -72,7 +72,7 @@ style_mono_accent(
   link_color = "#48a878", 
   ## add logo to the title page (bit bigger)
   title_slide_background_image = "https://github.com/appliedepi/intro_course/raw/main/images/logo.png", 
-  title_slide_background_position = "90% 90%", 
+  title_slide_background_position = "95% 95%", 
   title_slide_background_size = "25%", 
   ## add logo to all following slides
   background_image = "https://github.com/appliedepi/intro_course/raw/main/images/logo.png", 

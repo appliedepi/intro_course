@@ -1,8 +1,8 @@
 ---
-title: "Welcome"
-subtitle: "Introduction to R for<br>Applied Epidemiology and Public Health<br>"
-author: '</br>Offered by: [Applied Epi](https:://appliedepi.org) </br> A nonprofit organization elevating frontline epidemiology <br>`r icons::icon_style(icons::fontawesome$brands$twitter, fill = "white")` [@epiRhandbook](https://twitter.com/epiRhandbook) `r icons::icon_style(icons::fontawesome("paper-plane"), fill = "white")` [contact@appliedepi.org](mailto:contact@appliedepi.org)'
-date: "March 2022"
+title: "Introduction to R for Applied Epidemiology"
+subtitle: "<br>Grouping and summarizing data"
+author: "March 2022"
+date: '[contact@appliedepi.org](mailto:contact@appliedepi.org)'
 output:
   xaringan::moon_reader:
     seal: TRUE
@@ -70,7 +70,7 @@ style_mono_accent(
   link_color = "#48a878", 
   ## add logo to the title page (bit bigger)
   title_slide_background_image = "https://github.com/appliedepi/intro_course/raw/main/images/logo.png", 
-  title_slide_background_position = "90% 90%", 
+  title_slide_background_position = "95% 95%", 
   title_slide_background_size = "25%", 
   ## add logo to all following slides
   background_image = "https://github.com/appliedepi/intro_course/raw/main/images/logo.png", 
@@ -128,10 +128,7 @@ surv <- rio::import(here::here("data", "surveillance_linelist_clean.rds"))
 
 
 
----
-class: inverse, center, middle
-
-## Grouping data 
+# Grouping data 
 
 
 ```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
@@ -144,13 +141,30 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "grouping", "Gr
 
 
 ---
+# Today: objectives & schedule  
 
-# Daily timeline
+**In this module we aim to help you:**  
+* Gain familiarity of {dplyr} functions used to clean public health data  
+* Apply a series of functions to a data frame using the pipe operator  
+* Begin writing an R script to analyze outbreak data  
 
 
----
+```{r, echo=FALSE, warning=F, message=F}
+outline <- dplyr::tribble(
+  ~Time, ~Location, ~Topic,
+  "0900-0945",     "Main",      "TODO",
+  "0950-1050",     "Main",      "TODO",
+  "1100-1200",     "Breakouts", "TODO",
+  "1205-1220",     "Main",      "TODO"
+)
 
-# Objectives  
+outline %>% 
+  flextable::qflextable() %>% 
+  flextable::add_footer_lines("Breaks are incorporated above, but not shown as rows")
+```
+
+??? Note stretch breaks throughout.
+
 
 
 
@@ -169,11 +183,11 @@ class: inverse, center, middle
 
 ## {tidyverse} - flexibility  
 
-```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
+```{r, eval = TRUE, echo = FALSE, out.width = "65%"}
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
 
-knitr::include_graphics(xfun::relative_path(here::here("images", "grouping", "Grouping_1500x500.png")))
+knitr::include_graphics(xfun::relative_path(here::here("images", "grouping", "flexibility.png")))
 ```
 
 
@@ -517,11 +531,11 @@ class: inverse, center, middle
 
 ## {janitor} - speed  
 
-```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
+```{r, eval = TRUE, echo = FALSE, out.width = "65%"}
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
 
-knitr::include_graphics(xfun::relative_path(here::here("images", "grouping", "Grouping_1500x500.png")))
+knitr::include_graphics(xfun::relative_path(here::here("images", "grouping", "simple_table.png")))
 ```
 
 
@@ -815,11 +829,11 @@ class: inverse, center, middle
 
 ## {gtsummary} - beauty  
 
-```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
+```{r, eval = TRUE, echo = FALSE, out.width = "65%"}
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
 
-knitr::include_graphics(xfun::relative_path(here::here("images", "grouping", "Grouping_1500x500.png")))
+knitr::include_graphics(xfun::relative_path(here::here("images", "grouping", "beauty.png")))
 ```
 
 
