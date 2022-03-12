@@ -45,7 +45,7 @@ labels](https://appliedepi.github.io/intro_course/modules/module_4/slides/slides
 
 **Module 7:**
 
-**Module 7:**
+**Module 8:**
 
 Please note that all these training materials use *fake example data* in
 which no person is identifiable and the actual values have been
