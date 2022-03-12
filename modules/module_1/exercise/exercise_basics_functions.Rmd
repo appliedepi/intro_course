@@ -22,6 +22,11 @@ description: >
 library(learnr)
 library(gradethis)
 library(etude)      # help functions for gradethis
+library(basked)
+library(rio)
+library(janitor)
+library(flair)
+
 
 # Cran packages
 pacman::p_load(

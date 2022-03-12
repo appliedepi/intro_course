@@ -161,8 +161,8 @@ surv %&gt;%
 ## 5        East III  12
 ## 6  Mountain Rural 203
 ## 7          West I  17
-## 8         West II 125
-## 9        West III 114
+## 8         West II 126
+## 9        West III 115
 ## 10           &lt;NA&gt;   2
 ```
 
@@ -207,9 +207,9 @@ surv %&gt;%
 ## 20         West I   male   5
 ## 21         West I   &lt;NA&gt;   2
 ## 22        West II female  60
-## 23        West II   male  62
+## 23        West II   male  63
 ## 24        West II   &lt;NA&gt;   3
-## 25       West III female  52
+## 25       West III female  53
 ## 26       West III   male  56
 ## 27       West III   &lt;NA&gt;   6
 ## 28           &lt;NA&gt; female   1
@@ -261,22 +261,22 @@ If printed, the `Groups:` are listed above the data.
 
 
 ```
-## # A tibble: 661 x 23
+## # A tibble: 663 x 27
 ## # Groups:   district [10]
-##    case_id date_onset gender   age age_unit hospital      wt_kg ht_cm fever chills cough aches vomit  temp   bmi
-##    &lt;chr&gt;   &lt;date&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;         &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 86340d  2014-10-30 female     1 years    Port Hospital    18    29 yes   no     yes   no    no     39.4 214. 
-##  2 92d002  2014-08-16 female    16 years    &lt;NA&gt;             59   133 yes   no     yes   no    yes    39.3  33.4
-##  3 544bd1  2014-08-29 female    10 years    &lt;NA&gt;             39   106 yes   no     yes   no    yes    39.3  34.7
-##  4 6056ba  2014-10-20 female     0 years    &lt;NA&gt;             NA    24 yes   yes    yes   no    yes    38.6  NA  
-##  5 eb5aeb  2014-10-28 female     8 years    Port Hospital    34   104 yes   no     yes   no    yes    38.2  31.4
-##  6 e64e04  2014-10-06 female     7 years    &lt;NA&gt;             32    91 no    no     yes   yes   yes    36.5  38.6
-##  7 5a65bb  2014-09-21 male       4 years    Port Hospital    41    74 yes   yes    yes   no    yes    39.1  74.9
-##  8 2ae019  2014-05-06 male      37 years    Other            81   167 yes   no     yes   no    no     39.5  29.0
-##  9 7ca4c0  2014-09-29 male      11 years    Port Hospital    56   163 yes   no     yes   no    no     38.9  21.1
-## 10 699d82  2014-11-27 male      27 years    Port Hospital    76   178 yes   yes    yes   no    no     39.4  24.0
-## # ... with 651 more rows, and 8 more variables: district_res &lt;chr&gt;, admin3pcod &lt;chr&gt;, district_det &lt;chr&gt;,
-## #   case_def &lt;chr&gt;, age_years &lt;dbl&gt;, age_cat &lt;fct&gt;, moved &lt;lgl&gt;, district &lt;chr&gt;
+##    case_id date_onset gender   age age_unit hospital      wt_kg ht_cm fever chills cough aches vomit  temp   bmi district_res   admin3pcod district_det   case_def
+##    &lt;chr&gt;   &lt;date&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;         &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;      &lt;chr&gt;          &lt;chr&gt;   
+##  1 86340d  2014-10-30 female     1 years    Port Hospital    18    29 yes   no     yes   no    no     39.4 214.  Mountain Rural SL040102   Mountain Rural Confirm~
+##  2 92d002  2014-08-16 female    16 years    &lt;NA&gt;             59   133 yes   no     yes   no    yes    39.3  33.4 Mountain Rural SL040102   Mountain Rural Confirm~
+##  3 544bd1  2014-08-29 female    10 years    &lt;NA&gt;             39   106 yes   no     yes   no    yes    39.3  34.7 East II        SL040204   East II        Confirm~
+##  4 6056ba  2014-10-20 female     0 years    &lt;NA&gt;             NA    24 yes   yes    yes   no    yes    38.6  NA   West III       SL040208   West III       Confirm~
+##  5 eb5aeb  2014-10-28 female     8 years    Port Hospital    34   104 yes   no     yes   no    yes    38.2  31.4 West III       SL040208   West III       Confirm~
+##  6 e64e04  2014-10-06 female     7 years    &lt;NA&gt;             32    91 no    no     yes   yes   yes    36.5  38.6 Mountain Rural SL040102   Mountain Rural Confirm~
+##  7 5a65bb  2014-09-21 male       4 years    Port Hospital    41    74 yes   yes    yes   no    yes    39.1  74.9 Mountain Rural SL040102   Mountain Rural Confirm~
+##  8 2ae019  2014-05-06 male      37 years    Other            81   167 yes   no     yes   no    no     39.5  29.0 West III       SL040208   West III       Confirm~
+##  9 7ca4c0  2014-09-29 male      11 years    Port Hospital    56   163 yes   no     yes   no    no     38.9  21.1 West III       SL040208   West III       Confirm~
+## 10 699d82  2014-11-27 male      27 years    Port Hospital    76   178 yes   yes    yes   no    no     39.4  24.0 Mountain Rural SL040102   Mountain Rural Confirm~
+## # ... with 653 more rows, and 8 more variables: date_report &lt;date&gt;, week_onset &lt;date&gt;, week_report &lt;date&gt;, diff &lt;drtn&gt;, age_years &lt;dbl&gt;, age_cat &lt;fct&gt;,
+## #   moved &lt;lgl&gt;, district &lt;chr&gt;
 ```
 
 
@@ -349,8 +349,8 @@ Within the parentheses, *create columns in a **new**, summarized dataset.*
 ##  5 East III           12
 ##  6 Mountain Rural    203
 ##  7 West I             17
-##  8 West II           125
-##  9 West III          114
+##  8 West II           126
+##  9 West III          115
 ## 10 &lt;NA&gt;                2
 
 ```
@@ -382,8 +382,8 @@ Within the parentheses, *create columns in a **new**, summarized dataset.*
 ##  5 East III           12    19.7
 ##  6 Mountain Rural    203    14  
 ##  7 West I             17    13.4
-##  8 West II           125    17.7
-##  9 West III          114    15.3
+##  8 West II           126    17.8
+##  9 West III          115    15.2
 ## 10 &lt;NA&gt;                2     9.5
 
 ```
@@ -415,8 +415,8 @@ Within the parentheses, *create columns in a **new**, summarized dataset.*
 ##  5 East III           12    19.7 2014-11-14
 ##  6 Mountain Rural    203    14   2014-11-28
 ##  7 West I             17    13.4 2014-11-14
-##  8 West II           125    17.7 2014-11-28
-##  9 West III          114    15.3 2014-11-27
+##  8 West II           126    17.8 2014-11-28
+##  9 West III          115    15.2 2014-11-27
 ## 10 &lt;NA&gt;                2     9.5 2014-10-23
 
 ```
@@ -452,8 +452,8 @@ surv %&gt;%
 ##  5 Central I          37    20.7 2014-11-27
 ##  6 Central II         44    17.3 2014-11-26
 ##  7 East II            76    16.6 2014-11-26
-##  8 West III          114    15.3 2014-11-27
-##  9 West II           125    17.7 2014-11-28
+##  8 West III          115    15.2 2014-11-27
+##  9 West II           126    17.8 2014-11-28
 ## 10 Mountain Rural    203    14   2014-11-28
 ```
 
@@ -482,8 +482,8 @@ surv %&gt;%
 ##    district       n_rows age_avg max_onset 
 ##    &lt;chr&gt;           &lt;int&gt;   &lt;dbl&gt; &lt;date&gt;    
 ##  1 Mountain Rural    203    14   2014-11-28
-##  2 West II           125    17.7 2014-11-28
-##  3 West III          114    15.3 2014-11-27
+##  2 West II           126    17.8 2014-11-28
+##  3 West III          115    15.2 2014-11-27
 ##  4 East II            76    16.6 2014-11-26
 ##  5 Central II         44    17.3 2014-11-26
 ##  6 Central I          37    20.7 2014-11-27
@@ -512,22 +512,22 @@ surv %&gt;%
 ```
 
 ```
-## # A tibble: 661 x 23
+## # A tibble: 663 x 27
 ## # Groups:   hospital [6]
-##    case_id date_onset gender   age age_unit hospital      wt_kg ht_cm fever chills cough aches vomit  temp   bmi
-##    &lt;chr&gt;   &lt;date&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;         &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 86340d  2014-10-30 female     1 years    Port Hospital    18    29 yes   no     yes   no    no     39.4 214. 
-##  2 92d002  2014-08-16 female    16 years    &lt;NA&gt;             59   133 yes   no     yes   no    yes    39.3  33.4
-##  3 544bd1  2014-08-29 female    10 years    &lt;NA&gt;             39   106 yes   no     yes   no    yes    39.3  34.7
-##  4 6056ba  2014-10-20 female     0 years    &lt;NA&gt;             NA    24 yes   yes    yes   no    yes    38.6  NA  
-##  5 eb5aeb  2014-10-28 female     8 years    Port Hospital    34   104 yes   no     yes   no    yes    38.2  31.4
-##  6 e64e04  2014-10-06 female     7 years    &lt;NA&gt;             32    91 no    no     yes   yes   yes    36.5  38.6
-##  7 5a65bb  2014-09-21 male       4 years    Port Hospital    41    74 yes   yes    yes   no    yes    39.1  74.9
-##  8 2ae019  2014-05-06 male      37 years    Other            81   167 yes   no     yes   no    no     39.5  29.0
-##  9 7ca4c0  2014-09-29 male      11 years    Port Hospital    56   163 yes   no     yes   no    no     38.9  21.1
-## 10 699d82  2014-11-27 male      27 years    Port Hospital    76   178 yes   yes    yes   no    no     39.4  24.0
-## # ... with 651 more rows, and 8 more variables: district_res &lt;chr&gt;, admin3pcod &lt;chr&gt;, district_det &lt;chr&gt;,
-## #   case_def &lt;chr&gt;, age_years &lt;dbl&gt;, age_cat &lt;fct&gt;, moved &lt;lgl&gt;, district &lt;chr&gt;
+##    case_id date_onset gender   age age_unit hospital      wt_kg ht_cm fever chills cough aches vomit  temp   bmi district_res   admin3pcod district_det   case_def
+##    &lt;chr&gt;   &lt;date&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;         &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;      &lt;chr&gt;          &lt;chr&gt;   
+##  1 86340d  2014-10-30 female     1 years    Port Hospital    18    29 yes   no     yes   no    no     39.4 214.  Mountain Rural SL040102   Mountain Rural Confirm~
+##  2 92d002  2014-08-16 female    16 years    &lt;NA&gt;             59   133 yes   no     yes   no    yes    39.3  33.4 Mountain Rural SL040102   Mountain Rural Confirm~
+##  3 544bd1  2014-08-29 female    10 years    &lt;NA&gt;             39   106 yes   no     yes   no    yes    39.3  34.7 East II        SL040204   East II        Confirm~
+##  4 6056ba  2014-10-20 female     0 years    &lt;NA&gt;             NA    24 yes   yes    yes   no    yes    38.6  NA   West III       SL040208   West III       Confirm~
+##  5 eb5aeb  2014-10-28 female     8 years    Port Hospital    34   104 yes   no     yes   no    yes    38.2  31.4 West III       SL040208   West III       Confirm~
+##  6 e64e04  2014-10-06 female     7 years    &lt;NA&gt;             32    91 no    no     yes   yes   yes    36.5  38.6 Mountain Rural SL040102   Mountain Rural Confirm~
+##  7 5a65bb  2014-09-21 male       4 years    Port Hospital    41    74 yes   yes    yes   no    yes    39.1  74.9 Mountain Rural SL040102   Mountain Rural Confirm~
+##  8 2ae019  2014-05-06 male      37 years    Other            81   167 yes   no     yes   no    no     39.5  29.0 West III       SL040208   West III       Confirm~
+##  9 7ca4c0  2014-09-29 male      11 years    Port Hospital    56   163 yes   no     yes   no    no     38.9  21.1 West III       SL040208   West III       Confirm~
+## 10 699d82  2014-11-27 male      27 years    Port Hospital    76   178 yes   yes    yes   no    no     39.4  24.0 Mountain Rural SL040102   Mountain Rural Confirm~
+## # ... with 653 more rows, and 8 more variables: date_report &lt;date&gt;, week_onset &lt;date&gt;, week_report &lt;date&gt;, diff &lt;drtn&gt;, age_years &lt;dbl&gt;, age_cat &lt;fct&gt;,
+## #   moved &lt;lgl&gt;, district &lt;chr&gt;
 ```
 ???
 Note that we are back to the original linelist here, not a summarised dataframe  
@@ -548,22 +548,22 @@ surv %&gt;%
 ```
 
 ```
-## # A tibble: 661 x 23
+## # A tibble: 663 x 27
 ## # Groups:   hospital [6]
-##    case_id   date_onset gender   age age_unit hospital         wt_kg ht_cm fever chills cough aches vomit  temp   bmi
-##    &lt;chr&gt;     &lt;date&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;            &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 62638     2014-07-25 male      13 years    Central Hospital    61   125 no    no     yes   no    yes    37.5  39.0
-##  2 ae4a36    2014-07-25 female     7 years    Central Hospital    32    87 yes   no     no    yes   no     38.7  42.3
-##  3 5b1d5e    2014-08-06 female    22 years    Central Hospital    65   151 yes   no     yes   no    yes    38.4  28.5
-##  4 9.20E+130 2014-08-10 female    12 years    Central Hospital    51   125 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;   36.6  32.6
-##  5 f13395    2014-08-13 female     7 years    Central Hospital    43    96 yes   no     no    no    no     39.9  46.7
-##  6 b016e0    2014-08-14 male      45 years    Central Hospital    97   217 yes   no     yes   no    no     38.4  20.6
-##  7 7d25a6    2014-08-16 &lt;NA&gt;      27 years    Central Hospital    67   157 no    no     yes   no    yes    37.9  27.2
-##  8 0afd15    2014-08-27 male      17 years    Central Hospital    60   165 yes   no     yes   no    yes    39.1  22.0
-##  9 5a7acc    2014-09-01 female    13 years    Central Hospital    63   148 no    yes    yes   yes   yes    36.2  28.8
-## 10 bf302f    2014-09-08 male      14 years    Central Hospital    64   156 yes   no     yes   no    yes    39    26.3
-## # ... with 651 more rows, and 8 more variables: district_res &lt;chr&gt;, admin3pcod &lt;chr&gt;, district_det &lt;chr&gt;,
-## #   case_def &lt;chr&gt;, age_years &lt;dbl&gt;, age_cat &lt;fct&gt;, moved &lt;lgl&gt;, district &lt;chr&gt;
+##    case_id   date_onset gender   age age_unit hospital        wt_kg ht_cm fever chills cough aches vomit  temp   bmi district_res admin3pcod district_det case_def
+##    &lt;chr&gt;     &lt;date&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;           &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;   
+##  1 62638     2014-07-25 male      13 years    Central Hospit~    61   125 no    no     yes   no    yes    37.5  39.0 West III     SL040208   West III     Confirm~
+##  2 ae4a36    2014-07-25 female     7 years    Central Hospit~    32    87 yes   no     no    yes   no     38.7  42.3 East I       SL040203   East I       Confirm~
+##  3 5b1d5e    2014-08-06 female    22 years    Central Hospit~    65   151 yes   no     yes   no    yes    38.4  28.5 Central I    SL040201   Central I    Confirm~
+##  4 9.20E+130 2014-08-10 female    12 years    Central Hospit~    51   125 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;   36.6  32.6 West II      SL040207   West II      Confirm~
+##  5 f13395    2014-08-13 female     7 years    Central Hospit~    43    96 yes   no     no    no    no     39.9  46.7 Mountain Ru~ SL040102   Mountain Ru~ Confirm~
+##  6 b016e0    2014-08-14 male      45 years    Central Hospit~    97   217 yes   no     yes   no    no     38.4  20.6 West II      SL040207   West II      Confirm~
+##  7 7d25a6    2014-08-16 &lt;NA&gt;      27 years    Central Hospit~    67   157 no    no     yes   no    yes    37.9  27.2 Central I    SL040201   Central I    Confirm~
+##  8 0afd15    2014-08-27 male      17 years    Central Hospit~    60   165 yes   no     yes   no    yes    39.1  22.0 Central I    SL040201   Central I    Confirm~
+##  9 5a7acc    2014-09-01 female    13 years    Central Hospit~    63   148 no    yes    yes   yes   yes    36.2  28.8 West II      SL040207   West II      Confirm~
+## 10 bf302f    2014-09-08 male      14 years    Central Hospit~    64   156 yes   no     yes   no    yes    39    26.3 West II      SL040207   West II      Confirm~
+## # ... with 653 more rows, and 8 more variables: date_report &lt;date&gt;, week_onset &lt;date&gt;, week_report &lt;date&gt;, diff &lt;drtn&gt;, age_years &lt;dbl&gt;, age_cat &lt;fct&gt;,
+## #   moved &lt;lgl&gt;, district &lt;chr&gt;
 ```
 
 ---
@@ -581,22 +581,22 @@ surv %&gt;%
 ```
 
 ```
-## # A tibble: 661 x 23
+## # A tibble: 663 x 27
 ## # Groups:   hospital [6]
-##    case_id date_onset gender   age age_unit hospital         wt_kg ht_cm fever chills cough aches vomit  temp   bmi
-##    &lt;chr&gt;   &lt;date&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;            &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 d05a15  2014-11-26 female     8 years    Central Hospital    33   118 yes   yes    yes   no    no     38.5  23.7
-##  2 0d8a0a  2014-11-24 male      27 years    Central Hospital    60   152 yes   no     no    no    yes    40    26.0
-##  3 a4585b  2014-11-23 male      23 years    Central Hospital    65   162 yes   no     yes   no    no     39.6  24.8
-##  4 e5e4e7  2014-11-22 female    12 years    Central Hospital    53   133 yes   no     yes   no    yes    38.7  30.0
-##  5 f52668  2014-11-18 male      12 years    Central Hospital    64   154 yes   no     yes   no    no     38.8  27.0
-##  6 6f8014  2014-11-17 male      16 years    Central Hospital    63   141 yes   no     yes   no    no     38.7  31.7
-##  7 e88337  2014-11-16 male      41 years    Central Hospital    87   211 yes   yes    yes   no    yes    39.4  19.5
-##  8 da8bdb  2014-11-14 female    12 years    Central Hospital    51   140 yes   yes    yes   no    yes    38.7  26.0
-##  9 bc475c  2014-11-08 female     4 years    Central Hospital    35    63 yes   no     yes   no    yes    39.4  88.2
-## 10 9c5424  2014-11-07 male       1 years    Central Hospital    17    50 yes   no     yes   no    yes    38.8  68  
-## # ... with 651 more rows, and 8 more variables: district_res &lt;chr&gt;, admin3pcod &lt;chr&gt;, district_det &lt;chr&gt;,
-## #   case_def &lt;chr&gt;, age_years &lt;dbl&gt;, age_cat &lt;fct&gt;, moved &lt;lgl&gt;, district &lt;chr&gt;
+##    case_id date_onset gender   age age_unit hospital         wt_kg ht_cm fever chills cough aches vomit  temp   bmi district_res  admin3pcod district_det case_def
+##    &lt;chr&gt;   &lt;date&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;            &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;   
+##  1 d05a15  2014-11-26 female     8 years    Central Hospital    33   118 yes   yes    yes   no    no     38.5  23.7 Central II    SL040202   Central II   Confirm~
+##  2 0d8a0a  2014-11-24 male      27 years    Central Hospital    60   152 yes   no     no    no    yes    40    26.0 West II       SL040207   West II      Confirm~
+##  3 a4585b  2014-11-23 male      23 years    Central Hospital    65   162 yes   no     yes   no    no     39.6  24.8 Central I     SL040201   Central I    Confirm~
+##  4 e5e4e7  2014-11-22 female    12 years    Central Hospital    53   133 yes   no     yes   no    yes    38.7  30.0 East II       SL040204   East II      Confirm~
+##  5 f52668  2014-11-18 male      12 years    Central Hospital    64   154 yes   no     yes   no    no     38.8  27.0 Mountain Rur~ SL040102   Mountain Ru~ Confirm~
+##  6 6f8014  2014-11-17 male      16 years    Central Hospital    63   141 yes   no     yes   no    no     38.7  31.7 West II       SL040207   West II      Confirm~
+##  7 e88337  2014-11-16 male      41 years    Central Hospital    87   211 yes   yes    yes   no    yes    39.4  19.5 Mountain Rur~ SL040102   Mountain Ru~ Confirm~
+##  8 da8bdb  2014-11-14 female    12 years    Central Hospital    51   140 yes   yes    yes   no    yes    38.7  26.0 Mountain Rur~ SL040102   Mountain Ru~ Confirm~
+##  9 bc475c  2014-11-08 female     4 years    Central Hospital    35    63 yes   no     yes   no    yes    39.4  88.2 West II       SL040207   West II      Confirm~
+## 10 9c5424  2014-11-07 male       1 years    Central Hospital    17    50 yes   no     yes   no    yes    38.8  68   West II       SL040207   West II      Confirm~
+## # ... with 653 more rows, and 8 more variables: date_report &lt;date&gt;, week_onset &lt;date&gt;, week_report &lt;date&gt;, diff &lt;drtn&gt;, age_years &lt;dbl&gt;, age_cat &lt;fct&gt;,
+## #   moved &lt;lgl&gt;, district &lt;chr&gt;
 ```
 
 
@@ -651,16 +651,16 @@ surv %&gt;%
 
 ```
 ##        district   n     percent valid_percent
-##       Central I  37 0.055975794    0.05614568
-##      Central II  44 0.066565809    0.06676783
-##          East I  31 0.046898638    0.04704097
-##         East II  76 0.114977307    0.11532625
-##        East III  12 0.018154312    0.01820941
-##  Mountain Rural 203 0.307110439    0.30804249
-##          West I  17 0.025718608    0.02579666
-##         West II 125 0.189107413    0.18968134
-##        West III 114 0.172465961    0.17298938
-##            &lt;NA&gt;   2 0.003025719            NA
+##       Central I  37 0.055806938    0.05597579
+##      Central II  44 0.066365008    0.06656581
+##          East I  31 0.046757164    0.04689864
+##         East II  76 0.114630468    0.11497731
+##        East III  12 0.018099548    0.01815431
+##  Mountain Rural 203 0.306184012    0.30711044
+##          West I  17 0.025641026    0.02571861
+##         West II 126 0.190045249    0.19062027
+##        West III 115 0.173453997    0.17397882
+##            &lt;NA&gt;   2 0.003016591            NA
 ```
 
 ]
@@ -686,17 +686,17 @@ surv %&gt;%
 
 ```
 ##        district   n     percent valid_percent
-##       Central I  37 0.055975794    0.05614568
-##      Central II  44 0.066565809    0.06676783
-##          East I  31 0.046898638    0.04704097
-##         East II  76 0.114977307    0.11532625
-##        East III  12 0.018154312    0.01820941
-##  Mountain Rural 203 0.307110439    0.30804249
-##          West I  17 0.025718608    0.02579666
-##         West II 125 0.189107413    0.18968134
-##        West III 114 0.172465961    0.17298938
-##            &lt;NA&gt;   2 0.003025719            NA
-##           Total 661 1.000000000    1.00000000
+##       Central I  37 0.055806938    0.05597579
+##      Central II  44 0.066365008    0.06656581
+##          East I  31 0.046757164    0.04689864
+##         East II  76 0.114630468    0.11497731
+##        East III  12 0.018099548    0.01815431
+##  Mountain Rural 203 0.306184012    0.30711044
+##          West I  17 0.025641026    0.02571861
+##         West II 126 0.190045249    0.19062027
+##        West III 115 0.173453997    0.17397882
+##            &lt;NA&gt;   2 0.003016591            NA
+##           Total 663 1.000000000    1.00000000
 ```
 
 ]
@@ -727,16 +727,16 @@ surv %&gt;%
 ```
 ##        district   n percent valid_percent
 ##       Central I  37    5.6%          5.6%
-##      Central II  44    6.7%          6.7%
+##      Central II  44    6.6%          6.7%
 ##          East I  31    4.7%          4.7%
 ##         East II  76   11.5%         11.5%
 ##        East III  12    1.8%          1.8%
-##  Mountain Rural 203   30.7%         30.8%
+##  Mountain Rural 203   30.6%         30.7%
 ##          West I  17    2.6%          2.6%
-##         West II 125   18.9%         19.0%
-##        West III 114   17.2%         17.3%
+##         West II 126   19.0%         19.1%
+##        West III 115   17.3%         17.4%
 ##            &lt;NA&gt;   2    0.3%             -
-##           Total 661  100.0%        100.0%
+##           Total 663  100.0%        100.0%
 ```
 
 ]
@@ -772,8 +772,8 @@ surv %&gt;%
 ##        East III      4    7   1
 ##  Mountain Rural    111   85   7
 ##          West I     10    5   2
-##         West II     60   62   3
-##        West III     52   56   6
+##         West II     60   63   3
+##        West III     53   56   6
 ##            &lt;NA&gt;      1    1   0
 ```
 
@@ -811,8 +811,8 @@ Remove missing values from the table.
 ##        East III      4    7
 ##  Mountain Rural    111   85
 ##          West I     10    5
-##         West II     60   62
-##        West III     52   56
+##         West II     60   63
+##        West III     53   56
 ```
 
 ]
@@ -850,9 +850,9 @@ Add totals for both rows and columns.
 ##        East III      4    7    11
 ##  Mountain Rural    111   85   196
 ##          West I     10    5    15
-##         West II     60   62   122
-##        West III     52   56   108
-##           Total    326  308   634
+##         West II     60   63   123
+##        West III     53   56   109
+##           Total    327  309   636
 ```
 
 ]
@@ -890,8 +890,8 @@ Add formatted percents with these two commands.
 ##        East III  36.4% 63.6% 100.0%
 ##  Mountain Rural  56.6% 43.4% 100.0%
 ##          West I  66.7% 33.3% 100.0%
-##         West II  49.2% 50.8% 100.0%
-##        West III  48.1% 51.9% 100.0%
+##         West II  48.8% 51.2% 100.0%
+##        West III  48.6% 51.4% 100.0%
 ##           Total  51.4% 48.6% 100.0%
 ```
 
@@ -932,7 +932,7 @@ Set the number of decimal digits.
 ##  Mountain Rural    57%  43%  100%
 ##          West I    67%  33%  100%
 ##         West II    49%  51%  100%
-##        West III    48%  52%  100%
+##        West III    49%  51%  100%
 ##           Total    51%  49%  100%
 ```
 
@@ -962,7 +962,7 @@ surv %&gt;%
 
 .pull-right[
 
-&lt;template id="2305bbad-679e-49a1-8156-f328bfbfc83a"&gt;&lt;style&gt;
+&lt;template id="fb6c8ce2-ef62-4522-bd50-7f3a4326c8e5"&gt;&lt;style&gt;
 .tabwid table{
   border-spacing:0px !important;
   border-collapse:collapse;
@@ -996,11 +996,11 @@ surv %&gt;%
 .tabwid table tr {
 background-color: transparent;
 }
-&lt;/style&gt;&lt;div class="tabwid"&gt;&lt;style&gt;.cl-c5a5f5a6{}.cl-c59be214{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-c59be215{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-c59be216{width:53.5pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59be217{width:44.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59be218{width:95.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59be219{width:48.7pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59be21a{width:48.7pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59be21b{width:95.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59be21c{width:53.5pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59be21d{width:44.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59be21e{width:95.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59ca6fe{width:53.5pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59ca6ff{width:44.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c59ca700{width:48.7pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-c5a5f5a6'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be21e"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;district&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59ca6fe"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;female&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59ca6ff"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;male&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59ca700"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;Total&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be218"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;Central I&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be216"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;54%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be217"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;46%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be219"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be218"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;Central II&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be216"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;49%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be217"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;51%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be219"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be218"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;East I&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be216"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;41%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be217"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;59%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be219"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be218"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;East II&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be216"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;49%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be217"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;51%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be219"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be218"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;East III&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be216"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;36%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be217"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;64%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be219"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be218"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;Mountain Rural&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be216"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;57%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be217"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;43%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be219"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be218"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;West I&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be216"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;67%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be217"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;33%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be219"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be218"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;West II&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be216"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;49%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be217"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;51%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be219"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be218"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;West III&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be216"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;48%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be217"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;52%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be219"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-c59be21b"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;Total&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be21c"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;51%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be21d"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;49%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-c59be21a"&gt;&lt;p class="cl-c59be215"&gt;&lt;span class="cl-c59be214"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/template&gt;
-&lt;div class="flextable-shadow-host" id="404a7721-fac9-42bd-ba1b-3f5221a13342"&gt;&lt;/div&gt;
+&lt;/style&gt;&lt;div class="tabwid"&gt;&lt;style&gt;.cl-31e5dafa{}.cl-31dd7612{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-31dd7613{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-31ddc432{width:53.5pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-31ddc433{width:44.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-31ddc434{width:95.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-31ddc435{width:48.7pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-31ddc436{width:48.7pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-31ddc437{width:95.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-31ddc438{width:53.5pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-31ddc439{width:44.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-31ddc43a{width:95.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-31ddc43b{width:53.5pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-31ddc43c{width:44.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-31ddeb42{width:48.7pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-31e5dafa'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-31ddc43a"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;district&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc43b"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;female&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc43c"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;male&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddeb42"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;Total&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-31ddc434"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;Central I&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc432"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;54%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc433"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;46%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc435"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-31ddc434"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;Central II&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc432"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;49%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc433"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;51%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc435"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-31ddc434"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;East I&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc432"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;41%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc433"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;59%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc435"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-31ddc434"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;East II&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc432"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;49%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc433"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;51%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc435"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-31ddc434"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;East III&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc432"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;36%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc433"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;64%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc435"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-31ddc434"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;Mountain Rural&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc432"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;57%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc433"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;43%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc435"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-31ddc434"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;West I&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc432"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;67%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc433"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;33%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc435"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-31ddc434"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;West II&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc432"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;49%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc433"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;51%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc435"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-31ddc434"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;West III&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc432"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;49%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc433"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;51%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc435"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-31ddc437"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;Total&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc438"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;51%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc439"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;49%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-31ddc436"&gt;&lt;p class="cl-31dd7613"&gt;&lt;span class="cl-31dd7612"&gt;100%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/template&gt;
+&lt;div class="flextable-shadow-host" id="64bf7166-0eb0-41d0-83c1-efe26b19bf69"&gt;&lt;/div&gt;
 &lt;script&gt;
-var dest = document.getElementById("404a7721-fac9-42bd-ba1b-3f5221a13342");
-var template = document.getElementById("2305bbad-679e-49a1-8156-f328bfbfc83a");
+var dest = document.getElementById("64bf7166-0eb0-41d0-83c1-efe26b19bf69");
+var template = document.getElementById("fb6c8ce2-ef62-4522-bd50-7f3a4326c8e5");
 var caption = template.content.querySelector("caption");
 if(caption) {
   caption.style.cssText = "display:block;text-align:center;";
@@ -1095,12 +1095,12 @@ For demonstration:
 
 .pull-right[
 
-<div id="znghkcoyfd" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="pshlvisffn" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#znghkcoyfd .gt_table {
+#pshlvisffn .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1125,7 +1125,7 @@ For demonstration:
   border-left-color: #D3D3D3;
 }
 
-#znghkcoyfd .gt_heading {
+#pshlvisffn .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1137,7 +1137,7 @@ For demonstration:
   border-right-color: #D3D3D3;
 }
 
-#znghkcoyfd .gt_title {
+#pshlvisffn .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1149,7 +1149,7 @@ For demonstration:
   border-bottom-width: 0;
 }
 
-#znghkcoyfd .gt_subtitle {
+#pshlvisffn .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1161,13 +1161,13 @@ For demonstration:
   border-top-width: 0;
 }
 
-#znghkcoyfd .gt_bottom_border {
+#pshlvisffn .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#znghkcoyfd .gt_col_headings {
+#pshlvisffn .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1182,7 +1182,7 @@ For demonstration:
   border-right-color: #D3D3D3;
 }
 
-#znghkcoyfd .gt_col_heading {
+#pshlvisffn .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1202,7 +1202,7 @@ For demonstration:
   overflow-x: hidden;
 }
 
-#znghkcoyfd .gt_column_spanner_outer {
+#pshlvisffn .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1214,15 +1214,15 @@ For demonstration:
   padding-right: 4px;
 }
 
-#znghkcoyfd .gt_column_spanner_outer:first-child {
+#pshlvisffn .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#znghkcoyfd .gt_column_spanner_outer:last-child {
+#pshlvisffn .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#znghkcoyfd .gt_column_spanner {
+#pshlvisffn .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1234,7 +1234,7 @@ For demonstration:
   width: 100%;
 }
 
-#znghkcoyfd .gt_group_heading {
+#pshlvisffn .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1259,7 +1259,7 @@ For demonstration:
   vertical-align: middle;
 }
 
-#znghkcoyfd .gt_empty_group_heading {
+#pshlvisffn .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1274,15 +1274,15 @@ For demonstration:
   vertical-align: middle;
 }
 
-#znghkcoyfd .gt_from_md > :first-child {
+#pshlvisffn .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#znghkcoyfd .gt_from_md > :last-child {
+#pshlvisffn .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#znghkcoyfd .gt_row {
+#pshlvisffn .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1301,7 +1301,7 @@ For demonstration:
   overflow-x: hidden;
 }
 
-#znghkcoyfd .gt_stub {
+#pshlvisffn .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1314,7 +1314,7 @@ For demonstration:
   padding-right: 5px;
 }
 
-#znghkcoyfd .gt_stub_row_group {
+#pshlvisffn .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1328,11 +1328,11 @@ For demonstration:
   vertical-align: top;
 }
 
-#znghkcoyfd .gt_row_group_first td {
+#pshlvisffn .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#znghkcoyfd .gt_summary_row {
+#pshlvisffn .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1342,16 +1342,16 @@ For demonstration:
   padding-right: 5px;
 }
 
-#znghkcoyfd .gt_first_summary_row {
+#pshlvisffn .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#znghkcoyfd .gt_first_summary_row.thick {
+#pshlvisffn .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#znghkcoyfd .gt_last_summary_row {
+#pshlvisffn .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1361,7 +1361,7 @@ For demonstration:
   border-bottom-color: #D3D3D3;
 }
 
-#znghkcoyfd .gt_grand_summary_row {
+#pshlvisffn .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1371,7 +1371,7 @@ For demonstration:
   padding-right: 5px;
 }
 
-#znghkcoyfd .gt_first_grand_summary_row {
+#pshlvisffn .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1381,11 +1381,11 @@ For demonstration:
   border-top-color: #D3D3D3;
 }
 
-#znghkcoyfd .gt_striped {
+#pshlvisffn .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#znghkcoyfd .gt_table_body {
+#pshlvisffn .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1394,7 +1394,7 @@ For demonstration:
   border-bottom-color: #D3D3D3;
 }
 
-#znghkcoyfd .gt_footnotes {
+#pshlvisffn .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1408,7 +1408,7 @@ For demonstration:
   border-right-color: #D3D3D3;
 }
 
-#znghkcoyfd .gt_footnote {
+#pshlvisffn .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1417,7 +1417,7 @@ For demonstration:
   padding-right: 5px;
 }
 
-#znghkcoyfd .gt_sourcenotes {
+#pshlvisffn .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1431,7 +1431,7 @@ For demonstration:
   border-right-color: #D3D3D3;
 }
 
-#znghkcoyfd .gt_sourcenote {
+#pshlvisffn .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1439,60 +1439,60 @@ For demonstration:
   padding-right: 5px;
 }
 
-#znghkcoyfd .gt_left {
+#pshlvisffn .gt_left {
   text-align: left;
 }
 
-#znghkcoyfd .gt_center {
+#pshlvisffn .gt_center {
   text-align: center;
 }
 
-#znghkcoyfd .gt_right {
+#pshlvisffn .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#znghkcoyfd .gt_font_normal {
+#pshlvisffn .gt_font_normal {
   font-weight: normal;
 }
 
-#znghkcoyfd .gt_font_bold {
+#pshlvisffn .gt_font_bold {
   font-weight: bold;
 }
 
-#znghkcoyfd .gt_font_italic {
+#pshlvisffn .gt_font_italic {
   font-style: italic;
 }
 
-#znghkcoyfd .gt_super {
+#pshlvisffn .gt_super {
   font-size: 65%;
 }
 
-#znghkcoyfd .gt_footnote_marks {
+#pshlvisffn .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#znghkcoyfd .gt_asterisk {
+#pshlvisffn .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#znghkcoyfd .gt_slash_mark {
+#pshlvisffn .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#znghkcoyfd .gt_fraction_numerator {
+#pshlvisffn .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#znghkcoyfd .gt_fraction_denominator {
+#pshlvisffn .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -1503,26 +1503,26 @@ For demonstration:
   <thead class="gt_col_headings">
     <tr>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>N = 661</strong><sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>N = 663</strong><sup class="gt_footnote_marks">1</sup></th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
     <tr><td class="gt_row gt_left">hospital</td>
 <td class="gt_row gt_center"></td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Central Hospital</td>
-<td class="gt_row gt_center">52 (10%)</td></tr>
+<td class="gt_row gt_center">53 (11%)</td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Military Hospital</td>
-<td class="gt_row gt_center">97 (20%)</td></tr>
+<td class="gt_row gt_center">97 (19%)</td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Other</td>
 <td class="gt_row gt_center">99 (20%)</td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Port Hospital</td>
 <td class="gt_row gt_center">207 (42%)</td></tr>
-    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">St. Mark's Maternity Hospital (SMMH)</td>
-<td class="gt_row gt_center">41 (8.3%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">SMMH</td>
+<td class="gt_row gt_center">42 (8.4%)</td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Unknown</td>
 <td class="gt_row gt_center">165</td></tr>
     <tr><td class="gt_row gt_left">age_years</td>
-<td class="gt_row gt_center">13 (6, 22)</td></tr>
+<td class="gt_row gt_center">13 (6, 23)</td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Unknown</td>
 <td class="gt_row gt_center">9</td></tr>
   </tbody>
@@ -1562,12 +1562,12 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
 
 .pull-right[
 
-<div id="vnutwqtebi" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="mugputepqa" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#vnutwqtebi .gt_table {
+#mugputepqa .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1592,7 +1592,7 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   border-left-color: #D3D3D3;
 }
 
-#vnutwqtebi .gt_heading {
+#mugputepqa .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1604,7 +1604,7 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   border-right-color: #D3D3D3;
 }
 
-#vnutwqtebi .gt_title {
+#mugputepqa .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1616,7 +1616,7 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   border-bottom-width: 0;
 }
 
-#vnutwqtebi .gt_subtitle {
+#mugputepqa .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1628,13 +1628,13 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   border-top-width: 0;
 }
 
-#vnutwqtebi .gt_bottom_border {
+#mugputepqa .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#vnutwqtebi .gt_col_headings {
+#mugputepqa .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1649,7 +1649,7 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   border-right-color: #D3D3D3;
 }
 
-#vnutwqtebi .gt_col_heading {
+#mugputepqa .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1669,7 +1669,7 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   overflow-x: hidden;
 }
 
-#vnutwqtebi .gt_column_spanner_outer {
+#mugputepqa .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1681,15 +1681,15 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   padding-right: 4px;
 }
 
-#vnutwqtebi .gt_column_spanner_outer:first-child {
+#mugputepqa .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#vnutwqtebi .gt_column_spanner_outer:last-child {
+#mugputepqa .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#vnutwqtebi .gt_column_spanner {
+#mugputepqa .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1701,7 +1701,7 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   width: 100%;
 }
 
-#vnutwqtebi .gt_group_heading {
+#mugputepqa .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1726,7 +1726,7 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   vertical-align: middle;
 }
 
-#vnutwqtebi .gt_empty_group_heading {
+#mugputepqa .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1741,15 +1741,15 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   vertical-align: middle;
 }
 
-#vnutwqtebi .gt_from_md > :first-child {
+#mugputepqa .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#vnutwqtebi .gt_from_md > :last-child {
+#mugputepqa .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#vnutwqtebi .gt_row {
+#mugputepqa .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1768,7 +1768,7 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   overflow-x: hidden;
 }
 
-#vnutwqtebi .gt_stub {
+#mugputepqa .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1781,7 +1781,7 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   padding-right: 5px;
 }
 
-#vnutwqtebi .gt_stub_row_group {
+#mugputepqa .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1795,11 +1795,11 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   vertical-align: top;
 }
 
-#vnutwqtebi .gt_row_group_first td {
+#mugputepqa .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#vnutwqtebi .gt_summary_row {
+#mugputepqa .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1809,16 +1809,16 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   padding-right: 5px;
 }
 
-#vnutwqtebi .gt_first_summary_row {
+#mugputepqa .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#vnutwqtebi .gt_first_summary_row.thick {
+#mugputepqa .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#vnutwqtebi .gt_last_summary_row {
+#mugputepqa .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1828,7 +1828,7 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   border-bottom-color: #D3D3D3;
 }
 
-#vnutwqtebi .gt_grand_summary_row {
+#mugputepqa .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1838,7 +1838,7 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   padding-right: 5px;
 }
 
-#vnutwqtebi .gt_first_grand_summary_row {
+#mugputepqa .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1848,11 +1848,11 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   border-top-color: #D3D3D3;
 }
 
-#vnutwqtebi .gt_striped {
+#mugputepqa .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#vnutwqtebi .gt_table_body {
+#mugputepqa .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1861,7 +1861,7 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   border-bottom-color: #D3D3D3;
 }
 
-#vnutwqtebi .gt_footnotes {
+#mugputepqa .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1875,7 +1875,7 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   border-right-color: #D3D3D3;
 }
 
-#vnutwqtebi .gt_footnote {
+#mugputepqa .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1884,7 +1884,7 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   padding-right: 5px;
 }
 
-#vnutwqtebi .gt_sourcenotes {
+#mugputepqa .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1898,7 +1898,7 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   border-right-color: #D3D3D3;
 }
 
-#vnutwqtebi .gt_sourcenote {
+#mugputepqa .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1906,60 +1906,60 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   padding-right: 5px;
 }
 
-#vnutwqtebi .gt_left {
+#mugputepqa .gt_left {
   text-align: left;
 }
 
-#vnutwqtebi .gt_center {
+#mugputepqa .gt_center {
   text-align: center;
 }
 
-#vnutwqtebi .gt_right {
+#mugputepqa .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vnutwqtebi .gt_font_normal {
+#mugputepqa .gt_font_normal {
   font-weight: normal;
 }
 
-#vnutwqtebi .gt_font_bold {
+#mugputepqa .gt_font_bold {
   font-weight: bold;
 }
 
-#vnutwqtebi .gt_font_italic {
+#mugputepqa .gt_font_italic {
   font-style: italic;
 }
 
-#vnutwqtebi .gt_super {
+#mugputepqa .gt_super {
   font-size: 65%;
 }
 
-#vnutwqtebi .gt_footnote_marks {
+#mugputepqa .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#vnutwqtebi .gt_asterisk {
+#mugputepqa .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#vnutwqtebi .gt_slash_mark {
+#mugputepqa .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#vnutwqtebi .gt_fraction_numerator {
+#mugputepqa .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#vnutwqtebi .gt_fraction_denominator {
+#mugputepqa .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -1970,8 +1970,8 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
   <thead class="gt_col_headings">
     <tr>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>female</strong>, N = 327<sup class="gt_footnote_marks">1</sup></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>male</strong>, N = 309<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>female</strong>, N = 328<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>male</strong>, N = 310<sup class="gt_footnote_marks">1</sup></th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
@@ -1983,7 +1983,7 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
 <td class="gt_row gt_center"></td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Central Hospital</td>
 <td class="gt_row gt_center">20 (8.2%)</td>
-<td class="gt_row gt_center">30 (13%)</td></tr>
+<td class="gt_row gt_center">31 (13%)</td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Military Hospital</td>
 <td class="gt_row gt_center">42 (17%)</td>
 <td class="gt_row gt_center">49 (21%)</td></tr>
@@ -1992,9 +1992,9 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
 <td class="gt_row gt_center">45 (19%)</td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Port Hospital</td>
 <td class="gt_row gt_center">108 (44%)</td>
-<td class="gt_row gt_center">92 (40%)</td></tr>
-    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">St. Mark's Maternity Hospital (SMMH)</td>
-<td class="gt_row gt_center">24 (9.8%)</td>
+<td class="gt_row gt_center">92 (39%)</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">SMMH</td>
+<td class="gt_row gt_center">25 (10%)</td>
 <td class="gt_row gt_center">16 (6.9%)</td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Unknown</td>
 <td class="gt_row gt_center">83</td>
