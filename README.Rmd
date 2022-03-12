@@ -23,22 +23,35 @@ knitr::opts_chunk$set(
 
 [**Applied Epi**](www.appliedepi.org) is a nonprofit organization supporting frontline practitioners through open-course analytical tools, training, and support. Our [Epidemiologist R Handbook](www.epirhandbook.com) is a free R reference manual which has been used by 130,000 people around the world.  
 
+# Course outline  
+
+Click here to download the course outline (PDF)  
+
+
+# Case study files and data  
+
+THIS IS A DRAFT  
+
+You can download a zipped folder that contains the case study materials HERE.  
+
 
 # Course exercises  
+
+THESE ARE DRAFTS  
 
 The course utilizes the R package {learnr} to provide interactive exercises *within* your RStudio window. To access these custom exercises, follow these instructions:
 
 1) Set up R and RStudio (we will help you do this before and during the course)  
 
-2) Run this command in the R console:  
-> `install.packges("learnr")`
-> `install.packages("remotes")`  
+2) Run these commands in your R console:  
+`install.packges("learnr")`  
+`install.packages("remotes")`  
 
-3) Run this command in the R console:  
-> `remotes::install_github("appliedepi/introexercises", dep = TRUE, force = TRUE)`  
+3) Run this command in your R console:  
+`remotes::install_github("appliedepi/introexercises", dep = TRUE, force = TRUE)`  
 Follow any prompted instructions regarding necessary updates  
 
-4) When you want to run an exercise, run the corresponding command listed inthe module information below. The tutorial will appear in the upper-right "Tutorial" pane of your RStudio. You can proceed, or click the small icon to expand this tutorial into a separate window.  
+4) To open an exercise, run the command listed in the corresponding module information below. That tutorial will appear in the upper-right "Tutorial" pane of your RStudio. You can proceed in this pane, or click the small icon to expand this tutorial into a separate window.  
 
 
 # Course slides  
@@ -50,18 +63,22 @@ THESE ARE DRAFTS
 
 **Module 1:**  
 - [Slides: Welcome, course logistics, RStudio, and basic R syntax](https://appliedepi.github.io/intro_course/modules/module_1/slides/course_introduction/slides_course_introduction.html)
-- Exercise:  
-> `learnr::run_tutorial("module1", "introexercises")`  
+- Exercise: `learnr::run_tutorial("module1", "introexercises")`  
 
 **Module 2:**  
 - [Slides: Tidy data and data cleaning](https://appliedepi.github.io/intro_course/modules/module_2/slides/slides_cleaning_dplyr/slides_cleaning_dplyr.html)
+- Exercise: `learnr::run_tutorial("", "introexercises")`  
 
 **Module 3:**  
 - [Slides: Grouping and summarizing data](https://appliedepi.github.io/intro_course/modules/module_3/slides/slides_summary_tables/slides_grouping_summaries.html)
+- Exercise: `learnr::run_tutorial("", "introexercises")`  
 
 **Module 4:**  
 - [Slides: Data visualization with ggplot2](https://appliedepi.github.io/intro_course/modules/module_4/slides/slides_ggplot_basics/slides_ggplot_basics.html)  
-- [Slides: Scales, themes, and labels](https://appliedepi.github.io/intro_course/modules/module_4/slides/slides_ggplot_scales_labels/slides_ggplot_scales_labels.html)
+- Exercise: `learnr::run_tutorial("", "introexercises")`  
+- [Slides: Scales, themes, and labels](https://appliedepi.github.io/intro_course/modules/module_4/slides/slides_ggplot_scales_labels/slides_ggplot_scales_labels.html)  
+- Exercise: `learnr::run_tutorial("", "introexercises")`  
+
 
 **Module 5:**  
 - [Slides: Transforming data: joins](https://appliedepi.github.io/intro_course/modules/module_5/slides/slides_joins/slides_joins.html)  
@@ -89,7 +106,7 @@ Instructors and authors from **Applied Epi** included:
 
 
 The Fulton County Board of Health graciously provided example data (anonymized and scrambled) for a case study.  
-The {outbreaks} package formed the basis for the dataset in the Ebola case study.  
+The {outbreaks} package formed the basis for the fake dataset in the Ebola case study.  
 
 
 # Terms of Use and License   

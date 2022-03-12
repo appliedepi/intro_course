@@ -22,7 +22,7 @@ description: >
 library(learnr)
 library(gradethis)
 library(etude)      # help functions for gradethis
-library(basked)
+library(basket)
 library(rio)
 library(janitor)
 library(flair)
@@ -84,8 +84,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```{r, include=FALSE}
 # data prep --------------------------------------------------------------------
-linelist_raw <- rio::import(here::here("data", "linelist_raw.xlsx"))
-linelist <- rio::import(here::here("data", "linelist_cleaned.rds"))
+surv <- rio::import(here::here("data", "surveillance_linelist_12012014.csv"))
 ```
 
 
@@ -1522,7 +1521,7 @@ Notes:
 
 [***DANGER:*** If providing a vector of numbers to one of the above functions, be sure to wrap the numbers within `c()` .]{style="color: red;"}
 
-```{r}
+```{r, eval=T, echo=T}
 # If supplying raw numbers to a function, wrap them in c()
 mean(1, 6, 12, 10, 5, 0)    # !!! INCORRECT !!!  
 
@@ -1577,6 +1576,8 @@ File naming can seem like a small thing to focus on, but the ramifications can b
 Imagine the power of R - you can write code to automatically import the most recent data files by the date in their file name! But this can be hindered by poor file naming practices.  
 
 Even if you never try coding such as that, you surely know that bad file naming practices can cause significant problems for version control and archiving.  
+
+### Good and bad file names  
 
 **Have you ever seen files like these?**  
 
@@ -2089,7 +2090,35 @@ You can return a good summary of the dataset using the R package {skimr} and its
 
 Install this package and load it for use.  
 
-Place the name of the linelist in `skim()` and run. What content appears in the R console? If it is not easily readible, try expanding your Console pane to be larger, and run the command again.  
+Place the name of the linelist in `skim()` and run. What content appears in the R console? If it is not easily readable, try expanding your Console pane to be larger, and run the command again.  
+
+
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+slim(surv_raw
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+
+
+
+
+
 
 **What does the output show?**  
 

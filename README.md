@@ -16,7 +16,20 @@ training, and support. Our [Epidemiologist R
 Handbook](www.epirhandbook.com) is a free R reference manual which has
 been used by 130,000 people around the world.
 
+# Course outline
+
+Click here to download the course outline (PDF)
+
+# Case study files and data
+
+THIS IS A DRAFT
+
+You can download a zipped folder that contains the case study materials
+HERE.
+
 # Course exercises
+
+THESE ARE DRAFTS
 
 The course utilizes the R package {learnr} to provide interactive
 exercises *within* your RStudio window. To access these custom
@@ -25,18 +38,19 @@ exercises, follow these instructions:
 1)  Set up R and RStudio (we will help you do this before and during the
     course)
 
-2)  Run this command in the R console:  
-    \> `install.packges("learnr")` \> `install.packages("remotes")`
+2)  Run these commands in your R console:  
+    `install.packges("learnr")`  
+    `install.packages("remotes")`
 
-3)  Run this command in the R console:  
-    \>
+3)  Run this command in your R console:  
     `remotes::install_github("appliedepi/introexercises", dep = TRUE, force = TRUE)`  
     Follow any prompted instructions regarding necessary updates
 
-4)  When you want to run an exercise, run the corresponding command
-    listed inthe module information below. The tutorial will appear in
-    the upper-right “Tutorial” pane of your RStudio. You can proceed, or
-    click the small icon to expand this tutorial into a separate window.
+4)  To open an exercise, run the command listed in the corresponding
+    module information below. That tutorial will appear in the
+    upper-right “Tutorial” pane of your RStudio. You can proceed in this
+    pane, or click the small icon to expand this tutorial into a
+    separate window.
 
 # Course slides
 
@@ -92,8 +106,8 @@ Instructors and authors from **Applied Epi** included:
 
 The Fulton County Board of Health graciously provided example data
 (anonymized and scrambled) for a case study.  
-The {outbreaks} package formed the basis for the dataset in the Ebola
-case study.
+The {outbreaks} package formed the basis for the fake dataset in the
+Ebola case study.
 
 # Terms of Use and License
 
