@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introduction to R for Applied Epidemiology</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="March 2022" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/tabwid/tabwid.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Introduction to R for<br>Applied Epidemiology
+## Transforming and restructuring data
+### March 2022
+### <a href="mailto:contact@appliedepi.org">contact@appliedepi.org</a>
+
+---
+
+
+
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+    .remark-slide table{
+      border: none
+    }
+    .remark-slide-table {
+      
+    }
+    tr:first-child {
+      border-top: none;
+  }
+    tr:last-child {
+    border-bottom: none;
+  }
+&lt;/style&gt;
+
+
+# Today: objectives &amp; schedule  
+
+**In this module we aim to help you:**  
+* Learn how to join 2 or more tables together:  
+* Learn about the different sort of joins  
+* Choose which columns to use ad keys/identifier  
+* Know how to perform join safely  
+
+
+
+&lt;template id="b0ce7931-11e4-4940-b675-f156e5c846bb"&gt;&lt;style&gt;
+.tabwid table{
+  border-spacing:0px !important;
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+&lt;/style&gt;&lt;div class="tabwid"&gt;&lt;style&gt;.cl-89a0e32e{}.cl-89980916{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-89983026{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-8998572c{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8998572d{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8998572e{width:548.5pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8998572f{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-89985730{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-89985731{width:548.5pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-89985732{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-89985733{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-89985734{width:548.5pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-89985735{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-89985736{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-89987e3c{width:548.5pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-89a0e32e'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-89985736"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Time&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-89985735"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Location&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-89987e3c"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Topic&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-8998572c"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;0900-0945&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8998572d"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Main&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8998572e"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Welcome, course logistics, Why R?&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-8998572c"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;0950-1050&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8998572d"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Main&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8998572e"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Lecture and live demonstration:&lt;br&gt;RStudio tour, R projects, basic R syntax, functions &amp;amp; packages, data import&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-8998572c"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;1100-1200&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8998572d"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Breakouts&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8998572e"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Setting up a script, importing data, and reviewing a data frame&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-8998572f"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;1205-1220&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-89985730"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Main&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-89985731"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Debrief&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;tfoot&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td  colspan="3"class="cl-89985733"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Breaks are incorporated above, but not shown as rows&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;&lt;/table&gt;&lt;/div&gt;&lt;/template&gt;
+&lt;div class="flextable-shadow-host" id="2d671df9-ab2a-48da-aa55-47e4585b05ab"&gt;&lt;/div&gt;
+&lt;script&gt;
+var dest = document.getElementById("2d671df9-ab2a-48da-aa55-47e4585b05ab");
+var template = document.getElementById("b0ce7931-11e4-4940-b675-f156e5c846bb");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+&lt;/script&gt;
+
+
+
+---
+class: inverse, center, middle
+
+# Joining dataframes
+
+*Join, merge, unite, combine, assemble, link, match, unite...* dataframes
+
+.footnote[Thank you to Garrick Aden-Buie for providing the gifs used in these slides]
+
+???
+
+Explain that:
+- people coming from different background might have different words for this type of operation: joining, union, merging, combining, assembling...
+- In this module, we will use the word "join" to stick to the `join_` function family from tidyverse as well as well known functions from SQL. The base R equivalent is `merge`.
+
+
+   
+   
+---
+
+# Situation: data is scattered between dataframes
+
+
+???
+
+Provide examples of situations they might encounter to highlight how common it is: 
+- connect laboratory data to patient clinical outcomes
+- connect patient data with GIS data,
+- connectGoogle mobility data to infectious disease trends
+- other relevant example for their work hinted by participant survey
+
+---
+
+# Situation: data is scattered between dataframes
+
+
+
+
+#### Objective: we want to *join* both dataframes:  
+
+
+.pull-left[
+
+**Info about patient**
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; case_id &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; age &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; age_unit &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; gender &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5fe599 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8689b7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 11f8ea &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; b8812a &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 893f25 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+]
+
+.pull-right[
+
+**Info about hospitalisation**
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; id_patient &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; hospital &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5fe599 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Other &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8689b7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Missing &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 11f8ea &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; St. Mark's Maternity Hospital (SMMH) &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+]
+
+&lt;br&gt;
+
+The **KEY** columns linking the two dataframes are **case_id** and **id_patient**
+
+
+???
+For the purpose of the slides, we created two _mini_ dataframes to see what's happening, one with patient characteristics (age and gender), the other hospital the patient has been hospitalised in.
+**Note that both datasets have the ID of the patient in common, but a slightly different name (a very common situation)**. We call this column the KEY, or the identifier column. It allows to *match* observations in both dataframes.
+
+
+---
+# Types of joins
+
+#### Several types of joins
+* **Mutating joins**: add new variable to a dataframe
+     * **Left join** / **Right join**: add data to a dataframe
+     * **Full join**: combine two full dataframes
+     * **Inner join**: take the intersection of two dataframes
+* **Filtering joins**: filter a dataframe based on another one
+     * **Anti join** / **semi join**
+
+#### General syntax
+* We use the `join` functions from **dplyr** package
+* Homogeneous syntax:
+
+
+```r
+xxx_join(dataframe_1, dataframe_2, 
+         by = "key_id")
+```
+
+
+???
+Insist that there are globally two types of joins, the mutating joins, who will add new columns, and potentially affect the number of lines, and the filtering joins, wich will not add any new columns, just change the rows in one dataset.
+
+Explain that the function are always in this form, two dataframes, the first one is nicknamed _left_ dataframe, the second is nicknamed the _right_ dataframe. The *by* argument: provide columns used for identifying matches between observations
+
+---
+# Left join
+
+* Left (and right) joins are used to **add columns** to a dataframe.
+
+* All rows from the *left* dataframe are kept, and lines with a correspondence in the *right* dataframe are merged unto it.
+
+* If no match is found, `NA` are added.
+
+* Lines from the *right* dataframe without a match are dropped.
+
+
+.left-column[
+&lt;img src="../../../../images/left-join.gif" width="100%" /&gt;
+]
+
+.right-column[
+&lt;img src="../../../../images/left_join.png" width="100%" /&gt;
+]
+
+
+.footnote[Sometimes called Left *outer* join]
+
+---
+# Left join
+
+
+```r
+left_join(linelist_patient,  linelist_hospit,
+*        by = c("case_id" = "id_patient"))      # KEY
+```
+
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; case_id &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; age &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; age_unit &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; gender &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; hospital &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5fe599 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Other &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8689b7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Missing &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 11f8ea &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; St. Mark's Maternity Hospital (SMMH) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; b8812a &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 893f25 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+* All lines from the first dataframe (the *left* dataframe) are kept. 
+* **Only lines with a correspondance through the key column(s)** are imported from the second (*right*) dataframe.
+* NA were added for the two last lines of `linelist_patient` instead.
+
+
+---
+# Right join
+
+Keeps all rows from the second dataframe and adds information from the first dataframe
+
+
+```r
+right_join(linelist_patient,  linelist_hospit,       
+*          by = c("case_id" = "id_patient"))    # KEY
+```
+
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; case_id &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; age &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; age_unit &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; gender &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; hospital &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5fe599 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Other &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8689b7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Missing &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 11f8ea &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; St. Mark's Maternity Hospital (SMMH) &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+* All lines from the second dataframe (the *right* dataframe) are kept. 
+* **Only lines with a correspondance through the key column(s)** are imported from the first (*left*) dataframe.
+
+
+---
+# Full joins
+
+* The most inclusive of joins
+* Keeps **all lines from both dataframes**
+* Adds `NA` for the rows present in only one dataframe (no match)
+
+.center[
+&lt;img src="../../../../images/full-join.gif" width="40%" /&gt;
+]
+
+
+.footnote[Sometimes called *Full outer join*, or *Outer join*]
+
+
+---
+# Full joins
+
+With our data:
+
+
+```r
+full_join(linelist_patient,  linelist_hospit,       
+*          by = c("case_id" = "id_patient"))    # KEY
+```
+
+All lines from both dataset are kept:  
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; case_id &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; age &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; age_unit &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; gender &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; hospital &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5fe599 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Other &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8689b7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Missing &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 11f8ea &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; St. Mark's Maternity Hospital (SMMH) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; b8812a &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 893f25 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+???
+Now is a good time to insist on how consistent the arguments of the join function family are: you always write them the same way
+
+---
+# Inner join 
+
+* The most **restrictive** of joins, 
+* Takes the **intersection** between two dataframes
+* Keeps **only rows with matches across both dataframes**
+* **Discard** rows without matches
+
+.center[
+&lt;img src="../../../../images/inner-join.gif" width="50%" /&gt;
+]
+
+.footnote[Also called *Natural join*]
+
+???
+Well, the bullet points all sort of say the same thing, but I think it is good to make sure that everyone uderstand what it means to take the _intersection_.
+
+---
+# Inner join 
+
+With our data:  
+
+
+```r
+inner_join(linelist_patient,  linelist_hospit,       
+*          by = c("case_id" = "id_patient"))    # KEY
+```
+
+
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; case_id &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; age &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; age_unit &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; gender &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; hospital &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5fe599 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Other &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8689b7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Missing &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 11f8ea &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; St. Mark's Maternity Hospital (SMMH) &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+* All lines with common id in both dataset are kept
+* Other lines are discarded:  
+
+---
+# Syntax tricks
+
+* Joins can be used in **pipelines** (the piped dataframe is the _left_ one):  
+
+```r
+*linelist_patient %&gt;%
+*    inner_join(linelist_hospit,
+           by = c("case_id" = "id_patient"))  # KEY 
+```
+
+--
+
+* If the **KEY column has the same name** in both dataframes:  
+
+```r
+inner_join(linelist_patient, linelist_hospit,       
+*          by = "case_id")  # KEY
+```
+
+--
+
+* One can pass **several columns** to use as unique identifiers:
+
+```r
+inner_join(dataframe1, dataframe2,       
+           by = c("Name" = "NAME",  
+*                 "Surname"))   # KEY
+```
+
+
+---
+# Filtering joins
+
+* Filtering joins are used to **filter rows** from the *left* dataframe depending on the matches in _right_ dataframe. 
+* Filtering joins *do not merge data*.
+
+.pull-left[
+
+#### Anti join
+
+Keeps all the rows from a dataframe **without matches in another dataframe**
+
+&lt;img src="../../../../images/anti-join.gif" width="50%" /&gt;
+
+]
+
+.pull-right[
+
+#### Semi join
+
+Keeps all the rows from a dataframe **with a match in another dataframe**
+
+&lt;img src="../../../../images/semi-join.gif" width="50%" /&gt;
+]
+
+**Filtering joins never duplicate rows, they can only drop them**
+
+---
+# Real life: duplicated columns
+
+
+
+**If both dataframes have columns with the same name**: both columns are imported, a *.x* and *.y* is added to the variable name 
+
+.pull-left[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; ID &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; sexe &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; M &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; M &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+.pull-right[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; ID &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; age &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; sexe &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; ID &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; sexe.x &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; age &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; sexe.y &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; M &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; M &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id_4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+???
+If columns are in common, R will change their name to disambiguate them.
+- If you are sure both columns contain the same information, remove them from one of the dataframe before the join
+- If you are unsure, you can compare them easily after the join.
+Mention orally that there is a "suffix" argument and you can give it a vector to rename instead of .x and .y
+
+---
+# Real life: one-to-many lines
+
+If a row from the reference dataframe matches *multiple rows* from the second dataframe, **all combinations are returned!**
+
+
+
+
+
+```r
+left_join(df1, df2, by = "ID")
+```
+
+
+&lt;img src="../../../../images/join-one-to-many.png" width="100%" /&gt;
+
+---
+# Good practices
+
+.pull-left[
+Use `semi_join()` and `anti_join()` to **understand which lines are dropped** (and _why_)
+
+
+
+```r
+semi_join(df1, df2)
+```
+
+```
+## # A tibble: 1 x 2
+##   ID    sexe 
+##   &lt;chr&gt; &lt;chr&gt;
+## 1 id_1  F
+```
+
+```r
+anti_join(df1, df2)
+```
+
+```
+## # A tibble: 3 x 2
+##   ID    sexe 
+##   &lt;chr&gt; &lt;chr&gt;
+## 1 id_2  M    
+## 2 id_3  M    
+## 3 id_4  F
+```
+]
+
+--
+
+.pull-right[
+* **Check size** of dataframes before and after the merge!
+
+
+```r
+nrow(df1)
+```
+
+```
+## [1] 4
+```
+
+```r
+nrow(df1)
+```
+
+```
+## [1] 4
+```
+
+```r
+full_join(df1, df2, by = "ID") %&gt;% nrow()
+```
+
+```
+## [1] 5
+```
+
+Is this what was expected? Are some lines duplicated?
+]
+
+???
+Another good check is to use the `count()` function to count the number of rows for each of your identifier.
+
+
+
+---
+class: inverse, center, middle
+
+# Restructuring data
+
+*pivoting, reshaping, melting, casting, transforming...* dataframes
+
+
+---
+
+# What is pivoting?
+
+* *Excel pivot tables* are a way of summarizing and aggregating data
+
+* In R, **pivoting** a dataframe has a **different meaning**
+
+* Think of it as *restructuring*, or *reshaping* the dataframe
+
+* We will use the `pivot_wider()` and `pivot_larger()` functions from the {tidyr} package
+
+* You will often see examples using alternative functions from other packages: 
+     * `melt` and `cast` from {reshape2}
+     * `gather` and `spread` from {tidyr} (the ancestors of the pivot_xxx functions)
+     * `melt` and `dcast` from {data.table}
+     
+  
+---
+
+# Wide and long data?
+
+&lt;img src="../../../../images/pivoting.png" width="100%" /&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

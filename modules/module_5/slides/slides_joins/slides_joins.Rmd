@@ -1,0 +1,564 @@
+---
+title: "Introduction to R for<br>Applied Epidemiology"
+subtitle: "Transforming and restructuring data"
+author: "March 2022"
+date: '[contact@appliedepi.org](mailto:contact@appliedepi.org)'
+output:
+  xaringan::moon_reader:
+    seal: TRUE
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    css: xaringan-themer.css
+---
+
+```{r, eval=F, echo=F, include=F}
+# Must do in order to render.
+
+pacman::p_load(xaringan)
+devtools::install_github("gadenbuie/xaringanExtra")
+remotes::install_github("mitchelloharawild/icons")
+icons::download_fontawesome()
+
+# Render with xaringan::infinite_moon_reader()
+# Slides will appear in viewer, and will update as you edit/save
+```
+
+
+```{r setup, include=FALSE, echo=F}
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      fig.retina = 3  ## retina more effective than w/h (according to twitter)
+                      # fig.width = 16, 
+                      # fig.height = 10
+                      )
+## I dont know why this is included in the example xaringan slide 
+## but is something to do with background images
+options(htmltools.dir.version = FALSE)
+
+## install and load necessary packages 
+pacman::p_load(
+  rio,        # importing data  
+  here,       # relative file pathways  
+  janitor,    # data cleaning and tables
+  lubridate,  # working with dates
+  tidyverse,  # data management and visualization
+  gtsummary,  # summary tables
+  kableExtra, # for output tables
+  xaringanthemer  # for styling presentation 
+)
+
+
+# data prep --------------------------------------------------------------------
+# linelist_raw <- rio::import(here::here("data", "linelist_raw.xlsx"))
+linelist_surv <- rio::import(here::here("data", "linelist_cleaned.rds"))
+linelist_med <- rio::import(here::here("data", "medical_linelist_12012014.xlsx"))
+```
+
+```{r  xaringan-themer, include = FALSE}
+
+## define presentation colours (theme) using {xaringanthemer} package 
+## https://pkg.garrickadenbuie.com/xaringanthemer/articles/xaringanthemer.html
+
+## epirhandbook logo colours: 
+  ## blue: "#00538c"
+  ## green: "#007732"
+  ## lighter green: "#48a878"
+
+## see ?style_mono_accent for all the things can customise
+style_mono_accent(
+  base_color = "#00538c", 
+  link_color = "#48a878", 
+  ## add logo to the title page (bit bigger)
+  title_slide_background_image = "https://github.com/appliedepi/intro_course/raw/main/images/logo.png", 
+  title_slide_background_position = "95% 95%", 
+  title_slide_background_size = "25%", 
+  ## add logo to all following slides
+  background_image = "https://github.com/appliedepi/intro_course/raw/main/images/logo.png", 
+  background_size = "10%",
+  background_position = "100% 0%"
+)
+```
+
+```{css, echo=F}
+    .remark-slide table{
+      border: none
+    }
+    .remark-slide-table {
+      
+    }
+    tr:first-child {
+      border-top: none;
+  }
+    tr:last-child {
+    border-bottom: none;
+  }
+```
+
+
+# Today: objectives & schedule  
+
+**In this module we aim to help you:**  
+* Learn how to join 2 or more tables together:  
+* Learn about the different sort of joins  
+* Choose which columns to use ad keys/identifier  
+* Know how to perform join safely  
+
+
+```{r, echo=FALSE, warning=F, message=F}
+outline <- dplyr::tribble(
+  ~Time, ~Location, ~Topic,
+  "0900-0945",     "Main",      "Welcome, course logistics, Why R?",
+  "0950-1050",     "Main",      "Lecture and live demonstration:\nRStudio tour, R projects, basic R syntax, functions & packages, data import",
+  "1100-1200",     "Breakouts", "Setting up a script, importing data, and reviewing a data frame",
+  "1205-1220",     "Main",      "Debrief"
+)
+
+outline %>% 
+  flextable::qflextable() %>% 
+  flextable::add_footer_lines("Breaks are incorporated above, but not shown as rows")
+```
+
+
+
+---
+class: inverse, center, middle
+
+# Joining dataframes
+
+*Join, merge, unite, combine, assemble, link, match, unite...* dataframes
+
+.footnote[Thank you to Garrick Aden-Buie for providing the gifs used in these slides]
+
+???
+
+Explain that:
+- people coming from different background might have different words for this type of operation: joining, union, merging, combining, assembling...
+- In this module, we will use the word "join" to stick to the `join_` function family from tidyverse as well as well known functions from SQL. The base R equivalent is `merge`.
+
+
+   
+   
+---
+
+# Situation: data is scattered between dataframes
+
+
+???
+
+Provide examples of situations they might encounter to highlight how common it is: 
+- connect laboratory data to patient clinical outcomes
+- connect patient data with GIS data,
+- connectGoogle mobility data to infectious disease trends
+- other relevant example for their work hinted by participant survey
+
+---
+
+# Situation: data is scattered between dataframes
+
+
+```{r include=FALSE, echo=F}
+# Make smaller linelists for exemple purpose
+linelist_patient <- linelist_surv %>% 
+     select(case_id, age, age_unit, gender) %>% 
+     head(5)
+
+linelist_hospit <- linelist_surv %>% 
+     select(id_patient = case_id, hospital) %>% 
+     head(3)
+```
+
+#### Objective: we want to *join* both dataframes:  
+
+
+.pull-left[
+
+**Info about patient**
+
+```{r include=TRUE, echo=FALSE}
+linelist_patient %>% 
+     # head(5) %>% 
+     knitr::kable()
+```
+
+
+]
+
+.pull-right[
+
+**Info about hospitalisation**
+```{r include=TRUE, echo=FALSE}
+linelist_hospit %>% 
+     # head(3) %>% 
+     knitr::kable()
+```
+
+]
+
+<br>
+
+The **KEY** columns linking the two dataframes are **case_id** and **id_patient**
+
+
+???
+For the purpose of the slides, we created two _mini_ dataframes to see what's happening, one with patient characteristics (age and gender), the other hospital the patient has been hospitalised in.
+**Note that both datasets have the ID of the patient in common, but a slightly different name (a very common situation)**. We call this column the KEY, or the identifier column. It allows to *match* observations in both dataframes.
+
+
+---
+# Types of joins
+
+#### Several types of joins
+* **Mutating joins**: add new variable to a dataframe
+     * **Left join** / **Right join**: add data to a dataframe
+     * **Full join**: combine two full dataframes
+     * **Inner join**: take the intersection of two dataframes
+* **Filtering joins**: filter a dataframe based on another one
+     * **Anti join** / **semi join**
+
+#### General syntax
+* We use the `join` functions from **dplyr** package
+* Homogeneous syntax:
+
+```{r include=TRUE, echo=TRUE, eval=FALSE}
+xxx_join(dataframe_1, dataframe_2, 
+         by = "key_id")
+```
+
+
+???
+Insist that there are globally two types of joins, the mutating joins, who will add new columns, and potentially affect the number of lines, and the filtering joins, wich will not add any new columns, just change the rows in one dataset.
+
+Explain that the function are always in this form, two dataframes, the first one is nicknamed _left_ dataframe, the second is nicknamed the _right_ dataframe. The *by* argument: provide columns used for identifying matches between observations
+
+---
+# Left join
+
+* Left (and right) joins are used to **add columns** to a dataframe.
+
+* All rows from the *left* dataframe are kept, and lines with a correspondence in the *right* dataframe are merged unto it.
+
+* If no match is found, `NA` are added.
+
+* Lines from the *right* dataframe without a match are dropped.
+
+
+.left-column[
+```{r eval = TRUE, echo=FALSE, out.width = '100%'}
+knitr::include_graphics(xfun::relative_path(here::here("images", "left-join.gif")))
+```
+]
+
+.right-column[
+```{r eval = TRUE, echo=FALSE, out.width = '100%'}
+knitr::include_graphics(xfun::relative_path(here::here("images", "left_join.png")))
+```
+]
+
+
+.footnote[Sometimes called Left *outer* join]
+
+---
+# Left join
+
+```{r echo = TRUE, eval=FALSE, include=TRUE}
+left_join(linelist_patient,  linelist_hospit,
+         by = c("case_id" = "id_patient"))      # KEY #<<
+```
+
+
+```{r include=TRUE, echo=FALSE, eval=TRUE, out.width = '80%'}
+left_join(linelist_patient, 
+          linelist_hospit, 
+     by = c("case_id" = "id_patient")) %>% 
+     knitr::kable()
+```
+
+* All lines from the first dataframe (the *left* dataframe) are kept. 
+* **Only lines with a correspondance through the key column(s)** are imported from the second (*right*) dataframe.
+* NA were added for the two last lines of `linelist_patient` instead.
+
+
+---
+# Right join
+
+Keeps all rows from the second dataframe and adds information from the first dataframe
+
+```{r echo = TRUE, eval=FALSE, include=TRUE}
+right_join(linelist_patient,  linelist_hospit,       
+           by = c("case_id" = "id_patient"))    # KEY #<<
+```
+
+
+```{r include=TRUE, echo=FALSE, eval=TRUE, out.width = '80%'}
+right_join(linelist_patient, 
+          linelist_hospit, 
+     by = c("case_id" = "id_patient")) %>%
+     knitr::kable()
+```
+
+* All lines from the second dataframe (the *right* dataframe) are kept. 
+* **Only lines with a correspondance through the key column(s)** are imported from the first (*left*) dataframe.
+
+
+---
+# Full joins
+
+* The most inclusive of joins
+* Keeps **all lines from both dataframes**
+* Adds `NA` for the rows present in only one dataframe (no match)
+
+.center[
+```{r eval = TRUE, echo=FALSE, out.width = '40%'}
+knitr::include_graphics(xfun::relative_path(here::here("images", "full-join.gif")))
+```
+]
+
+
+.footnote[Sometimes called *Full outer join*, or *Outer join*]
+
+
+---
+# Full joins
+
+With our data:
+
+```{r echo = TRUE, eval=FALSE, include=TRUE}
+full_join(linelist_patient,  linelist_hospit,       
+           by = c("case_id" = "id_patient"))    # KEY #<<
+```
+
+All lines from both dataset are kept:  
+
+```{r include=TRUE, echo=FALSE, eval=TRUE, out.width = '80%'}
+full_join(linelist_patient, 
+          linelist_hospit, 
+     by = c("case_id" = "id_patient")) %>% 
+     knitr::kable()
+```
+
+
+???
+Now is a good time to insist on how consistent the arguments of the join function family are: you always write them the same way
+
+---
+# Inner join 
+
+* The most **restrictive** of joins, 
+* Takes the **intersection** between two dataframes
+* Keeps **only rows with matches across both dataframes**
+* **Discard** rows without matches
+
+.center[
+```{r eval = TRUE, echo=FALSE, out.width = '50%'}
+knitr::include_graphics(xfun::relative_path(here::here("images", "inner-join.gif")))
+```
+]
+
+.footnote[Also called *Natural join*]
+
+???
+Well, the bullet points all sort of say the same thing, but I think it is good to make sure that everyone uderstand what it means to take the _intersection_.
+
+---
+# Inner join 
+
+With our data:  
+
+```{r echo = TRUE, eval=FALSE, include=TRUE}
+inner_join(linelist_patient,  linelist_hospit,       
+           by = c("case_id" = "id_patient"))    # KEY #<<
+```
+
+
+
+```{r include=TRUE, echo=FALSE, eval=TRUE, out.width = '80%'}
+inner_join(linelist_patient, 
+          linelist_hospit, 
+     by = c("case_id" = "id_patient")) %>%
+     knitr::kable()
+```
+
+* All lines with common id in both dataset are kept
+* Other lines are discarded:  
+
+---
+# Syntax tricks
+
+* Joins can be used in **pipelines** (the piped dataframe is the _left_ one):  
+```{r echo = TRUE, eval=FALSE, include=TRUE}
+linelist_patient %>%                  #<<
+     inner_join(linelist_hospit,      #<<    
+           by = c("case_id" = "id_patient"))  # KEY 
+```
+
+--
+
+* If the **KEY column has the same name** in both dataframes:  
+```{r echo = TRUE, eval=FALSE, include=TRUE}
+inner_join(linelist_patient, linelist_hospit,       
+           by = "case_id")  # KEY #<<
+```
+
+--
+
+* One can pass **several columns** to use as unique identifiers:
+```{r echo = TRUE, eval=FALSE, include=TRUE}
+inner_join(dataframe1, dataframe2,       
+           by = c("Name" = "NAME",  
+                  "Surname"))   # KEY #<<
+```
+
+
+---
+# Filtering joins
+
+* Filtering joins are used to **filter rows** from the *left* dataframe depending on the matches in _right_ dataframe. 
+* Filtering joins *do not merge data*.
+
+.pull-left[
+
+#### Anti join
+
+Keeps all the rows from a dataframe **without matches in another dataframe**
+
+```{r eval = TRUE, echo=FALSE, out.width = '50%'}
+knitr::include_graphics(xfun::relative_path(here::here("images", "anti-join.gif")))
+```
+
+]
+
+.pull-right[
+
+#### Semi join
+
+Keeps all the rows from a dataframe **with a match in another dataframe**
+
+```{r eval = TRUE, echo=FALSE, out.width = '50%'}
+knitr::include_graphics(xfun::relative_path(here::here("images", "semi-join.gif")))
+```
+]
+
+**Filtering joins never duplicate rows, they can only drop them**
+
+---
+# Real life: duplicated columns
+
+```{r eval = TRUE, echo=FALSE}
+df1 <- tibble(ID = c("id_1", "id_2", "id_3", "id_4"), sexe = c("F", "M", "M", "F"))
+df2 <- tibble(ID = c("id_1", "id_2", "id_5"), age = c(5, 5, 7), sexe = c("F", "F", "F"))
+```
+
+**If both dataframes have columns with the same name**: both columns are imported, a *.x* and *.y* is added to the variable name 
+
+.pull-left[
+```{r eval = TRUE, echo=FALSE}
+df1 %>% knitr::kable()
+```
+]
+
+.pull-right[
+```{r eval = TRUE, echo=FALSE}
+df2 %>% knitr::kable()
+```
+]
+
+
+```{r eval=TRUE, echo=FALSE}
+left_join(df1, df2, by = "ID") %>% knitr::kable()
+```
+
+???
+If columns are in common, R will change their name to disambiguate them.
+- If you are sure both columns contain the same information, remove them from one of the dataframe before the join
+- If you are unsure, you can compare them easily after the join.
+Mention orally that there is a "suffix" argument and you can give it a vector to rename instead of .x and .y
+
+---
+# Real life: one-to-many lines
+
+If a row from the reference dataframe matches *multiple rows* from the second dataframe, **all combinations are returned!**
+
+```{r eval = TRUE, echo=FALSE}
+df1 <- tibble(ID = c("id_1", "id_2", "id_3", "id_4"), sexe = c("F", "M", "M", "F"))
+df2 <- tibble(ID = c("id_1", "id_1"), age = c(5, 5))
+```
+
+
+```{r eval = FALSE, echo=TRUE}
+left_join(df1, df2, by = "ID")
+```
+
+
+```{r eval = TRUE, echo=FALSE, out.width = '100%'}
+knitr::include_graphics(xfun::relative_path(here::here("images", "join-one-to-many.png")))
+```
+
+---
+# Good practices
+
+.pull-left[
+Use `semi_join()` and `anti_join()` to **understand which lines are dropped** (and _why_)
+
+
+```{r eval = TRUE, echo=TRUE}
+semi_join(df1, df2)
+anti_join(df1, df2)
+```
+]
+
+--
+
+.pull-right[
+* **Check size** of dataframes before and after the merge!
+
+```{r eval = TRUE, echo=TRUE}
+nrow(df1)
+nrow(df1)
+full_join(df1, df2, by = "ID") %>% nrow()
+```
+
+Is this what was expected? Are some lines duplicated?
+]
+
+???
+Another good check is to use the `count()` function to count the number of rows for each of your identifier.
+
+
+
+---
+class: inverse, center, middle
+
+# Restructuring data
+
+*pivoting, reshaping, melting, casting, transforming...* dataframes
+
+
+---
+
+# What is pivoting?
+
+* *Excel pivot tables* are a way of summarizing and aggregating data
+
+* In R, **pivoting** a dataframe has a **different meaning**
+
+* Think of it as *restructuring*, or *reshaping* the dataframe
+
+* We will use the `pivot_wider()` and `pivot_larger()` functions from the {tidyr} package
+
+* You will often see examples using alternative functions from other packages: 
+     * `melt` and `cast` from {reshape2}
+     * `gather` and `spread` from {tidyr} (the ancestors of the pivot_xxx functions)
+     * `melt` and `dcast` from {data.table}
+     
+  
+---
+
+# Wide and long data?
+
+```{r eval = TRUE, echo=FALSE, out.width = '100%'}
+knitr::include_graphics(xfun::relative_path(here::here("images", "pivoting.png")))
+```

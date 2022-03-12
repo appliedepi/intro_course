@@ -16,14 +16,40 @@ training, and support. Our [Epidemiologist R
 Handbook](www.epirhandbook.com) is a free R reference manual which has
 been used by 130,000 people around the world.
 
-# Course materials
+# Course exercises
+
+The course utilizes the R package {learnr} to provide interactive
+exercises *within* your RStudio window. To access these custom
+exercises, follow these instructions:
+
+1)  Set up R and RStudio (we will help you do this before and during the
+    course)
+
+2)  Run this command in the R console:  
+    \> `install.packges("learnr")` \> `install.packages("remotes")`
+
+3)  Run this command in the R console:  
+    \>
+    `remotes::install_github("appliedepi/introexercises", dep = TRUE, force = TRUE)`  
+    Follow any prompted instructions regarding necessary updates
+
+4)  When you want to run an exercise, run the corresponding command
+    listed inthe module information below. The tutorial will appear in
+    the upper-right “Tutorial” pane of your RStudio. You can proceed, or
+    click the small icon to expand this tutorial into a separate window.
+
+# Course slides
 
 <!-- badges: start -->
 <!-- badges: end -->
 
+THESE ARE DRAFTS
+
 **Module 1:**  
 - [Slides: Welcome, course logistics, RStudio, and basic R
-syntax](https://appliedepi.github.io/intro_course/modules/module_1/slides/course_introduction/slides_course_introduction.html)
+syntax](https://appliedepi.github.io/intro_course/modules/module_1/slides/course_introduction/slides_course_introduction.html) -
+Exercise:  
+\> `learnr::run_tutorial("module1", "introexercises")`
 
 **Module 2:**  
 - [Slides: Tidy data and data
@@ -39,9 +65,15 @@ ggplot2](https://appliedepi.github.io/intro_course/modules/module_4/slides/slide
 - [Slides: Scales, themes, and
 labels](https://appliedepi.github.io/intro_course/modules/module_4/slides/slides_ggplot_scales_labels/slides_ggplot_scales_labels.html)
 
-**Module 5:**
+**Module 5:**  
+- [Slides: Transforming data:
+joins](https://appliedepi.github.io/intro_course/modules/module_5/slides/slides_joins/slides_joins.html)  
+- [Slides: Transforming data:
+pivots](https://appliedepi.github.io/intro_course/modules/module_5/slides/slides_pivots/slides_pivots.html)
 
-**Module 6:**
+**Module 6:**  
+- [Slides: GIS
+demonstration](https://appliedepi.github.io/intro_course/modules/module_6/slides/slides_gis_demo/slides_gis_demo.html)
 
 **Module 7:**
 
