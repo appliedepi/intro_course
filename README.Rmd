@@ -12,87 +12,63 @@ knitr::opts_chunk$set(
 ```
 
 
-<img src = "https://github.com/appliedepi/epiRhandbook_eng/raw/master/images/Epi%20R%20Handbook%20Banner%20Beige%201500x500.png" width = "800" height="300">
+
+# Introduction to R for Applied Epidemiology  
 
 
-# Intro to R for Applied Epidemiology  
+<img src = "https://github.com/appliedepi/epiRhandbook_eng/raw/master/images/Applied_Epi_logo.png" height = "200" align = "right">
+
+
+[This website](https://appliedepi.github.io/emory_training) hosts training materials for "Introduction to R for Applied Epidemiologists". This course teaches the fundamentals of R for applied epidemiologists and public health practitioners.  
+
+[**Applied Epi**](www.appliedepi.org) is a nonprofit organization supporting frontline practitioners through open-course analytical tools, training, and support. Our [Epidemiologist R Handbook](www.epirhandbook.com) is a free R reference manual which has been used by 130,000 people around the world.  
+
+
+
+
+# Course resources  
+
 
 <!-- badges: start -->
 <!-- badges: end -->
 
+**Module 1:**  
+- [Slides: Welcome, course logistics, RStudio, and basic R syntax](https://appliedepi.github.io/intro_course/modules/module_1/slides/course_introduction/slides_course_introduction.html)
 
-[link to welcome slides](https://github.com/appliedepi/intro_course/modules/module_1/slides/course_introduction/slides_course_introduction.html)
+**Module 2:**  
+- [Slides: Tidy data and data cleaning](https://appliedepi.github.io/intro_course/modules/module_2/slides/slides_cleaning_dplyr.html)
 
-[This website](https://appliedepi.github.io/emory_training) hosts training materials for the R demonstrations first delivered by **Applied Epi** to 40 Rollins COVID-19 Epidemiology fellows and colleagues from the [Emory COVID-19 Response Collaborative](https://emorycovidcollaborative.org/) in August 2021.   
-Links to the video recordings are available below and on our [YouTube channel](https://www.youtube.com/channel/UCgXBQIFJ_Rmq3UhWL_yrkxQ/featured).
+**Module 3:**  
+- [Slides: Grouping and summarizing data](https://appliedepi.github.io/intro_course/modules/module_3/slides/slides_grouping_summaries.html)
 
+**Module 4:**  
+- [Slides: Data visualization with ggplot2](https://appliedepi.github.io/intro_course/modules/module_4/slides/slides_ggplot_basics/slides_ggplot_basics.html)  
+- [Slides: Scales, themes, and labels](https://appliedepi.github.io/intro_course/modules/module_4/slides/slides_ggplot_scales_labels/slides_ggplot_scales_labels.html)
 
-# Applied Epi  
+**Module 5:**  
 
+**Module 6:**  
 
-<img src = "https://github.com/appliedepi/emory_training/raw/master/presentation/images/AppliedEpi_Hex_sub.png" height = "200" align = "right">
+**Module 7:**  
 
-**Applied Epi** is the non-profit organization that wrote the [Epidemiologist R Handbook](www.epirhandbook.com), a free R reference manual for applied epidemiology and public health which has been used by 50,000 people around the world.  
-
-Contact **epiRhandbook@gmail.com** to schedule R demonstrations, interactive training sessions, Intro-to-R workshops, or to subscribe to "help desk" support services from R experts who know applied epi!  
-
-
-
-
-# The Emory COVID-19 Response Collaborative  
-
-
-<img src = "https://github.com/appliedepi/emory_training/raw/master/presentation/images/ECRC_full%20color.png" width = "800" height="200">
-
-The [Emory COVID-19 Response Collaborative](https://emorycovidcollaborative.org/projects/georgia-department-of-public-health/) is an initiative led by the Emory Rollins School of Public Health in collaboration with the Georgia Department of Public Health (GDPH).  Its mission is to provide academic support to state and local health department partners during the COVID-19 crisis.  One of its seminal programs is the Rollins Epidemiology Fellows Program, a 2-year fellowship designed to attract, place and support early-career epidemiologists across Georgia’s 18 health districts and GDPH. With assistance from ECRC leadership and the Fulton County Board of Health, Applied Epi designed this tailored training session to build the fellows’ analytic capabilities in R through examples tailored to their applied needs in preparing jurisdictional COVID-19 outbreak reports and maps.
-
-
-# Training materials  
-
-The links below contain all of the materials used for the course. See our [Github repository](https://github.com/appliedepi/emory_training) for more detail:  
-
--   [Agenda](https://appliedepi.github.io/emory_training/timetable/timetable.pdf)
-
-Session 1: Case study walk-through - data cleaning and analytic workflow in an R markdown report 
-
--   [Analytical workflow presentation slides](https://appliedepi.github.io/emory_training/presentation/slides_workflow.html)
--   [Case study R project (zip download of example data and R markdown script)](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/emory_training/tree/master/case_study)
-
-Session 2: Data visualization with **ggplot2**  
-
--   [Data visualization presentation slides](https://appliedepi.github.io/emory_training/presentation/slides_ggplot.html)
--   [R markdown script](https://github.com/appliedepi/emory_training/blob/master/case_study/ggplot_demo.Rmd)
+**Module 7:**  
 
 
 Please note that all these training materials use *fake example data* in which no person is identifiable and the actual values have been scrambled.  
 
-# Video recordings 
 
-## **Session 1**: Data cleaning and analytic workflow (13^th^ August 2021)
-<iframe width="560" height="315" src="https://www.youtube.com/embed/nxBTDfJ_neE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-  
-  
-## **Session 2**: Data visualization with *ggplot* (20^th^ August 2021)
-<iframe width="560" height="315" src="https://www.youtube.com/embed/caMOUUG2joo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 
 # Acknowledgements  
 
 Instructors and authors from **Applied Epi** included:  
 
-* Neale Batra  
-* Alex Spina  
-* Henry Laurenson-Schafer  
-* Mathilde Mousset  
-* Wen Lin  
+* 
+* 
 
-Many thanks to the Fulton County Board of Health, that provided example data (anonymized and scrambled) for the case study.  
 
-Representatives from the Emory COVID-19 Response Collaborative included:  
-
-* Zena Belay  
-* Dr. Allison Chamberlain  
-* Shelby Rentmeester  
-* Eve Rose
+Thank you to the Fulton County Board of Health, that provided example data (anonymized and scrambled) for the case study.  
+Thank you to the {outbreak} package, which provided the basis for the dataset for the Ebola case study.  
 
 
 # Terms of Use and License   
