@@ -3,10 +3,13 @@
 
 <img src = "https://github.com/appliedepi/epiRhandbook_eng/raw/master/images/Epi%20R%20Handbook%20Banner%20Beige%201500x500.png" width = "800" height="300">
 
-# R Demonstration for Emory COVID-19 Response Collaborative
+# Intro to R for Applied Epidemiology
 
 <!-- badges: start -->
 <!-- badges: end -->
+
+[link to welcome
+slides](https://github.com/appliedepi/intro_course/modules/module_1/slides/course_introduction/slides_course_introduction.html)
 
 [This website](https://appliedepi.github.io/emory_training) hosts
 training materials for the R demonstrations first delivered by **Applied
