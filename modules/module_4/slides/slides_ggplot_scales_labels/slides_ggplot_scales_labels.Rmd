@@ -138,13 +138,27 @@ surv <- rio::import(here::here("data", "surveillance_linelist_clean.rds"))
 
 
 
+# Today: objectives & schedule  
 
----
-# Day timeline
+**In this module we aim to help you:**  
+* Understand R within the ecosystem of analytical tools  
+* Navigate RStudio and R projects  
+* Write a basic R script to load packages, import data, and view a dataset  
 
 
----
-# Objectives 
+```{r, echo=FALSE, warning=F, message=F}
+outline <- dplyr::tribble(
+  ~Time, ~Location, ~Topic,
+  "0900-0945",     "Main",      "Welcome, course logistics, Why R?",
+  "0950-1050",     "Main",      "Lecture and live demonstration:\nRStudio tour, R projects, basic R syntax, functions & packages, data import",
+  "1100-1200",     "Breakouts", "Setting up a script, importing data, and reviewing a data frame",
+  "1205-1220",     "Main",      "Debrief"
+)
+
+outline %>% 
+  flextable::qflextable() %>% 
+  flextable::add_footer_lines("Breaks are incorporated above, but not shown as rows")
+```
 
 
 

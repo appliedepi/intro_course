@@ -21,3 +21,12 @@ Chunk 2:
 Try to embed shiny app in a slide, that reads Google Froms and makes plot
 Alternatively, just have the app open in another tab and show it
 
+
+
+
+---
+     # testing a learnr embed
+     
+     ```{r, echo=F, out.width="100%"}
+knitr::include_url("https://nealebatra.shinyapps.io/embed1/", height = "400px")
+```

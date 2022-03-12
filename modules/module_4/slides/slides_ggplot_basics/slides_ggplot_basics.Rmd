@@ -1,8 +1,8 @@
 ---
-title: "Data Vizualization"
-subtitle: "An introduction to {ggplot2}<br><br>"
-author: '</br>Offered by: [Applied Epi](https:://appliedepi.org) </br> A nonprofit organization elevating frontline epidemiology <br>`r icons::icon_style(icons::fontawesome$brands$twitter, fill = "white")` [@epiRhandbook](https://twitter.com/epiRhandbook) `r icons::icon_style(icons::fontawesome("paper-plane"), fill = "white")` [contact@appliedepi.org](mailto:contact@appliedepi.org)'
-date: "March 2022"
+title: "Introduction to R for<br>Applied Epidemiology"
+subtitle: "<br>{ggplot2} for data visualization"
+author: "March 2022"
+date: '[contact@appliedepi.org](mailto:contact@appliedepi.org)'
 output:
   xaringan::moon_reader:
     seal: TRUE
@@ -70,7 +70,7 @@ style_mono_accent(
   link_color = "#48a878", 
   ## add logo to the title page (bit bigger)
   title_slide_background_image = "https://github.com/appliedepi/intro_course/raw/main/images/logo.png", 
-  title_slide_background_position = "90% 90%", 
+  title_slide_background_position = "95% 90%", 
   title_slide_background_size = "25%", 
   ## add logo to all following slides
   background_image = "https://github.com/appliedepi/intro_course/raw/main/images/logo.png", 
@@ -128,14 +128,27 @@ surv <- rio::import(here::here("data", "surveillance_linelist_clean.rds"))
 ```
 
 
+# Today: objectives & schedule  
+
+**In this module we aim to help you:**  
+* Understand R within the ecosystem of analytical tools  
+* Navigate RStudio and R projects  
+* Write a basic R script to load packages, import data, and view a dataset  
 
 
----
-# Day timeline
+```{r, echo=FALSE, warning=F, message=F}
+outline <- dplyr::tribble(
+  ~Time, ~Location, ~Topic,
+  "0900-0945",     "Main",      "Welcome, course logistics, Why R?",
+  "0950-1050",     "Main",      "Lecture and live demonstration:\nRStudio tour, R projects, basic R syntax, functions & packages, data import",
+  "1100-1200",     "Breakouts", "Setting up a script, importing data, and reviewing a data frame",
+  "1205-1220",     "Main",      "Debrief"
+)
 
-
----
-# Objectives 
+outline %>% 
+  flextable::qflextable() %>% 
+  flextable::add_footer_lines("Breaks are incorporated above, but not shown as rows")
+```
 
 
 

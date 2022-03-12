@@ -122,7 +122,7 @@ style_mono_accent(
 
 
 ```{r, echo=F, include = F}
-surv_raw <- rio::import(here::here("data", "surveillance_linelist_12012014.xlsx"))
+surv_raw <- rio::import(here::here("data", "surveillance_linelist_12012014.csv"))
 medical_linelist <- rio::import(here::here("data", "medical_linelist_12012014.xlsx"))
 
 ```
@@ -131,7 +131,7 @@ medical_linelist <- rio::import(here::here("data", "medical_linelist_12012014.xl
 
 
 
----
+
 class: inverse, center, middle
 
 .pull-left[

@@ -1,8 +1,8 @@
 ---
-title: "Welcome"
-subtitle: "Introduction to R for<br>Applied Epidemiology and Public Health<br>"
-author: '</br>Offered by: [Applied Epi](https:://appliedepi.org) </br> A nonprofit organization elevating frontline epidemiology <br>`r icons::icon_style(icons::fontawesome$brands$twitter, fill = "white")` [@epiRhandbook](https://twitter.com/epiRhandbook) `r icons::icon_style(icons::fontawesome("paper-plane"), fill = "white")` [contact@appliedepi.org](mailto:contact@appliedepi.org)'
-date: "March 2022"
+title: "Introduction to R for<br>Applied Epidemiology"
+subtitle: "Welcome and course overview"
+author: "March 2022"
+date: '[contact@appliedepi.org](mailto:contact@appliedepi.org)'
 output:
   xaringan::moon_reader:
     seal: TRUE
@@ -11,7 +11,7 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
-    css: xaringan-themer.css
+    css: [xaringan-themer.css] 
 ---
 
 ```{r, eval=F, echo=F, include = F}
@@ -67,10 +67,10 @@ pacman::p_load(
 style_mono_accent(
   base_color = "#00538c", 
   link_color = "#48a878", 
-  ## add logo to the title page (bit bigger)
-  title_slide_background_image = "https://github.com/appliedepi/intro_course/raw/main/images/logo.png", 
-  title_slide_background_position = "90% 90%", 
-  title_slide_background_size = "25%", 
+  # add logo to the title page (bit bigger)
+  title_slide_background_image = "https://github.com/appliedepi/intro_course/raw/main/images/logo.png",
+  title_slide_background_position = "95% 95%",
+  title_slide_background_size = "25%",
   ## add logo to all following slides
   background_image = "https://github.com/appliedepi/intro_course/raw/main/images/logo.png", 
   background_size = "10%",
@@ -97,7 +97,7 @@ style_mono_accent(
 
 .left-column[
 
-```{r, eval = TRUE, echo = FALSE, out.width = "65%"}
+```{r, eval = TRUE, echo = FALSE, out.width = "55%"}
 # Using here() alone won't work because Rmd folder becomes the rendering root.
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
@@ -105,9 +105,9 @@ style_mono_accent(
 knitr::include_graphics(xfun::relative_path(here::here("images", "instructors", "neale.png")))
 ```
 
-</br>
 
-```{r, eval = TRUE, echo = FALSE, out.width = "65%"}
+
+```{r, eval = TRUE, echo = FALSE, out.width = "55%"}
 # Using here() alone won't work because Rmd folder becomes the rendering root.
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
@@ -115,9 +115,9 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "instructors", 
 knitr::include_graphics(xfun::relative_path(here::here("images", "instructors", "paula.png")))
 ```
 
-</br>
 
-```{r, eval = TRUE, echo = FALSE, out.width = "65%"}
+
+```{r, eval = TRUE, echo = FALSE, out.width = "55%"}
 # Using here() alone won't work because Rmd folder becomes the rendering root.
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
@@ -127,28 +127,31 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "instructors", 
 
 ]
 
+.right-column[
 
 * **Neale Batra**  
 President and co-founder, Applied Epi  
-@MSF @WHO @CDC @USAID @Philly @CaliforniaEIS
+@MSF @WHO @CDC @USAID @Philly @CalEIS
 </br>
 </br>
 
 * **Paula Blomquist**  
-Bio here  
 @PHE @EPIET @WHO @PHRST
 </br>
 </br>
 
 
 * **Arran Hamlet**  
-Bio here  
 @Imperial @WHO  
-
+</br>
+</br>
+ 
+]
 
 .footnote[**Thank you for your service** *to your community in these busy times for public health. We are glad that you are taking the time to learn R with us.*]
 
 ???
+
 
 
 
@@ -259,13 +262,13 @@ class: inverse, center, middle
 ---
 class: inverse, center, middle
 
-# Why R? 
-### Tagline here (TODO) 
+# Why use R? 
+
 
 ---
 # Flexibility 
 
-```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
+```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
 # Using here() alone won't work because Rmd folder becomes the rendering root.
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
@@ -284,7 +287,7 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "int
 # Popularity 
 .center[
 
-```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
+```{r, eval = TRUE, echo = FALSE, out.width = "65%"}
 # Using here() alone won't work because Rmd folder becomes the rendering root.
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
@@ -353,7 +356,7 @@ ggplot() +
 ---
 # User community 
 
-```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
+```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
 # Using here() alone won't work because Rmd folder becomes the rendering root.
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
@@ -371,7 +374,7 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "use
 # Data visualization 
 
 
-```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
+```{r, eval = TRUE, echo = FALSE, out.width = "90%"}
 # Using here() alone won't work because Rmd folder becomes the rendering root.
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
@@ -404,7 +407,7 @@ Slide source: Paula Bianca Blomquist
 
 .pull-right[
 
-```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
+```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
 # Using here() alone won't work because Rmd folder becomes the rendering root.
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
@@ -505,17 +508,9 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "tea
 # Partnerships
 
 We work closely with local and global entities to support people doing the hard work of public health practice
-.pull-left[
-- TEPHINET and the US CDC
-     * A global network of Field Epi Training Programs (FETPs)
-- Médecins sans frontières/<br>Doctors without Borders (MSF)
-- World Health Organization (WHO)
-- EPIET/EUPHEM Alumni Network (EAN)
-]
 
-.pull-right[
 
-```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
+```{r, eval = TRUE, echo = FALSE, out.width = "80%"}
 # Using here() alone won't work because Rmd folder becomes the rendering root.
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
@@ -523,7 +518,6 @@ We work closely with local and global entities to support people doing the hard 
 knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "partners-blur.jpg")))
 ```
 
-]
 
 
 ???
@@ -651,7 +645,7 @@ outline %>%
   flextable::qflextable()
 ```
 
-- Each module will begin with a brief review of the previous module, and will end with a debrief.  
+- Each module will begin with a brief review of the previous module, and will end with a plenary debrief.  
 - Between modules, you will be asked to write answers to two self-reflective questions in the [Applied Epi Community](www.community.appliedepi.org) class thread.  
 
 
@@ -771,13 +765,4 @@ outline %>%
 We are in this course to succeed, together
 
 
-
-
-
----
-# testing a learnr embed  
-
-```{r, echo=F, out.width="100%"}
-knitr::include_url("https://nealebatra.shinyapps.io/embed1/", height = "400px")
-```
 
