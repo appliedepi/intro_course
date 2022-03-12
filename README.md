@@ -27,11 +27,11 @@ syntax](https://appliedepi.github.io/intro_course/modules/module_1/slides/course
 
 **Module 2:**  
 - [Slides: Tidy data and data
-cleaning](https://appliedepi.github.io/intro_course/modules/module_2/slides/slides_cleaning_dplyr.html)
+cleaning](https://appliedepi.github.io/intro_course/modules/module_2/slides/slides_cleaning_dplyr/slides_cleaning_dplyr.html)
 
 **Module 3:**  
 - [Slides: Grouping and summarizing
-data](https://appliedepi.github.io/intro_course/modules/module_3/slides/slides_grouping_summaries.html)
+data](https://appliedepi.github.io/intro_course/modules/module_3/slides/slides_summary_tables/slides_grouping_summaries.html)
 
 **Module 4:**  
 - [Slides: Data visualization with
