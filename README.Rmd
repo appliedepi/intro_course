@@ -74,7 +74,7 @@ THESE ARE DRAFTS
 
 **Module 1:**  
 - [Slides: Welcome, course logistics, RStudio, and basic R syntax](https://appliedepi.github.io/intro_course/modules/module_1/slides/course_introduction/slides_course_introduction.html)  
-- [Slides: R basic syntax, functions, and packages](https://appliedepi.github.io/intro_course/modules/module_1/slides/functions_packages/functions_packages.html)  
+- [Slides: R basic syntax, functions, and packages](https://appliedepi.github.io/intro_course/modules/module_1/slides/functions_packages/slides_functions_packages.html)  
 
 
 - Exercise:  
