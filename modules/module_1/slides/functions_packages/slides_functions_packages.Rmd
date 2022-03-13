@@ -653,7 +653,7 @@ Both of these codes install and load the same packages.
 
 Using {base} R  
 
-```{r, eval=F}
+```{r, eval=F, echo=T}
 install.packages(
      c("rio",
        "janitor",
@@ -675,7 +675,7 @@ library(tidyverse)
 
 Using {pacman}  
 
-```{r, eval=F}
+```{r, eval=F, echo=T}
 pacman::p_load(
   rio,
   janitor,
