@@ -179,14 +179,10 @@ R **functions** are similar to Excel **equations**
   * They accept inputs within **parentheses**  
   * The inputs are separated by **commas**  
 
---
-
-You can reference other values within the equation:  
-* Excel function: `sumif(B2, "")`
 
 
 ---
-# Simple functions
+# Simple R functions  
 
 .pull-left[
 
@@ -343,14 +339,25 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "functions_pack
 knitr::include_graphics(xfun::relative_path(here::here("images", "functions_packages", "excel_arguments.png")))
 ```
 
-Once again, Excel is not so different:  
-  * Arguments have names  
-  * Arguments values are separated by commas  
-  * Some are required, others are optional  
+Once again, Excel is not so different from R:  
+  * Arguments have names and are separated by commas  
 
 --
 
-.footnote[What is returned by this Excel equation?]
+  * Values supplied can be numeric (12) or character ("Apple")  
+  
+--
+
+  * Some arguments are optional  
+  
+--
+  
+  * They can reference other values  
+  
+
+
+???
+What is returned by this Excel equation?
 
 
 
@@ -379,11 +386,11 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "functions_pack
 
 
 ---
-# Example: tbl_cross()
+# Example  
 
-Let's say we have this dataset below. We import it into R, and save with the name `surv`.  
+Imagine we have this dataset imported into R, saved with the name **`surv`**.  
 
-We want to cross-tabulate the columns `case_def` and `gender`.  
+We want to create a cross-tabulation of the columns `case_def` and `gender`.  
 
 ```{r include=FALSE}
 surv <- surv_linelist %>% 
@@ -398,7 +405,7 @@ surv %>% knitr::kable()
 
 
 ---
-# Example: tbl_cross()
+# The `tbl_cross()` function 
 
 ```{r include=FALSE}
 linelist <- surv_linelist
@@ -428,7 +435,7 @@ Here is the function, with no values provided to the arguments.
 ```
 
 ---
-# Example: tbl_cross()
+# The `tbl_cross()` function 
 
 ```{r include=FALSE}
 linelist <- surv_linelist
@@ -457,7 +464,7 @@ The dataset we want to cross-tabulate is named `surv`
 
 
 ---
-# Example: tbl_cross()
+# The `tbl_cross()` function 
 
 ```{r include=FALSE}
 linelist <- surv_linelist
@@ -493,7 +500,7 @@ We want the `gender` values to form the rows of the cross-table
 
 
 ---
-# Example: tbl_cross()
+# The `tbl_cross()` function 
 
 ```{r include=FALSE}
 linelist <- surv_linelist
@@ -522,7 +529,7 @@ We want the `case_def` values to form the columns of the cross-table
 
 
 ---
-# Example: tbl_cross()
+# The `tbl_cross()` function 
 
 ```{r include=FALSE}
 linelist <- surv_linelist
@@ -700,7 +707,7 @@ You had to remember one function for each type of file: `read.csv()`, `read_exce
 
 --
 
-The {rio} package makes it easy with only one function: `import()`  
+The {rio} package makes it easy with only one function: **`import()`**  
 
 ```{eval=F}
 import("surveillance_linelist_12012014.csv")
@@ -730,7 +737,11 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "functions_pack
 
 An RStudio project is a self-contained and portable R working environment.  
 
-It is a folder with all the files associated with a distinct project (data files, R scripts, outputs...)  
+It is a folder with all the files associated with a distinct project:  
+* Data files  
+* R scripts  
+* Outputs  
+* etc.
 
 This makes your life immensely easier.  
 ]
@@ -750,6 +761,10 @@ You can zip the folder and share it with a colleague, it can be hosted on a shar
 
 ---
 # File paths  
+
+Let's try import a dataset "linelist.csv" into R!  
+
+--
 
 Will this "absolute" file path work on your computer? Or will it "break"?  
 
