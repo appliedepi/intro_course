@@ -41,7 +41,7 @@ THESE ARE DRAFTS
 
 The course utilizes the R package {learnr} to provide interactive exercises *within* your RStudio window. To access these custom exercises, follow these instructions:
 
-1) Set up R and RStudio (we will help you do this before and during the course)  
+1) Set up R and RStudio (we will provide instructions and troubleshooting before the course)  
 
 2) Run these commands in your R console:  
 `install.packges("learnr")`  
@@ -51,7 +51,18 @@ The course utilizes the R package {learnr} to provide interactive exercises *wit
 `remotes::install_github("appliedepi/introexercises", dep = TRUE, force = TRUE)`  
 Follow any prompted instructions regarding necessary updates  
 
-4) To open an exercise, run the command listed in the corresponding module information below. That tutorial will appear in the upper-right "Tutorial" pane of your RStudio. You can proceed in this pane, or click the small icon to expand this tutorial into a separate window.  
+4) To open an exercise, Click on the "Tutorial" tab in the upper-right RStudio pane (which also contains a tab holding your R Environment).  
+  * the first time, you may need to restart your R session for the tutorials to appear.  
+  
+5) Select the exercise for your current course module - look for the name "Applied Epi -".  
+  * You can proceed with the exercise in this pane, or click the small icon to expand this tutorial into a separate window.  
+  * Watch the gif below. The exercise will provide sample code that you can run from your R script.  
+  * Return to the exercise to answer quiz questions and proceed to the next section of the exercise.  
+  
+
+```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
+knitr::include_graphics("images/README_images/exercise_demo.gif")
+```
 
 
 # Course slides  
@@ -62,22 +73,48 @@ Follow any prompted instructions regarding necessary updates
 THESE ARE DRAFTS
 
 **Module 1:**  
-- [Slides: Welcome, course logistics, RStudio, and basic R syntax](https://appliedepi.github.io/intro_course/modules/module_1/slides/course_introduction/slides_course_introduction.html)
-- Exercise: `learnr::run_tutorial("module1", "introexercises")`  
+- [Slides: Welcome, course logistics, RStudio, and basic R syntax](https://appliedepi.github.io/intro_course/modules/module_1/slides/course_introduction/slides_course_introduction.html)  
+
+- Exercise:  
+
+```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
+knitr::include_graphics("images/README_images/pointer_tutorial_setup.png")
+```
 
 **Module 2:**  
-- [Slides: Tidy data and data cleaning](https://appliedepi.github.io/intro_course/modules/module_2/slides/slides_cleaning_dplyr/slides_cleaning_dplyr.html)
-- Exercise: `learnr::run_tutorial("", "introexercises")`  
+- [Slides: Tidy data and data cleaning](https://appliedepi.github.io/intro_course/modules/module_2/slides/slides_cleaning_dplyr/slides_cleaning_dplyr.html)  
+
+- Exercise:  
+
+```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
+knitr::include_graphics("images/README_images/pointer_tutorial_cleaning.png")
+```
 
 **Module 3:**  
-- [Slides: Grouping and summarizing data](https://appliedepi.github.io/intro_course/modules/module_3/slides/slides_summary_tables/slides_grouping_summaries.html)
-- Exercise: `learnr::run_tutorial("", "introexercises")`  
+- [Slides: Grouping and summarizing data](https://appliedepi.github.io/intro_course/modules/module_3/slides/slides_summary_tables/slides_grouping_summaries.html)  
+
+- Exercise:  
+
+```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
+knitr::include_graphics("images/README_images/pointer_tutorial_grouping.png")
+```
 
 **Module 4:**  
 - [Slides: Data visualization with ggplot2](https://appliedepi.github.io/intro_course/modules/module_4/slides/slides_ggplot_basics/slides_ggplot_basics.html)  
-- Exercise: `learnr::run_tutorial("", "introexercises")`  
+
+- Exercise:  
+
+```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
+knitr::include_graphics("images/README_images/pointer_tutorial_ggplot_basics.png")
+```
+
 - [Slides: Scales, themes, and labels](https://appliedepi.github.io/intro_course/modules/module_4/slides/slides_ggplot_scales_labels/slides_ggplot_scales_labels.html)  
-- Exercise: `learnr::run_tutorial("", "introexercises")`  
+
+- Exercise:  
+
+```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
+knitr::include_graphics("images/README_images/pointer_tutorial_ggplot_scales.png")
+```
 
 
 **Module 5:**  
@@ -85,11 +122,18 @@ THESE ARE DRAFTS
 - [Slides: Transforming data: pivots](https://appliedepi.github.io/intro_course/modules/module_5/slides/slides_pivots/slides_pivots.html)  
 
 **Module 6:**  
+- [Slides: Epidemic curves in ggplot2]()  TODO  
+- [Slides: Heat plots in ggplot2]()  TODO  
+- [Slides: Age/sex pyramids in ggplot2]()  TODO  
 - [Slides: GIS demonstration](https://appliedepi.github.io/intro_course/modules/module_6/slides/slides_gis_demo/slides_gis_demo.html)  
 
 **Module 7:**  
+- [Slides: R markdown and routine reports]()  TODO  
 
 **Module 8:**  
+- [Slides: COVID case study]()  TODO  
+- [Slides: Code review]()  TODO  
+
 
 
 Please note that all these training materials use *fake example data* in which no person is identifiable and the actual values have been scrambled.  
