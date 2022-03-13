@@ -20,11 +20,14 @@ been used by 130,000 people around the world.
 
 Click here to download the course outline (PDF)
 
-# Case study files and data
+# Course folder and case study data
 
 [Click
-here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/course_files)
+here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/intro_course)
 to download a zipped folder to use in the course exercises.
+
+**Unzip the folder and save it on your computer (not on a shared
+drive).** You will receive further instructions in the course.
 
 # Course exercises
 
@@ -75,7 +78,7 @@ THESE ARE DRAFTS
 - [Slides: Welcome, course logistics, RStudio, and basic R
 syntax](https://appliedepi.github.io/intro_course/modules/module_1/slides/course_introduction/slides_course_introduction.html)  
 - [Slides: R basic syntax, functions, and
-packages](https://appliedepi.github.io/intro_course/modules/module_1/slides/functions_packages/functions_packages.html)
+packages](https://appliedepi.github.io/intro_course/modules/module_1/slides/functions_packages/slides_functions_packages.html)
 
 -   Exercise:
 
