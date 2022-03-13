@@ -30,7 +30,7 @@ Click here to download the course outline (PDF)
 
 # Course folder and case study data  
 
-[Click here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/course_files) to download a zipped folder to use in the course exercises.  
+[Click here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/intro_course) to download a zipped folder to use in the course exercises.  
 
 **Unzip the folder and save it on your computer (not on a shared drive).** You will receive further instructions in the course.  
 
