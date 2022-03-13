@@ -154,12 +154,64 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "functions_pack
      - Does some action with the inputs  
      - Returns an output  
 
+--
+
 - Functions have a name (*hopefully intuitive!*), and have parentheses ( )  
      * `print()` helps you print an R object
      * `mean()`  averages some values
      * `filter()` removes certain rows in a dataset using logical criteria
 
 .footnote[functions also appear in Excel as *equations*]
+
+
+---
+# Does this look familiar?  
+
+```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "functions_packages", "excel_functions.png")))
+```
+
+R **functions** are similar to Excel **equations**  
+
+  * They accept inputs within **parentheses**  
+  * The inputs are separated by **commas**  
+
+--
+
+You can reference other values within the equation:  
+* Excel function: `sumif(B2, "")`
+
+
+---
+# Simple functions
+
+.pull-left[
+
+- `sqrt()`  
+
+  * Accepts one numeric value as input, returns the square root
+
+]
+
+.pull-right[
+```{r, echo=T, out.width="100%"}
+sqrt(49)
+```
+
+]
+
+.footnote[Note the [1] that appears: it is this command's  1st (and only) output in the R console]
+
+???
+Demonstrate each `sqrt(49)`, `sqrt(12)`, `max(1, 15, 2, 9)` (explain commas)
+Explain vectors `c(1, 15, 2, 9)` and a named vector `cities <- c("Wuhan", "Milan", "New York")`
+Quickly note indexed vectors `cities[[2]]`
+and numeric: `ages <- c(15, 28, 100, 15, 65, 4, 10)` then `summary(ages)` and `summary(ages)[2]` and `summary(ages)[[2]]`
+
+
 
 ---
 # Simple functions
@@ -172,9 +224,7 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "functions_pack
 - `max()`  
   * Accepts numeric values and returns the maximum
 
-- `c()`  
-  * Shorthand for "concatenate"  
-  * Combines inputs into a *vector*  
+
 ]
 
 .pull-right[
@@ -185,7 +235,46 @@ sqrt(49)
 ```{r, echo=T, out.width="100%"}
 max(2, 10, 15, 200, 9)
 ```
+
+]
+
+.footnote[These are examples of functions in "*base R*" - functions that come installed with R.]
+
+???
+Demonstrate each `sqrt(49)`, `sqrt(12)`, `max(1, 15, 2, 9)` (explain commas)
+Explain vectors `c(1, 15, 2, 9)` and a named vector `cities <- c("Wuhan", "Milan", "New York")`
+Quickly note indexed vectors `cities[[2]]`
+and numeric: `ages <- c(15, 28, 100, 15, 65, 4, 10)` then `summary(ages)` and `summary(ages)[2]` and `summary(ages)[[2]]`
+
+
+---
+# Simple functions
+
+.pull-left[
+
+- `sqrt()`  
+  * Accepts one numeric value as input, returns the square root
 <br>
+
+- `max()`  
+  * Accepts numeric values and returns the maximum
+<br>
+
+- `c()`  
+  * Shorthand for "concatenate"  
+  * Combines inputs into a *vector*  
+]
+
+.pull-right[
+```{r, echo=T, out.width="100%"}
+sqrt(49)
+```
+<br>
+
+```{r, echo=T, out.width="100%"}
+max(2, 10, 15, 200, 9)
+```
+
 ```{r, echo=T, out.width="100%"}
 c(2, 5, 9, 12, 47)
 ```
@@ -198,6 +287,11 @@ Demonstrate each `sqrt(49)`, `sqrt(12)`, `max(1, 15, 2, 9)` (explain commas)
 Explain vectors `c(1, 15, 2, 9)` and a named vector `cities <- c("Wuhan", "Milan", "New York")`
 Quickly note indexed vectors `cities[[2]]`
 and numeric: `ages <- c(15, 28, 100, 15, 65, 4, 10)` then `summary(ages)` and `summary(ages)[2]` and `summary(ages)[[2]]`
+
+
+
+
+
 
 
 ---
@@ -238,6 +332,27 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "functions_pack
 
 
 
+---
+
+# This may look familiar  
+
+```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "functions_packages", "excel_arguments.png")))
+```
+
+Once again, Excel is not so different:  
+  * Arguments have names  
+  * Arguments values are separated by commas  
+  * Some are required, others are optional  
+
+--
+
+.footnote[What is returned by this Excel equation?]
+
+
 
 
 ---
@@ -266,19 +381,73 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "functions_pack
 ---
 # Example: tbl_cross()
 
+Let's say we have this dataset below. We import it into R, and save with the name `surv`.  
+
+We want to cross-tabulate the columns `case_def` and `gender`.  
+
+```{r include=FALSE}
+surv <- surv_linelist %>% 
+     select(case_def, gender, age) %>% 
+     head(8)
+```
+
+```{r, echo=F, eval=T}
+surv %>% knitr::kable()
+```
+
+
+
+---
+# Example: tbl_cross()
+
 ```{r include=FALSE}
 linelist <- surv_linelist
 ```
 
+```{r, results = "asis", echo = FALSE}
+"tbl_cross() requires us to supply 3 arguments, to create a cross-tabulation:" %>%
+  flair("tbl_cross()", color = "cornflowerblue") %>%
+  flair("arguments", color = "orange") %>%
+  flair_all(before = "<h4>", after = "</h4>") %>%
+  cat()
+```
+
+--
+
+Here is the function, with no values provided to the arguments.  
+
 
 ```{r, results = "asis", echo = FALSE}
-"Let's say we have a dataset in R which we named 'linelist'.\ntbl_cross() needs 3 arguments to create a cross-tabulation:" %>%
-  flair("dataset", color = "deeppink") %>%
+"tbl_cross(data =        , row =        , col =        )" %>%
+  flair("tbl_cross(", color = "cornflowerblue") %>%
+  flair("data =", color = "orange") %>%
+  flair("col =", color = "orange") %>%
+  flair("row =", color = "orange") %>%
+  flair_all(before = "<h4>", after = "</h4>") %>%
+  cat()
+```
+
+---
+# Example: tbl_cross()
+
+```{r include=FALSE}
+linelist <- surv_linelist
+```
+
+```{r, results = "asis", echo = FALSE}
+"tbl_cross() requires us to supply 3 arguments, to create a cross-tabulation:" %>%
   flair("tbl_cross()", color = "cornflowerblue") %>%
-  flair("dataset", color = "deeppink") %>%
-  flair("linelist", color = "deeppink") %>%
   flair("arguments", color = "orange") %>%
-  flair("column name", color = "green") %>%
+  flair_all(before = "<h4>", after = "</h4>") %>%
+  cat()
+```
+
+The dataset we want to cross-tabulate is named `surv`  
+
+
+```{r, results = "asis", echo = FALSE}
+"tbl_cross(data = surv, row =       , col =         )" %>%
+  flair("tbl_cross(", color = "cornflowerblue") %>%
   flair("data =", color = "orange") %>%
   flair("col =", color = "orange") %>%
   flair("row =", color = "orange") %>%
@@ -287,68 +456,276 @@ linelist <- surv_linelist
 ```
 
 
---
+---
+# Example: tbl_cross()
 
-```{r function, include = F}
-tbl_cross(data = linelist, row = gender, col = case_def)
+```{r include=FALSE}
+linelist <- surv_linelist
 ```
 
-```{r function_flair, echo = FALSE}
-decorate("function") %>%
-  flair("tbl_cross", color = "cornflowerblue") %>%
-  flair("data", color = "orange") %>% 
-  flair("row", color = "orange") %>% 
-  flair("col", color = "orange") %>% 
-  flair("linelist", color = "deeppink") %>% 
-  flair("gender", color = "green") %>% 
-  flair("case_def", color = "green") %>% 
+```{r, results = "asis", echo = FALSE}
+"tbl_cross() requires us to supply 3 arguments, to create a cross-tabulation:" %>%
+  flair("tbl_cross(", color = "cornflowerblue") %>%
+  flair("arguments", color = "orange") %>%
+  flair_all(before = "<h4>", after = "</h4>") %>%
+  cat()
+```
+
+We want the `gender` values to form the rows of the cross-table 
+
+```{r, results = "asis", echo = FALSE}
+"tbl_cross(data = surv, row = gender, col =         )" %>%
+  flair("tbl_cross(", color = "cornflowerblue") %>%
+  flair("data =", color = "orange") %>%
+  flair("col =", color = "orange") %>%
+  flair("row =", color = "orange") %>%
+  flair_all(before = "<h4>", after = "</h4>") %>%
+  cat()
+```
+
+
+
+
+
+
+
+
+
+
+---
+# Example: tbl_cross()
+
+```{r include=FALSE}
+linelist <- surv_linelist
+```
+
+```{r, results = "asis", echo = FALSE}
+"tbl_cross() requires us to supply 3 arguments, to create a cross-tabulation:" %>%
+  flair("tbl_cross(", color = "cornflowerblue") %>%
+  flair("arguments", color = "orange") %>%
+  flair_all(before = "<h4>", after = "</h4>") %>%
+  cat()
+```
+
+We want the `case_def` values to form the columns of the cross-table 
+
+```{r, results = "asis", echo = FALSE}
+"tbl_cross(data = surv, row = gender, col = case_def)" %>%
+  flair("tbl_cross(", color = "cornflowerblue") %>%
+  flair("data =", color = "orange") %>%
+  flair("col =", color = "orange") %>%
+  flair("row =", color = "orange") %>%
+  flair_all(before = "<h4>", after = "</h4>") %>%
+  cat()
+```
+
+
+
+---
+# Example: tbl_cross()
+
+```{r include=FALSE}
+linelist <- surv_linelist
+```
+
+```{r, results = "asis", echo = FALSE}
+"tbl_cross() requires us to supply 3 arguments, to create a cross-tabulation:" %>%
+  flair("tbl_cross(", color = "cornflowerblue") %>%
+  flair("arguments", color = "orange") %>%
+  flair_all(before = "<h4>", after = "</h4>") %>%
+  cat()
+```
+
+We want the `case_def` values to form the columns of the cross-table 
+
+```{r tblcross, include = F}
+tbl_cross(data = surv, row = gender, col = case_def)
+```
+
+```{r tblcross_flair, echo=F}
+decorate("tblcross") %>%
+  flair("tbl_cross(", color = "cornflowerblue") %>%
+  flair("data =", color = "orange") %>%
+  flair("col =", color = "orange") %>%
+  flair("row =", color = "orange") %>%
   knit_print.with_flair()
 ```
 
 
 
 
-???
-gender and case_def are variables in the linelist dataset
-The colors have been added in the slides for clarity (they do not appear this way in R)
+---
+# Packages  
+
+The functions `sqrt()`, `sum()`, and `c()` are ready-to-use when you install R.  
+
+These are called {base} R functions, but are only a small portion of R.  
+
+Most functions you will use must be downloaded in an R **package**.  
+
+--
+
+For example, `tbl_cross()` is contained in the R package named {gtsummary}.  
+
+.pull-left[
+
+R packages are often referred to in {brackets} and have "hex" logos.  
+
+]
+
+.pull-right[
+```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "functions_packages", "gt_summary.png")))
+```
+]
 
 ---
 
+# Packages
+
+An R package is a *shareable bundle of related functions* that you can download and use. Packages typically have a theme, for example:
+
+
+* {ggplot2} is the most common data visualization package  
+* {lubridate} makes it easier to work with dates  
+* {janitor} help clean and summarize data  
+* {rmarkdown} help you write documents and make dashboards  
+
+```{r, eval = TRUE, echo = FALSE, out.width = "20%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "functions_packages", "ggplot2.png")))
+knitr::include_graphics(xfun::relative_path(here::here("images", "functions_packages", "lubridate.png")))
+knitr::include_graphics(xfun::relative_path(here::here("images", "functions_packages", "janitor.png")))
+knitr::include_graphics(xfun::relative_path(here::here("images", "functions_packages", "rmarkdown.png")))
+
+
+```
+
+
+---
+# Install vs. Load  
+
+**Step 1 - Install:** A package is **installed once** and stored in your R “library”.  
+  * The package is like a "book" of functions which you buy for your library.  
+     
+--
+
+**Step 2 - Load:** Begin every R session by "loading" the packages you want to use  
+  * This is like borrowing that book from your library  
+  
+```{r, eval = TRUE, echo = FALSE, out.width = "40%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+knitr::include_graphics(xfun::relative_path(here::here("images", "functions_packages", "bookshelf1.png")))
+```
 
 
 
 
 
 ---
-# A real R function 
+# {pacman}  
 
-But we do not use R to bake break. Let's see a real example:
+This package help you manage other packages.  
 
-The function `age_pyramid()` takes the following arguments:  
+* **pac** - **pac**kage  
+* **man** - **man**ager  
 
-Argument        |Expected                
-----------------|--------------------
-`data = `       |A dataset imported into R to be used for the pyramid
-`age_group = `  |A column name in the data of categorical ages (e.g. "10-14")
-`split_by = `   |A column name from the data of gender values (e.g. "f")  
+It **installs and loads** 
 
 
 
 ---
+# Which version is more simple?  
 
-1. Write the function
-2. In the parentheses, you provide values for the function's *arguments*  
-3. Unseen, the function's code runs, using the values you have given for its arguments
-4. An output is returned  
+Both of these codes install and load the same packages.  
+
+.pull-left[
+
+Using {base} R  
+
+```{r, eval=F}
+install.packages(
+     c("rio",
+       "janitor",
+       "gtsummary",
+       "here",
+       "tidyverse"))
+
+library(rio)
+library(janitor)
+library(gtsummary)
+library(here)
+library(tidyverse)
+```
 
 
+]
 
+.pull-right[
+
+Using {pacman}  
+
+```{r, eval=F}
+pacman::p_load(
+  rio,
+  janitor,
+  gtsummary,
+  here,
+  tidyverse)
+```
+
+]
+
+.footnote[We show you this, because you will encounter {base} in your collaborations with others]
 
 
 ---
-# File paths
+# Importing data with {rio}  
 
-#### Use the `{here}` package to find files
+Importing data into R **used to be** painful  
+
+You had to remember one function for each type of file: `read.csv()`, `read_excel()`, `read_xlsx()`...  
+
+--
+
+The {rio} package makes it easy with only one function: `import()`  
+
+```{eval=F}
+import("surveillance_linelist_12012014.csv")
+```
+
+.pull-left[
+"rio" is shorthand for "R inputs/outputs"  
+]
+
+.pull-right[
+
+```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+knitr::include_graphics(xfun::relative_path(here::here("images", "functions_packages", "rio.png")))
+```
+]
+
+---
+# R projects  
+
+TODO
+
+---
+# File paths  
+
+The `{here}` package to find files
 
 .pull-left[
 - *Relative* rather than *absolute* file-paths 
@@ -367,32 +744,4 @@ Argument        |Expected
 .footnote[
 See the [EpiRHandbook section on here package](https://epirhandbook.com/import-and-export.html?q=here#here)
 ]
-
----
-# Importing data  
-#### Using the `{rio}` package for important data 
-- `rio::import()` to import a file
-  - wrapper package able to import wide variety of file formats
-
-
-```{r, eval=FALSE, echo = TRUE}
-# import excel file from data folder
-# use  sheet named **in**
-raw_linelist <- rio::import(
-  here::here("data", "covid_linelist.xlsx"), 
-  which = "in"
-)
-```
-
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
-# import actual data for use in this slide deck
-linelist_raw <- rio::import(here::here("data", "linelist_cleaned.rds"))
-```
-
-.footnote[
-
-See the [EpiRHandbook section on importing](https://epirhandbook.com/cleaning-data-and-core-functions.html?q=import#import)
-
-]
-
 
