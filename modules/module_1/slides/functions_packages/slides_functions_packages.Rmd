@@ -807,7 +807,7 @@ The path *begins* at the R project. Everything before is flexible.
 
 --
 
-The command `here("data", "clean", "linelist.csv")`  
+The command **`here("data", "clean", "linelist.csv")`**  
 
 produces this file path on Laura's computer:  
 
