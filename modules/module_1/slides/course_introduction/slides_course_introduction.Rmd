@@ -95,6 +95,8 @@ style_mono_accent(
 
 # Thank you for joining us  
 
+PENDING REVISIONS - PUT INSTRUCTORS HERE  
+
 .left-column[
 
 ```{r, eval = TRUE, echo = FALSE, out.width = "55%"}
@@ -694,23 +696,23 @@ outline %>%
 ---
 # Breakouts and support  
 
-- **General pattern:** Brief explanation -> Demonstration -> Exercises in breakouts  
+- **General pattern:** Brief explanation -> Live demonstration -> breakout exercises -> plenary debrief  
 
 --
 
-- **Facilitators will rotate** slowly between breakout groups throughout the course.   
+- **Assistant instructors** will facilitate breakout groups and lead plenary debriefs  
 
 --
 
-- **Screen fatigue is real** - you are welcome to turn off your video, but we wish that you keep video on when your breakouts are discussing
+- **Screen fatigue is real** - you are welcome to turn off your video, but please try to keep video on in breakout discussions  
 
 --
 
-- **You can post questions in the Q&A tool**. An instructor will be monitoring the questions and will answer them in the chat or verbally.   
+- **Post questions in the Meet Q&A tool** - an instructor will be monitoring and will answer in the chat or verbally  
 
 --
 
-- **Extra support** will be available during lunch, in a breakout room, for participants who are very confused. 
+- **Extra support** is available during lunch, in a breakout room, for participants who are very confused  
 
 
 
