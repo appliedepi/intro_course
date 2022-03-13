@@ -536,7 +536,7 @@ linelist <- surv_linelist
   cat()
 ```
 
-We want the `case_def` values to form the columns of the cross-table 
+Running the command produces the table!  
 
 ```{r tblcross, include = F}
 tbl_cross(data = surv, row = gender, col = case_def)
@@ -561,7 +561,7 @@ The functions `sqrt()`, `sum()`, and `c()` are ready-to-use when you install R.
 
 These are called {base} R functions, but are only a small portion of R.  
 
-Most functions you will use must be downloaded in an R **package**.  
+However, most functions you will use must be downloaded in an R **package**.  
 
 --
 
@@ -617,8 +617,8 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "functions_pack
      
 --
 
-**Step 2 - Load:** Begin every R session by "loading" the packages you want to use  
-  * This is like borrowing that book from your library  
+**Step 2 - Load:** Begin **every R session** by "loading" the packages you want to use  
+  * This is like borrowing the books from your library  
   
 ```{r, eval = TRUE, echo = FALSE, out.width = "40%"}
 # Using here() alone won't work because Rmd folder becomes the rendering root.
@@ -634,17 +634,18 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "functions_pack
 ---
 # {pacman}  
 
-This package help you manage other packages.  
+This package help you manage the instal/loading of other packages.  
 
-* **pac** - **pac**kage  
-* **man** - **man**ager  
+* **{pacman}** = **pac**kage **man**ager 
 
-It **installs and loads** 
+It installs the package (if necessary) **and** loads it for use in the current R session.  
+
+
 
 
 
 ---
-# Which version is more simple?  
+# Which code is more simple?  
 
 Both of these codes install and load the same packages.  
 
@@ -687,6 +688,8 @@ pacman::p_load(
 
 .footnote[We show you this, because you will encounter {base} in your collaborations with others]
 
+???
+This is common R, where there are many ways do a task. Our job is boil it all down and share with you the easiest and most simple approaches.  
 
 ---
 # Importing data with {rio}  
@@ -704,7 +707,8 @@ import("surveillance_linelist_12012014.csv")
 ```
 
 .pull-left[
-"rio" is shorthand for "R inputs/outputs"  
+"rio" is shorthand for  
+"R inputs/outputs"  
 ]
 
 .pull-right[
@@ -718,30 +722,100 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "functions_pack
 ]
 
 ---
-# R projects  
+# RStudio projects  
 
-TODO
+
+
+.pull-left[
+
+An RStudio project is a self-contained and portable R working environment.  
+
+It is a folder with all the files associated with a distinct project (data files, R scripts, outputs...)  
+
+This makes your life immensely easier.  
+]
+
+.pull-right[
+```{r, eval = TRUE, echo = FALSE, out.width = "85%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+knitr::include_graphics(xfun::relative_path(here::here("images", "functions_packages", "project_briefcase.png")))
+```
+]
+
+???
+We will help 
+You can zip the folder and share it with a colleague, it can be hosted on a shared drive, and can be synced with a Github repository.  
 
 ---
 # File paths  
 
-The `{here}` package to find files
+Will this "absolute" file path work on your computer? Or will it "break"?  
+
+```{r, eval=F, echo=T}
+import("C:/Users/Laura/Documents/intro_course/data/clean/linelist.csv")
+```
+
+--
+
+Mostly likely, it will not work.  
+
+--
+
+This is why we use RStudio project & the {here} package for relative file paths  
+
+
+---
+# {here}  
 
 .pull-left[
-- *Relative* rather than *absolute* file-paths 
-  - Better than `setwd()` for sharing
-- Finds root directory automatically 
-- Open `.Rproj` file first
-- package::function() to avoid conflicts
-  - `here::here()`
+
+With {here}, file paths are ***relative* to the RStudio project root folder**.  
+
 ]
 
 .pull-right[
-![source: Alison Horst](https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/here.png)
+
+* `r emo::ji("folder")` project ("intro_course")  
+     * intro_course.Rproj  
+     * .here  
+     * `r emo::ji("folder")` data  
+          * `r emo::ji("folder")` clean  
+               * `r emo::ji("document")` **linelist.csv**
+          * `r emo::ji("folder")` raw  
+     * `r emo::ji("folder")` scripts
 ]
 
- 
+--
+
+The command `here("data", "clean", "linelist.csv")`  
+
+produces this file path on Laura's computer:  
+
+`"C:/Users/Laura/Documents/intro_course/data/clean/linelist.csv"`  
+
+--
+
+and produces *this* on Rajiv's computer:  
+
+`"D:/Users/Rajiv/docs/intro_course/data/clean/linelist.csv"`  
+
+
+
+---
+# {here} and {rio} together  
+
+Finally, we can combine `import()` and `here()` to create a command that is truly versatile:  
+
+```{r, echo=T, eval=F}
+import(here("data", "clean", "linelist.csv"))
+```
+
+We can zip this R project and email to a colleague, and this command will correctly import the data no matter where the R project is stored on their computer.  
+
+
 .footnote[
-See the [EpiRHandbook section on here package](https://epirhandbook.com/import-and-export.html?q=here#here)
+See the [EpiRHandbook section on here package](https://epirhandbook.com/import-and-export.html?q=here#here) and on [EpiRHandbook section on importing data](https://epirhandbook.com/en/import-and-export.html)
 ]
 
