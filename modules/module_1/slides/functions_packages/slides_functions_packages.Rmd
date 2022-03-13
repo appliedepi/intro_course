@@ -788,11 +788,14 @@ This is why we use RStudio project & the {here} package for relative file paths
 
 With {here}, file paths are ***relative* to the RStudio project root folder**.  
 
+The path *begins* at the R project. Everything before is flexible.  
+
+
 ]
 
 .pull-right[
 
-* `r emo::ji("folder")` project ("intro_course")  
+* `r emo::ji("folder")` intro_course (R project folder)  
      * intro_course.Rproj  
      * .here  
      * `r emo::ji("folder")` data  
