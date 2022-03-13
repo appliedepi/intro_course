@@ -22,10 +22,9 @@ Click here to download the course outline (PDF)
 
 # Case study files and data
 
-THIS IS A DRAFT
-
-You can download a zipped folder that contains the case study materials
-HERE.
+[Click
+here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/course_files)
+to download a zipped folder to use in the course exercises.
 
 # Course exercises
 
@@ -74,7 +73,9 @@ THESE ARE DRAFTS
 
 **Module 1:**  
 - [Slides: Welcome, course logistics, RStudio, and basic R
-syntax](https://appliedepi.github.io/intro_course/modules/module_1/slides/course_introduction/slides_course_introduction.html)
+syntax](https://appliedepi.github.io/intro_course/modules/module_1/slides/course_introduction/slides_course_introduction.html)  
+- [Slides: R basic syntax, functions, and
+packages](https://appliedepi.github.io/intro_course/modules/module_1/slides/functions_packages/functions_packages.html)
 
 -   Exercise:
 

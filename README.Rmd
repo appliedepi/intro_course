@@ -28,11 +28,11 @@ knitr::opts_chunk$set(
 Click here to download the course outline (PDF)  
 
 
-# Case study files and data  
+# Course folder and case study data  
 
-THIS IS A DRAFT  
+[Click here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/course_files) to download a zipped folder to use in the course exercises.  
 
-You can download a zipped folder that contains the case study materials HERE.  
+**Unzip the folder and save it on your computer (not on a shared drive).** You will receive further instructions in the course.  
 
 
 # Course exercises  
