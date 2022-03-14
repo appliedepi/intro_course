@@ -1202,7 +1202,7 @@ This creates "groups" and generates a legend.
 
 This assignment occurs *inside* `aes()`.  
 
-Above, `color=` is mapped to column `died`  
+Above, `color=` is mapped to column `hospital`  
 
 ]
 
@@ -1246,7 +1246,7 @@ geom_point(
 
 Above, `size = 7` and `alpha = 0.7` are assigned statically, outside `aes()`.  
 
-`color=` is assigned to column `died`, within `aes()`.  
+`color=` is assigned to column `hospital`, within `aes()`.  
 
 
 ]
