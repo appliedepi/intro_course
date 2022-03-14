@@ -54,8 +54,7 @@ pacman::p_load(
 
 # data prep --------------------------------------------------------------------
 # linelist_raw <- rio::import(here::here("data", "linelist_raw.xlsx"))
-linelist_surv <- rio::import(here::here("data", "linelist_cleaned.rds"))
-linelist_med <- rio::import(here::here("data", "medical_linelist_12012014.xlsx"))
+linelist_surv <- rio::import(here::here("data", "surveillance_linelist_clean.rds"))
 ```
 
 ```{r  xaringan-themer, include = FALSE}
@@ -239,18 +238,27 @@ Explain that the function are always in this form, two dataframes, the first one
 
 * Left (and right) joins are used to **add columns** to a dataframe.
 
+--
+
 * All rows from the *left* dataframe are kept, and lines with a correspondence in the *right* dataframe are merged unto it.
+
+--
 
 * If no match is found, `NA` are added.
 
+--
+
 * Lines from the *right* dataframe without a match are dropped.
 
+--
 
 .left-column[
 ```{r eval = TRUE, echo=FALSE, out.width = '100%'}
 knitr::include_graphics(xfun::relative_path(here::here("images", "joins_pivots", "left-join.gif")))
 ```
 ]
+
+--
 
 .right-column[
 ```{r eval = TRUE, echo=FALSE, out.width = '100%'}
@@ -259,7 +267,8 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "joins_pivots",
 ]
 
 
-.footnote[Sometimes called Left *outer* join]
+???
+Sometimes called Left *outer* join  
 
 ---
 # Left join
@@ -277,8 +286,14 @@ left_join(linelist_patient,
      knitr::kable()
 ```
 
-* All lines from the first dataframe (the *left* dataframe) are kept. 
+* All lines from the first dataframe (the *left* dataframe) are kept.  
+
+--
+
 * **Only lines with a correspondance through the key column(s)** are imported from the second (*right*) dataframe.
+
+--
+
 * NA were added for the two last lines of `linelist_patient` instead.
 
 

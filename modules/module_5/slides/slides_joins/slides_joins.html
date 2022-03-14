@@ -6,6 +6,8 @@
     <meta name="author" content="March 2022" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/tabwid/tabwid.css" rel="stylesheet" />
+    <link href="libs/countdown/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown/countdown.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -13,7 +15,7 @@
 class: center, middle, inverse, title-slide
 
 # Introduction to R for<br>Applied Epidemiology
-## Transforming and restructuring data
+## Joining data
 ### March 2022
 ### <a href="mailto:contact@appliedepi.org">contact@appliedepi.org</a>
 
@@ -53,7 +55,7 @@ class: center, middle, inverse, title-slide
 
 
 
-&lt;template id="b0ce7931-11e4-4940-b675-f156e5c846bb"&gt;&lt;style&gt;
+&lt;template id="b32c072f-b009-4444-b404-28282ffabeaa"&gt;&lt;style&gt;
 .tabwid table{
   border-spacing:0px !important;
   border-collapse:collapse;
@@ -87,11 +89,11 @@ class: center, middle, inverse, title-slide
 .tabwid table tr {
 background-color: transparent;
 }
-&lt;/style&gt;&lt;div class="tabwid"&gt;&lt;style&gt;.cl-89a0e32e{}.cl-89980916{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-89983026{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-8998572c{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8998572d{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8998572e{width:548.5pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8998572f{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-89985730{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-89985731{width:548.5pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-89985732{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-89985733{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-89985734{width:548.5pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-89985735{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-89985736{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-89987e3c{width:548.5pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-89a0e32e'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-89985736"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Time&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-89985735"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Location&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-89987e3c"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Topic&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-8998572c"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;0900-0945&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8998572d"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Main&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8998572e"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Welcome, course logistics, Why R?&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-8998572c"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;0950-1050&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8998572d"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Main&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8998572e"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Lecture and live demonstration:&lt;br&gt;RStudio tour, R projects, basic R syntax, functions &amp;amp; packages, data import&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-8998572c"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;1100-1200&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8998572d"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Breakouts&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8998572e"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Setting up a script, importing data, and reviewing a data frame&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-8998572f"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;1205-1220&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-89985730"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Main&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-89985731"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Debrief&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;tfoot&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td  colspan="3"class="cl-89985733"&gt;&lt;p class="cl-89983026"&gt;&lt;span class="cl-89980916"&gt;Breaks are incorporated above, but not shown as rows&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;&lt;/table&gt;&lt;/div&gt;&lt;/template&gt;
-&lt;div class="flextable-shadow-host" id="2d671df9-ab2a-48da-aa55-47e4585b05ab"&gt;&lt;/div&gt;
+&lt;/style&gt;&lt;div class="tabwid"&gt;&lt;style&gt;.cl-1ccb2198{}.cl-1cc4df18{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-1cc4df19{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-1cc5061e{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1cc5061f{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1cc50620{width:548.5pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1cc50621{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1cc50622{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1cc50623{width:548.5pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1cc50624{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1cc50625{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1cc50626{width:548.5pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1cc50627{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1cc50628{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1cc52d4c{width:548.5pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-1ccb2198'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-1cc50628"&gt;&lt;p class="cl-1cc4df19"&gt;&lt;span class="cl-1cc4df18"&gt;Time&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-1cc50627"&gt;&lt;p class="cl-1cc4df19"&gt;&lt;span class="cl-1cc4df18"&gt;Location&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-1cc52d4c"&gt;&lt;p class="cl-1cc4df19"&gt;&lt;span class="cl-1cc4df18"&gt;Topic&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-1cc5061e"&gt;&lt;p class="cl-1cc4df19"&gt;&lt;span class="cl-1cc4df18"&gt;0900-0945&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-1cc5061f"&gt;&lt;p class="cl-1cc4df19"&gt;&lt;span class="cl-1cc4df18"&gt;Main&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-1cc50620"&gt;&lt;p class="cl-1cc4df19"&gt;&lt;span class="cl-1cc4df18"&gt;Welcome, course logistics, Why R?&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-1cc5061e"&gt;&lt;p class="cl-1cc4df19"&gt;&lt;span class="cl-1cc4df18"&gt;0950-1050&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-1cc5061f"&gt;&lt;p class="cl-1cc4df19"&gt;&lt;span class="cl-1cc4df18"&gt;Main&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-1cc50620"&gt;&lt;p class="cl-1cc4df19"&gt;&lt;span class="cl-1cc4df18"&gt;Lecture and live demonstration:&lt;br&gt;RStudio tour, R projects, basic R syntax, functions &amp;amp; packages, data import&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-1cc5061e"&gt;&lt;p class="cl-1cc4df19"&gt;&lt;span class="cl-1cc4df18"&gt;1100-1200&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-1cc5061f"&gt;&lt;p class="cl-1cc4df19"&gt;&lt;span class="cl-1cc4df18"&gt;Breakouts&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-1cc50620"&gt;&lt;p class="cl-1cc4df19"&gt;&lt;span class="cl-1cc4df18"&gt;Setting up a script, importing data, and reviewing a data frame&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-1cc50621"&gt;&lt;p class="cl-1cc4df19"&gt;&lt;span class="cl-1cc4df18"&gt;1205-1220&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-1cc50622"&gt;&lt;p class="cl-1cc4df19"&gt;&lt;span class="cl-1cc4df18"&gt;Main&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-1cc50623"&gt;&lt;p class="cl-1cc4df19"&gt;&lt;span class="cl-1cc4df18"&gt;Debrief&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;tfoot&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td  colspan="3"class="cl-1cc50625"&gt;&lt;p class="cl-1cc4df19"&gt;&lt;span class="cl-1cc4df18"&gt;Breaks are incorporated above, but not shown as rows&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;&lt;/table&gt;&lt;/div&gt;&lt;/template&gt;
+&lt;div class="flextable-shadow-host" id="f572daa0-ce04-4a94-8a09-adadac4b7ea4"&gt;&lt;/div&gt;
 &lt;script&gt;
-var dest = document.getElementById("2d671df9-ab2a-48da-aa55-47e4585b05ab");
-var template = document.getElementById("b0ce7931-11e4-4940-b675-f156e5c846bb");
+var dest = document.getElementById("f572daa0-ce04-4a94-8a09-adadac4b7ea4");
+var template = document.getElementById("b32c072f-b009-4444-b404-28282ffabeaa");
 var caption = template.content.querySelector("caption");
 if(caption) {
   caption.style.cssText = "display:block;text-align:center;";
@@ -162,34 +164,34 @@ Provide examples of situations they might encounter to highlight how common it i
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 5fe599 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 86340d &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 8689b7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 92d002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 11f8ea &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 544bd1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; b8812a &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6056ba &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 893f25 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; eb5aeb &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -209,16 +211,16 @@ Provide examples of situations they might encounter to highlight how common it i
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 5fe599 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Other &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 86340d &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Port Hospital &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 8689b7 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Missing &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 92d002 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 11f8ea &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; St. Mark's Maternity Hospital (SMMH) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 544bd1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -267,23 +269,33 @@ Explain that the function are always in this form, two dataframes, the first one
 
 * Left (and right) joins are used to **add columns** to a dataframe.
 
+--
+
 * All rows from the *left* dataframe are kept, and lines with a correspondence in the *right* dataframe are merged unto it.
+
+--
 
 * If no match is found, `NA` are added.
 
+--
+
 * Lines from the *right* dataframe without a match are dropped.
 
+--
 
 .left-column[
-&lt;img src="../../../../images/left-join.gif" width="100%" /&gt;
+&lt;img src="../../../../images/joins_pivots/left-join.gif" width="100%" /&gt;
 ]
+
+--
 
 .right-column[
-&lt;img src="../../../../images/left_join.png" width="100%" /&gt;
+&lt;img src="../../../../images/joins_pivots/left_join.png" width="100%" /&gt;
 ]
 
 
-.footnote[Sometimes called Left *outer* join]
+???
+Sometimes called Left *outer* join  
 
 ---
 # Left join
@@ -307,45 +319,51 @@ left_join(linelist_patient,  linelist_hospit,
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 5fe599 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 86340d &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Other &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Port Hospital &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 8689b7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 92d002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Missing &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 11f8ea &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; St. Mark's Maternity Hospital (SMMH) &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; b8812a &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 893f25 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 544bd1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 6056ba &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; eb5aeb &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-* All lines from the first dataframe (the *left* dataframe) are kept. 
+* All lines from the first dataframe (the *left* dataframe) are kept.  
+
+--
+
 * **Only lines with a correspondance through the key column(s)** are imported from the second (*right*) dataframe.
+
+--
+
 * NA were added for the two last lines of `linelist_patient` instead.
 
 
@@ -373,25 +391,25 @@ right_join(linelist_patient,  linelist_hospit,
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 5fe599 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 86340d &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Other &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Port Hospital &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 8689b7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 92d002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Missing &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 11f8ea &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 544bd1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; St. Mark's Maternity Hospital (SMMH) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -408,7 +426,7 @@ right_join(linelist_patient,  linelist_hospit,
 * Adds `NA` for the rows present in only one dataframe (no match)
 
 .center[
-&lt;img src="../../../../images/full-join.gif" width="40%" /&gt;
+&lt;img src="../../../../images/joins_pivots/full-join.gif" width="40%" /&gt;
 ]
 
 
@@ -440,38 +458,38 @@ All lines from both dataset are kept:
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 5fe599 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 86340d &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Other &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Port Hospital &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 8689b7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 92d002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Missing &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 11f8ea &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; St. Mark's Maternity Hospital (SMMH) &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; b8812a &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 893f25 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 544bd1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 6056ba &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; eb5aeb &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
@@ -490,7 +508,7 @@ Now is a good time to insist on how consistent the arguments of the join functio
 * **Discard** rows without matches
 
 .center[
-&lt;img src="../../../../images/inner-join.gif" width="50%" /&gt;
+&lt;img src="../../../../images/joins_pivots/inner-join.gif" width="50%" /&gt;
 ]
 
 .footnote[Also called *Natural join*]
@@ -523,25 +541,25 @@ inner_join(linelist_patient,  linelist_hospit,
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 5fe599 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 86340d &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Other &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Port Hospital &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 8689b7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 92d002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; f &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Missing &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; 11f8ea &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 544bd1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; years &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; m &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; St. Mark's Maternity Hospital (SMMH) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -592,7 +610,7 @@ inner_join(dataframe1, dataframe2,
 
 Keeps all the rows from a dataframe **without matches in another dataframe**
 
-&lt;img src="../../../../images/anti-join.gif" width="50%" /&gt;
+&lt;img src="../../../../images/joins_pivots/anti-join.gif" width="50%" /&gt;
 
 ]
 
@@ -602,7 +620,7 @@ Keeps all the rows from a dataframe **without matches in another dataframe**
 
 Keeps all the rows from a dataframe **with a match in another dataframe**
 
-&lt;img src="../../../../images/semi-join.gif" width="50%" /&gt;
+&lt;img src="../../../../images/joins_pivots/semi-join.gif" width="50%" /&gt;
 ]
 
 **Filtering joins never duplicate rows, they can only drop them**
@@ -730,7 +748,7 @@ left_join(df1, df2, by = "ID")
 ```
 
 
-&lt;img src="../../../../images/join-one-to-many.png" width="100%" /&gt;
+&lt;img src="../../../../images/joins_pivots/join-one-to-many.png" width="100%" /&gt;
 
 ---
 # Good practices
@@ -803,37 +821,20 @@ Another good check is to use the `count()` function to count the number of rows 
 
 
 
----
-class: inverse, center, middle
-
-# Restructuring data
-
-*pivoting, reshaping, melting, casting, transforming...* dataframes
-
 
 ---
+class: inverse, center, middle  
 
-# What is pivoting?
+# Stretch break!
 
-* *Excel pivot tables* are a way of summarizing and aggregating data
+&lt;img src="../../../../images/breakout/window.png" width="50%" /&gt;
 
-* In R, **pivoting** a dataframe has a **different meaning**
+<div class="countdown" id="timer_622f7cf3" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
 
-* Think of it as *restructuring*, or *reshaping* the dataframe
 
-* We will use the `pivot_wider()` and `pivot_larger()` functions from the {tidyr} package
 
-* You will often see examples using alternative functions from other packages: 
-     * `melt` and `cast` from {reshape2}
-     * `gather` and `spread` from {tidyr} (the ancestors of the pivot_xxx functions)
-     * `melt` and `dcast` from {data.table}
-     
-  
----
-
-# Wide and long data?
-
-&lt;img src="../../../../images/pivoting.png" width="100%" /&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
