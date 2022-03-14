@@ -248,13 +248,13 @@ Explain that the function are always in this form, two dataframes, the first one
 
 .left-column[
 ```{r eval = TRUE, echo=FALSE, out.width = '100%'}
-knitr::include_graphics(xfun::relative_path(here::here("images", "left-join.gif")))
+knitr::include_graphics(xfun::relative_path(here::here("images", "joins_pivots", "left-join.gif")))
 ```
 ]
 
 .right-column[
 ```{r eval = TRUE, echo=FALSE, out.width = '100%'}
-knitr::include_graphics(xfun::relative_path(here::here("images", "left_join.png")))
+knitr::include_graphics(xfun::relative_path(here::here("images", "joins_pivots", "left_join.png")))
 ```
 ]
 
@@ -313,7 +313,7 @@ right_join(linelist_patient,
 
 .center[
 ```{r eval = TRUE, echo=FALSE, out.width = '40%'}
-knitr::include_graphics(xfun::relative_path(here::here("images", "full-join.gif")))
+knitr::include_graphics(xfun::relative_path(here::here("images", "joins_pivots", "full-join.gif")))
 ```
 ]
 
@@ -354,7 +354,7 @@ Now is a good time to insist on how consistent the arguments of the join functio
 
 .center[
 ```{r eval = TRUE, echo=FALSE, out.width = '50%'}
-knitr::include_graphics(xfun::relative_path(here::here("images", "inner-join.gif")))
+knitr::include_graphics(xfun::relative_path(here::here("images", "joins_pivots", "inner-join.gif")))
 ```
 ]
 
@@ -426,7 +426,7 @@ inner_join(dataframe1, dataframe2,
 Keeps all the rows from a dataframe **without matches in another dataframe**
 
 ```{r eval = TRUE, echo=FALSE, out.width = '50%'}
-knitr::include_graphics(xfun::relative_path(here::here("images", "anti-join.gif")))
+knitr::include_graphics(xfun::relative_path(here::here("images", "joins_pivots", "anti-join.gif")))
 ```
 
 ]
@@ -438,7 +438,7 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "anti-join.gif"
 Keeps all the rows from a dataframe **with a match in another dataframe**
 
 ```{r eval = TRUE, echo=FALSE, out.width = '50%'}
-knitr::include_graphics(xfun::relative_path(here::here("images", "semi-join.gif")))
+knitr::include_graphics(xfun::relative_path(here::here("images", "joins_pivots", "semi-join.gif")))
 ```
 ]
 
@@ -494,7 +494,7 @@ left_join(df1, df2, by = "ID")
 
 
 ```{r eval = TRUE, echo=FALSE, out.width = '100%'}
-knitr::include_graphics(xfun::relative_path(here::here("images", "join-one-to-many.png")))
+knitr::include_graphics(xfun::relative_path(here::here("images", "joins_pivots", "join-one-to-many.png")))
 ```
 
 ---
@@ -529,36 +529,23 @@ Another good check is to use the `count()` function to count the number of rows 
 
 
 
----
-class: inverse, center, middle
-
-# Restructuring data
-
-*pivoting, reshaping, melting, casting, transforming...* dataframes
-
 
 ---
+class: inverse, center, middle  
 
-# What is pivoting?
+# Stretch break!
 
-* *Excel pivot tables* are a way of summarizing and aggregating data
+```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
 
-* In R, **pivoting** a dataframe has a **different meaning**
-
-* Think of it as *restructuring*, or *reshaping* the dataframe
-
-* We will use the `pivot_wider()` and `pivot_larger()` functions from the {tidyr} package
-
-* You will often see examples using alternative functions from other packages: 
-     * `melt` and `cast` from {reshape2}
-     * `gather` and `spread` from {tidyr} (the ancestors of the pivot_xxx functions)
-     * `melt` and `dcast` from {data.table}
-     
-  
----
-
-# Wide and long data?
-
-```{r eval = TRUE, echo=FALSE, out.width = '100%'}
-knitr::include_graphics(xfun::relative_path(here::here("images", "pivoting.png")))
+knitr::include_graphics(xfun::relative_path(here::here("images", "breakout", "window.png")))
 ```
+
+```{r}
+countdown(minutes = 5, seconds = 00)
+```
+
+
+

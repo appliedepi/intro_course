@@ -19,6 +19,8 @@ class: center, middle, inverse, title-slide
 
 ---
 
+class: inverse, center, middle
+
 
 
 
@@ -43,17 +45,287 @@ class: center, middle, inverse, title-slide
 &lt;/style&gt;
 
 
-# Today: objectives &amp; schedule  
-
-**In this module we aim to help you:**  
-*  
-*  
-* 
-* 
 
 
+# Restructuring data
 
-&lt;template id="98bc8b12-59bb-4ecc-8fc3-0127d87d5cfc"&gt;&lt;style&gt;
+*pivoting, reshaping, melting, casting, transforming...* dataframes
+
+&lt;img src="../../../../images/joins_pivots/Pivoting_500x500.png" width="222" height="100%" /&gt;
+
+---
+
+# What is pivoting?
+
+* *Excel pivot tables* are a way of summarizing and aggregating data
+
+--
+
+* In R, **pivoting** a dataframe has a **different meaning**
+
+--
+
+* Think of it as *restructuring*, or *reshaping* the dataframe
+
+--
+
+* We will use the `pivot_wider()` and `pivot_larger()` functions from the {tidyr} package
+
+--
+
+* You will often see examples using alternative functions from other packages: 
+     * `melt()` and `cast()` from {reshape2}
+     * `gather()` and `spread()` ancestors of the {tidyr} `pivot_()` functions  
+     * `melt()` and `dcast()` from {data.table}
+     
+     
+     
+     
+
+
+
+---
+# Tidy data
+
+Do you remember the 3 principles of "tidy data"?  
+
+--
+
+1. Each **value** must have its own **cell**
+
+--
+
+2. Each **variable** must have its own **column**
+
+--
+
+3. Each **observation** must have its own **row**  
+
+
+
+
+
+
+
+
+---
+
+# Terminology  
+
+Structurally, "data frames" in R consist of **columns** and **rows**.  
+
+--
+
+However, **"variables"** and **"observations"** are more *abstract* concepts:  
+
+* **Variables** measure one *underlying attribute* (age, outcome, or date of onset)  
+* **Observations** relate to a *unit of analysis*  
+
+--
+
+Ideally, they align: **columns = variables** and **rows = observations**  
+
+&lt;img src="../../../../images/data_cleaning/tidy_image.png" width="853" height="65%" /&gt;
+
+.footnote[Image source: [R for Data Science](https://r4ds.had.co.nz/tidy-data.html)]
+
+
+
+
+
+---
+# Pivot longer  
+
+
+.pull-left[
+
+Data are often stored in “wide” format  
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 1999 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 2000 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 2001 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 2002 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Nigeria &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7500 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9250 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10200 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; India &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20100 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 25650 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 26800 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 27255 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Brazil &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4500 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5120 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5100 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5860 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+* A subject’s characteristics are stored in a single row  
+* Useful for presentation  
+* **Not** ideal for some types of analysis.
+]
+
+--
+
+
+.pull-right[
+
+**Easier to analyse in "long" format**  
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 2002 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; cases &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Nigeria &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10200 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1999 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8000 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Nigeria &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10200 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7500 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Nigeria &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10200 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2001 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9250 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; India &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 27255 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1999 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20100 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; India &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 27255 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 25650 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; India &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 27255 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2001 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 26800 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Brazil &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5860 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1999 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4500 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Brazil &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5860 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5120 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Brazil &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5860 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2001 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5100 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+]
+
+
+
+
+
+
+
+
+
+
+
+---
+# {ggplot2} example
+
+How to plot cases over time for the three countries?  
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 1999 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 2000 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 2001 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 2002 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Nigeria &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7500 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9250 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10200 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; India &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20100 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 25650 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 26800 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 27255 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Brazil &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4500 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5120 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5100 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5860 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+  
+
+```r
+ggplot(data = example,
+       mapping = aes(x = ???, y = ???))+
+     geom_line()
+```
+
+
+
+
+
+
+---
+# Pivot longer
+
+.pull-left[
+
+&lt;template id="d180ef1e-00fe-49a3-b62f-a05457f3fd3d"&gt;&lt;style&gt;
 .tabwid table{
   border-spacing:0px !important;
   border-collapse:collapse;
@@ -87,11 +359,11 @@ class: center, middle, inverse, title-slide
 .tabwid table tr {
 background-color: transparent;
 }
-&lt;/style&gt;&lt;div class="tabwid"&gt;&lt;style&gt;.cl-629b85b8{}.cl-6294ce6c{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-6294f5ae{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-62951cbe{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-62951cbf{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-62951cc0{width:548.5pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-62951cc1{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-62951cc2{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-62951cc3{width:548.5pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-62951cc4{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-62951cc5{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-62951cc6{width:548.5pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-62951cc7{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-62951cc8{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-629543ce{width:548.5pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-629b85b8'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-62951cc8"&gt;&lt;p class="cl-6294f5ae"&gt;&lt;span class="cl-6294ce6c"&gt;Time&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-62951cc7"&gt;&lt;p class="cl-6294f5ae"&gt;&lt;span class="cl-6294ce6c"&gt;Location&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-629543ce"&gt;&lt;p class="cl-6294f5ae"&gt;&lt;span class="cl-6294ce6c"&gt;Topic&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-62951cbe"&gt;&lt;p class="cl-6294f5ae"&gt;&lt;span class="cl-6294ce6c"&gt;0900-0945&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-62951cbf"&gt;&lt;p class="cl-6294f5ae"&gt;&lt;span class="cl-6294ce6c"&gt;Main&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-62951cc0"&gt;&lt;p class="cl-6294f5ae"&gt;&lt;span class="cl-6294ce6c"&gt;Welcome, course logistics, Why R?&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-62951cbe"&gt;&lt;p class="cl-6294f5ae"&gt;&lt;span class="cl-6294ce6c"&gt;0950-1050&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-62951cbf"&gt;&lt;p class="cl-6294f5ae"&gt;&lt;span class="cl-6294ce6c"&gt;Main&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-62951cc0"&gt;&lt;p class="cl-6294f5ae"&gt;&lt;span class="cl-6294ce6c"&gt;Lecture and live demonstration:&lt;br&gt;RStudio tour, R projects, basic R syntax, functions &amp;amp; packages, data import&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-62951cbe"&gt;&lt;p class="cl-6294f5ae"&gt;&lt;span class="cl-6294ce6c"&gt;1100-1200&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-62951cbf"&gt;&lt;p class="cl-6294f5ae"&gt;&lt;span class="cl-6294ce6c"&gt;Breakouts&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-62951cc0"&gt;&lt;p class="cl-6294f5ae"&gt;&lt;span class="cl-6294ce6c"&gt;Setting up a script, importing data, and reviewing a data frame&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-62951cc1"&gt;&lt;p class="cl-6294f5ae"&gt;&lt;span class="cl-6294ce6c"&gt;1205-1220&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-62951cc2"&gt;&lt;p class="cl-6294f5ae"&gt;&lt;span class="cl-6294ce6c"&gt;Main&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-62951cc3"&gt;&lt;p class="cl-6294f5ae"&gt;&lt;span class="cl-6294ce6c"&gt;Debrief&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;tfoot&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td  colspan="3"class="cl-62951cc5"&gt;&lt;p class="cl-6294f5ae"&gt;&lt;span class="cl-6294ce6c"&gt;Breaks are incorporated above, but not shown as rows&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;&lt;/table&gt;&lt;/div&gt;&lt;/template&gt;
-&lt;div class="flextable-shadow-host" id="0a493206-a017-4b91-bd7f-99396bd4f34c"&gt;&lt;/div&gt;
+&lt;/style&gt;&lt;div class="tabwid"&gt;&lt;style&gt;.cl-3983ab04{}.cl-397922c4{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-397922c5{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-397922c6{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-397ca570{width:54.2pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-397ca571{width:56.6pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-397ca572{width:54.2pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-397ca573{width:56.6pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-397ca574{width:54.2pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-397ca575{width:56.6pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-397ca576{width:54.2pt;background-color:rgba(255, 165, 0, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-397ca577{width:56.6pt;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-3983ab04'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-397ca577"&gt;&lt;p class="cl-397922c5"&gt;&lt;span class="cl-397922c4"&gt;country&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-397ca576"&gt;&lt;p class="cl-397922c6"&gt;&lt;span class="cl-397922c4"&gt;1999&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-397ca576"&gt;&lt;p class="cl-397922c6"&gt;&lt;span class="cl-397922c4"&gt;2000&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-397ca576"&gt;&lt;p class="cl-397922c6"&gt;&lt;span class="cl-397922c4"&gt;2001&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-397ca576"&gt;&lt;p class="cl-397922c6"&gt;&lt;span class="cl-397922c4"&gt;2002&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-397ca571"&gt;&lt;p class="cl-397922c5"&gt;&lt;span class="cl-397922c4"&gt;Nigeria&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-397ca570"&gt;&lt;p class="cl-397922c6"&gt;&lt;span class="cl-397922c4"&gt;8,000&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-397ca570"&gt;&lt;p class="cl-397922c6"&gt;&lt;span class="cl-397922c4"&gt;7,500&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-397ca570"&gt;&lt;p class="cl-397922c6"&gt;&lt;span class="cl-397922c4"&gt;9,250&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-397ca570"&gt;&lt;p class="cl-397922c6"&gt;&lt;span class="cl-397922c4"&gt;10,200&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-397ca573"&gt;&lt;p class="cl-397922c5"&gt;&lt;span class="cl-397922c4"&gt;India&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-397ca572"&gt;&lt;p class="cl-397922c6"&gt;&lt;span class="cl-397922c4"&gt;20,100&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-397ca572"&gt;&lt;p class="cl-397922c6"&gt;&lt;span class="cl-397922c4"&gt;25,650&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-397ca572"&gt;&lt;p class="cl-397922c6"&gt;&lt;span class="cl-397922c4"&gt;26,800&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-397ca572"&gt;&lt;p class="cl-397922c6"&gt;&lt;span class="cl-397922c4"&gt;27,255&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-397ca575"&gt;&lt;p class="cl-397922c5"&gt;&lt;span class="cl-397922c4"&gt;Brazil&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-397ca574"&gt;&lt;p class="cl-397922c6"&gt;&lt;span class="cl-397922c4"&gt;4,500&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-397ca574"&gt;&lt;p class="cl-397922c6"&gt;&lt;span class="cl-397922c4"&gt;5,120&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-397ca574"&gt;&lt;p class="cl-397922c6"&gt;&lt;span class="cl-397922c4"&gt;5,100&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-397ca574"&gt;&lt;p class="cl-397922c6"&gt;&lt;span class="cl-397922c4"&gt;5,860&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/template&gt;
+&lt;div class="flextable-shadow-host" id="8be222b8-1fb8-4977-bfc9-914026e20327"&gt;&lt;/div&gt;
 &lt;script&gt;
-var dest = document.getElementById("0a493206-a017-4b91-bd7f-99396bd4f34c");
-var template = document.getElementById("98bc8b12-59bb-4ecc-8fc3-0127d87d5cfc");
+var dest = document.getElementById("8be222b8-1fb8-4977-bfc9-914026e20327");
+var template = document.getElementById("d180ef1e-00fe-49a3-b62f-a05457f3fd3d");
 var caption = template.content.querySelector("caption");
 if(caption) {
   caption.style.cssText = "display:block;text-align:center;";
@@ -104,19 +376,306 @@ var templateContent = template.content;
 fantome.appendChild(templateContent);
 &lt;/script&gt;
 
+* These **column names will be pivoted**  
+
+]
+
 
 
 ---
-class: inverse, center, middle
+# Pivot longer
 
-# Pivoting data frames
+.pull-left[
 
-   
+&lt;template id="39553a87-360e-48bf-9743-f2c6a5b35ea2"&gt;&lt;style&gt;
+.tabwid table{
+  border-spacing:0px !important;
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+&lt;/style&gt;&lt;div class="tabwid"&gt;&lt;style&gt;.cl-39a146dc{}.cl-3998e226{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-3998e227{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-3998e228{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-39990940{width:54.2pt;background-color:rgba(49, 163, 84, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39990941{width:56.6pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39990942{width:54.2pt;background-color:rgba(49, 163, 84, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39990943{width:56.6pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39990944{width:54.2pt;background-color:rgba(49, 163, 84, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39990945{width:56.6pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39990946{width:54.2pt;background-color:rgba(255, 165, 0, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39990947{width:56.6pt;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-39a146dc'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39990947"&gt;&lt;p class="cl-3998e227"&gt;&lt;span class="cl-3998e226"&gt;country&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39990946"&gt;&lt;p class="cl-3998e228"&gt;&lt;span class="cl-3998e226"&gt;1999&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39990946"&gt;&lt;p class="cl-3998e228"&gt;&lt;span class="cl-3998e226"&gt;2000&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39990946"&gt;&lt;p class="cl-3998e228"&gt;&lt;span class="cl-3998e226"&gt;2001&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39990946"&gt;&lt;p class="cl-3998e228"&gt;&lt;span class="cl-3998e226"&gt;2002&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39990941"&gt;&lt;p class="cl-3998e227"&gt;&lt;span class="cl-3998e226"&gt;Nigeria&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39990940"&gt;&lt;p class="cl-3998e228"&gt;&lt;span class="cl-3998e226"&gt;8,000&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39990940"&gt;&lt;p class="cl-3998e228"&gt;&lt;span class="cl-3998e226"&gt;7,500&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39990940"&gt;&lt;p class="cl-3998e228"&gt;&lt;span class="cl-3998e226"&gt;9,250&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39990940"&gt;&lt;p class="cl-3998e228"&gt;&lt;span class="cl-3998e226"&gt;10,200&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39990943"&gt;&lt;p class="cl-3998e227"&gt;&lt;span class="cl-3998e226"&gt;India&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39990942"&gt;&lt;p class="cl-3998e228"&gt;&lt;span class="cl-3998e226"&gt;20,100&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39990942"&gt;&lt;p class="cl-3998e228"&gt;&lt;span class="cl-3998e226"&gt;25,650&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39990942"&gt;&lt;p class="cl-3998e228"&gt;&lt;span class="cl-3998e226"&gt;26,800&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39990942"&gt;&lt;p class="cl-3998e228"&gt;&lt;span class="cl-3998e226"&gt;27,255&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39990945"&gt;&lt;p class="cl-3998e227"&gt;&lt;span class="cl-3998e226"&gt;Brazil&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39990944"&gt;&lt;p class="cl-3998e228"&gt;&lt;span class="cl-3998e226"&gt;4,500&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39990944"&gt;&lt;p class="cl-3998e228"&gt;&lt;span class="cl-3998e226"&gt;5,120&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39990944"&gt;&lt;p class="cl-3998e228"&gt;&lt;span class="cl-3998e226"&gt;5,100&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39990944"&gt;&lt;p class="cl-3998e228"&gt;&lt;span class="cl-3998e226"&gt;5,860&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/template&gt;
+&lt;div class="flextable-shadow-host" id="c8e979c0-8195-4e10-878e-7cd393a57666"&gt;&lt;/div&gt;
+&lt;script&gt;
+var dest = document.getElementById("c8e979c0-8195-4e10-878e-7cd393a57666");
+var template = document.getElementById("39553a87-360e-48bf-9743-f2c6a5b35ea2");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+&lt;/script&gt;
+
+* These **values will be re-arranged**    
+
+]
+
+
+
 ---
+# Pivot longer
 
-# Wide and long data?
+.pull-left[
 
-&lt;img src="../../../../images/pivoting.png" width="100%" /&gt;
+&lt;template id="34feb769-7cbb-4662-a3d4-32cf03d014ee"&gt;&lt;style&gt;
+.tabwid table{
+  border-spacing:0px !important;
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+&lt;/style&gt;&lt;div class="tabwid"&gt;&lt;style&gt;.cl-39bf7ea4{}.cl-39b6f2a2{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-39b719b2{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-39b719b3{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-39b740c2{width:54.2pt;background-color:rgba(49, 163, 84, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39b740c3{width:56.6pt;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39b740c4{width:54.2pt;background-color:rgba(49, 163, 84, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39b740c5{width:56.6pt;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39b740c6{width:54.2pt;background-color:rgba(49, 163, 84, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39b740c7{width:56.6pt;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39b740c8{width:54.2pt;background-color:rgba(255, 165, 0, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39b740c9{width:56.6pt;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-39bf7ea4'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39b740c9"&gt;&lt;p class="cl-39b719b2"&gt;&lt;span class="cl-39b6f2a2"&gt;country&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39b740c8"&gt;&lt;p class="cl-39b719b3"&gt;&lt;span class="cl-39b6f2a2"&gt;1999&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39b740c8"&gt;&lt;p class="cl-39b719b3"&gt;&lt;span class="cl-39b6f2a2"&gt;2000&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39b740c8"&gt;&lt;p class="cl-39b719b3"&gt;&lt;span class="cl-39b6f2a2"&gt;2001&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39b740c8"&gt;&lt;p class="cl-39b719b3"&gt;&lt;span class="cl-39b6f2a2"&gt;2002&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39b740c3"&gt;&lt;p class="cl-39b719b2"&gt;&lt;span class="cl-39b6f2a2"&gt;Nigeria&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39b740c2"&gt;&lt;p class="cl-39b719b3"&gt;&lt;span class="cl-39b6f2a2"&gt;8,000&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39b740c2"&gt;&lt;p class="cl-39b719b3"&gt;&lt;span class="cl-39b6f2a2"&gt;7,500&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39b740c2"&gt;&lt;p class="cl-39b719b3"&gt;&lt;span class="cl-39b6f2a2"&gt;9,250&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39b740c2"&gt;&lt;p class="cl-39b719b3"&gt;&lt;span class="cl-39b6f2a2"&gt;10,200&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39b740c5"&gt;&lt;p class="cl-39b719b2"&gt;&lt;span class="cl-39b6f2a2"&gt;India&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39b740c4"&gt;&lt;p class="cl-39b719b3"&gt;&lt;span class="cl-39b6f2a2"&gt;20,100&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39b740c4"&gt;&lt;p class="cl-39b719b3"&gt;&lt;span class="cl-39b6f2a2"&gt;25,650&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39b740c4"&gt;&lt;p class="cl-39b719b3"&gt;&lt;span class="cl-39b6f2a2"&gt;26,800&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39b740c4"&gt;&lt;p class="cl-39b719b3"&gt;&lt;span class="cl-39b6f2a2"&gt;27,255&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39b740c7"&gt;&lt;p class="cl-39b719b2"&gt;&lt;span class="cl-39b6f2a2"&gt;Brazil&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39b740c6"&gt;&lt;p class="cl-39b719b3"&gt;&lt;span class="cl-39b6f2a2"&gt;4,500&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39b740c6"&gt;&lt;p class="cl-39b719b3"&gt;&lt;span class="cl-39b6f2a2"&gt;5,120&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39b740c6"&gt;&lt;p class="cl-39b719b3"&gt;&lt;span class="cl-39b6f2a2"&gt;5,100&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39b740c6"&gt;&lt;p class="cl-39b719b3"&gt;&lt;span class="cl-39b6f2a2"&gt;5,860&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/template&gt;
+&lt;div class="flextable-shadow-host" id="25d555b4-cdb0-4aba-b0ad-82b42960858a"&gt;&lt;/div&gt;
+&lt;script&gt;
+var dest = document.getElementById("25d555b4-cdb0-4aba-b0ad-82b42960858a");
+var template = document.getElementById("34feb769-7cbb-4662-a3d4-32cf03d014ee");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+&lt;/script&gt;
+
+* These rows will be duplicated  
+
+]
+
+
+
+---
+# Pivot longer  
+
+.pull-left[
+
+&lt;template id="7a39f537-0f71-4653-9480-85e7993a0b4f"&gt;&lt;style&gt;
+.tabwid table{
+  border-spacing:0px !important;
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+&lt;/style&gt;&lt;div class="tabwid"&gt;&lt;style&gt;.cl-39de2c00{}.cl-39d578ee{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-39d578ef{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-39d578f0{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-39d5a008{width:54.2pt;background-color:rgba(49, 163, 84, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39d5a009{width:56.6pt;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39d5a00a{width:54.2pt;background-color:rgba(49, 163, 84, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39d5a00b{width:56.6pt;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39d5a00c{width:54.2pt;background-color:rgba(49, 163, 84, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39d5a00d{width:56.6pt;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39d5a00e{width:54.2pt;background-color:rgba(255, 165, 0, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39d5a00f{width:56.6pt;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-39de2c00'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39d5a00f"&gt;&lt;p class="cl-39d578ef"&gt;&lt;span class="cl-39d578ee"&gt;country&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39d5a00e"&gt;&lt;p class="cl-39d578f0"&gt;&lt;span class="cl-39d578ee"&gt;1999&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39d5a00e"&gt;&lt;p class="cl-39d578f0"&gt;&lt;span class="cl-39d578ee"&gt;2000&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39d5a00e"&gt;&lt;p class="cl-39d578f0"&gt;&lt;span class="cl-39d578ee"&gt;2001&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39d5a00e"&gt;&lt;p class="cl-39d578f0"&gt;&lt;span class="cl-39d578ee"&gt;2002&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39d5a009"&gt;&lt;p class="cl-39d578ef"&gt;&lt;span class="cl-39d578ee"&gt;Nigeria&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39d5a008"&gt;&lt;p class="cl-39d578f0"&gt;&lt;span class="cl-39d578ee"&gt;8,000&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39d5a008"&gt;&lt;p class="cl-39d578f0"&gt;&lt;span class="cl-39d578ee"&gt;7,500&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39d5a008"&gt;&lt;p class="cl-39d578f0"&gt;&lt;span class="cl-39d578ee"&gt;9,250&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39d5a008"&gt;&lt;p class="cl-39d578f0"&gt;&lt;span class="cl-39d578ee"&gt;10,200&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39d5a00b"&gt;&lt;p class="cl-39d578ef"&gt;&lt;span class="cl-39d578ee"&gt;India&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39d5a00a"&gt;&lt;p class="cl-39d578f0"&gt;&lt;span class="cl-39d578ee"&gt;20,100&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39d5a00a"&gt;&lt;p class="cl-39d578f0"&gt;&lt;span class="cl-39d578ee"&gt;25,650&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39d5a00a"&gt;&lt;p class="cl-39d578f0"&gt;&lt;span class="cl-39d578ee"&gt;26,800&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39d5a00a"&gt;&lt;p class="cl-39d578f0"&gt;&lt;span class="cl-39d578ee"&gt;27,255&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39d5a00d"&gt;&lt;p class="cl-39d578ef"&gt;&lt;span class="cl-39d578ee"&gt;Brazil&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39d5a00c"&gt;&lt;p class="cl-39d578f0"&gt;&lt;span class="cl-39d578ee"&gt;4,500&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39d5a00c"&gt;&lt;p class="cl-39d578f0"&gt;&lt;span class="cl-39d578ee"&gt;5,120&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39d5a00c"&gt;&lt;p class="cl-39d578f0"&gt;&lt;span class="cl-39d578ee"&gt;5,100&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39d5a00c"&gt;&lt;p class="cl-39d578f0"&gt;&lt;span class="cl-39d578ee"&gt;5,860&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/template&gt;
+&lt;div class="flextable-shadow-host" id="ce516373-45e5-4d47-91b2-71068d9d7129"&gt;&lt;/div&gt;
+&lt;script&gt;
+var dest = document.getElementById("ce516373-45e5-4d47-91b2-71068d9d7129");
+var template = document.getElementById("7a39f537-0f71-4653-9480-85e7993a0b4f");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+&lt;/script&gt;
+
+&lt;img src="../../../../images/joins_pivots/pivot_command.png" width="100%" /&gt;
+
+* List the columns to pivot  
+* Provide 2 **new** column names  
+
+]
+
+
+.pull-right[
+
+
+&lt;template id="f2da8acb-1b01-41e8-9b5e-a7267f9ba57f"&gt;&lt;style&gt;
+.tabwid table{
+  border-spacing:0px !important;
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+&lt;/style&gt;&lt;div class="tabwid"&gt;&lt;style&gt;.cl-3a000e74{}.cl-39f97e56{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-39f97e57{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-39f97e58{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-39f9a57a{width:54.2pt;background-color:rgba(49, 163, 84, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39f9a57b{width:45pt;background-color:rgba(255, 165, 0, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39f9a57c{width:56.6pt;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39f9a57d{width:54.2pt;background-color:rgba(49, 163, 84, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39f9a57e{width:45pt;background-color:rgba(255, 165, 0, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39f9a57f{width:56.6pt;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39f9a580{width:56.6pt;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39f9a581{width:45pt;background-color:rgba(255, 165, 0, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39f9a582{width:54.2pt;background-color:rgba(49, 163, 84, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39f9a583{width:54.2pt;background-color:rgba(203, 195, 227, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39f9a584{width:45pt;background-color:rgba(255, 255, 0, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39f9cc44{width:56.6pt;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-3a000e74'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39f9cc44"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;country&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a584"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;year&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a583"&gt;&lt;p class="cl-39f97e58"&gt;&lt;span class="cl-39f97e56"&gt;cases&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39f9a57c"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;Nigeria&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57b"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;1999&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57a"&gt;&lt;p class="cl-39f97e58"&gt;&lt;span class="cl-39f97e56"&gt;8,000&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39f9a57c"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;Nigeria&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57b"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;2000&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57a"&gt;&lt;p class="cl-39f97e58"&gt;&lt;span class="cl-39f97e56"&gt;7,500&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39f9a57c"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;Nigeria&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57b"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;2001&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57a"&gt;&lt;p class="cl-39f97e58"&gt;&lt;span class="cl-39f97e56"&gt;9,250&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39f9a57c"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;Nigeria&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57b"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;2002&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57a"&gt;&lt;p class="cl-39f97e58"&gt;&lt;span class="cl-39f97e56"&gt;10,200&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39f9a57f"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;India&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57e"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;1999&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57d"&gt;&lt;p class="cl-39f97e58"&gt;&lt;span class="cl-39f97e56"&gt;20,100&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39f9a57f"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;India&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57e"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;2000&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57d"&gt;&lt;p class="cl-39f97e58"&gt;&lt;span class="cl-39f97e56"&gt;25,650&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39f9a57f"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;India&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57e"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;2001&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57d"&gt;&lt;p class="cl-39f97e58"&gt;&lt;span class="cl-39f97e56"&gt;26,800&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39f9a57f"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;India&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57e"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;2002&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57d"&gt;&lt;p class="cl-39f97e58"&gt;&lt;span class="cl-39f97e56"&gt;27,255&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39f9a57f"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;Brazil&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57e"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;1999&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57d"&gt;&lt;p class="cl-39f97e58"&gt;&lt;span class="cl-39f97e56"&gt;4,500&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39f9a57f"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;Brazil&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57e"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;2000&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57d"&gt;&lt;p class="cl-39f97e58"&gt;&lt;span class="cl-39f97e56"&gt;5,120&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39f9a57f"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;Brazil&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57e"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;2001&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a57d"&gt;&lt;p class="cl-39f97e58"&gt;&lt;span class="cl-39f97e56"&gt;5,100&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-39f9a580"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;Brazil&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a581"&gt;&lt;p class="cl-39f97e57"&gt;&lt;span class="cl-39f97e56"&gt;2002&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-39f9a582"&gt;&lt;p class="cl-39f97e58"&gt;&lt;span class="cl-39f97e56"&gt;5,860&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/template&gt;
+&lt;div class="flextable-shadow-host" id="12be6966-c2f1-4598-a4a4-6e39ea0a2935"&gt;&lt;/div&gt;
+&lt;script&gt;
+var dest = document.getElementById("12be6966-c2f1-4598-a4a4-6e39ea0a2935");
+var template = document.getElementById("f2da8acb-1b01-41e8-9b5e-a7267f9ba57f");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+&lt;/script&gt;
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+# ggplot command
+
+.pull-left[
+
+```r
+example %&gt;%
+  pivot_longer(
+       cols = `1999`:`2002`,
+       names_to = "year",
+       values_to = "cases") %&gt;%
+     
+  ggplot(mapping = aes(
+*           x = year,
+*           y = cases,
+*           color = country,
+*           group = country))+
+  geom_line()
+```
+]
+
+.pull-right[
+
+&lt;img src="slides_pivots_files/figure-html/unnamed-chunk-16-1.png" width="504" /&gt;
+
+]
+
+
+---
+# Pivoting wider  
+
+---
+# Pivoting wider  
+
+
+
+---
+# Breakout  
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

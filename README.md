@@ -74,7 +74,7 @@ exercises, follow these instructions:
 
 THESE ARE DRAFTS
 
-**Module 1:**  
+**Module 1: Introduction to R**  
 - [Slides: Welcome, course logistics, RStudio, and basic R
 syntax](https://appliedepi.github.io/intro_course/modules/module_1/slides/course_introduction/slides_course_introduction.html)
 
@@ -82,7 +82,7 @@ syntax](https://appliedepi.github.io/intro_course/modules/module_1/slides/course
 
 <img src="images/README_images/pointer_tutorial_setup.png" width="50%" />
 
-**Module 2:**  
+**Module 2: Data cleaning**  
 - [Slides: Tidy data and data
 cleaning](https://appliedepi.github.io/intro_course/modules/module_2/slides/slides_cleaning_dplyr/slides_cleaning_dplyr.html)
 
@@ -90,7 +90,7 @@ cleaning](https://appliedepi.github.io/intro_course/modules/module_2/slides/slid
 
 <img src="images/README_images/pointer_tutorial_cleaning.png" width="50%" />
 
-**Module 3:**  
+**Module 3: Grouping data and making summary tables**  
 - [Slides: Grouping and summarizing
 data](https://appliedepi.github.io/intro_course/modules/module_3/slides/slides_summary_tables/slides_grouping_summaries.html)
 
@@ -98,7 +98,7 @@ data](https://appliedepi.github.io/intro_course/modules/module_3/slides/slides_s
 
 <img src="images/README_images/pointer_tutorial_grouping.png" width="50%" />
 
-**Module 4:**  
+**Module 4: Data visualization with {ggplot2}**  
 - [Slides: Data visualization with
 ggplot2](https://appliedepi.github.io/intro_course/modules/module_4/slides/slides_ggplot_basics/slides_ggplot_basics.html)
 
@@ -113,13 +113,13 @@ ggplot2](https://appliedepi.github.io/intro_course/modules/module_4/slides/slide
 
 <img src="images/README_images/pointer_tutorial_ggplot_scales.png" width="50%" />
 
-**Module 5:**  
-- [Slides: Transforming data:
-joins](https://appliedepi.github.io/intro_course/modules/module_5/slides/slides_joins/slides_joins.html)  
-- [Slides: Transforming data:
-pivots](https://appliedepi.github.io/intro_course/modules/module_5/slides/slides_pivots/slides_pivots.html)
+**Module 5: Transforming data**  
+- [Slides: Joining
+data](https://appliedepi.github.io/intro_course/modules/module_5/slides/slides_joins/slides_joins.html)  
+- [Slides: Pivoting
+data](https://appliedepi.github.io/intro_course/modules/module_5/slides/slides_pivots/slides_pivots.html)
 
-**Module 6:**  
+**Module 6: More data visualization with {ggplot2}**  
 - [Slides: Epidemic curves in ggplot2]() TODO  
 - [Slides: Heat plots in ggplot2]() TODO  
 - [Slides: Age/sex pyramids in ggplot2]() TODO  
