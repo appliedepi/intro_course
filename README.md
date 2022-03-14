@@ -18,7 +18,7 @@ been used by 130,000 people around the world.
 
 # Course outline
 
-Click here to download the course outline (PDF)
+Click here to download the course outline (PDF) TODO
 
 # Course folder and case study data
 
@@ -41,7 +41,6 @@ exercises, follow these instructions:
     troubleshooting before the course)
 
 2)  Run these commands in your R console:  
-    `install.packges("learnr")`  
     `install.packages("remotes")`
 
 3)  Run this command in your R console:  
@@ -52,8 +51,8 @@ exercises, follow these instructions:
     RStudio pane (which also contains a tab holding your R
     Environment).  
 
--   the first time, you may need to restart your R session for the
-    tutorials to appear.
+-   The first time, you may need to restart RStudio for the tutorials to
+    appear.
 
 5)  Select the exercise for your current course module - look for the
     name “Applied Epi -”.  
