@@ -1,8 +1,8 @@
 ---
-title: "Data Vizualization"
-subtitle: "Scales, themes, and dynamic labeling in {ggplot2}<br><br>"
-author: '</br>Offered by: [Applied Epi](https:://appliedepi.org) </br> A nonprofit organization elevating frontline epidemiology <br>`r icons::icon_style(icons::fontawesome$brands$twitter, fill = "white")` [@epiRhandbook](https://twitter.com/epiRhandbook) `r icons::icon_style(icons::fontawesome("paper-plane"), fill = "white")` [contact@appliedepi.org](mailto:contact@appliedepi.org)'
-date: "March 2022"
+title: "Introduction to R for<br>Applied Epidemiology"
+subtitle: "<br>Scales, themes, and dynamic labeling in {ggplot2}"
+author: "March 2022"
+date: '[contact@appliedepi.org](mailto:contact@appliedepi.org)'
 output:
   xaringan::moon_reader:
     seal: TRUE
@@ -79,7 +79,7 @@ style_mono_accent(
   link_color = "#48a878", 
   ## add logo to the title page (bit bigger)
   title_slide_background_image = "https://github.com/appliedepi/intro_course/raw/main/images/logo.png", 
-  title_slide_background_position = "90% 90%", 
+  title_slide_background_position = "95% 95%", 
   title_slide_background_size = "25%", 
   ## add logo to all following slides
   background_image = "https://github.com/appliedepi/intro_course/raw/main/images/logo.png", 
@@ -137,22 +137,23 @@ surv <- rio::import(here::here("data", "surveillance_linelist_clean.rds"))
 ```
 
 
-
 # Today: objectives & schedule  
 
 **In this module we aim to help you:**  
-* Understand R within the ecosystem of analytical tools  
-* Navigate RStudio and R projects  
-* Write a basic R script to load packages, import data, and view a dataset  
+* Understand the {ggplot2} "Grammar of graphics"  
+* Build simple box/scatter/bar plots and histograms  
+* Adjust the scales, themes, and labels of the plots  
 
 
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
   ~Time, ~Location, ~Topic,
-  "0900-0945",     "Main",      "Welcome, course logistics, Why R?",
-  "0950-1050",     "Main",      "Lecture and live demonstration:\nRStudio tour, R projects, basic R syntax, functions & packages, data import",
-  "1100-1200",     "Breakouts", "Setting up a script, importing data, and reviewing a data frame",
-  "1205-1220",     "Main",      "Debrief"
+  "0900-0930",     "Main",      "{ggplot2} 'Grammar of graphics' syntax",
+  "0930-0945",     "Main",      "Live demonstration",
+  "1000-1100",     "Breakouts", "Practice making simple plots",
+  "1110-1130",     "Main",      "Scales, themes, and labels",
+  "1130-1220",     "Breakouts", "Adjusting plots",
+  "1220-1230",     "Main",      "Plenary debrief"
 )
 
 outline %>% 
@@ -222,9 +223,9 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "ggplot_scales_
 ---
 # Scales - overview  
 
-Scale commands replace defaults of *how* the aesthetic mappings manifest, such as:  
+Scale commands replace defaults for how aesthetics are displayed such as:  
 * *Which* colors or shapes to display  
-* The min/max of point sizes  
+* *How* date or proportions are written in axis labels  
 * The min/max and frequency of axes breaks  
 
 --
@@ -242,6 +243,87 @@ As a generic formula, these commands are written as: **`scale_AESTHETIC_METHOD()
 3) METHOD: `_continuous()`, `_discrete()`, `_manual()`, `_date()`, etc.  
 
 
+
+
+---
+# Scales - overview  
+
+Scale commands replace defaults for how aesthetics are displayed such as:  
+* *Which* colors or shapes to display  
+* *How* date or proportions are written in axis labels  
+* The min/max and frequency of axes breaks  
+
+--
+
+```{r, results = "asis", echo = FALSE}
+"Generic formula: scale_aesthetic_method()" %>%
+  flair("scale", color = "darkgreen") %>%
+  flair("aesthetic", color = "cornflowerblue") %>%  
+  flair("method", color = "deeppink") %>%
+  flair_all(before = "<h4>", after = "</h4>") %>%
+  cat()
+```
+
+--
+
+```{r, results = "asis", echo = FALSE}
+"1) scale_ : this prefix never changes." %>%
+  flair("scale", color = "darkgreen") %>%
+  flair("aesthetic", color = "cornflowerblue") %>%  
+  flair("method", color = "deeppink") %>%
+  flair_all(before = "<h4>", after = "</h4>") %>%
+  cat()
+```
+
+--
+```{r, results = "asis", echo = FALSE}
+"2) aesthetic: _fill_ or _color_ or _x_ or _y_ etc." %>%
+  flair("scale", color = "darkgreen") %>%
+  flair("aesthetic", color = "cornflowerblue") %>%  
+  flair("method", color = "deeppink") %>%
+  flair_all(before = "<h4>", after = "</h4>") %>%
+  cat()
+```
+
+--
+
+```{r, results = "asis", echo = FALSE}
+"3) method: _continuous() or _discrete() or _manual() or _date() etc." %>%
+  flair("scale", color = "darkgreen") %>%
+  flair("aesthetic", color = "cornflowerblue") %>%  
+  flair("method", color = "deeppink") %>%
+  flair_all(before = "<h4>", after = "</h4>") %>%
+  cat()
+```
+
+--
+
+```{r, results = "asis", echo = FALSE}
+"scale_color_continuous()" %>%
+  flair("scale", color = "darkgreen") %>%
+  flair("color", color = "cornflowerblue") %>%  
+  flair("continuous", color = "deeppink") %>%
+  flair_all(before = "<h4>", after = "</h4>") %>%
+  cat()
+```
+
+```{r, results = "asis", echo = FALSE}
+"scale_x_date()" %>%
+  flair("scale", color = "darkgreen") %>%
+  flair("x", color = "cornflowerblue") %>%  
+  flair("date", color = "deeppink") %>%
+  flair_all(before = "<h4>", after = "</h4>") %>%
+  cat()
+```
+
+```{r, results = "asis", echo = FALSE}
+"scale_x_manual()" %>%
+  flair("scale", color = "darkgreen") %>%
+  flair("x", color = "cornflowerblue") %>%  
+  flair("manual", color = "deeppink") %>%
+  flair_all(before = "<h4>", after = "</h4>") %>%
+  cat()
+```
 
 
 

@@ -131,18 +131,20 @@ surv <- rio::import(here::here("data", "surveillance_linelist_clean.rds"))
 # Today: objectives & schedule  
 
 **In this module we aim to help you:**  
-* Understand R within the ecosystem of analytical tools  
-* Navigate RStudio and R projects  
-* Write a basic R script to load packages, import data, and view a dataset  
+* Understand the {ggplot2} "Grammar of graphics"  
+* Build simple box/scatter/bar plots and histograms  
+* Adjust the scales, themes, and labels of the plots  
 
 
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
   ~Time, ~Location, ~Topic,
-  "0900-0945",     "Main",      "Welcome, course logistics, Why R?",
-  "0950-1050",     "Main",      "Lecture and live demonstration:\nRStudio tour, R projects, basic R syntax, functions & packages, data import",
-  "1100-1200",     "Breakouts", "Setting up a script, importing data, and reviewing a data frame",
-  "1205-1220",     "Main",      "Debrief"
+  "0900-0930",     "Main",      "{ggplot2} 'Grammar of graphics' syntax",
+  "0930-0945",     "Main",      "Live demonstration",
+  "1000-1100",     "Breakouts", "Practice making simple plots",
+  "1110-1130",     "Main",      "Scales, themes, and labels",
+  "1130-1220",     "Breakouts", "Adjusting plots",
+  "1220-1230",     "Main",      "Plenary debrief"
 )
 
 outline %>% 
@@ -370,7 +372,7 @@ The order of layers will usually look like this:
 
 --
 
-These layers are "added" sequentially with `+` symbols.  
+These layers are "added" sequentially with **`+`** symbols.  
 **ggplot2** commands can be quite long!  
 
 
@@ -512,6 +514,43 @@ ggplot commands tend to get very vertical (long)
 
 
 
+---
+# Mappings with `aes()`  
+
+.pull-left[
+
+```{r, eval=F, echo=T}
+ggplot(
+  data = surv,
+  mapping = aes(        
+   x = age_years       #<<
+   ))               
+```
+
+Aesthetic mappings are placed within `aes()`.  
+
+Two basic mappings are axes to columns, via:  
+`x = `   
+
+
+]
+
+.pull-right[
+
+```{r , echo = FALSE, eval = TRUE}
+ggplot(
+  data = surv,
+  mapping = aes(
+   x = age_years))+
+theme_grey(base_size = 16)
+```
+] 
+
+???
+ggplot commands tend to get very vertical (long)  
+
+
+
 
 ---
 # Mappings with `aes()`  
@@ -569,7 +608,8 @@ ggplot(
 
 Data are visualized using "geom" commands, such as `geom_point()`.  
 
-These commands are "added" with a `+` to the `ggplot()` command.  
+These commands are "added"  
+with a **`+`** to the `ggplot()` command.  
 
 ]
 
@@ -934,6 +974,50 @@ Each geom accepts certain aesthetics, like `binwidth=` for `geom_histogram()`
 
 
 
+---
+
+class: medium-text
+
+# Aesthetics assignments  
+
+
+.pull-left[
+
+Aesthetics can be assigned to either:  
+
+* **Static values**: `color = "purple"`  
+  - Assigned *outside* `aes()`  
+  - Same display for all data  
+
+</br>
+</br>
+</br>
+</br>
+
+
+]
+
+
+.pull-right[
+
+Some examples:  
+
+```{r, message=F, warning=F}
+
+color_purple <- ggplot(data = surv, aes(x = age_years, y = ht_cm))+
+  geom_point(color = "purple")+
+  theme_minimal(base_size = 16)+
+  labs(title = "Using color = 'purple'")
+
+color_hospital <- ggplot() + theme_void()
+
+cowplot::plot_grid(color_purple, color_hospital,
+                  nrow = 2, rel_widths = c(2,2))
+
+
+```
+
+]
 
 
 
@@ -951,6 +1035,11 @@ Aesthetics can be assigned to either:
 * **Static values**: `color = "purple"`  
   - Assigned *outside* `aes()`  
   - Same display for all data  
+
+</br>
+</br>
+</br>
+</br>
 
 * **A data column**: `aes(color = gender)`  
   - Assigned *inside* `aes()`
@@ -986,6 +1075,8 @@ cowplot::plot_grid(color_purple, color_hospital,
 
 
 
+
+
 ---
 
 class: medium-text
@@ -1001,6 +1092,11 @@ Aesthetics can be assigned to either:
   - Assigned *outside* `aes()`  
   - Same display for all data  
   
+</br>
+</br>
+</br>
+</br>
+
 * **A data column**: `aes(fill = gender)`  
   - Assigned *inside* `aes()`
   - Displays data as "groups"  
@@ -1035,8 +1131,6 @@ cowplot::plot_grid(
 ```
 
 ]
-
-
 
 
 
@@ -1102,9 +1196,13 @@ geom_point()
 ```
 
 
-*Dynamic* aesthetics are mapped to a column name, and defined *inside* `aes()`. This creates "groups" in the plot and generates a legend. The display varies for each data point.  
+*Dynamic* aesthetics are mapped to a column name.  
 
-Above, `color=` is mapped to column `died`, and is inherited by `geom_point()`.   
+This creates "groups" and generates a legend.  
+
+This assignment occurs *inside* `aes()`.  
+
+Above, `color=` is mapped to column `died`  
 
 ]
 
@@ -1146,9 +1244,9 @@ geom_point(
 * alpha = 0.7) 
 ```
 
-Above, `size = 7` and `alpha = 0.7` are static aesthetics defined outside any `aes()` and apply to `geom_point()`.  
+Above, `size = 7` and `alpha = 0.7` are assigned statically, outside `aes()`.  
 
-`color=` is within an `aes()`, and maps to values in column `died`.  
+`color=` is assigned to column `died`, within `aes()`.  
 
 
 ]
@@ -1195,9 +1293,10 @@ geom_histogram() +
 *facet_wrap(~hospital)
 ```
 
-Another way of *displaying groups* is via faceting. 
+Faceting can also display groups. 
 
-`facet_wrap()` produces one facet per unique value.  
+`facet_wrap()` produces one facet  
+per unique value.  
 
 Place a "~" before the column name.  
 
@@ -1240,7 +1339,7 @@ geom_histogram() +
             scales = "free_y")
 ```
 
-"Free" auto-scaled axes with `scales=`. Options:  
+"Free" auto-scaled axes with `scales=`  
 - "free_y"  
 - "free_x"   
 - "free" (both x and y)  
@@ -1374,7 +1473,8 @@ surv %>%
 
 
 
-
+???
+Here we create data frame of cases per week per hospital, and plot with `geom_line()`. The highlight is applied to Port Hospital.  
 
 
 
