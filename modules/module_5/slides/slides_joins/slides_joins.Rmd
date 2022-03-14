@@ -1,6 +1,6 @@
 ---
 title: "Introduction to R for<br>Applied Epidemiology"
-subtitle: "Transforming and restructuring data"
+subtitle: "Joining data"
 author: "March 2022"
 date: '[contact@appliedepi.org](mailto:contact@appliedepi.org)'
 output:

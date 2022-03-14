@@ -192,17 +192,9 @@ previous_week <- epiweek - 1   # define previous epiweek
      * Print by running the command `district`.
      * Note the difference between `"34"` and `34` - **note the quotation marks** - one you can use as a number, the other you should not.    
      
-# Course files  
-1. **Copy course files into the R project**  
-     * Toggle out of RStudio and show the File Explorer window.
-          * **Copy all the course files** and paste them into the R project  
-          * Show how they are now accessible from the RStudio **Files pane**.  
-          * Discuss the project structure (a "data" folder, a "scripts" folder, and a "outputs" folder)          
-     * Save and close "*demo.R*" in RStudio. In the File Explorer, manually move it from the project root into the "scripts" subfolder  
-
 # Finish
 Close RStudio.    
-
+Return to slides and begin functions slides.  
 
 
      
