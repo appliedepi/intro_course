@@ -15,6 +15,7 @@ output:
 params:
   online: TRUE
 ---
+class: inverse, center, middle
 
 ```{r, eval=F, echo=F, include = F}
 # Must do in order to render.
@@ -128,19 +129,13 @@ medical_linelist <- rio::import(here::here("data", "medical_linelist_12012014.xl
 ```
 
 
-
-
-
-
-class: inverse, center, middle
-
 .pull-left[
 ## Tidy data 
 ]
 
 .pull-right[
 
-```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
+```{r, eval = TRUE, echo = FALSE, out.width = "85%"}
 # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
 # It dynamically creates the ../../etc filepath.
 
@@ -172,14 +167,15 @@ outline %>%
   flextable::add_footer_lines("Breaks are incorporated above, but not shown as rows")
 ```
 
-??? Note stretch breaks throughout.
+???
+Note stretch breaks throughout.
 
 
 
 ---
 # Clean data, messy data   
 
-- What is involved in "cleaning" a dataset?  
+What is involved in "cleaning" a dataset?  
 
 
 .pull-left[
@@ -247,7 +243,7 @@ Clean data should also be "tidy". Below are 3 core principles of "tidy data":
 
 
 ---
-# Messy values  
+# Values in their own cell  
 
 
 ```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
@@ -388,8 +384,8 @@ class: medium-large-table
 
 # Review your data  
 
-We will begin working with the *"surveillance_linelist_12012014.xlsx"*  
-We assigned it the name `surv_raw` once imported to R.    
+We will begin working with the *"surveillance_linelist_12012014.csv"*  
+We assigned it the name `surv_raw` when we imported it into R.    
 
 ```{r}
 head(surv_raw, 25) %>% 
@@ -430,7 +426,9 @@ demo %>%
      
 ```
 
+--
 
+We will name it "**`demo`**"
 
 ---
 
@@ -453,7 +451,7 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "data_cleaning"
 
 * This package is installed in a universe of {tidyverse} R packages  
 
-* Introduction of the {tidyverse} has transformed R in the last 5 years  
+* The {tidyverse} has transformed R in the last 5 years  
 
 
 ]
@@ -944,7 +942,7 @@ Explain that there are many nuances to case_when() which you will practice in th
 ---
 # What about dates?
 
-It is important that R understands dates correctly - as dates (not character values!)  
+It is important that R understands dates correctly (not as character values!)  
 
 .pull-left[
 
@@ -1001,7 +999,7 @@ demo %>%
 ```{r, eval=T, echo=T}
 demo %>% 
   select(case_id, `onset date`) %>% 
-  mutate(`onset date` = ymd(`onset date`)) %>%  #<<
+  mutate(`onset date` = mdy(`onset date`)) %>%  #<<
   tibble()
 ```
 
