@@ -400,7 +400,8 @@ geom_bar() +
 
 ```
 
-Within `scale_fill_manual()` we provide assignments within a vector `c()`.  
+Within `scale_fill_manual()` we provide **manual** assignments  
+within a vector `c()`.  
 
 
 .footnote[Use *na.value = "grey"* for missing values]  
@@ -429,6 +430,52 @@ Discuss the na.value= arguments in most scale commands, and the difference betwe
 
 
 
+
+---
+# Scales - colorbrewer 
+
+.pull-left[
+
+
+```{r, eval=F, echo=T}
+ggplot(
+  data = surv,
+  mapping = aes(
+    x = district,
+    fill = gender)) +
+geom_bar() +
+*scale_fill_brewer(
+*   type = "qual",
+*   na.value = "grey50")
+
+```
+
+Use `scale_fill_brewer()` for pleasant palettes  
+
+
+.footnote[Use *na.value = "grey"* for missing values]  
+
+]
+
+.pull-right[
+
+```{r, eval=T, echo=F}
+ggplot(
+  data = surv,
+  mapping = aes(
+    x = district,
+    fill = gender)) +
+geom_bar() +
+scale_fill_brewer(type = "qual", na.value = "grey50")+
+theme_gray(base_size = 16)
+```
+]
+
+???
+Briefly mention the `na.value=` arguments in most scale commands, and the difference between having NA values in the data and having an explicit missing value such as "Unknown".
+
+
+
 ---
 # Scales - adjusted y-axis 
 
@@ -436,7 +483,7 @@ Discuss the na.value= arguments in most scale commands, and the difference betwe
 
 ```{r, eval=F, echo=T}
 ggplot(
-  data = sur,
+  data = surv,
   mapping = aes(
     x = district,
     fill = gender)) +
@@ -482,7 +529,7 @@ theme_gray(base_size = 18)
 
 
 ---
-# Scales - Start axes at 0 
+# Scales - start axes at 0 
 
 .pull-left[
 
@@ -506,7 +553,7 @@ scale_y_continuous(
 *  expand = c(0, 0))
 ```
 
-In any `scale_x_` or `scale_y_` command, use `expand = c(0,0)` to remove excess space around the plot features.  
+In `scale_x_` or `scale_y_` commands, use `expand = c(0,0)` to remove excess space around the plot.  
 
 ]
 
@@ -640,9 +687,10 @@ scale_x_date(
 
 ```
 
-Specify date label format to `date_labels=` using ["strptime" syntax](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/strptime)  
+Specify date label format to `date_labels=` using  
+["strptime" syntax](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/strptime)  
 
-`"%d %b %Y"` for DD MMM YYYY.  
+`"%d %b %Y"` for DD MM YYYY.  
 
 
 .footnote[See Epi R Handbook [Epicurves](https://epirhandbook.com/epidemic-curves.html) and [Strings](https://epirhandbook.com/characters-and-strings.html) chapters]  
@@ -686,8 +734,8 @@ ggplot(
   mapping = aes(x = date_onset)) +
 geom_histogram() +
 scale_x_date(
-  date_breaks = "2 months",
-* labels = scales::label_date_short() )
+* date_breaks = "2 weeks",
+* labels = label_date_short() )
 
 ```
 
@@ -705,7 +753,7 @@ ggplot(
   mapping = aes(x = date_onset)) +
 geom_histogram() +
 scale_x_date(
-  date_breaks = "2 months",
+  date_breaks = "2 weeks",
   labels = scales::label_date_short())+
 theme_grey(base_size = 18)
 
@@ -725,46 +773,34 @@ theme_grey(base_size = 18)
 .pull-left[
 
 ```{r, echo = TRUE, eval = FALSE, tidy = FALSE}
-ggplot(data = surv)+
-geom_histogram(
+ggplot(
+  data = surv,
   mapping = aes(
-    x = age_years,
-    fill = district),    
-  alpha = 0.3) +
-*labs(
-*  title = "Age distributiona among confirmed cases",
-*  subtitle = "Ebola outbreak, 2014",
-*  x = "Age (years)",
-*  y = "Number of cases",
-*  caption = "Fictional Ebola data",
-*  color = "Gender"
-) +
+    x = date_onset,
+    fill = district)) +
+geom_histogram() +
+scale_x_date(
+  date_breaks = "2 weeks",
+  labels = label_date_short() )+
+scale_fill_brewer(type = "qual",
+                  na.value = "grey50")
 ```
 
-
-Use `labs()` as above. 
-
-Note: to edit legend title, use the aesthetic that created the legend (e.g. `color=`).  
 
 ]
 
 .pull-right[
 
 ```{r , echo = FALSE, eval = TRUE, tidy = FALSE}
-ggplot(data = surv)+
-geom_histogram(
-  mapping = aes(
-    x = age_years,
-    fill = district),    
-  alpha = 0.3) +
-labs(
-  title = "Age distributiona among confirmed cases",
-  subtitle = "Ebola outbreak, 2014",
-  x = "Age (years)",
-  y = "Number of cases",
-  caption = "Fictional Ebola data",
-  color = "Gender"
-) +
+ggplot(
+  data = surv,
+  mapping = aes(x = date_onset, fill = hospital)) +
+geom_histogram() +
+scale_x_date(
+  date_breaks = "2 weeks",
+  labels = label_date_short() )+
+scale_fill_brewer(type = "qual",
+                  na.value = "grey50")+
 theme_grey(base_size = 18)
 ```
 ]
@@ -772,9 +808,74 @@ theme_grey(base_size = 18)
 
 
 ---
+# Plot labels  
+
+.pull-left[
+
+```{r, echo = TRUE, eval = FALSE, tidy = FALSE}
+ggplot(
+  data = surv,
+  mapping = aes(
+    x = date_onset,
+    fill = district)) +
+geom_histogram() +
+scale_x_date(
+  date_breaks = "2 weeks",
+  labels = label_date_short() )+
+scale_fill_brewer(type = "qual",
+                  na.value = "grey50")+
+*labs(
+*  title = "Epidemic curve of Ebola outbreak",
+*  subtitle = "Confirmed cases, 2014",
+*  x = "Date",
+*  y = "Number of cases",
+*  caption = "Fictional Ebola data",
+*  fill = "District"
+) +
+```
+
+
+Use `labs()` as above. 
+
+Note: edit legend title via the aesthetic that created the legend (e.g. `fill=`).  
+
+]
+
+.pull-right[
+
+```{r , echo = FALSE, eval = TRUE, tidy = FALSE}
+ggplot(
+  data = surv,
+  mapping = aes(
+    x = date_onset,
+    fill = hospital)) +
+geom_histogram() +
+scale_x_date(
+  date_breaks = "2 weeks",
+  labels = label_date_short() )+
+scale_fill_brewer(type = "qual",
+                  na.value = "grey50")+
+labs(
+  title = "Epidemic curve of Ebola outbreak",
+  subtitle = "Confirmed cases, 2014",
+  x = "Date",
+  y = "Number of cases",
+  caption = "Fictional Ebola data",
+  fill = "District"
+) +
+theme_grey(base_size = 18)
+```
+]
+
+
+
+
+
+---
 # Dynamic labels  
 
-Embed code within `str_glue("write text {CODE HERE}")`, which updates with new data.  
+Embed code within `str_glue("text here {CODE HERE} text here")`  
+The code will update with the data.  
 
 ```{r, eval=T, echo=T}
 str_glue("Data as of {Sys.Date()}")
@@ -836,7 +937,7 @@ The power of {ggplot2} - you can make extremely small adjustments
 .pull-left[
 
 
-[These "complete themes"](https://ggplot2.tidyverse.org/reference/ggtheme.html) are easy to add.  
+["Complete themes"](https://ggplot2.tidyverse.org/reference/ggtheme.html) are easy to add.  
 
 ```{r, eval=F, echo=T}
 # Try one of these...
@@ -1073,6 +1174,21 @@ Explain that nobody has these all memorized, but the common ones are easy to rem
 
 
 
+
+---
+class: inverse, center, middle
+
+
+
+## Breakout  
+
+
+```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "breakout", "teamwork3.png")))
+```
 
 
 

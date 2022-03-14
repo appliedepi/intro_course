@@ -1488,3 +1488,19 @@ ggplot images from:
 * https://jcheshire.com/r-spatial-data-hints/great-maps-ggplot2/
 
 
+
+
+---
+class: inverse, center, middle
+
+
+
+## Breakout  
+
+
+```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "breakout", "Safety Match - COVID artwork.png")))
+```

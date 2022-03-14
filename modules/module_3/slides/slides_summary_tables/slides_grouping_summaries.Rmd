@@ -1032,5 +1032,3 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "choices.png"))
 ```
 
 
-
-
