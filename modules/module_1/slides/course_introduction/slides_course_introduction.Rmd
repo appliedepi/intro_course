@@ -48,6 +48,7 @@ pacman::p_load(
   lubridate,  # working with dates
   tidyverse,  # data management and visualization
   gtsummary,  # summary tables
+  flair,      # coloring text
   kableExtra, # for output tables
   xaringanthemer  # for styling presentation 
 )
@@ -94,6 +95,11 @@ style_mono_accent(
     tr:last-child {
     border-bottom: none;
   }
+```
+
+
+```{r, echo=F, eval=T}
+surv <- rio::import(xfun::relative_path(here::here("data", "surveillance_linelist_clean.rds")))
 ```
 
 # Thank you for joining us  
@@ -677,7 +683,8 @@ outline %>%
   flextable::add_footer_lines("Breaks are incorporated above, but not shown as rows")
 ```
 
-??? Note stretch breaks throughout.
+???
+Note stretch breaks throughout.
 
 
 ---
@@ -1073,7 +1080,7 @@ Imagine we have this dataset imported into R, saved with the name **`surv`**.
 We want to create a cross-tabulation of the columns `case_def` and `gender`.  
 
 ```{r include=FALSE}
-surv <- surv_linelist %>% 
+surv <- surv %>% 
      select(case_def, gender, age) %>% 
      head(8)
 ```
@@ -1086,10 +1093,6 @@ surv %>% knitr::kable()
 
 ---
 # The `tbl_cross()` function 
-
-```{r include=FALSE}
-linelist <- surv_linelist
-```
 
 ```{r, results = "asis", echo = FALSE}
 "tbl_cross() requires us to supply 3 arguments, to create a cross-tabulation:" %>%
@@ -1117,10 +1120,6 @@ Here is the function, with no values provided to the arguments.
 ---
 # The `tbl_cross()` function 
 
-```{r include=FALSE}
-linelist <- surv_linelist
-```
-
 ```{r, results = "asis", echo = FALSE}
 "tbl_cross() requires us to supply 3 arguments, to create a cross-tabulation:" %>%
   flair("tbl_cross()", color = "cornflowerblue") %>%
@@ -1145,10 +1144,6 @@ The dataset we want to cross-tabulate is named `surv`
 
 ---
 # The `tbl_cross()` function 
-
-```{r include=FALSE}
-linelist <- surv_linelist
-```
 
 ```{r, results = "asis", echo = FALSE}
 "tbl_cross() requires us to supply 3 arguments, to create a cross-tabulation:" %>%
@@ -1182,9 +1177,6 @@ We want the `gender` values to form the rows of the cross-table
 ---
 # The `tbl_cross()` function 
 
-```{r include=FALSE}
-linelist <- surv_linelist
-```
 
 ```{r, results = "asis", echo = FALSE}
 "tbl_cross() requires us to supply 3 arguments, to create a cross-tabulation:" %>%
@@ -1210,10 +1202,6 @@ We want the `case_def` values to form the columns of the cross-table
 
 ---
 # The `tbl_cross()` function 
-
-```{r include=FALSE}
-linelist <- surv_linelist
-```
 
 ```{r, results = "asis", echo = FALSE}
 "tbl_cross() requires us to supply 3 arguments, to create a cross-tabulation:" %>%
@@ -1321,7 +1309,7 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "functions_pack
 ---
 # {pacman}  
 
-This package help you manage the instal/loading of other packages.  
+This package help you manage the install/loading of other packages.  
 
 * **{pacman}** = **pac**kage **man**ager 
 
@@ -1449,7 +1437,7 @@ Let's try import a dataset "linelist.csv" into R!
 Will this "absolute" file path work on your computer? Or will it "break"?  
 
 ```{r, eval=F, echo=T}
-import("C:/Users/Laura/Documents/intro_course/data/clean/linelist.csv")
+import("C:\Users\Laura\Documents\intro_course\data\clean\linelist.csv")
 ```
 
 --
@@ -1491,13 +1479,13 @@ The command **`here("data", "clean", "linelist.csv")`**
 
 produces this file path on Laura's computer:  
 
-`"C:/Users/Laura/Documents/intro_course/data/clean/linelist.csv"`  
+`"C:\Users\Laura\Documents\intro_course\data\clean\linelist.csv"`  
 
 --
 
-and produces *this* on Rajiv's computer:  
+and produces *this* on Rajiv's Mac computer:  
 
-`"D:/Users/Rajiv/docs/intro_course/data/clean/linelist.csv"`  
+`"home/Rajiv/docs/intro_course/data/clean/linelist.csv"`  
 
 
 
@@ -1509,6 +1497,8 @@ Finally, we can combine `import()` and `here()` to create a command that is trul
 ```{r, echo=T, eval=F}
 import(here("data", "clean", "linelist.csv"))
 ```
+
+It is also agnostic in terms of slash direction ( / vs. \\ )  
 
 We can zip this R project and email to a colleague, and this command will correctly import the data no matter where the R project is stored on their computer.  
 

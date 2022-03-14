@@ -78,6 +78,9 @@ THESE ARE DRAFTS
 - [Slides: Welcome, course logistics, RStudio, and basic R
 syntax](https://appliedepi.github.io/intro_course/modules/module_1/slides/course_introduction/slides_course_introduction.html)
 
+-   Live demonstration ([instructor
+    guide](https://appliedepi.github.io/intro_course/modules/module_1/guides/rstudio_tour.html))
+
 -   Exercise:
 
 <img src="images/README_images/pointer_tutorial_setup.png" width="50%" />

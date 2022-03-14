@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 
 # Course outline  
 
-Click here to download the course outline (PDF)  
+Click here to download the course outline (PDF) TODO  
 
 
 # Course folder and case study data  
@@ -74,6 +74,8 @@ THESE ARE DRAFTS
 
 **Module 1: Introduction to R**  
 - [Slides: Welcome, course logistics, RStudio, and basic R syntax](https://appliedepi.github.io/intro_course/modules/module_1/slides/course_introduction/slides_course_introduction.html)  
+
+- Live demonstration ([instructor guide](https://appliedepi.github.io/intro_course/modules/module_1/guides/rstudio_tour.html))  
 
 - Exercise:  
 
