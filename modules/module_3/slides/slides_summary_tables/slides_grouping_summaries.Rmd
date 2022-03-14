@@ -48,6 +48,7 @@ pacman::p_load(
   tidyverse,  # data management and visualization
   gtsummary,  # summary tables
   flextable,  # pretty tables
+  scales,     # percents in tables
   kableExtra, # for output tables
   xaringanthemer  # for styling presentation 
 )
@@ -144,9 +145,9 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "grouping", "Gr
 # Today: objectives & schedule  
 
 **In this module we aim to help you:**  
-* Gain familiarity of {dplyr} functions used to clean public health data  
-* Apply a series of functions to a data frame using the pipe operator  
-* Begin writing an R script to analyze outbreak data  
+* Gain familiarity of {dplyr} functions used to organize data in groups  
+* Learn 3 methods for creating descriptive summary tables  
+* Make tables of printable quality and export as PNG, Word, etc.  
 
 
 ```{r, echo=FALSE, warning=F, message=F}
@@ -163,7 +164,8 @@ outline %>%
   flextable::add_footer_lines("Breaks are incorporated above, but not shown as rows")
 ```
 
-??? Note stretch breaks throughout.
+???
+Note stretch breaks throughout.
 
 
 
@@ -211,14 +213,16 @@ Common grouping/summarising functions, all from the {tidyverse}:
 ---
 # `count()`  
 
-Pipe to `count()`, with a column name, to get the number of rows per group
+Pipe the data into to `count()`, and provide a column name.  
+
+This returns the number of rows per unique value (per group)  
 
 --
 
 
 ```{r, echo=T}
 surv %>% 
-  count(district)                            #<<
+  count(hospital)                            #<<
 ```
 
 ???
@@ -234,7 +238,7 @@ You can include multiple grouping columns
 
 ```{r, echo=T}
 surv %>% 
-  count(district, gender)                            #<<
+  count(hospital, gender)                            #<<
 ```
 
 ???
@@ -270,7 +274,7 @@ But what if you want more than just the counts?
 
 ```{r, echo=T, eval=F}
 surv %>% 
-  group_by(district)
+  group_by(hospital)
 ```
 
 No perceptible change to the dataset *until* another {dplyr} function is applied.  
@@ -281,13 +285,13 @@ If printed, the `Groups:` are listed above the data.
 
 ```{r, echo=F, eval=T}
 surv %>% 
-  group_by(district)
+  group_by(hospital)
 ```
 
 
 
 ???
-Note the `groups: district`, at the top of the tibble
+Note the `groups: hospital`, at the top of the tibble
 
 
 
@@ -311,7 +315,7 @@ Within `summarise()`, *create columns in a **new**, summarized dataset.*
 
 ```{r summarise, include = F}
 surv %>% 
-  group_by(district) %>% 
+  group_by(hospital) %>% 
   summarise()   
 ```
 
@@ -329,7 +333,7 @@ decorate("summarise") %>%
 ---
 # group_by() and summarise()  
 
-Within the parentheses, *create columns in a **new**, summarized dataset.*  
+Within the parentheses, *list new columns for the **new**, summary dataset.*  
 
 ```{r, results = "asis", echo = FALSE}
 "summarise(new column name = a function to apply to each group of rows)" %>%
@@ -341,8 +345,8 @@ Within the parentheses, *create columns in a **new**, summarized dataset.*
 
 ```{r summarise2, include = F}
 surv %>% 
-  group_by(district) %>% 
-  summarise(n_rows = n())                # use function n() to count the number of rows
+  group_by(hospital) %>% 
+  summarise(n_rows = n())                        # n() counts the number of rows per group
 ```
 
 ```{r summarise2_flair, echo=F}
@@ -370,10 +374,10 @@ Within the parentheses, *create columns in a **new**, summarized dataset.*
 
 ```{r summarise3, include = F}
 surv %>% 
-  group_by(district) %>% 
+  group_by(hospital) %>% 
   summarise(
-    n_rows  = n(),                          # use function n() to count the number of rows
-    age_avg = mean(age_years, na.rm = T))   # mean age in the group
+    n_rows  = n(),                               # n() counts the number of rows per group
+    age_avg = mean(age_years, na.rm = T))        # mean age in the group
 ```
 
 ```{r summarise3_flair, echo=F}
@@ -403,19 +407,20 @@ Within the parentheses, *create columns in a **new**, summarized dataset.*
 
 ```{r summarise4, include = F}
 surv %>% 
-  group_by(district) %>% 
+  group_by(hospital) %>% 
   summarise(
-    n_rows  = n(),                           # use function n() to count the number of rows
-    age_avg = mean(age_years, na.rm = T),    # mean age in the group
-    max_onset = max(date_onset, na.rm=T))    # latest onset date
+    n_rows  = n(),                               # n() counts the number of rows per group
+    age_avg = mean(age_years, na.rm = T),        # mean age in the group
+    max_onset = max(date_onset, na.rm=T))        # latest onset date
+
 ```
 
 ```{r summarise4_flair, echo=F}
 decorate("summarise4") %>%
   flair("n_rows", color = "deeppink") %>%
-  flair("n()", color = "cornflowerblue") %>% 
   flair("age_avg", color = "deeppink") %>%
   flair("max_onset", color = "deeppink") %>%
+  flair("n()", color = "cornflowerblue") %>% 
   flair("mean(age_years, na.rm = T)", color = "cornflowerblue") %>% 
   flair("max(date_onset, na.rm=T)", color = "cornflowerblue") %>% 
   knit_print.with_flair()
@@ -425,6 +430,84 @@ decorate("summarise4") %>%
 
 
 ---
+# group_by() and summarise()  
+
+Within the parentheses, *create columns in a **new**, summarized dataset.*  
+
+```{r, results = "asis", echo = FALSE}
+"summarise(new column name = a function to apply to each group of rows)" %>%
+  flair("new column name", color = "deeppink") %>%
+  flair("a function", color = "cornflowerblue") %>%
+  flair_all(before = "<h4>", after = "</h4>") %>%
+  cat()
+```
+
+```{r summarise5, include = F}
+surv %>% 
+  group_by(hospital) %>% 
+  summarise(
+    n_rows  = n(),                               # n() counts the number of rows per group
+    age_avg = mean(age_years, na.rm = T),        # mean age in the group
+    max_onset = max(date_onset, na.rm=T),        # latest onset date
+    n_female = sum(gender == 'female', na.rm=T)) # number female in group
+
+```
+
+```{r summarise5_flair, echo=F}
+decorate("summarise5") %>%
+  flair("n_rows", color = "deeppink") %>%
+  flair("age_avg", color = "deeppink") %>%
+  flair("max_onset", color = "deeppink") %>%
+  flair(" n_female ", color = "deeppink") %>%
+  flair("n()", color = "cornflowerblue") %>% 
+  flair("mean(age_years, na.rm = T)", color = "cornflowerblue") %>% 
+  flair("max(date_onset, na.rm=T)", color = "cornflowerblue") %>% 
+  flair("sum(gender == 'female', na.rm=T)", color = "cornflowerblue") %>% 
+  knit_print.with_flair()
+```
+
+
+
+---
+# group_by() and summarise()  
+
+Within the parentheses, *create columns in a **new**, summarized dataset.*  
+
+```{r, results = "asis", echo = FALSE}
+"summarise(new column name = a function to apply to each group of rows)" %>%
+  flair("new column name", color = "deeppink") %>%
+  flair("a function", color = "cornflowerblue") %>%
+  flair_all(before = "<h4>", after = "</h4>") %>%
+  cat()
+```
+
+```{r summarise6, include = F}
+surv %>% 
+  group_by(hospital) %>% 
+  summarise(
+    n_rows  = n(),                                # n() counts the number of rows per group
+    age_avg = mean(age_years, na.rm = T),        # mean age in the group
+    max_onset = max(date_onset, na.rm=T),        # latest onset date
+    n_female = sum(gender == 'female', na.rm=T), # number female in group
+    pct_female = percent(n_female / n_rows))     # number female in group
+```
+
+```{r summarise6_flair, echo=F}
+decorate("summarise6") %>%
+  flair(" n_rows ", color = "deeppink") %>%
+  flair("age_avg", color = "deeppink") %>%
+  flair("max_onset", color = "deeppink") %>%
+  flair("n()", color = "cornflowerblue") %>% 
+  flair(" n_female ", color = "deeppink") %>%
+  flair("pct_female", color = "deeppink") %>%
+  flair("mean(age_years, na.rm = T)", color = "cornflowerblue") %>% 
+  flair("max(date_onset, na.rm=T)", color = "cornflowerblue") %>% 
+  flair("sum(gender == 'female', na.rm=T)", color = "cornflowerblue") %>% 
+  flair("percent(n_female / n_rows)", color = "cornflowerblue") %>% 
+  knit_print.with_flair()
+```
+
+---
 
 # `arrange()`
 
@@ -432,11 +515,13 @@ Sort the table by placing the column(s) for sorting within `arrange()`
 
 ```{r arange, echo=T}
 surv %>% 
-  group_by(district) %>% 
+  group_by(hospital) %>% 
   summarise(
-    n_rows  = n(),                             
-    age_avg = mean(age_years, na.rm = T),      
-    max_onset = max(date_onset, na.rm=T)) %>%  
+    n_rows  = n(),                               # n() counts the number of rows per group
+    age_avg = mean(age_years, na.rm = T),        # mean age in the group
+    max_onset = max(date_onset, na.rm=T),        # latest onset date
+    n_female = sum(gender == 'female', na.rm=T), # number female in group
+    pct_female = percent(n_female / n_rows)) %>% # number female in group
   arrange(n_rows)                                  #<<
 ```
 
@@ -451,11 +536,13 @@ Wrap the column(s) in `desc()` to reverse the sorting
 
 ```{r arange-desc, echo=T}
 surv %>% 
-  group_by(district) %>% 
+  group_by(hospital) %>% 
   summarise(
-    n_rows  = n(),                             
-    age_avg = mean(age_years, na.rm = T),      
-    max_onset = max(date_onset, na.rm=T)) %>%  
+    n_rows  = n(),                               # n() counts the number of rows per group
+    age_avg = mean(age_years, na.rm = T),        # mean age in the group
+    max_onset = max(date_onset, na.rm=T),        # latest onset date
+    n_female = sum(gender == 'female', na.rm=T), # number female in group
+    pct_female = percent(n_female / n_rows)) %>% # number female in group
   arrange(desc(n_rows))                             #<<
 ```
 
