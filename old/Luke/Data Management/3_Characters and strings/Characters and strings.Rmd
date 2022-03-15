@@ -1,0 +1,302 @@
+---
+title: "Data Management"
+subtitle: "Characters and strings"
+output:
+  xaringan::moon_reader:
+    seal: TRUE
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    css: xaringan-themer.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      fig.retina = 3  ## retina more effective than w/h (according to twitter)
+                      # fig.width = 16, 
+                      # fig.height = 10
+                      )
+
+## I dont know why this is included in the example xaringan slide 
+## but is something to do with background images
+options(htmltools.dir.version = FALSE)
+
+## install and load necessary packages 
+pacman::p_load(
+  rio,        # importing data  
+  here,       # relative file pathways  
+  janitor,    # data cleaning and tables
+  lubridate,  # working with dates
+  tidyverse,  # data management and visualization
+  gtsummary,  # summary tables
+  kableExtra, # for output tables
+  xaringanthemer  # for styling presentation 
+)
+
+```
+
+
+```{r  xaringan-themer, include = FALSE}
+
+## define presentation colours (theme) using {xaringanthemer} package 
+## https://pkg.garrickadenbuie.com/xaringanthemer/articles/xaringanthemer.html
+
+## epirhandbook logo colours: 
+  ## blue: "#00538c"
+  ## green: "#007732"
+  ## lighter green: "#48a878"
+
+## see ?style_mono_accent for all the things can customise
+style_mono_accent(
+  base_color = "#00538c", 
+  link_color = "#48a878", 
+  ## add logo to the title page (bit bigger)
+  title_slide_background_image = "https://github.com/appliedepi/epiRhandbook_eng/raw/master/images/epiRhandbook_HexSticker_500x500.png", 
+  title_slide_background_position = "100% 100%", 
+  title_slide_background_size = "25%", 
+  ## add logo to all following slides
+  background_image = "https://github.com/appliedepi/emory_training/raw/master/presentation/images/AppliedEpi_Hex.png", 
+  background_size = "10%",
+  background_position = "100% 0%"
+)
+
+```
+
+```{css, echo=F}
+    .remark-slide table{
+      border: none
+    }
+
+    .remark-slide-table {
+      
+    }
+
+    tr:first-child {
+      border-top: none;
+  }
+    tr:last-child {
+    border-bottom: none;
+  }
+
+```
+<!-- Slide 1: Introduce the chapter with objectives and a brief outline -->
+
+# Objective
+  
+1. To demonstrate common tasks in standardizing or extracting analyzable data from character or string data
+2. To introduce R packages and functions that are useful for character or string modification
+
+# Outline
+* Introduction to characters and strings in data management
+* Preparation
+* Unite, split and arrange
+* Clean and standardise
+* Handle by position
+* Patterns
+* Special characters
+* Regular expressions
+
+---
+<!-- Slide 2: Describe the topic and why it's a needed aspect of data management -->
+# Characters and strings
+
+--
+
+### What are character or string data?
+ * Character or string data is typically any free-text or non-numeric, non-categorized variable. 
+
+--
+
+### How can manipulating character or string data facilitate data analysis?
+ * Standardizing string data can facilitate the creation of categorical or numeric variables
+     * Example: standardizing free-text town names can facilitate analysis of town names as a categorical variable
+     * Example: parsing and standardizing address components in a free-text address variable could facilitate geocoding and spatial analyses
+
+ * Identification of patterns in free-text can enable creation of indicator variables
+     * Example: if a narrative description of patient symptoms is available, searching for a pattern (e.g. 'fever') could be used to create a binary indicator variable for the symptom
+
+---
+
+<!-- Slide 4: sub-chapter 1 -->
+
+## Characters and strings
+
+### R functions and packages
+
+* The **stringr** package includes many functions to manipulate and evaluate character or string variables
+     * Combine, order, split, arrange:
+          * `str_c()`, `str_glue()`, `str_order()`, `str_split()`
+     * Clean and standardise:
+          * Adjust length: `str_pad()`, `str_trunc()`, `str_wrap()`
+          * Change case: `str_to_upper()`, `str_to_title()`, `str_to_lower()`
+     * Evaluate and extract by position:
+          * `str_length()`, `str_sub()`, `word()`
+     * Patterns:
+          * Detect and locate: `str_detect()`, `str_subset()`, `str_match()`, `str_extract()`
+          * Modify and replace: `str_sub()`, `str_replace_all()`
+
+---
+# Example of string data cleaning
+
+.pull-left[
+
+```{r, eval=T, echo=F}
+ linelist <- import(here::here("data", "linelist_raw.xlsx")) %>%
+     select(hospital) %>%
+     group_by(hospital) %>%
+     slice(1) %>%
+     ungroup() %>%
+     rename(messy = hospital)
+```
+
+
+```{r, eval=F, echo=T}
+linelist <- linelist %>%
+*    mutate(clean = str_to_lower(messy))
+```
+
+```{r, eval=T, echo=F}
+linelist <- linelist %>%
+     mutate(clean = str_to_lower(messy))
+```
+
+If our goal is to transform the 'hospital' variable from character to categorical, we could first change all strings to a uniform lower case to reduce variation using `str_to_lower()` from the **stringr** package.
+
+]
+
+.pull-right[
+
+```{r, eval=T, echo=F}
+  linelist %>%
+     # step1
+     knitr::kable()
+```
+
+]
+
+---
+
+# Example of string data cleaning
+
+.pull-left[
+
+```{r, eval=T, echo=F}
+ linelist <- import(here::here("data", "linelist_raw.xlsx")) %>%
+     select(hospital) %>%
+     group_by(hospital) %>%
+     slice(1) %>%
+     ungroup() %>%
+     rename(messy = hospital)
+```
+
+```{r, eval=F, echo=T}
+linelist <- linelist %>%
+     mutate(clean = str_to_lower(messy)) %>%
+*    mutate(clean = str_squish(clean))    
+```
+
+```{r, eval=T, echo=F}
+linelist <- linelist %>%
+     mutate(clean = str_to_lower(messy)) %>%
+     mutate(clean = str_squish(clean))    
+```
+
+A second step to reduce variation between strings could be to remove leading and tailing blanks as well as reducing any repeated blanks within the string, using `str_squish()`.
+]
+
+.pull-right[
+
+```{r, eval=T, echo=F}
+  linelist %>%
+     # step1
+     knitr::kable()
+```
+]
+---
+
+# Example of string data cleaning
+
+.pull-left[
+
+```{r, eval=T, echo=F}
+ linelist <- import(here::here("data", "linelist_raw.xlsx")) %>%
+     select(hospital) %>%
+     group_by(hospital) %>%
+     slice(1) %>%
+     ungroup() %>%
+     rename(messy = hospital)
+```
+
+```{r, eval=F, echo=T}
+linelist <- linelist %>%
+     mutate(clean = str_to_lower(messy)) %>%
+     mutate(clean = str_squish(clean)) %>%
+*    mutate(clean = str_replace_all(clean, "[^A-z0-9 ]", ""))    
+```
+
+```{r, eval=T, echo=F}
+linelist <- linelist %>%
+     mutate(clean = str_to_lower(messy)) %>%
+     mutate(clean = str_squish(clean)) %>%
+     mutate(clean = str_replace_all(clean, "[^A-z0-9 ]", ""))  
+```
+
+A third step to reduce variation between strings could be to remove all special characters. This can be done by using `str_replace_all()` to replace all non-alphanumeric characters while keeping spaces (specified by `[^A-z0-9 ]`).
+]
+.pull-right[
+
+```{r, eval=T, echo=F}
+  linelist %>%
+     knitr::kable()
+```
+]
+
+---
+# Example of string data cleaning
+
+.pull-left[
+
+```{r, eval=T, echo=F}
+ linelist <- import(here::here("data", "linelist_raw.xlsx")) %>%
+     select(hospital) %>%
+     group_by(hospital) %>%
+     slice(1) %>%
+     ungroup() %>%
+     rename(messy = hospital)
+```
+
+```{r, eval=F, echo=T}
+linelist <- linelist %>%
+     mutate(clean = str_to_lower(messy)) %>%
+     mutate(clean = str_squish(clean)) %>%
+     mutate(clean = str_replace_all(clean, "[^A-z0-9 ]", ""))  %>%
+*    mutate(clean = str_replace_all(clean, "hopital", "hospital")) %>%
+*    mutate(clean = str_replace_all(clean, "mitylira", "military"))    
+```
+
+```{r, eval=T, echo=F}
+linelist <- linelist %>%
+     mutate(clean = str_to_lower(messy)) %>%
+     mutate(clean = str_squish(clean)) %>%
+     mutate(clean = str_replace_all(clean, "[^A-z0-9 ]", ""))  %>%
+     mutate(clean = str_replace_all(clean, "hopital", "hospital")) %>%
+     mutate(clean = str_replace_all(clean, "mitylira", "military"))    
+```
+
+A fourth step to reduce variation between strings could be to correct commonly misspelled words. In this case, hospital is commonly misspelled as "hopital" and military is commonly misspelled as "mitylira". Using `str_replace_all()`, we can replace all occurrences of misspelled words with the correctly spelled word.
+]
+
+.pull-right[
+
+```{r, eval=T, echo=F}
+  linelist %>%
+     knitr::kable()
+```
+
+]
+
+---

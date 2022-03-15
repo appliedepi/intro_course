@@ -1,0 +1,376 @@
+---
+title: "Data Management"
+subtitle: "Working with dates"
+output:
+  xaringan::moon_reader:
+    seal: TRUE
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    css: xaringan-themer.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      fig.retina = 3  ## retina more effective than w/h (according to twitter)
+                      # fig.width = 16, 
+                      # fig.height = 10
+                      )
+
+## I dont know why this is included in the example xaringan slide 
+## but is something to do with background images
+options(htmltools.dir.version = FALSE)
+
+## install and load necessary packages 
+pacman::p_load(
+  rio,        # importing data  
+  here,       # relative file pathways  
+  janitor,    # data cleaning and tables
+  lubridate,  # working with dates
+  tidyverse,  # data management and visualization
+  gtsummary,  # summary tables
+  kableExtra, # for output tables
+  xaringanthemer  # for styling presentation 
+)
+
+```
+
+
+```{r  xaringan-themer, include = FALSE}
+
+## define presentation colours (theme) using {xaringanthemer} package 
+## https://pkg.garrickadenbuie.com/xaringanthemer/articles/xaringanthemer.html
+
+## epirhandbook logo colours: 
+  ## blue: "#00538c"
+  ## green: "#007732"
+  ## lighter green: "#48a878"
+
+## see ?style_mono_accent for all the things can customise
+style_mono_accent(
+  base_color = "#00538c", 
+  link_color = "#48a878", 
+  ## add logo to the title page (bit bigger)
+  title_slide_background_image = "https://github.com/appliedepi/epiRhandbook_eng/raw/master/images/epiRhandbook_HexSticker_500x500.png", 
+  title_slide_background_position = "100% 100%", 
+  title_slide_background_size = "25%", 
+  ## add logo to all following slides
+  background_image = "https://github.com/appliedepi/emory_training/raw/master/presentation/images/AppliedEpi_Hex.png", 
+  background_size = "10%",
+  background_position = "100% 0%"
+)
+
+```
+
+```{css, echo=F}
+    .remark-slide table{
+      border: none
+    }
+
+    .remark-slide-table {
+      
+    }
+
+    tr:first-child {
+      border-top: none;
+  }
+    tr:last-child {
+    border-bottom: none;
+  }
+
+```
+<!-- Slide 1: Introduce the chapter with objectives and a brief outline -->
+
+# Objective
+  
+1. To show the unique characteristics of date data and it's storage
+2. To demonstrate how dates from various data file types can be imported and transformed in R
+
+# Outline
+* Date features and characteristics
+* Dates in R
+* Importing date variables and converting to date class
+* Working with dates
+
+---
+<!-- Slide 2: Describe the topic and why it's a needed aspect of data management -->
+# Working with dates
+#### Dates have many components that can make them difficult to work with:
+
+  * Order: 12/31/2021 vs. 31/21/2021
+  * Syntax: December 31, 2021 vs. 12/31/2021
+  * Abbreviation: Dec. 31st 2021 vs. December 31st 2021
+  * Storage: Days since 1/1/1900 vs. Days since 1/1/1970
+  * Date-Time storage vs. Date only
+  * Timezones
+  
+--
+
+#### What is the goal of date data management?
+ * To take all input date data elements and transform them into a consistent date format that is relevant to the analysis
+ 
+--
+
+#### How can date data management facilitate data analysis?
+ * Well formatted and defined dates can be:
+     * Analyzed quantitatively
+     * Aggregated into relevant units, such as epiweeks
+
+---
+<!-- Slide 3: Provide examples of messy data and clean data related to teh topic -->
+
+# Working with dates
+
+<!-- Describe a few examples related to the topic of how data can be messy and of clean data. The idea here is to show how there are many ways data can be messy, but that clean data is more standardized. -->
+
+.pull-left[
+
+<!-- Examples: If using table-based examples, define them here, using simple common data elements like demographics: -->
+```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+messy_example <- data.frame(case = c("Case 1", "Case 2", "Case 3", "Case 4", "Case 5", "Case 6"), onset_date = c("12/31/2021", "Dec. 24th 2021", "23/12/21", "12.17.2021", "20211213T000000", " 2021-12-10"))
+
+clean_example <- data.frame(case = c("Case 1", "Case 2", "Case 3", "Case 4", "Case 5", "Case 6"), onset_date = c("12/31/2021", "12/24/2021", "12/23/2021", "12/17/2021", "12/13/2021", " 12/10/2021")) %>%
+     mutate(onset_date = as.Date(onset_date, "%m/%d/%Y"))
+
+```
+
+### Messy data:
+
+<!-- For topics where a table would better describe messy data, replace the bullets with a short table (e.g. 2 columns, 3 or 4 rows) -->
+  <!-- * [example 1] -->
+
+  <!-- * [example 2] -->
+
+  <!-- * [example 3] -->
+
+<!-- If using table example, remove the example bullets and print the messy data example with the below: -->
+
+```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+     messy_example  %>%
+     knitr::kable()
+```
+
+]
+
+.pull-right[
+### Clean data:
+<!-- If using a table for messy data examples, show the same table but cleaned -->
+
+  <!-- * [example 1] -->
+
+<!-- If using table example, remove the example bullets and print the clean data example with the below: -->
+
+```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+     clean_example  %>%
+     knitr::kable()
+```
+
+]
+
+
+When date data are imported, R often interprets them as character objects. To transfrom them into date objects, you must help R know which aprt of a date represents what (month, day, hour, etc.).
+---
+
+<!-- Slide 4: sub-chapter 1 -->
+
+## Packages for working with dates
+
+The below packages are commonly used for working with dates:
+
+  * **lubridate**: general package for handling and converting dates
+  * **linelist**: has function to 'guess' messy dates
+  * **aweek**: another option for converting dates to weeks, and weeks to dates
+  * **zoo**: additional date/time functions
+
+---
+
+## Dates in R
+
+* Dates are a unique class of objects in R
+     * Unique from 'numeric', 'character', and other object classes
+     * A similar object class is datetime, or POSIXt, POSICct, and POSIXlt (see handbook for more detial on these classes)
+     
+* In order to convert a data element into a date class, you have to tell R how the data is structured (e.g. mm/dd/yy, dd-mm-yy, etc.)
+
+* By default, values of class Date in R are displayed as YYYY-MM-DD, but this can be changed as needed
+---
+
+# Importing date variables and converting to date class
+
+.pull-left[
+The table to the right is an example of messy date data. Each variable has a different date format and none are stored as date class objects.
+]
+.pull-right[
+```{r, eval=T, echo=F}
+messy_data <- import(here::here("data", "linelist_raw.xlsx")) %>%
+     janitor::clean_names() %>%
+     select(case_id, date_onset) %>%
+     head(4) %>%
+     bind_cols(hosp_date = c(16205, 16215, 16208, 16216)) %>%
+     bind_cols(death_date = c("Jun 15th 2014", "Jun 18th 2014", "Jun 21st 2014", "Jun 28th 2014")) %>%
+     mutate(hosp_date = hosp_date + 25569)
+```
+
+```{r, eval=T, echo=F}
+  messy_data %>%
+     # step1
+     knitr::kable()
+```
+]
+---
+
+# Importing date variables and converting to date class
+.pull-left[
+Check the class of date variables using the `class()` function
+
+Use `mutate()` and the base R function `as.Date()` to convert from a character object with uniform structure to a date object.
+
+Note that the structure is specified in `as.Date()` using a specific notation in the format argument. To view all format notations, use the function `?strptime.`
+
+Alternatively, the **lubridate** package can be used to specify the date format more simply using functions `mdy()`, `dmy()`, or others.
+```{r, eval=F, echo=T}
+clean_data <- messy_data %>%
+*     mutate(date_onset = as.Date(date_onset, format="%Y-%m-%d"),
+*            death_date = lubridate::mdy(death_date))
+```
+```{r, eval=T, echo=F}
+clean_data <- messy_data %>%
+     mutate(date_onset = as.Date(date_onset, format="%Y-%m-%d"),
+            death_date = mdy(death_date))
+```
+]
+.pull-right[
+```{r, eval=T, echo=F}
+clean_data %>%
+     knitr::kable()
+```
+
+]
+---
+
+# Importing date variables and converting to date class
+
+.pull-left[
+Some software stores dates as numeric class objects, with an origin date specific to that software.
+
+To convert these into date objects, the origin date from the source software must be specified.
+
+Excel origin date on Windows is 12/30/1899, and is 1/1/1904 on Mac.
+```{r, eval=F, echo=T}
+clean_data <- messy_data %>%
+     mutate(date_onset = as.Date(date_onset, format="%Y-%m-%d"),
+            death_date = lubridate::mdy(death_date),
+*           hosp_date = as.Date(hosp_date, origin="1899-12-30"))
+```
+```{r, eval=T, echo=F}
+clean_data <- messy_data %>%
+     mutate(date_onset = as.Date(date_onset, format="%Y-%m-%d"),
+            death_date = mdy(death_date),
+           hosp_date = as.Date(hosp_date, origin="1899-12-30"))
+```
+]
+.pull-right[
+```{r, eval=T, echo=F}
+clean_data %>%
+     knitr::kable()
+```
+]
+---
+
+# Importing date variables and converting to date class
+
+To quickly work with date variables in multiple date formats, the `guess_dates()` function in the **linelist** package can be useful, especially when there are multiple date formats within a single variable.
+
+To use this function, all variables must first be converted to character class.
+```{r, eval=T, echo=T}
+clean_data <- messy_data %>%
+     mutate(date_onset = linelist::guess_dates(as.character(date_onset)),
+            hosp_date = linelist::guess_dates(as.character(hosp_date)),
+            death_date = linelist::guess_dates(as.character(death_date))
+)
+```
+
+---
+
+# Working with dates
+
+#### Common ways of working with dates:
+
+* Extracting aspects of a date, such as the year
+* Aggregating dates into other units, such as epiweek
+* Performing date arithmetic
+* Calculating date intervals
+
+---
+
+# Working with dates
+
+#### Common ways of working with dates:
+
+* Extracting aspects of a date, such as the year
+     * The **lubridate** package includes functions useful for extracting elements of a date:
+          * `month()` -> month number
+          * `day()` -> day (number) of the month
+          * `wday()` -> day number of the week (1-7)
+     
+* Aggregating dates into other units, such as epiweek
+
+* Performing date arithmetic
+
+* Calculating date intervals
+
+---
+
+# Working with dates
+
+#### Common ways of working with dates:
+
+* Extracting aspects of a date, such as the year
+
+* Aggregating dates into other units, such as epiweek
+     * Oftentimes, date date has to be grouped into other time units for analysis or display, such as epiweeks, months, or quarter
+          * **lubridate** has a function `floor_date()` that can be useful
+          * in `floor_date()`, use the argument `unit = "week"` to round a date down to the first date of the week as defined by the argument `week_start =`. 
+          * In this way epiweeks can be defined according to your needs
+     
+* Performing date arithmetic
+
+* Calculating date intervals
+
+---
+
+# Working with dates
+
+#### Common ways of working with dates:
+
+* Extracting aspects of a date, such as the year
+
+* Aggregating dates into other units, such as epiweek
+
+* Performing date arithmetic
+     * Once the date variable is assigned to the date class, it can be treated as a number (of days) for calculations
+     * For example, adding '1' to a date object will add one day to a date.
+     
+* Calculating date intervals
+
+---
+
+# Working with dates
+
+#### Common ways of working with dates:
+
+* Extracting aspects of a date, such as the year
+
+* Aggregating dates into other units, such as epiweek
+
+* Performing date arithmetic
+
+* Calculating date intervals
+     * Intervals (in days) between two dates can be calculated using basic arithmetic so long as both dates are formatted as date objects
+     * E.g.: (date2) - (date1) = days between date1 and date2
+     * Date intervals are returned as objects with class `difftime`, typically displayed as "Time difference of X days".
+     * `as.integer()` can be used to convert a date interval with `difftime` class to `integer` class

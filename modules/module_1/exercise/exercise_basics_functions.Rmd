@@ -1723,7 +1723,7 @@ How can these file names be improved? Both for human readability, but also to fa
 
 **Edit the file names to that they are standardized with best practices above**  
 
-**When finished, view a "solution" below.** You may choose to align your file names with these.  
+**When finished, view a "solution" below.** We suggest that you align your file names with the solution below.  
 
 <!--
 NOTE: Below is the solution (all within details tags collapsed)
@@ -1733,12 +1733,12 @@ NOTE: Below is the solution (all within details tags collapsed)
 <summary style='text-decoration: underline; color: red;'>`r icons::icon_style(icons::fontawesome("check", style = "solid"), scale = 1, fill = "red")`Click to see a solution (try it yourself first!)</summary>
 </br>
 
-* 20141201_hosp-linelist_central.csv  
-* 20141201_hosp-linelist_military.csv  
-* 20141201_hosp-linelist_port.csv  
-* 20141201_hosp-linelist_smmh.csv  
-* 20141201_hosp-linelist_other.csv  
-* 20141201_hosp-linelist_missing.csv  
+* 20141201_hosp_central.csv  
+* 20141201_hosp_military.csv  
+* 20141201_hosp_port.csv  
+* 20141201_hosp_smmh.csv  
+* 20141201_hosp_other.csv  
+* 20141201_hosp_missing.csv  
 
 </br>
 </details>

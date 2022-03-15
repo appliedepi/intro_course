@@ -1,0 +1,10 @@
+#header.fluid-row::before {
+   content: "";
+   height: 150px;
+   width: 150px;
+   float: right;
+   background-image: url("https://raw.githubusercontent.com/appliedepi/presentations/main/images/Applied_Epi_logo.png");
+   background-size: contain;
+   background-position: center center;
+   background-repeat: no-repeat;
+ }
