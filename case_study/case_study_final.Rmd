@@ -38,7 +38,7 @@ date <- params$date
 # Import each dataset
 
 # surveillance
-surv_raw <- rio::import(here("data", "surveillance_linelist_12012014.xlsx"))
+surv_raw <- rio::import(here("data", "surveillance_linelist_12012014.csv"))
 
 # hospital datasets
 central  <- rio::import(here("data", "Central Hospital 12012014.csv"))
@@ -65,49 +65,114 @@ Today's district is `r params$district` and today's date is `params$date`.
 ## Data cleaning
 
 ```{r}
-# Clean surveillance linelist
-#############################
-surv_clean <- surv_raw %>% 
+surv <- surv_raw %>% 
+  
+  # automatically clean column names
+  clean_names() %>% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    date_report = date_of_report,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %>%
      
-     # clean column names - lowercase, underscores, etc.
-     clean_names() %>%
+  # remove unnecessary column
+  select(-row_num) %>% 
+
+  # de-duplicate rows  
+  distinct() %>% 
      
-     # rename
-     rename( # NEW name    # OLD name
-             date_onset = "onset_date") %>%
+  # convert date_onset to date class
+  mutate(date_onset = mdy(date_onset)) %>% 
+  mutate(date_report = mdy(date_report)) %>% 
      
-     # deduplicate
-     distinct() %>% 
+  # create epiweek columns  
+  mutate(week_onset = floor_date(date_onset, unit = "week")) %>% 
+  mutate(week_report = floor_date(date_report, unit = "week")) %>% 
      
-     # filter for confirmed cases only
-     filter(case_def == "Confirmed") %>% 
+  # convert age to numeric class
+  mutate(age = as.numeric(age)) %>% 
      
-     # Make new columns
-     mutate(
-          # convert to class date
-          across(contains("date"), ymd),
-          
-          # is residence different than place of detection?
-          moved = adm3_name_det != adm3_name_res,
-          
-          # prioritise place of detection, replace with residence if missing
-          location = coalesce(adm3_name_det, adm3_name_res),
-          
-          # create column with age in years
-          age_years = case_when(
-            age_unit == "years"  ~ age,       # if age is given in years
-            age_unit == "months" ~ age/12,    # if age is given in months
-            is.na(age_unit)      ~ age,       # if age unit is missing, assume years
-            TRUE                 ~ NA_real_), # any other circumstance, assign missing
-          
-          # age in age groups
-          age_cat = age_categories(                  # create new column
-               age_years,                            # numeric column to make groups from
-               lower = 0,
-               upper = 70,
-               by = 10)
-          ) 
+  # properly record missing values
+  mutate(across(.cols = where(is.character), .fns = na_if, "")) %>% 
+     
+  # Make date-difference column  
+  mutate(diff = date_report - date_onset) %>% 
+     
+  # convert negative values to NA
+  mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
+         bmi   = ifelse(bmi < 0,   NA, bmi)) %>% 
+     
+  # convert gender values to full words
+  mutate(gender = case_when(               # re-define gender as: 
+    gender == 'm' ~ 'male',                # when "m", change to "male"   
+    gender == 'f' ~ 'female',              # when "f", change to "female" 
+    TRUE          ~ gender)) %>%           # any other value, remain as before
+     
+  # create age-in-years
+  mutate(age_years = case_when(
+    age_unit == "years"  ~ age,            # if age is given in years
+    age_unit == "months" ~ age/12,         # if age is given in months
+    is.na(age_unit)      ~ age,            # if age unit is missing, assume years
+    TRUE                 ~ NA_real_)) %>%  # any other circumstance, assign missing
+       
+  # create age category column
+  mutate(age_cat = age_categories(         # create new column
+    age_years,                             # numeric column to make groups from
+    lower = 0,
+    upper = 70,
+    by = 10)) %>% 
+     
+  # create column marking TRUE if district of residence and detection differ
+  mutate(moved = district_res != district_det) %>% 
+  
+  # create new column that prioritizes district of detection
+  mutate(district = coalesce(district_det, district_res)) %>% 
+  
+  # re-code hospital column
+  mutate(hospital = recode(hospital,
+    # for reference: OLD = NEW
+    "Mitilary Hospital"  = "Military Hospital",
+    "Port"               = "Port Hospital",
+    "Port Hopital"       = "Port Hospital",
+    "St. Mark's Maternity Hospital (SMMH)" = "SMMH")) %>% 
+     
+  # remove suspect cases
+  filter(case_def == "Confirmed")
 ```
+
+
+
+
+```{r}
+hosp <- bind_rows(central, military, port, smmh, other, missing) %>% 
+     select(case_id, `hospitalisation date`, `admission time`, `outcome date`, outcome)
+```
+
+
+
+```{r}
+combined <- full_join(surv, hosp, by = "case_id")
+```
+
+```{r}
+combined <- full_join(combined, lab_raw, by = "case_id")
+```
+
+```{r}
+source <- source_raw %>% 
+     select(case_id, `infection date`, infector, source, generation)
+```
+
+```{r}
+combined <- full_join(combined, source, by = "case_id")
+```
+
+```{r}
+export(combined, here("data", "linelist_combined_20141201.rds"))
+```
+
 
 
 
