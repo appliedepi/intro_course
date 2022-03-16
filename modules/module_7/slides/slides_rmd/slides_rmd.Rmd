@@ -1,6 +1,6 @@
 ---
 title: "Introduction to R for<br>Applied Epidemiology"
-subtitle: "More public health visualizations with {ggplot2}"
+subtitle: "Routine reports with {rmarkdown}"
 author: "March 2022"
 date: '[contact@appliedepi.org](mailto:contact@appliedepi.org)'
 output:
@@ -108,20 +108,19 @@ style_mono_accent(
 # Today: objectives & schedule  
 
 **In this module we aim to help you:**  
-* Understand the {ggplot2} "Grammar of graphics"  
-* Build simple box/scatter/bar plots and histograms  
-* Adjust the scales, themes, and labels of the plots  
+* Understand the R markdown language as a tool to make routine reports  
+* Explore the wide variety of formats and integrations available in R markdown reports  
+* Transfer the code you have written for the Ebola case study into an R markdown report  
+* Adjust an R markdown to make it conducive to automatically updating with refreshed data  
 
 
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
   ~Time, ~Location, ~Topic,
-  "0900-0930",     "Main",      "{ggplot2} 'Grammar of graphics' syntax",
-  "0930-0945",     "Main",      "Live demonstration",
-  "1000-1100",     "Breakouts", "Practice making simple plots",
-  "1110-1130",     "Main",      "Scales, themes, and labels",
-  "1130-1220",     "Breakouts", "Adjusting plots",
-  "1220-1230",     "Main",      "Plenary debrief"
+  "0900-0930",     "Main",      "R markdown demonstration",
+  "0930-1000",     "Main",      "R markdown syntax",
+  "1000-1200",     "Breakouts", "Create your Ebola situation report",
+  "1200-1230",     "Main",      "Plenary debrief"
 )
 
 outline %>% 
