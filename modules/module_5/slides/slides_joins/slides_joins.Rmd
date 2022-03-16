@@ -47,6 +47,8 @@ pacman::p_load(
   lubridate,  # working with dates
   tidyverse,  # data management and visualization
   gtsummary,  # summary tables
+  countdown,  # countdown timer
+  flextable,  # tables
   kableExtra, # for output tables
   xaringanthemer  # for styling presentation 
 )
@@ -161,13 +163,31 @@ Provide examples of situations they might encounter to highlight how common it i
 
 ```{r include=FALSE, echo=F}
 # Make smaller linelists for exemple purpose
-linelist_patient <- linelist_surv %>% 
-     select(case_id, age, age_unit, gender) %>% 
-     head(5)
+# linelist_patient <- linelist_surv %>% 
+#      select(case_id, age, age_unit, gender) %>% 
+#      arrange(case_id) %>% 
+#      head(5)
 
-linelist_hospit <- linelist_surv %>% 
-     select(id_patient = case_id, hospital) %>% 
-     head(3)
+linelist_patient <- tribble(
+     ~case_id, ~age, ~age_unit, ~gender,
+     "5fe599", 2, "years", "m",
+     "8689b7", 3, "years", "f",
+     "11f8ea", 56, "years", "m",
+     "b8812a", 18, "years", "f",
+     "893f25", 3, "years", "m")
+
+
+linelist_hospit <- tribble(
+     ~id_patient, ~hospital,
+      "5fe599", "Other",
+     "8689b7", "Missing",
+     "11f8ea", "St. Mark's Maternity Hospital (SMMH)")
+
+
+# linelist_hospit <- linelist_surv %>% 
+#      select(id_patient = case_id, hospital) %>% 
+#      arrange(id_patient) %>% 
+#      head(3)
 ```
 
 #### Objective: we want to *join* both dataframes:  
@@ -180,7 +200,8 @@ linelist_hospit <- linelist_surv %>%
 ```{r include=TRUE, echo=FALSE}
 linelist_patient %>% 
      # head(5) %>% 
-     knitr::kable()
+     qflextable() %>% 
+     bg(part = "header", i = 1, j = 1, bg = "yellow")
 ```
 
 
@@ -188,11 +209,13 @@ linelist_patient %>%
 
 .pull-right[
 
-**Info about hospitalisation**
+**Info about hospitalisation**  
+
 ```{r include=TRUE, echo=FALSE}
 linelist_hospit %>% 
      # head(3) %>% 
-     knitr::kable()
+     qflextable() %>% 
+     bg(part = "header", i = 1, j = 1, bg = "yellow")
 ```
 
 ]

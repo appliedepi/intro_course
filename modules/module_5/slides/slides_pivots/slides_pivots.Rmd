@@ -233,7 +233,7 @@ example %>%
 
 ```{r}
 example %>%
-  pivot_longer(cols=2:4, names_to="year", values_to = "cases") %>% 
+  pivot_longer(cols=2:5, names_to="year", values_to = "cases") %>% 
      knitr::kable()
 ```
 
