@@ -11,12 +11,11 @@ params:
 knitr::opts_chunk$set(echo = FALSE, message = FALSE)
 ```
 
-# Define report parameters  
+# Define report parameters
 
 ```{r }
 date <- params$date
 ```
-
 
 ## Install packages
 
@@ -36,7 +35,6 @@ pacman::p_load(
      tidyverse
 )
 ```
-
 
 ## Import data
 
@@ -61,10 +59,9 @@ lab <- rio::import(here("intro_course", "data", "raw", "lab_results_20141201.xls
 investigations <- rio::import(here("intro_course", "data", "raw", "case_investigations_20141201.xlsx"))
 ```
 
-
 ## R Markdown
 
-Today's district is `r params$district` and today's date is `params$date`. 
+Today's district is `r params$district` and today's date is `params$date`.
 
 ## Clean the surveillance linelist
 
@@ -146,20 +143,18 @@ surv <- surv_raw %>%
   filter(case_def == "Confirmed")
 ```
 
-
-# Joins to other datasets 
-
+# Joins to other datasets
 
 ## Create the hospital linelist
 
-Bind together the different hospital linelists  
+Bind together the different hospital linelists
 
 ```{r}
 # bind the rows 
 hosp <- bind_rows(hosp_central, hosp_port, hosp_military, hosp_smmh, hosp_other, hosp_missing)
 ```
 
-Clean the hospital linelist and join it to the surveillance dataset  
+Clean the hospital linelist and join it to the surveillance dataset
 
 ```{r}
 # Modify the hosp dataset
@@ -176,14 +171,12 @@ hosp <- hosp %>%
 combined <- full_join(surv, hosp, by = "case_id")
 ```
 
-
 ```{r}
 # Join the two data frames with a full-join
 # (place this in the Joining data section of your script)
 combined <- full_join(combined, lab, by = "case_id")
 
 ```
-
 
 ```{r}
 
@@ -195,8 +188,6 @@ investigations <- investigations %>%
 # Join the two data frames with a full-join
 combined <- full_join(combined, investigations, by = "case_id")
 ```
-
-
 
 ```{r}
 # Clean the new columns that have been joined to 'combined'
@@ -216,95 +207,16 @@ combined <- combined %>%
          date_infection       = ymd(date_infection))
 ```
 
-
-
 ```{r}
 export(combined, here("data", "linelist_combined_20141201.rds"))
 ```
-
-
-
-
-<!-- ```{r} -->
-<!-- # Clean medical linelist -->
-<!-- ######################## -->
-<!--              # bind together the different hospital files -->
-<!-- med_clean <- bind_rows(central, military, missing, smmh, port, other) %>%   -->
-
-<!--      # clean column names - lowercase, underscores, etc. -->
-<!--      clean_names() %>% -->
-
-<!--      # rename -->
-<!--      rename( # NEW name    # OLD name -->
-<!--              date_hospitalisation = "hospitalisation_date", -->
-<!--              date_outcome = "outcome_date", -->
-<!--              time_admission = "admission_time") %>% -->
-
-<!--      # deduplicate -->
-<!--      distinct() %>%  -->
-
-<!--      # Make new columns -->
-<!--      mutate( -->
-<!--           across(contains("date"), ymd), -->
-
-<!--           hour_admit = hour(strptime(time_admission, format = "%H:%M")),  -->
-<!--           time_period = case_when( -->
-<!--               hour_admit > 06  & hour_admit < 12 ~ "Morning", -->
-<!--               hour_admit >= 12 & hour_admit < 17 ~ "Afternoon", -->
-<!--               hour_admit >= 17 & hour_admit < 21 ~ "Evening", -->
-<!--               hour_admit >= 21 | hour_admit <= 6 ~ "Night")) -->
-<!-- ``` -->
-
-
-
-
-<!-- ```{r} -->
-<!-- # Clean case investigation dataset -->
-<!-- ################################## -->
-<!-- source_clean <- source_raw %>%  -->
-
-<!--      # clean column names - lowercase, underscores, etc. -->
-<!--      clean_names() %>% -->
-
-<!--      # rename -->
-<!--      rename( # NEW name    # OLD name -->
-<!--              date_infection = "infection_date") %>% -->
-
-<!--      # deduplicate -->
-<!--      distinct() %>%  -->
-
-<!--      # Make new columns -->
-<!--      mutate(across(contains("date"), ymd)) -->
-<!-- ``` -->
-
-
-
-
-<!-- ```{r} -->
-<!-- # Clean lab dataset -->
-<!-- ################### -->
-<!-- lab_clean <- lab_raw %>%  -->
-
-<!--      # clean column names - lowercase, underscores, etc. -->
-<!--      clean_names() %>% -->
-
-<!--      # deduplicate -->
-<!--      distinct() -->
-
-<!-- # TODO could put TRUE/FALSE here with some higher than 40 -->
-<!-- ``` -->
-
-
-
-
-
 
 ## Person
 
 ```{r}
 
 age_pyramid(
-     data = cases,
+     data = combined,
      age_group = "age_cat",
      split_by = "gender",
      proportional = TRUE,
@@ -324,8 +236,6 @@ age_pyramid(
 
 ```
 
-
-
 ## Time
 
 ```{r}
@@ -334,10 +244,10 @@ age_pyramid(
 # Sequence of weekly Monday dates for CENTRAL HOSPITAL
 
 # Monday prior to first case
-monday_floor <- floor_date(min(cases$date_onset, na.rm=T),   "week", week_start = 1)
+monday_floor <- floor_date(min(combined$date_onset, na.rm=T),   "week", week_start = 1)
 
 # Monday after last case
-monday_ceiling <- ceiling_date(max(cases$date_onset, na.rm=T), "week", week_start = 1)
+monday_ceiling <- ceiling_date(max(combined$date_onset, na.rm=T), "week", week_start = 1)
 
 # define sequence of Mondays for histogram breaks
 weekly_breaks <- seq.Date(
@@ -377,27 +287,112 @@ ggplot(data = cases)+
          subtitle = "",
          x        = "Week of hospitalisation",
          y        = "Weekly incident cases reported",
-         caption  = stringr::str_glue("n = {nrow(cases)} cases; Hospitalisations range from {format(min(cases$date_onset, na.rm=T), format = '%a %d %b %Y')} to {format(max(cases$date_onset, na.rm=T), format = '%a %d %b %Y')}\n{nrow(cases %>% filter(is.na(date_onset)))} cases missing date of onset and not shown"))
+         caption  = stringr::str_glue("n = {nrow(combined)} combined; Hospitalisations range from {format(min(combined$date_onset, na.rm=T), format = '%a %d %b %Y')} to {format(max(combined$date_onset, na.rm=T), format = '%a %d %b %Y')}\n{nrow(combined %>% filter(is.na(date_onset)))} combined missing date of onset and not shown"))
 ```
-
-
 
 ## Place
 
 ```{r}
-cases %>% 
-     mutate(location = fct_explicit_na(location, na_level = "Missing")) %>% 
-     tabyl(location) %>% 
+combined %>% 
+     mutate(district = fct_explicit_na(district, na_level = "Missing")) %>% 
+     tabyl(district) %>% 
      arrange(desc(n)) %>% 
      mutate(percent = scales::percent(percent, 1)) %>% 
      qflextable()
 ```
 
+<!-- ```{r} -->
 
+<!-- # Clean medical linelist -->
 
+<!-- ######################## -->
 
+<!--              # bind together the different hospital files -->
 
+<!-- med_clean <- bind_rows(central, military, missing, smmh, port, other) %>%   -->
 
+<!--      # clean column names - lowercase, underscores, etc. -->
 
+<!--      clean_names() %>% -->
 
+<!--      # rename -->
 
+<!--      rename( # NEW name    # OLD name -->
+
+<!--              date_hospitalisation = "hospitalisation_date", -->
+
+<!--              date_outcome = "outcome_date", -->
+
+<!--              time_admission = "admission_time") %>% -->
+
+<!--      # deduplicate -->
+
+<!--      distinct() %>%  -->
+
+<!--      # Make new columns -->
+
+<!--      mutate( -->
+
+<!--           across(contains("date"), ymd), -->
+
+<!--           hour_admit = hour(strptime(time_admission, format = "%H:%M")),  -->
+
+<!--           time_period = case_when( -->
+
+<!--               hour_admit > 06  & hour_admit < 12 ~ "Morning", -->
+
+<!--               hour_admit >= 12 & hour_admit < 17 ~ "Afternoon", -->
+
+<!--               hour_admit >= 17 & hour_admit < 21 ~ "Evening", -->
+
+<!--               hour_admit >= 21 | hour_admit <= 6 ~ "Night")) -->
+
+<!-- ``` -->
+
+<!-- ```{r} -->
+
+<!-- # Clean case investigation dataset -->
+
+<!-- ################################## -->
+
+<!-- source_clean <- source_raw %>%  -->
+
+<!--      # clean column names - lowercase, underscores, etc. -->
+
+<!--      clean_names() %>% -->
+
+<!--      # rename -->
+
+<!--      rename( # NEW name    # OLD name -->
+
+<!--              date_infection = "infection_date") %>% -->
+
+<!--      # deduplicate -->
+
+<!--      distinct() %>%  -->
+
+<!--      # Make new columns -->
+
+<!--      mutate(across(contains("date"), ymd)) -->
+
+<!-- ``` -->
+
+<!-- ```{r} -->
+
+<!-- # Clean lab dataset -->
+
+<!-- ################### -->
+
+<!-- lab_clean <- lab_raw %>%  -->
+
+<!--      # clean column names - lowercase, underscores, etc. -->
+
+<!--      clean_names() %>% -->
+
+<!--      # deduplicate -->
+
+<!--      distinct() -->
+
+<!-- # TODO could put TRUE/FALSE here with some higher than 40 -->
+
+<!-- ``` -->
