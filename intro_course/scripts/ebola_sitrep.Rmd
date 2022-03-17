@@ -2,12 +2,13 @@
 title: "Situation Report"
 subtitle: "Ebola outbreak in Sierra Leone"
 author: "(Your name or agency here)"
-output:
-  word_document: default
+output: 
+  html_document:
+    code_folding: hide
 date: "`r Sys.Date()`"
 params:
   district: "Central"
-  report_date: "2014-12-01"
+  publish_date: "2014-12-01"
 ---
 
 ```{r setup, include=FALSE}
@@ -23,6 +24,15 @@ When you click the **Knit** button a document will be generated that includes bo
 ```{r cars}
 summary(cars)
 ```
+
+Here is some basic math calculations  
+
+```{r include=FALSE}
+2+2
+10/6
+```
+
+
 
 ## Including Plots
 

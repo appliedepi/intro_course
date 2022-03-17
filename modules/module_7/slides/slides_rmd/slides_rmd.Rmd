@@ -435,7 +435,6 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "rmarkdown", "6
 `````
 ```{r importing-data, eval=TRUE}`r ''`
 # import data
-
 surv_raw <- import(here("data", "surveillance_linelist_20141201.csv))
 ```
 `````  

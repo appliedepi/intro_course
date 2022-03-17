@@ -1,21 +1,37 @@
 ---
-title: "Ebola Situation Report"
-output: word_document
-date: "Last compiled on: `r format(Sys.time(), '%d %B, %Y')`"
-params: 
- district: "Bolo" 
- date: "`r format(Sys.time(), '%d %B, %Y')`"
+title: "Situation Report"
+subtitle: "Ebola outbreak in Sierra Leone"
+author: "(Your name or agency here)"
+output: 
+  html_document:
+    code_folding: hide
+date: "`r Sys.Date()`"
+params:
+  district: "Central"
+  publish_date: "2014-12-01"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 ```
+
+# Executive summary
+
+The outbreak of Ebola continues, although reported cases are decreasing in all districts following the surge in contract-tracing support provided by international partners.
+
+| Partner                                 | Arrived  | Activities                   |
+|-----------------------------------------|----------|------------------------------|
+| Doctors without Borders (MSF) - Belgium | 20 July  | Treatment centers            |
+| World Health Organization (WHO)         | 22 July  | Surveillance and analytics   |
+| Red Cross (ICRC)                        | 1 August | Community-based surveillance |
+
+: Table of partners involved in the response
 
 # Define report parameters
 
-```{r }
-date <- params$date
-```
+Here we are going to define the report parameters, such as the epiweek to run the report for, and the districts to run the report for.
+
+data-date is `r data_date`.
 
 ## Install packages
 
@@ -35,6 +51,12 @@ pacman::p_load(
      tidyverse
 )
 ```
+
+```{r}
+# Define data date as Sunday of prior week
+data_date <- floor_date(ymd(params$publish_date)-7, unit = "week")
+```
+
 
 ## Import data
 
@@ -207,6 +229,17 @@ combined <- combined %>%
          date_infection       = ymd(date_infection))
 ```
 
+
+
+```{r}
+# Filter dataset to data date
+combined <- combined %>% 
+  filter(date_report <= data_date)
+```
+
+
+
+
 ```{r}
 export(combined, here("data", "linelist_combined_20141201.rds"))
 ```
@@ -256,7 +289,7 @@ weekly_breaks <- seq.Date(
   by   = "week")
 
 # Make epidemic curve
-ggplot(data = cases)+
+ggplot(data = combined)+
        geom_histogram(
           mapping = aes(x = date_hospitalisation),
           breaks = weekly_breaks,
