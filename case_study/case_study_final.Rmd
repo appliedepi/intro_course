@@ -2,40 +2,21 @@
 title: "Situation Report"
 subtitle: "Ebola outbreak in Sierra Leone"
 author: "(Your name or agency here)"
-output: 
-  html_document:
-    code_folding: hide
+output:
+  word_document: default
 date: "`r Sys.Date()`"
 params:
-  district: "Central"
+  district: "Central Hospital"
   publish_date: "2014-12-01"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 ```
 
-# Executive summary
-
-The outbreak of Ebola continues, although reported cases are decreasing in all districts following the surge in contract-tracing support provided by international partners.
-
-| Partner                                 | Arrived  | Activities                   |
-|-----------------------------------------|----------|------------------------------|
-| Doctors without Borders (MSF) - Belgium | 20 July  | Treatment centers            |
-| World Health Organization (WHO)         | 22 July  | Surveillance and analytics   |
-| Red Cross (ICRC)                        | 1 August | Community-based surveillance |
-
-: Table of partners involved in the response
-
-# Define report parameters
-
-Here we are going to define the report parameters, such as the epiweek to run the report for, and the districts to run the report for.
-
-data-date is `r data_date`.
-
-## Install packages
 
 ```{r}
+# Install packages
 pacman::p_load(
      rio,
      here,
@@ -52,13 +33,6 @@ pacman::p_load(
 )
 ```
 
-```{r}
-# Define data date as Sunday of prior week
-data_date <- floor_date(ymd(params$publish_date)-7, unit = "week")
-```
-
-
-## Import data
 
 ```{r}
 # Import each dataset
@@ -81,13 +55,10 @@ lab <- rio::import(here("intro_course", "data", "raw", "lab_results_20141201.xls
 investigations <- rio::import(here("intro_course", "data", "raw", "case_investigations_20141201.xlsx"))
 ```
 
-## R Markdown
 
-Today's district is `r params$district` and today's date is `params$date`.
-
-## Clean the surveillance linelist
 
 ```{r}
+# Clean the surveillance linelist
 surv <- surv_raw %>% 
   
   # automatically clean column names
@@ -165,18 +136,11 @@ surv <- surv_raw %>%
   filter(case_def == "Confirmed")
 ```
 
-# Joins to other datasets
-
-## Create the hospital linelist
-
-Bind together the different hospital linelists
 
 ```{r}
-# bind the rows 
+# bind the rows of the hospital linelists
 hosp <- bind_rows(hosp_central, hosp_port, hosp_military, hosp_smmh, hosp_other, hosp_missing)
 ```
-
-Clean the hospital linelist and join it to the surveillance dataset
 
 ```{r}
 # Modify the hosp dataset
@@ -194,22 +158,24 @@ combined <- full_join(surv, hosp, by = "case_id")
 ```
 
 ```{r}
-# Join the two data frames with a full-join
+# Join the surveillance and hospital data frames with a full-join
 # (place this in the Joining data section of your script)
 combined <- full_join(combined, lab, by = "case_id")
 
 ```
 
 ```{r}
-
-# keep only certain columns  
-# (add to the Joining data section of your R script)
+# Case investigations dataset
+  # keep only certain columns  
+  # (add to the Joining data section of your R script)
 investigations <- investigations %>% 
   select(-c(age, `age unit`, gender))
 
 # Join the two data frames with a full-join
 combined <- full_join(combined, investigations, by = "case_id")
 ```
+
+
 
 ```{r}
 # Clean the new columns that have been joined to 'combined'
@@ -230,19 +196,40 @@ combined <- combined %>%
 ```
 
 
+```{r}
+# Define data date as Sunday of prior week
+data_date <- floor_date(ymd(params$publish_date)-7, unit = "week")
+```
 
 ```{r}
-# Filter dataset to data date
+# Filter combined dataset to data_date
 combined <- combined %>% 
   filter(date_report <= data_date)
 ```
 
 
 
-
 ```{r}
 export(combined, here("data", "linelist_combined_20141201.rds"))
 ```
+
+
+# Executive summary
+
+The outbreak of Ebola continues, although reported cases are decreasing in all districts following the surge in contract-tracing support provided by international partners.
+
+"As of `r format(data_date, "%d %B, %Y")` there had been `r nrow(combined)` confirmed cases reported."  
+
+
+| Partner                                 | Arrived  | Activities                   |
+|-----------------------------------------|----------|------------------------------|
+| Doctors without Borders (MSF) - Belgium | 20 July  | Treatment centers            |
+| World Health Organization (WHO)         | 22 July  | Surveillance and analytics   |
+| Red Cross (ICRC)                        | 1 August | Community-based surveillance |
+
+: Table of partners involved in the response
+
+
 
 ## Person
 

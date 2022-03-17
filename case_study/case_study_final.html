@@ -491,52 +491,8 @@ pre code {
 </div>
 
 
-<div id="executive-summary" class="section level1">
-<h1>Executive summary</h1>
-<p>The outbreak of Ebola continues, although reported cases are
-decreasing in all districts following the surge in contract-tracing
-support provided by international partners.</p>
-<table>
-<caption>Table of partners involved in the response</caption>
-<colgroup>
-<col width="50%" />
-<col width="12%" />
-<col width="37%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Partner</th>
-<th>Arrived</th>
-<th>Activities</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Doctors without Borders (MSF) - Belgium</td>
-<td>20 July</td>
-<td>Treatment centers</td>
-</tr>
-<tr class="even">
-<td>World Health Organization (WHO)</td>
-<td>22 July</td>
-<td>Surveillance and analytics</td>
-</tr>
-<tr class="odd">
-<td>Red Cross (ICRC)</td>
-<td>1 August</td>
-<td>Community-based surveillance</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="define-report-parameters" class="section level1">
-<h1>Define report parameters</h1>
-<p>Here we are going to define the report parameters, such as the
-epiweek to run the report for, and the districts to run the report
-for.</p>
-<div id="install-packages" class="section level2">
-<h2>Install packages</h2>
-<pre class="r"><code>pacman::p_load(
+<pre class="r"><code># Install packages
+pacman::p_load(
      rio,
      here,
      janitor,
@@ -550,9 +506,6 @@ for.</p>
      flextable,
      tidyverse
 )</code></pre>
-</div>
-<div id="import-data" class="section level2">
-<h2>Import data</h2>
 <pre class="r"><code># Import each dataset
 
 # surveillance
@@ -571,15 +524,8 @@ lab &lt;- rio::import(here(&quot;intro_course&quot;, &quot;data&quot;, &quot;raw
 
 # case investigation dataset
 investigations &lt;- rio::import(here(&quot;intro_course&quot;, &quot;data&quot;, &quot;raw&quot;, &quot;case_investigations_20141201.xlsx&quot;))</code></pre>
-</div>
-<div id="r-markdown" class="section level2">
-<h2>R Markdown</h2>
-<p>Today’s district is Central and today’s date is
-<code>params$date</code>.</p>
-</div>
-<div id="clean-the-surveillance-linelist" class="section level2">
-<h2>Clean the surveillance linelist</h2>
-<pre class="r"><code>surv &lt;- surv_raw %&gt;% 
+<pre class="r"><code># Clean the surveillance linelist
+surv &lt;- surv_raw %&gt;% 
   
   # automatically clean column names
   clean_names() %&gt;% 
@@ -654,17 +600,8 @@ investigations &lt;- rio::import(here(&quot;intro_course&quot;, &quot;data&quot;
      
   # remove suspect cases
   filter(case_def == &quot;Confirmed&quot;)</code></pre>
-</div>
-</div>
-<div id="joins-to-other-datasets" class="section level1">
-<h1>Joins to other datasets</h1>
-<div id="create-the-hospital-linelist" class="section level2">
-<h2>Create the hospital linelist</h2>
-<p>Bind together the different hospital linelists</p>
-<pre class="r"><code># bind the rows 
+<pre class="r"><code># bind the rows of the hospital linelists
 hosp &lt;- bind_rows(hosp_central, hosp_port, hosp_military, hosp_smmh, hosp_other, hosp_missing)</code></pre>
-<p>Clean the hospital linelist and join it to the surveillance
-dataset</p>
 <pre class="r"><code># Modify the hosp dataset
 hosp &lt;- hosp %&gt;% 
   # select specific columns from hosp, and re-name ID as case_ID
@@ -677,11 +614,12 @@ hosp &lt;- hosp %&gt;%
 
 # Join the two data frames with a full-join
 combined &lt;- full_join(surv, hosp, by = &quot;case_id&quot;)</code></pre>
-<pre class="r"><code># Join the two data frames with a full-join
+<pre class="r"><code># Join the surveillance and hospital data frames with a full-join
 # (place this in the Joining data section of your script)
 combined &lt;- full_join(combined, lab, by = &quot;case_id&quot;)</code></pre>
-<pre class="r"><code># keep only certain columns  
-# (add to the Joining data section of your R script)
+<pre class="r"><code># Case investigations dataset
+  # keep only certain columns  
+  # (add to the Joining data section of your R script)
 investigations &lt;- investigations %&gt;% 
   select(-c(age, `age unit`, gender))
 
@@ -703,13 +641,50 @@ combined &lt;- combined %&gt;%
          date_outcome         = mdy(date_outcome),
          date_infection       = ymd(date_infection))</code></pre>
 <pre class="r"><code># Define data date as Sunday of prior week
-data_date &lt;- floor_date(ymd(params$publish_date)-7, unit = &quot;week&quot;)
-
-# Filter dataset to data date
+data_date &lt;- floor_date(ymd(params$publish_date)-7, unit = &quot;week&quot;)</code></pre>
+<pre class="r"><code># Filter combined dataset to data_date
 combined &lt;- combined %&gt;% 
   filter(date_report &lt;= data_date)</code></pre>
 <pre class="r"><code>export(combined, here(&quot;data&quot;, &quot;linelist_combined_20141201.rds&quot;))</code></pre>
-</div>
+<div id="executive-summary" class="section level1">
+<h1>Executive summary</h1>
+<p>The outbreak of Ebola continues, although reported cases are
+decreasing in all districts following the surge in contract-tracing
+support provided by international partners.</p>
+<p>“As of 23 November, 2014 there had been 624 confirmed cases
+reported.”</p>
+<table>
+<caption>Table of partners involved in the response</caption>
+<colgroup>
+<col width="50%" />
+<col width="12%" />
+<col width="37%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Partner</th>
+<th>Arrived</th>
+<th>Activities</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Doctors without Borders (MSF) - Belgium</td>
+<td>20 July</td>
+<td>Treatment centers</td>
+</tr>
+<tr class="even">
+<td>World Health Organization (WHO)</td>
+<td>22 July</td>
+<td>Surveillance and analytics</td>
+</tr>
+<tr class="odd">
+<td>Red Cross (ICRC)</td>
+<td>1 August</td>
+<td>Community-based surveillance</td>
+</tr>
+</tbody>
+</table>
 <div id="person" class="section level2">
 <h2>Person</h2>
 <pre class="r"><code>age_pyramid(
@@ -793,7 +768,7 @@ ggplot(data = combined)+
      arrange(desc(n)) %&gt;% 
      mutate(percent = scales::percent(percent, 1)) %&gt;% 
      qflextable()</code></pre>
-<template id="6651eec0-5939-4c4a-a827-b1ed314025c0"><style>
+<template id="bd77a11d-e28a-49c9-834f-eda833af0264"><style>
 .tabwid table{
   border-spacing:0px !important;
   border-collapse:collapse;
@@ -827,12 +802,12 @@ ggplot(data = combined)+
 .tabwid table tr {
 background-color: transparent;
 }
-</style><div class="tabwid"><style>.cl-e1cfcff8{}.cl-e1c7e00e{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-e1c80746{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-e1c80747{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-e1c82e4c{width:38.9pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e1c82e4d{width:57.2pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e1c82e4e{width:95.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e1c82e4f{width:95.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e1c82e50{width:38.9pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e1c82e51{width:57.2pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e1c82e52{width:95.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e1c82e53{width:38.9pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e1c82e54{width:57.2pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table class="cl-e1cfcff8">
-<thead><tr style="overflow-wrap:break-word;"><td class="cl-e1c82e52"><p class="cl-e1c80746"><span class="cl-e1c7e00e">district</span></p></td><td class="cl-e1c82e53"><p class="cl-e1c80747"><span class="cl-e1c7e00e">n</span></p></td><td class="cl-e1c82e54"><p class="cl-e1c80746"><span class="cl-e1c7e00e">percent</span></p></td></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-e1c82e4e"><p class="cl-e1c80746"><span class="cl-e1c7e00e">Mountain Rural</span></p></td><td class="cl-e1c82e4c"><p class="cl-e1c80747"><span class="cl-e1c7e00e">193</span></p></td><td class="cl-e1c82e4d"><p class="cl-e1c80746"><span class="cl-e1c7e00e">31%</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-e1c82e4e"><p class="cl-e1c80746"><span class="cl-e1c7e00e">West II</span></p></td><td class="cl-e1c82e4c"><p class="cl-e1c80747"><span class="cl-e1c7e00e">116</span></p></td><td class="cl-e1c82e4d"><p class="cl-e1c80746"><span class="cl-e1c7e00e">19%</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-e1c82e4e"><p class="cl-e1c80746"><span class="cl-e1c7e00e">West III</span></p></td><td class="cl-e1c82e4c"><p class="cl-e1c80747"><span class="cl-e1c7e00e">107</span></p></td><td class="cl-e1c82e4d"><p class="cl-e1c80746"><span class="cl-e1c7e00e">17%</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-e1c82e4e"><p class="cl-e1c80746"><span class="cl-e1c7e00e">East II</span></p></td><td class="cl-e1c82e4c"><p class="cl-e1c80747"><span class="cl-e1c7e00e">71</span></p></td><td class="cl-e1c82e4d"><p class="cl-e1c80746"><span class="cl-e1c7e00e">11%</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-e1c82e4e"><p class="cl-e1c80746"><span class="cl-e1c7e00e">Central II</span></p></td><td class="cl-e1c82e4c"><p class="cl-e1c80747"><span class="cl-e1c7e00e">42</span></p></td><td class="cl-e1c82e4d"><p class="cl-e1c80746"><span class="cl-e1c7e00e">7%</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-e1c82e4e"><p class="cl-e1c80746"><span class="cl-e1c7e00e">Central I</span></p></td><td class="cl-e1c82e4c"><p class="cl-e1c80747"><span class="cl-e1c7e00e">34</span></p></td><td class="cl-e1c82e4d"><p class="cl-e1c80746"><span class="cl-e1c7e00e">5%</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-e1c82e4e"><p class="cl-e1c80746"><span class="cl-e1c7e00e">East I</span></p></td><td class="cl-e1c82e4c"><p class="cl-e1c80747"><span class="cl-e1c7e00e">30</span></p></td><td class="cl-e1c82e4d"><p class="cl-e1c80746"><span class="cl-e1c7e00e">5%</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-e1c82e4e"><p class="cl-e1c80746"><span class="cl-e1c7e00e">West I</span></p></td><td class="cl-e1c82e4c"><p class="cl-e1c80747"><span class="cl-e1c7e00e">17</span></p></td><td class="cl-e1c82e4d"><p class="cl-e1c80746"><span class="cl-e1c7e00e">3%</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-e1c82e4e"><p class="cl-e1c80746"><span class="cl-e1c7e00e">East III</span></p></td><td class="cl-e1c82e4c"><p class="cl-e1c80747"><span class="cl-e1c7e00e">12</span></p></td><td class="cl-e1c82e4d"><p class="cl-e1c80746"><span class="cl-e1c7e00e">2%</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-e1c82e4f"><p class="cl-e1c80746"><span class="cl-e1c7e00e">Missing</span></p></td><td class="cl-e1c82e50"><p class="cl-e1c80747"><span class="cl-e1c7e00e">2</span></p></td><td class="cl-e1c82e51"><p class="cl-e1c80746"><span class="cl-e1c7e00e">0%</span></p></td></tr></tbody></table></div></template>
-<div class="flextable-shadow-host" id="12a16802-d17e-4fe4-9bd8-d57483665f83"></div>
+</style><div class="tabwid"><style>.cl-dfca4bbe{}.cl-dfc0fcb2{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-dfc0fcb3{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-dfc0fcb4{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-dfc14b18{width:38.9pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-dfc14b19{width:57.2pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-dfc14b1a{width:95.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-dfc14b1b{width:95.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-dfc14b1c{width:38.9pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-dfc14b1d{width:57.2pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-dfc14b1e{width:95.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-dfc14b1f{width:38.9pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-dfc14b20{width:57.2pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table class="cl-dfca4bbe">
+<thead><tr style="overflow-wrap:break-word;"><td class="cl-dfc14b1e"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">district</span></p></td><td class="cl-dfc14b1f"><p class="cl-dfc0fcb4"><span class="cl-dfc0fcb2">n</span></p></td><td class="cl-dfc14b20"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">percent</span></p></td></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-dfc14b1a"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">Mountain Rural</span></p></td><td class="cl-dfc14b18"><p class="cl-dfc0fcb4"><span class="cl-dfc0fcb2">193</span></p></td><td class="cl-dfc14b19"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">31%</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-dfc14b1a"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">West II</span></p></td><td class="cl-dfc14b18"><p class="cl-dfc0fcb4"><span class="cl-dfc0fcb2">116</span></p></td><td class="cl-dfc14b19"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">19%</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-dfc14b1a"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">West III</span></p></td><td class="cl-dfc14b18"><p class="cl-dfc0fcb4"><span class="cl-dfc0fcb2">107</span></p></td><td class="cl-dfc14b19"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">17%</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-dfc14b1a"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">East II</span></p></td><td class="cl-dfc14b18"><p class="cl-dfc0fcb4"><span class="cl-dfc0fcb2">71</span></p></td><td class="cl-dfc14b19"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">11%</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-dfc14b1a"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">Central II</span></p></td><td class="cl-dfc14b18"><p class="cl-dfc0fcb4"><span class="cl-dfc0fcb2">42</span></p></td><td class="cl-dfc14b19"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">7%</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-dfc14b1a"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">Central I</span></p></td><td class="cl-dfc14b18"><p class="cl-dfc0fcb4"><span class="cl-dfc0fcb2">34</span></p></td><td class="cl-dfc14b19"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">5%</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-dfc14b1a"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">East I</span></p></td><td class="cl-dfc14b18"><p class="cl-dfc0fcb4"><span class="cl-dfc0fcb2">30</span></p></td><td class="cl-dfc14b19"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">5%</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-dfc14b1a"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">West I</span></p></td><td class="cl-dfc14b18"><p class="cl-dfc0fcb4"><span class="cl-dfc0fcb2">17</span></p></td><td class="cl-dfc14b19"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">3%</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-dfc14b1a"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">East III</span></p></td><td class="cl-dfc14b18"><p class="cl-dfc0fcb4"><span class="cl-dfc0fcb2">12</span></p></td><td class="cl-dfc14b19"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">2%</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-dfc14b1b"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">Missing</span></p></td><td class="cl-dfc14b1c"><p class="cl-dfc0fcb4"><span class="cl-dfc0fcb2">2</span></p></td><td class="cl-dfc14b1d"><p class="cl-dfc0fcb3"><span class="cl-dfc0fcb2">0%</span></p></td></tr></tbody></table></div></template>
+<div class="flextable-shadow-host" id="c776b681-3136-4114-950c-985c928bba90"></div>
 <script>
-var dest = document.getElementById("12a16802-d17e-4fe4-9bd8-d57483665f83");
-var template = document.getElementById("6651eec0-5939-4c4a-a827-b1ed314025c0");
+var dest = document.getElementById("c776b681-3136-4114-950c-985c928bba90");
+var template = document.getElementById("bd77a11d-e28a-49c9-834f-eda833af0264");
 var caption = template.content.querySelector("caption");
 if(caption) {
   caption.style.cssText = "display:block;text-align:center;";
