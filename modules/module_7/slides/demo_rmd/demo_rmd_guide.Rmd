@@ -98,7 +98,7 @@ output:
 
 ```
      
-     * Now adjust it so the TOC is floating, and re-render:  
+Now adjust it so the TOC is floating, and re-render:  
 
 ```{r, echo=T, eval=F, results='asis'}
 output:
@@ -109,6 +109,9 @@ output:
     number_sections: true
 ```
 
-     * Now edit the # Plots header to read: # Plots {.tabset} (ensure the sub-headings under are ## double-headers)  
+Now edit the # Plots header to read: # Plots {.tabset} (ensure the sub-headings under are ## double-headers)  
+
+Re-render
 
 
+End (go to slides)
