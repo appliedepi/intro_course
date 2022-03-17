@@ -31,8 +31,6 @@ drive).** You will receive further instructions in the course.
 
 # Course exercises
 
-THESE ARE DRAFTS
-
 The course utilizes the R package {learnr} to provide interactive
 exercises *within* your RStudio window. To access these custom
 exercises, follow these instructions:
@@ -66,7 +64,7 @@ exercises, follow these instructions:
 
 <img src="images/README_images/exercise_demo.gif" width="100%" />
 
-# Course slides
+# Course materials
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -197,9 +195,12 @@ update when incoming data is refreshed, that look professional, and can
 be sent to inform public health parters and stakeholders.
 
 -   Live demonstration [Instructor
-    guide](https://appliedepi.github.io/intro_course/modules/module_7/slides/demo_rmd/demo_rmd_guide.html)  
--   [Slides: R markdown and routine reports]() TODO  
--   Exercise
+    guide](https://appliedepi.github.io/intro_course/modules/module_7/slides/demo_rmd/demo_rmd_guide.html)
+
+-   [Slides: R markdown and routine
+    reports](https://appliedepi.github.io/intro_course/modules/module_7/slides/slides_rmd/slides_rmd.html)
+
+-   Exercise TODO
 
 ## Module 8: Final exercise and code review
 

@@ -157,8 +157,10 @@ In this second data visualization module we encourage you to practice learning R
 In this module, we take the R code on the Ebola case study that you have been building throughout the course and convert it into a reproducible, automated report (Word, PDF, HTML, etc.). We teach you the variations in syntax and opportunties that lie in being able to produce documents that update when incoming data is refreshed, that look professional, and can be sent to inform public health parters and stakeholders.  
 
 - Live demonstration [Instructor guide](https://appliedepi.github.io/intro_course/modules/module_7/slides/demo_rmd/demo_rmd_guide.html)  
-- [Slides: R markdown and routine reports]()  TODO  
-- Exercise  
+
+- [Slides: R markdown and routine reports](https://appliedepi.github.io/intro_course/modules/module_7/slides/slides_rmd/slides_rmd.html)  
+
+- Exercise  TODO
 
 ## Module 8: Final exercise and code review  
 In this last module, your skills are tested as you have to produce an R Markdown report using a COVID-19 case linelist. Unlike with the Ebola case study, you will not have the answer code available to you. When you finish, we perform "code reviews", simultaneously improving your coding skills and teaching you how to review others' code. Before closing, we touch upon how to find your particular community of R users, resources available to you for questions, and close with a feedback survey.  
