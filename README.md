@@ -200,7 +200,9 @@ be sent to inform public health parters and stakeholders.
 -   [Slides: R markdown and routine
     reports](https://appliedepi.github.io/intro_course/modules/module_7/slides/slides_rmd/slides_rmd.html)
 
--   Exercise TODO
+-   Exercise:
+
+<img src="images/README_images/pointer_tutorial_rmarkdown.png" width="50%" />
 
 ## Module 8: Final exercise and code review
 
