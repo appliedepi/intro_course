@@ -392,15 +392,27 @@ linelist %>%
 # Weekly epidemic curve by city  
 
 ```{r epicurve}
+# specify weekly breaks on Mondays
+weekly_breaks <- seq.Date(
+      from = floor_date(min(linelist$date_report, na.rm=T),   "week", week_start = 1), # Monday before first case
+      to   = ceiling_date(max(linelist$date_report, na.rm=T), "week", week_start = 1), # Monday after last case
+      by   = "week")    # bins are 7-days 
+
+
 # open a plot with the linelist data
-ggplot(linelist, mapping = aes(x = epiweek, fill = fct_lump_n(city, 5))) +
-  geom_histogram() +
+ggplot(linelist, mapping = aes(x = date_report, fill = fct_lump_n(city, 5))) +
+  geom_histogram(
+       breaks = weekly_breaks,  # use breaks defined above
+       closed = "left"          # count cases from the start of a breakpoint
+  ) +
   scale_y_continuous(
     # make the y axis start at the origin
     expand = c(0, 0))+
   scale_x_date(
-    labels = scales::label_date_short(),
-    date_breaks = "3 months"
+    expand            = c(0,0),           # remove excess x-axis space before and after case bars
+    date_breaks       = "2 months",        # date labels and major vertical gridlines appear every 4 Monday weeks
+    #date_minor_breaks = "week",           # minor vertical lines appear every Monday week
+    labels = scales::label_date_short()
     )+
   scale_fill_brewer(type = "qual")+
   labs(title = "COVID-19 epidemic, Fulton County, GA",
@@ -408,8 +420,9 @@ ggplot(linelist, mapping = aes(x = epiweek, fill = fct_lump_n(city, 5))) +
        x = "Date of report",
        y = "Number of cases",
        fill = "City",
-       caption = str_glue("Fake data for course exercise. {nrow(linelist)} cases shown by city of residence\nCases reported from {min(linelist$date_report)} to {max(linelist$date_report)}")) + 
-  theme(legend.position = "right")
+       caption = str_glue("Fake data for course exercise.\n{nrow(linelist)} cases shown by city of residence\nCases reported from {min(linelist$date_report)} to {max(linelist$date_report)}")) + 
+  theme(legend.position = "right")+
+  theme_minimal()
 
 ```
 
