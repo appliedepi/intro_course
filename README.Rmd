@@ -42,40 +42,27 @@ Click here to download the course outline (PDF) TODO
 This first part of the course setup uses the instructions below. After this intial setup, the exercises will be conducted entirely within RStudio.  
 
 
-<details markdown=1><summary markdown="span"><strong>Other Methods to add PPA where <code>add-apt-repository</code> is not available (Optional)</strong></summary>
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details><summary style='text-decoration: underline; color: darkgreen;'>`r fontawesome::fa("check", fill = "darkgreen")` 1. Download course files</summary>
+</br>
 
-[Click here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/intro_course) to download a zipped folder to use in the course exercises.  
-     
-<strong>Unzip the folder and save it on your computer's desktop (not on a shared drive).</strong>  
-
-To "unzip" a folder once it is downloaded, right-click on the folder and select "Extract All". If offered a choice of location to save the unzipped folder, save it to your desktop.  
-
-- Bullet 1
-- Bullet 2
-- Bullet 3  
-
-</details>
-
-
-
-<details>
-
-<summary style='text-decoration: underline; color: darkgreen;'>`r fontawesome::fa("check", fill = "darkgreen")` 1. Download course files</summary>
 [**Click here**](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/intro_course) to download a zipped folder to use in the course exercises.  
      
 **Unzip the folder and save it on your computer's desktop (not on a shared drive).**  
 
 To "unzip" a folder once it is downloaded, right-click on the folder and select "Extract All". If offered a choice of location to save the unzipped folder, save it to your desktop.  
 
+</br>
 </details>
+
 
 
 <!--
 NOTE: Below is the hint (all within details tags collapsed)
 -->
-<details>
-
-<summary style='text-decoration: underline; color: darkgreen;'>`r fontawesome::fa("check", fill = "darkgreen")` 2. Installing R and RStudio</summary>
+<details><summary style='text-decoration: underline; color: darkgreen;'>`r fontawesome::fa("check", fill = "darkgreen")` 2. Installing R and RStudio</summary>
 </br>
 
 Prior to this course, we sent you a guide to help you install R, RStudio, and the important R packages for this course. If this was not successful, please contact one of our instructors immediately.
@@ -91,9 +78,7 @@ If you already had R installed, please update to the most recent version for the
 <!--
 NOTE: Below is the hint (all within details tags collapsed)
 -->
-<details>
-
-<summary style='text-decoration: underline; color: darkgreen;'>`r fontawesome::fa("check", fill = "darkgreen")` 3. Understand R</summary>
+<details><summary style='text-decoration: underline; color: darkgreen;'>`r fontawesome::fa("check", fill = "darkgreen")` 3. Understand R</summary>
 </br>
 
 When you install R to your computer, it is an independent software that you can open directly. If you open only R (not RStudio), you will see only one simple panel - the R Console. **This is not how most people use R**. Using R this way will run all the computations and create all the plots you desire, *but it will be difficult to stay organized*.    
@@ -116,9 +101,7 @@ you can think that **R is the engine of a vehicle**, doing the crucial work, and
 <!--
 NOTE: Below is the hint (all within details tags collapsed)
 -->
-<details>
-
-<summary style='text-decoration: underline; color: darkgreen;'>`r fontawesome::fa("check", fill = "darkgreen")` 4. Understand RStudio Projects</summary>
+<details><summary style='text-decoration: underline; color: darkgreen;'>`r fontawesome::fa("check", fill = "darkgreen")` 4. Understand RStudio Projects</summary>
 </br>
 
 Most of the time when you use R, it will make your life drastically easier to organize your work within an RStudio project.  
@@ -151,9 +134,7 @@ knitr::include_graphics("images/README_images/Rproject_dropdown.png")
 <!--
 NOTE: Below is the hint (all within details tags collapsed)
 -->
-<details>
-
-<summary style='text-decoration: underline; color: darkgreen;'>`r fontawesome::fa("check", fill = "darkgreen")` 5. Create a new RStudio project</summary>
+<details><summary style='text-decoration: underline; color: darkgreen;'>`r fontawesome::fa("check", fill = "darkgreen")` 5. Create a new RStudio project</summary>
 </br>
 
 1) In RStudio click *File -> New Project*. In the pop-up window, select **"Existing directory"**.  
@@ -184,9 +165,7 @@ Voila! This new RStudio window should look very similar to your old one. Check t
 <!--
 NOTE: Below is the hint (all within details tags collapsed)
 -->
-<details>
-
-<summary style='text-decoration: underline; color: darkgreen;'>`r fontawesome::fa("check", fill = "darkgreen")` 6. Explore your new RStudio project</summary>
+<details><summary style='text-decoration: underline; color: darkgreen;'>`r fontawesome::fa("check", fill = "darkgreen")` 6. Explore your new RStudio project</summary>
 </br>
 
 
@@ -225,9 +204,7 @@ You can read more about RStudio projects in [this chapter of the Epi R Handbook]
 <!--
 NOTE: Below is the hint (all within details tags collapsed)
 -->
-<details>
-
-<summary style='text-decoration: underline; color: darkgreen;'>`r fontawesome::fa("check", fill = "darkgreen")` 7. Download Applied Epi course exercises</summary>
+<details><summary style='text-decoration: underline; color: darkgreen;'>`r fontawesome::fa("check", fill = "darkgreen")` 7. Download Applied Epi course exercises</summary>
 </br>
  
 The rest of the course will utilize the R package {learnr} to provide interactive exercises *within* your RStudio window. To access these custom exercises, follow these instructions below. If you need help, notify your breakout facilitator.  
