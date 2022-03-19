@@ -289,7 +289,7 @@ included:
 
 -   Paula Blomquist  
 
--   …
+-   Amy Mikhail
 
 -   The Fulton County Board of Health graciously provided example data
     (anonymized and scrambled) for a case study.  
