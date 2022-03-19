@@ -22,12 +22,15 @@ Click here to download the course outline (PDF) TODO
 
 # Course folder and case study data
 
-[Click
-here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/intro_course)
+[**Click
+here**](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/intro_course)
 to download a zipped folder to use in the course exercises.
 
 **Unzip the folder and save it on your computer (not on a shared
 drive).** You will receive further instructions in the course.
+
+To “unzip” a folder, right-click the folder and select “Extract All”. If
+offered a choice of saving location, save it to your desktop.
 
 # Course exercises
 
@@ -41,9 +44,16 @@ exercises, follow these instructions:
 2)  Run these commands in your R console:  
     `install.packages("remotes")`
 
-3)  Run this command in your R console:  
-    `remotes::install_github("appliedepi/introexercises", dep = TRUE, force = TRUE)`  
-    Follow any prompted instructions regarding necessary updates
+3)  Run this command in your R console:
+
+-   `remotes::install_github("appliedepi/introexercises", dep = TRUE, force = TRUE)`  
+-   If you see a warning about needing RTools, do not worry. This is
+    simply a warning message, but the install should proceed without
+    error.  
+-   If prompted to update some R packages, select “All” to update all of
+    the packages.  
+-   If you continue to be prompted for package updates, you can select
+    “None” and continue without further updates.
 
 4)  To open an exercise, Click on the “Tutorial” tab in the upper-right
     RStudio pane (which also contains a tab holding your R
