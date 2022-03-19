@@ -33,7 +33,7 @@ RStudio.
 NOTE: Below is the hint (all within details tags collapsed)
 -->
 <details>
-<summary style='text-decoration: underline; color: darkgreen;'>
+<summary markdown='span' style='text-decoration: underline; color: darkgreen;'>
 
 1.  Download course folder
     </summary>
@@ -58,7 +58,7 @@ NOTE: Below is the hint (all within details tags collapsed)
 <details>
 <summary style='text-decoration: underline; color: darkgreen;'>
 
-1.  Installing R and RStudio
+2.  Installing R and RStudio
     </summary>
     </br>
 
@@ -77,7 +77,7 @@ NOTE: Below is the hint (all within details tags collapsed)
 <details>
 <summary style='text-decoration: underline; color: darkgreen;'>
 
-2.  Understand R
+3.  Understand R
     </summary>
     </br>
 
@@ -106,7 +106,7 @@ NOTE: Below is the hint (all within details tags collapsed)
 <details>
 <summary style='text-decoration: underline; color: darkgreen;'>
 
-3.  Understand RStudio Projects
+4.  Understand RStudio Projects
     </summary>
     </br>
 
@@ -143,7 +143,7 @@ NOTE: Below is the hint (all within details tags collapsed)
 <details>
 <summary style='text-decoration: underline; color: darkgreen;'>
 
-4.  Create a new RStudio project
+5.  Create a new RStudio project
     </summary>
     </br>
 
@@ -174,7 +174,7 @@ NOTE: Below is the hint (all within details tags collapsed)
 <details>
 <summary style='text-decoration: underline; color: darkgreen;'>
 
-5.  Explore your new RStudio project
+6.  Explore your new RStudio project
     </summary>
     </br>
 
@@ -212,7 +212,7 @@ NOTE: Below is the hint (all within details tags collapsed)
 <details>
 <summary style='text-decoration: underline; color: darkgreen;'>
 
-6.  Download Applied Epi course exercises
+7.  Download Applied Epi course exercises
     </summary>
     </br>
 
