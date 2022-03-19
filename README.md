@@ -34,21 +34,19 @@ NOTE: Below is the hint (all within details tags collapsed)
 -->
 <details>
 <summary>
+Our summary here
+</summary>
 
-1.  Download course folder
+[**Click
+here**](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/intro_course)
+to download a zipped folder to use in the course exercises.
 
-    </summary>
+**Unzip the folder and save it on your computer’s desktop (not on a
+shared drive).**
 
-    [**Click
-    here**](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/intro_course)
-    to download a zipped folder to use in the course exercises.
-
-    **Unzip the folder and save it on your computer’s desktop (not on a
-    shared drive).**
-
-    To “unzip” a folder once it is downloaded, right-click on the folder
-    and select “Extract All”. If offered a choice of location to save
-    the unzipped folder, save it to your desktop.
+To “unzip” a folder once it is downloaded, right-click on the folder and
+select “Extract All”. If offered a choice of location to save the
+unzipped folder, save it to your desktop.
 
 </details>
 <!--
