@@ -33,11 +33,8 @@ RStudio.
 NOTE: Below is the hint (all within details tags collapsed)
 -->
 <details>
-<summary style='text-decoration: underline; color: darkgreen;'>
-
-1.  Download course files
-    </summary>
-    </br>
+<summary style='text-decoration: underline; color: darkgreen;'>1.  Download course files</summary>
+</br>
 
 [**Click
 here**](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/intro_course)
