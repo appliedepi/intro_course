@@ -36,16 +36,13 @@ here**](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appl
 to download a zipped folder to use in the course exercises.
 
 **Unzip the folder and save it on your computer’s desktop (not on a
-shared drive).**
-
-To “unzip” a folder once it is downloaded, right-click on the folder and
-select “Extract All”. If offered a choice of location to save the
-unzipped folder, save it to your desktop.
+shared drive).** To “unzip” a folder once it is downloaded, right-click
+on the folder and select “Extract All”. If offered a choice of location
+to save the unzipped folder, save it to your desktop.
 
 ### 2. Create a new RStudio project
 
-1)  Open RStudio. Ensure that you open *RStudio* and not just *R*. R wil
-    opened automatically within RStudio.
+1)  Open RStudio. Ensure that you open *RStudio* and not just *R*.
 
 2)  In RStudio click *File -\> New Project*. In the pop-up window,
     select **“Existing directory”**.
@@ -92,16 +89,14 @@ you:*
 project** (remember to re-open it by clicking the icon within your
 “intro_courses” folder).
 
-# Accessing course exercises
+### 4. Begin the first exercise
 
-Once you have completed the initial setup, all further breakout
-instructions will appear in Applied Epi interactive exercises, *within
-your RStudio window*. Each course module has a specific corresponding
-exercise.
-
-You can access these exercises through the “Tutorials” pane in RStudio
-(upper-left). Watch the gif below that introduces you to the exercise
-environment (you do not need to follow the steps shown right now).
+Once you have completed the initial setup, all further exercise
+instructions will appear *within your RStudio window*. Each course
+module has a specific corresponding exercise, which can be accessed
+through the “Tutorials” pane in RStudio (upper-left). Watch the gif
+below that introduces you to the exercise environment (you do not need
+to follow the steps shown right now).
 
 <img src="images/README_images/exercise_demo.gif" width="100%" />
 
@@ -109,14 +104,9 @@ environment (you do not need to follow the steps shown right now).
 data import”**. To open it:
 
 1)  Click on the “Tutorial” tab in the upper-right RStudio pane (which
-    also contains a tab holding your “Environment”).  
+    also contains a tab holding your “Environment”).
 
--   The first time, you may need to restart RStudio for the Applied Epi
-    exercises to appear.
-
-2)  Select the exercise (the full list of exercise names are below -
-    look for the name “Applied Epi”). For Module 1, the exercise is
-    called “Applied Epi - R setup, syntax, data import”.
+2)  Select the exercise “Applied Epi - R setup, syntax, data import”
 
 -   The exercise will load. Once you see the Applied Epi logo appear in
     the Tutorials pane, you can begin the exercise.  
