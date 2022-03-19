@@ -141,10 +141,11 @@ Step-by-step installation instructions have been provided below, along with some
 
 # R
 
-## Downloading R:
+## Downloading R:  
 
 The latest version of R can be downloaded from the [Comprehensive R Archive Network (CRAN)](https://cran.r-project.org/) website.  Here you can choose the version of R appropriate for your computer's operating system (Windows, MAC or Linux):
 
+Note: If you already had R installed on your computer from some time ago, to update the version you must *re-install* R from the website below. The old version of R can remain on your computer, but the newer version will be used by RStudio from now on. Later in the document we describe steps to take if RStudio does not automatically recognize the new R install.  
 
 ![CRAN website front page](../../images/screenshots/InstallR_fig01_cran.png)
 

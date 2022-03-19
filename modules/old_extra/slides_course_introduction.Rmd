@@ -104,63 +104,64 @@ surv <- rio::import(xfun::relative_path(here::here("data", "surveillance_linelis
 
 # Thank you for joining us  
 
-.left-column[
+- A brief round of introductions  
 
-```{r, eval = TRUE, echo = FALSE, out.width = "55%"}
-# Using here() alone won't work because Rmd folder becomes the rendering root.
-# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
-# It dynamically creates the ../../etc filepath.
+<!-- .left-column[ -->
 
-knitr::include_graphics(xfun::relative_path(here::here("images", "instructors", "neale.png")))
-```
+<!-- ```{r, eval = TRUE, echo = FALSE, out.width = "55%"} -->
+<!-- # Using here() alone won't work because Rmd folder becomes the rendering root. -->
+<!-- # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path. -->
+<!-- # It dynamically creates the ../../etc filepath. -->
 
-
-
-```{r, eval = TRUE, echo = FALSE, out.width = "55%"}
-# Using here() alone won't work because Rmd folder becomes the rendering root.
-# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
-# It dynamically creates the ../../etc filepath.
-
-knitr::include_graphics(xfun::relative_path(here::here("images", "instructors", "paula.png")))
-```
+<!-- knitr::include_graphics(xfun::relative_path(here::here("images", "instructors", "neale.png"))) -->
+<!-- ``` -->
 
 
 
-```{r, eval = TRUE, echo = FALSE, out.width = "55%"}
-# Using here() alone won't work because Rmd folder becomes the rendering root.
-# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
-# It dynamically creates the ../../etc filepath.
+<!-- ```{r, eval = TRUE, echo = FALSE, out.width = "55%"} -->
+<!-- # Using here() alone won't work because Rmd folder becomes the rendering root. -->
+<!-- # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path. -->
+<!-- # It dynamically creates the ../../etc filepath. -->
 
-knitr::include_graphics(xfun::relative_path(here::here("images", "instructors", "arran.png")))
-```
-
-]
-
-.right-column[
-
-* **Neale Batra**
-President and co-founder, Applied Epi  
-@MSF @WHO @CDC @USAID @Philly @CalEIS  
-</br>
-</br>
-
-* **Paula Blomquist**  
-@PHE @EPIET @WHO @PHRST
-</br>
-</br>
+<!-- knitr::include_graphics(xfun::relative_path(here::here("images", "instructors", "paula.png"))) -->
+<!-- ``` -->
 
 
-* **Arran Hamlet**  
-@Imperial @WHO
-</br>
-</br>
 
-]
+<!-- ```{r, eval = TRUE, echo = FALSE, out.width = "55%"} -->
+<!-- # Using here() alone won't work because Rmd folder becomes the rendering root. -->
+<!-- # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path. -->
+<!-- # It dynamically creates the ../../etc filepath. -->
+
+<!-- knitr::include_graphics(xfun::relative_path(here::here("images", "instructors", "arran.png"))) -->
+<!-- ``` -->
+
+<!-- ] -->
+
+<!-- .right-column[ -->
+
+<!-- * **Neale Batra**   -->
+<!-- President and co-founder, Applied Epi   -->
+<!-- @MSF @WHO @CDC @USAID @Philly @CalEIS -->
+<!-- </br> -->
+<!-- </br> -->
+
+<!-- * **Paula Blomquist**   -->
+<!-- @PHE @EPIET @WHO @PHRST -->
+<!-- </br> -->
+<!-- </br> -->
+
+
+<!-- * **Arran Hamlet**   -->
+<!-- @Imperial @WHO   -->
+<!-- </br> -->
+<!-- </br> -->
+
+<!-- ] -->
 
 .footnote[**Thank you for your service** *to your community in these busy times for public health. We are glad that you are taking the time to learn R with us.*]
 
 ???
-Do a brief round of introductions  
 
 
 
@@ -260,6 +261,13 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "man
 Community of people who support free software, open-access tools, and democratizing and equalizing data science
 
 
+
+
+<!-- --- -->
+<!-- class: inverse, center, middle -->
+
+<!-- # What do you know about R?  -->
+<!-- ### Live poll  -->
 
 
 ---
@@ -493,18 +501,18 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "tea
 
 We too have been working overtime on COVID response...<br>*and we believe that accelerating public health's transition to R is really important.*
 
----
-# A global grassroots movement
+<!-- --- -->
+<!-- # A global grassroots movement -->
 
-Some faces from our broader team
+<!-- Some faces from our broader team -->
 
-```{r, eval = TRUE, echo = FALSE, out.width = "120%"}
-# Using here() alone won't work because Rmd folder becomes the rendering root.
-# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
-# It dynamically creates the ../../etc filepath.
+<!-- ```{r, eval = TRUE, echo = FALSE, out.width = "120%"} -->
+<!-- # Using here() alone won't work because Rmd folder becomes the rendering root. -->
+<!-- # adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path. -->
+<!-- # It dynamically creates the ../../etc filepath. -->
 
-knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "team_faces.png")))
-```
+<!-- knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "team_faces.png"))) -->
+<!-- ``` -->
 
 
 ---
