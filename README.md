@@ -54,9 +54,7 @@ to save the unzipped folder, save it to your desktop.
 
 4)  Click “Create project”
 
-Voila! Check to see that the upper-right corner of this new RStudio
-shows that it is in the “intro_course” RStudio project. This will be the
-project for ALL of your work in this course.
+Voila! This will be the project for ALL of your work in this course.
 
 ### 3. Download Applied Epi course exercises
 
@@ -85,10 +83,6 @@ you:*
 -   If you continue to be prompted for package updates, you can select
     “None” and continue without further updates.
 
-**Once the download is complete, close and re-open your RStudio
-project** (remember to re-open it by clicking the icon within your
-“intro_courses” folder).
-
 ### 4. Begin the first exercise
 
 Once you have completed the initial setup, all further exercise
@@ -100,14 +94,13 @@ to follow the steps shown right now).
 
 <img src="images/README_images/exercise_demo.gif" width="100%" />
 
-**The first module’s tutorial is called “Applied Epi - R Setup, syntax,
-data import”**. To open it:
-
 1)  Click on the “Tutorial” tab in the upper-right RStudio pane (which
     also contains a tab holding your “Environment”).
 
 2)  Select the exercise “Applied Epi - R setup, syntax, data import”
 
+-   If you do not see any “Applied Epi” exercises, notify your
+    instructor. They make some time to appear.  
 -   The exercise will load. Once you see the Applied Epi logo appear in
     the Tutorials pane, you can begin the exercise.  
 -   You can view the exercise in this pane, or click the small icon in
