@@ -32,8 +32,7 @@ RStudio.
 <!--
 NOTE: Below is the hint (all within details tags collapsed)
 -->
-<details>
-<summary style='text-decoration: underline; color: darkgreen;'>1.  Download course files</summary>
+<details><summary style='text-decoration: underline; color: darkgreen;'>1.  Download course files</summary>
 </br>
 
 [**Click
@@ -49,14 +48,8 @@ unzipped folder, save it to your desktop.
 
 </br>
 </details>
-<!--
-NOTE: Below is the hint (all within details tags collapsed)
--->
-<details>
-<summary style='text-decoration: underline; color: darkgreen;'>
 
-2.  Installing R and RStudio
-    </summary>
+<details><summary style='text-decoration: underline; color: darkgreen;'>2. Installing R and RStudio</summary>
     </br>
 
 Prior to this course, we sent you a guide to help you install R,
