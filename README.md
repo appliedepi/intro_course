@@ -29,11 +29,7 @@ This first part of the course setup uses the instructions below. After
 this intial setup, the exercises will be conducted entirely within
 RStudio.
 
-<!--
-NOTE: Below is the hint (all within details tags collapsed)
--->
-<details><summary style='text-decoration: underline; color: darkgreen;'>1.  Download course files</summary>
-</br>
+### 1. Download course files
 
 [**Click
 here**](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/intro_course)
@@ -46,165 +42,26 @@ To “unzip” a folder once it is downloaded, right-click on the folder and
 select “Extract All”. If offered a choice of location to save the
 unzipped folder, save it to your desktop.
 
-</br>
-</details>
+### 2. Create a new RStudio project
 
-<details><summary style='text-decoration: underline; color: darkgreen;'>2. Installing R and RStudio</summary>
-    </br>
+1)  Open RStudio. Ensure that you open *RStudio* and not just *R*. R wil
+    opened automatically within RStudio.
 
-Prior to this course, we sent you a guide to help you install R,
-RStudio, and the important R packages for this course. If this was not
-successful, please contact one of our instructors immediately.
-
-If you already had R installed, please update to the most recent version
-for the course. This involves re-installing R.
-
-</br>
-</details>
-<!--
-NOTE: Below is the hint (all within details tags collapsed)
--->
-<details>
-<summary style='text-decoration: underline; color: darkgreen;'>
-
-3.  Understand R
-    </summary>
-    </br>
-
-When you install R to your computer, it is an independent software that
-you can open directly. If you open only R (not RStudio), you will see
-only one simple panel - the R Console. **This is not how most people use
-R**. Using R this way will run all the computations and create all the
-plots you desire, *but it will be difficult to stay organized*.
-
-**Now, people use Integrated Development Environments (IDE) such as
-RStudio** to “wrap around” their R software, allowing a more friendly
-user interface and file organization. RStudio is offered for free by the
-RStudio corporation.
-
-**Opening RStudio will automatically open R *within* RStudio.**
-
-you can think that **R is the engine of a vehicle**, doing the crucial
-work, and that **RStudio is the body of the vehicle** (with seats,
-accessories, etc.) that helps you actually use the engine to move
-forward!  
-</br>
-</details>
-<!--
-NOTE: Below is the hint (all within details tags collapsed)
--->
-<details>
-<summary style='text-decoration: underline; color: darkgreen;'>
-
-4.  Understand RStudio Projects
-    </summary>
-    </br>
-
-Most of the time when you use R, it will make your life drastically
-easier to organize your work within an RStudio project.
-
-<img src="images/README_images/project_briefcase.png" width="40%" />
-
-An RStudio project is a **self-contained and portable R working
-environment** - effectively a folder for all the files associated with a
-distinct project (data files, R scripts, outputs, etc.).
-
--   You can zip an RStudio project and email it to someone else. They
-    should be able to open it and replicate your work exactly!  
--   An RStudio project can be linked to a repository on version-control
-    software like Git/Github
-
-Working in an R project makes it much easier to organize your files and
-to share your work with others.
-
-If you are working in an RStudio project, you will see the name of the
-project indicated in the upper-right corner of RStudio. If you are not
-in an RStudio project, it will read “Project: (None)”.
-
-<img src="images/README_images/Rproject_dropdown.png" width="100%" />
-
-**What do you see in your RStudio?**
-
-</br>
-</details>
-<!--
-NOTE: Below is the hint (all within details tags collapsed)
--->
-<details>
-<summary style='text-decoration: underline; color: darkgreen;'>
-
-5.  Create a new RStudio project
-    </summary>
-    </br>
-
-<!-- -->
-
-1)  In RStudio click *File -\> New Project*. In the pop-up window,
+2)  In RStudio click *File -\> New Project*. In the pop-up window,
     select **“Existing directory”**.
 
-<img src="images/README_images/create_project.png" width="75%" />
-
-2)  Give your project the name “intro_course”. This will be the project
-    for ALL of your work in this course.
+<img src="images/README_images/create_project.png" width="50%" />
 
 3)  Click “browse” and select the “intro_course” folder on your desktop,
     that you downloaded earlier, which contains the course materials.
 
 4)  Click “Create project”
 
-Voila! This new RStudio window should look very similar to your old one.
-Check to see that the upper-right corner of this new RStudio shows that
-it is in the “intro_course” RStudio project.
+Voila! Check to see that the upper-right corner of this new RStudio
+shows that it is in the “intro_course” RStudio project. This will be the
+project for ALL of your work in this course.
 
-</br>
-</details>
-<!--
-NOTE: Below is the hint (all within details tags collapsed)
--->
-<details>
-<summary style='text-decoration: underline; color: darkgreen;'>
-
-6.  Explore your new RStudio project
-    </summary>
-    </br>
-
-**Close RStudio and open your File Explorer.** Navigate to the
-“intro_course” folder that you saved on your desktop, where you saved
-the R project.
-
-The contents of the folder should look similar to this:
-
-<img src="images/README_images/new_r_project_explorer.png" width="75%" />
-
-In the folder, you should see a small file with an icon that looks like
-an “R box” - this is the RStudio project file (.Rproj).
-
-**To directly open the project next time, simply double-click this
-RStudio project file to open it. RStudio will open, and all your files
-for this project will be at-the-ready.**
-
-**Now, double-click the RStudio Project file** to re-open your
-“intro_course” project. RStudio should open.
-
-Observe in the “Files” RStudio pane (lower-right) that you can also see
-and access the contents of the “intro_course” project.
-
-<img src="images/README_images/new_r_project.png" width="75%" />
-
-You can read more about RStudio projects in [this chapter of the Epi R
-Handbook](https://epirhandbook.com/en/r-projects.html).
-
-</br>
-</details>
-<!--
-NOTE: Below is the hint (all within details tags collapsed)
--->
-<details>
-<summary style='text-decoration: underline; color: darkgreen;'>
-
-7.  Download Applied Epi course exercises
-    </summary>
-    </br>
+### 3. Download Applied Epi course exercises
 
 The rest of the course will utilize the R package {learnr} to provide
 interactive exercises *within* your RStudio window. To access these
@@ -234,9 +91,6 @@ you:*
 **Once the download is complete, close and re-open your RStudio
 project** (remember to re-open it by clicking the icon within your
 “intro_courses” folder).
-
-</br>
-</details>
 
 # Accessing course exercises
 
