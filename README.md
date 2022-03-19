@@ -6,9 +6,9 @@
 <img src = "https://github.com/appliedepi/epiRhandbook_eng/raw/master/images/Applied_Epi_logo.png" height = "200" align = "right">
 
 [This website](https://appliedepi.github.io/intro_course) hosts training
-materials for “Introduction to R for Applied Epidemiologists”. This
-course teaches the fundamentals of R for applied epidemiologists and
-public health practitioners.
+materials for “Introduction to R for Applied Epidemiology”. This course
+teaches the fundamentals of R for applied epidemiologists and public
+health practitioners.
 
 [**Applied Epi**](www.appliedepi.org) is a nonprofit organization
 supporting frontline practitioners through open-course analytical tools,
@@ -20,66 +20,269 @@ been used by 130,000 people around the world.
 
 Click here to download the course outline (PDF) TODO
 
-# Course folder and case study data
+# Initial setup
+
+**When you are in the breakout session of your first module, click the
+green texts below to expand and follow the step-by-step instructions:**
+
+This first part of the course setup uses the instructions below. After
+this intial setup, the exercises will be conducted entirely within
+RStudio.
+
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+<summary style='text-decoration: underline; color: darkgreen;'>
+
+1.  Download course folder
+    </summary>
+    </br>
 
 [**Click
 here**](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/intro_course)
 to download a zipped folder to use in the course exercises.
 
-**Unzip the folder and save it on your computer (not on a shared
-drive).** You will receive further instructions in the course.
+**Unzip the folder and save it on your computer’s desktop (not on a
+shared drive).**
 
-To “unzip” a folder, right-click the folder and select “Extract All”. If
-offered a choice of saving location, save it to your desktop.
+To “unzip” a folder once it is downloaded, right-click on the folder and
+select “Extract All”. If offered a choice of location to save the
+unzipped folder, save it to your desktop.
 
-# Course exercises
+</br>
+</details>
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+<summary style='text-decoration: underline; color: darkgreen;'>
 
-The course utilizes the R package {learnr} to provide interactive
-exercises *within* your RStudio window. To access these custom
-exercises, follow these instructions:
+1.  Installing R and RStudio
+    </summary>
+    </br>
 
-1)  Set up R and RStudio (we will provide instructions and
-    troubleshooting before the course)
+Prior to this course, we sent you a guide to help you install R,
+RStudio, and the important R packages for this course. If this was not
+successful, please contact one of our instructors immediately.
 
-2)  Run these commands in your R console:  
-    `install.packages("remotes")`
+If you already had R installed, please update to the most recent version
+for the course. This involves re-installing R.
 
-3)  Run this command in your R console:
+</br>
+</details>
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+<summary style='text-decoration: underline; color: darkgreen;'>
 
--   `remotes::install_github("appliedepi/introexercises", dep = TRUE, force = TRUE)`  
--   If you see a warning about needing RTools, do not worry. This is
-    simply a warning message, but the install should proceed without
-    error.  
+2.  Understand R
+    </summary>
+    </br>
+
+When you install R to your computer, it is an independent software that
+you can open directly. If you open only R (not RStudio), you will see
+only one simple panel - the R Console. **This is not how most people use
+R**. Using R this way will run all the computations and create all the
+plots you desire, *but it will be difficult to stay organized*.
+
+**Now, people use Integrated Development Environments (IDE) such as
+RStudio** to “wrap around” their R software, allowing a more friendly
+user interface and file organization. RStudio is offered for free by the
+RStudio corporation.
+
+**Opening RStudio will automatically open R *within* RStudio.**
+
+you can think that **R is the engine of a vehicle**, doing the crucial
+work, and that **RStudio is the body of the vehicle** (with seats,
+accessories, etc.) that helps you actually use the engine to move
+forward!  
+</br>
+</details>
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+<summary style='text-decoration: underline; color: darkgreen;'>
+
+3.  Understand RStudio Projects
+    </summary>
+    </br>
+
+Most of the time when you use R, it will make your life drastically
+easier to organize your work within an RStudio project.
+
+<img src="images/README_images/project_briefcase.png" width="40%" />
+
+An RStudio project is a **self-contained and portable R working
+environment** - effectively a folder for all the files associated with a
+distinct project (data files, R scripts, outputs, etc.).
+
+-   You can zip an RStudio project and email it to someone else. They
+    should be able to open it and replicate your work exactly!  
+-   An RStudio project can be linked to a repository on version-control
+    software like Git/Github
+
+Working in an R project makes it much easier to organize your files and
+to share your work with others.
+
+If you are working in an RStudio project, you will see the name of the
+project indicated in the upper-right corner of RStudio. If you are not
+in an RStudio project, it will read “Project: (None)”.
+
+<img src="images/README_images/Rproject_dropdown.png" width="100%" />
+
+**What do you see in your RStudio?**
+
+</br>
+</details>
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+<summary style='text-decoration: underline; color: darkgreen;'>
+
+4.  Create a new RStudio project
+    </summary>
+    </br>
+
+<!-- -->
+
+1)  In RStudio click *File -\> New Project*. In the pop-up window,
+    select **“Existing directory”**.
+
+<img src="images/README_images/create_project.png" width="75%" />
+
+2)  Give your project the name “intro_course”. This will be the project
+    for ALL of your work in this course.
+
+3)  Click “browse” and select the “intro_course” folder on your desktop,
+    that you downloaded earlier, which contains the course materials.
+
+4)  Click “Create project”
+
+Voila! This new RStudio window should look very similar to your old one.
+Check to see that the upper-right corner of this new RStudio shows that
+it is in the “intro_course” RStudio project.
+
+</br>
+</details>
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+<summary style='text-decoration: underline; color: darkgreen;'>
+
+5.  Explore your new RStudio project
+    </summary>
+    </br>
+
+**Close RStudio and open your File Explorer.** Navigate to the
+“intro_course” folder that you saved on your desktop, where you saved
+the R project.
+
+The contents of the folder should look similar to this:
+
+<img src="images/README_images/new_r_project_explorer.png" width="75%" />
+
+In the folder, you should see a small file with an icon that looks like
+an “R box” - this is the RStudio project file (.Rproj).
+
+**To directly open the project next time, simply double-click this
+RStudio project file to open it. RStudio will open, and all your files
+for this project will be at-the-ready.**
+
+**Now, double-click the RStudio Project file** to re-open your
+“intro_course” project. RStudio should open.
+
+Observe in the “Files” RStudio pane (lower-right) that you can also see
+and access the contents of the “intro_course” project.
+
+<img src="images/README_images/new_r_project.png" width="75%" />
+
+You can read more about RStudio projects in [this chapter of the Epi R
+Handbook](https://epirhandbook.com/en/r-projects.html).
+
+</br>
+</details>
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+<summary style='text-decoration: underline; color: darkgreen;'>
+
+6.  Download Applied Epi course exercises
+    </summary>
+    </br>
+
+The rest of the course will utilize the R package {learnr} to provide
+interactive exercises *within* your RStudio window. To access these
+custom exercises, follow these instructions below. If you need help,
+notify your breakout facilitator.
+
+**Copy and paste this command into your R Console as shown below, then
+press the “Enter” key to run the command:**
+
+**`remotes::install_github("appliedepi/introexercises", dep = TRUE, force = TRUE)`**
+
+<img src="images/README_images/install_exercises.png" width="75%" />
+
+Text will begin to appear in the Console, below the command. Do not
+worry, R is simply downloading the tutorials from the internet and
+printing updates. *Watch the print-out for any questions that R may ask
+you:*
+
+-   If you see a printed warning about needing “RTools”, do not worry.
+    This is simply a warning message and the install should proceed
+    without error.  
 -   If prompted to update some R packages, select “All” to update all of
     the packages.  
 -   If you continue to be prompted for package updates, you can select
     “None” and continue without further updates.
 
-4)  To open an exercise, Click on the “Tutorial” tab in the upper-right
-    RStudio pane (which also contains a tab holding your R
-    Environment).  
+**Once the download is complete, close and re-open your RStudio
+project** (remember to re-open it by clicking the icon within your
+“intro_courses” folder).
 
--   The first time, you may need to restart RStudio for the tutorials to
-    appear.
+</br>
+</details>
 
-5)  Select the exercise for your current course module - look for the
-    name “Applied Epi -”.  
+# Accessing course exercises
 
--   You can proceed with the exercise in this pane, or click the small
-    icon to expand this tutorial into a separate window.  
--   Watch the gif below. The exercise will provide sample code that you
-    can run from your R script.  
--   Return to the exercise to answer quiz questions and proceed to the
-    next section of the exercise.
+Once you have completed the initial setup, all further breakout
+instructions will appear in Applied Epi interactive exercises, *within
+your RStudio window*. Each course module has a specific corresponding
+exercise.
+
+You can access these exercises through the “Tutorials” pane in RStudio
+(upper-left). Watch the gif below that introduces you to the exercise
+environment (you do not need to follow the steps shown right now).
 
 <img src="images/README_images/exercise_demo.gif" width="100%" />
 
-# Course materials
+**The first module’s tutorial is called “Applied Epi - R Setup, syntax,
+data import”**. To open it:
+
+1)  Click on the “Tutorial” tab in the upper-right RStudio pane (which
+    also contains a tab holding your “Environment”).  
+
+-   The first time, you may need to restart RStudio for the Applied Epi
+    exercises to appear.
+
+2)  Select the exercise (the full list of exercise names are below -
+    look for the name “Applied Epi”). For Module 1, the exercise is
+    called “Applied Epi - R setup, syntax, data import”.
+
+-   The exercise will load. Once you see the Applied Epi logo appear in
+    the Tutorials pane, you can begin the exercise.  
+-   You can view the exercise in this pane, or click the small icon in
+    the upper-left to pop-out into a separate window.
+
+# Modules
 
 <!-- badges: start -->
 <!-- badges: end -->
-
-THESE ARE DRAFTS
 
 ## Module 1: Introduction to R
 

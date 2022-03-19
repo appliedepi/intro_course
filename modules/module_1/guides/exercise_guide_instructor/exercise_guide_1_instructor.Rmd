@@ -1,0 +1,105 @@
+---
+title: "Module 1: R Setup, syntax, data import"
+subtitle: "Instructor guide"
+output: html_document
+theme: sandstone
+date: 'Date revised: 2022-03-02'
+---
+
+
+```{r, echo=FALSE}
+# Put logo in upper-right of document
+htmltools::img(src = knitr::image_uri(here::here("images", "logo.png")), 
+               alt = 'logo', 
+               style = 'position:absolute; top:0; right:0; padding:10px;',
+               width = "200px",
+               heigth = "200px")
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Notes  
+
+This module gets the students setup in RStudio with a project, demo script, and interacting with the learnr exercises.  
+
+At the beginning, you will demonstrate how to open a learnr exercise. Then, you can let the students work through the exercise and assist them as-needed.  
+
+# Preparation  
+
+1. Clear your desktop of clutter.  
+2. Turn off pop-up notifications from desktop versions of WhatsApp, Signal, Teams, etc.  
+3. Open RStudio and adjust the upper-right R project drop-down menu to close any open projects. This way, when you open RStudio it opens as "Project: None".  
+4. Open a file explorer window, showing the location where you will save the R project, and have it ready to show.  
+5. Open this file (or better: print it and have on your desk)
+
+# Setup  
+
+1. **In Google Meets**:  
+     * If you have two displays: share your second display, which contains RStudio and the file explorer. The first display will be contain the Meet.  
+     * If you only have one display, show your entire screen and ask an assistant instructor for help with any questions/hands that you cannot see. (TODO maybe there is a way to avoid mirroring in Meets?)  
+
+</br>
+
+# Exercise setup  
+
+Explain that the course utilizes the R package {learnr} to provide interactive exercises *within* your RStudio window.  
+
+**Share your screen and have the students follow-along step-by-step with you**  
+
+**They can access these same instructions at: https://appliedepi.github.io/intro_course/  **
+
+
+1) Run this commands in your R console to install the {remotes} package  
+`install.packages("remotes")`  
+
+3) Run this command in your R console to install our R package from Github, that contains the exercises:  
+
+  * `remotes::install_github("appliedepi/introexercises", dep = TRUE, force = TRUE)`  
+  * If you see a warning about needing RTools, do not worry. This is simply a warning message, but the install should proceed without error.  
+  * If prompted to update some R packages, select "All" to update all of the packages.  
+  * If you continue to be prompted for package updates, you can select "None" and continue without further updates.  
+
+
+
+# To open an exercise  
+
+Show your screen to the students Have the students Watch the gif below - you do not need to follow the steps shown right now, but it introduces you to the exercise environment.  
+
+```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
+knitr::include_graphics("images/README_images/exercise_demo.gif")
+```
+
+1) Click on the "Tutorial" tab in the upper-right RStudio pane (which also contains a tab holding your R Environment).  
+  * The first time, you may need to restart RStudio for the tutorials to appear.  
+  
+2) Select the exercise for your current course module (see list in section below) - look for the name "Applied Epi -". For Module 1, the exercise is called "Applied Epi - R setup, syntax, data import".  
+
+  * The exercise will load. Once you see the Applied Epi logo appear, you can begin the exercise.  
+  * You can proceed with the exercise in this RStudio pane, or click the small icon in the upper-left to expand this tutorial into a separate window.  
+  * Return to the exercise to answer quiz questions and proceed to the next section of the exercise.  
+  
+
+
+
+# Finish
+Close RStudio.    
+Return to begin the plenary debrief with the entire class.  
+
+
+
+     
+     
+     
+
+
+</br>
+
+</br>
+
+</br>
+
+</br>
