@@ -22,12 +22,8 @@ Click here to download the course outline (PDF) TODO
 
 # Initial setup
 
-**When you are in the breakout session of your first module, click the
-green texts below to expand and follow the step-by-step instructions:**
-
-This first part of the course setup uses the instructions below. After
-this intial setup, the exercises will be conducted entirely within
-RStudio.
+Follow these step-by-step instructions to setup an RStudio project for
+the course, and to download the course interactive exercises.
 
 ### 1. Download course files
 
@@ -91,7 +87,7 @@ module has a corresponding exercise, which can be accessed through the
 to the exercise environment (you do not need to follow the steps shown
 right now).
 
-<img src="images/README_images/exercise_demo.gif" width="100%" />
+<img src="images/README_images/exercise_demo_short_words.gif" width="100%" />
 
 1)  Click on the “Tutorial” tab in the upper-right RStudio pane (which
     also contains a tab holding your “Environment”).
@@ -102,6 +98,9 @@ right now).
     instructor. They make some time to appear.  
 -   The exercise will load. Once you see the Applied Epi logo appear in
     the Tutorials pane, you can begin the exercise.  
+-   To see the sidebar in the exercise, you may need to adjust the
+    Tutorials pane to be wider. You can also adjust the zoom from the
+    “View” menu.  
 -   You can view the exercise in this pane, or click the small icon in
     the upper-left to pop-out into a separate window.
 
