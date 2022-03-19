@@ -7,11 +7,19 @@ output:
     code_folding: hide
 date: "`r Sys.Date()`"
 params:
-  district: "Central"
+  district: "West II"
   publish_date: "2014-12-01"
 ---
 
-```{r}
+Spotlight on district: `r params$district`.  
 
+```{r}
+pacman::p_load(rio, here, tidyverse, janitor)
+
+combined <- import(here("intro_course", "data", "clean", "linelist_combined_20141201.rds"))
+
+combined %>% 
+     filter(district == params$district) %>% 
+     tabyl(hospital, outcome)
 ```
 

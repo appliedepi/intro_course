@@ -433,15 +433,22 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "rmarkdown", "6
 
 
 `````
-```{r importing-data, eval=TRUE}`r ''`
+```{r importing-data, eval=TRUE}`r ''`  
 # import data
 surv_raw <- import(here("data", "surveillance_linelist_20141201.csv))
 ```
 `````  
 
-Within the curly brackets { } at the top of each chunk is:  
-- the letter "r" (signifying R code) and a comma ,  
-- a chunk name (optional)  
+At the top of each chunk, within the curly brackets { }, is:  
+
+- the letter "r" (signifying R code) and a comma , 
+
+--
+
+- a chunk name (optional, no spaces allowed)  
+
+--
+
 - other options such as: 
      - `eval = TRUE` (run the R code, or ignores it)  
      - `echo = TRUE` (displays the R code in the document)  

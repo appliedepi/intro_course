@@ -1422,7 +1422,7 @@ You can zip the folder and share it with a colleague, it can be hosted on a shar
 ---
 # File paths  
 
-Let's try import a dataset "linelist.csv" into R!  
+Let's try to import a dataset "linelist.csv" into R!  
 
 --
 

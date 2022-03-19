@@ -44,44 +44,41 @@ At the beginning, you will demonstrate how to open a learnr exercise. Then, you 
 
 </br>
 
-# Exercise setup  
+# Introduction and welcome  
 
-Explain that the course utilizes the R package {learnr} to provide interactive exercises *within* your RStudio window.  
+Welcome the group and introduce yourself. 
 
-**Share your screen and have the students follow-along step-by-step with you**  
+Explain how the breakout sessions will work:  
 
-**They can access these same instructions at: https://appliedepi.github.io/intro_course/  **
+* You are available to answer any questions and help people  
+* The primary activity is them working through the interactive exercise for this module.  
+* If there is something that they do not understand, probably there are others that do not understand as well.  
+* They can turn their camera off while working, if they prefer  
+* The breakout will reconvene towards the end of the breakout time to discuss and ensure that everyone was successful.  
 
 
-1) Run this commands in your R console to install the {remotes} package  
-`install.packages("remotes")`  
+# Initial setup 
 
-3) Run this command in your R console to install our R package from Github, that contains the exercises:  
+Explain that there is some initial setup that needs to be done.  
 
-  * `remotes::install_github("appliedepi/introexercises", dep = TRUE, force = TRUE)`  
+**Give them the link https://appliedepi.github.io/intro_course/ and tell them to follow the "Initial setup instructions".**
+
+When they reach the part about downloading our Applied Epi R package, they will be prompted to run the following commands:  
+
+`remotes::install_github("appliedepi/introexercises", dep = TRUE, force = TRUE)`  
+
   * If you see a warning about needing RTools, do not worry. This is simply a warning message, but the install should proceed without error.  
   * If prompted to update some R packages, select "All" to update all of the packages.  
   * If you continue to be prompted for package updates, you can select "None" and continue without further updates.  
 
+When they open the tutorials pane for the first time, they may need to adjust the View size of RStudio, and adjust the pane edges in order to see the sidebar.  
+
+If they pop-out the tutorial into a separate window, they cannot re-insert it into RStudio. In this case, just have them close the pop-out window and re-open the tutorial. Their work in the tutorial (quiz questions, etc.) will be saved.  
 
 
-# To open an exercise  
+# Tutorial 1
 
-Show your screen to the students Have the students Watch the gif below - you do not need to follow the steps shown right now, but it introduces you to the exercise environment.  
-
-```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
-knitr::include_graphics("images/README_images/exercise_demo.gif")
-```
-
-1) Click on the "Tutorial" tab in the upper-right RStudio pane (which also contains a tab holding your R Environment).  
-  * The first time, you may need to restart RStudio for the tutorials to appear.  
-  
-2) Select the exercise for your current course module (see list in section below) - look for the name "Applied Epi -". For Module 1, the exercise is called "Applied Epi - R setup, syntax, data import".  
-
-  * The exercise will load. Once you see the Applied Epi logo appear, you can begin the exercise.  
-  * You can proceed with the exercise in this RStudio pane, or click the small icon in the upper-left to expand this tutorial into a separate window.  
-  * Return to the exercise to answer quiz questions and proceed to the next section of the exercise.  
-  
+The students should then proceed into Tutorial 1, which is called "Applied Epi - R setup, syntax, data import.  
 
 
 
@@ -90,16 +87,3 @@ Close RStudio.
 Return to begin the plenary debrief with the entire class.  
 
 
-
-     
-     
-     
-
-
-</br>
-
-</br>
-
-</br>
-
-</br>
