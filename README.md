@@ -35,16 +35,20 @@ RStudio.
 is not available (Optional)</strong>
 </summary>
 
-[**Click
-here**](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/intro_course)
+[Click
+here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/intro_course)
 to download a zipped folder to use in the course exercises.
 
-**Unzip the folder and save it on your computer’s desktop (not on a
-shared drive).**
+<strong>Unzip the folder and save it on your computer’s desktop (not on
+a shared drive).</strong>
 
 To “unzip” a folder once it is downloaded, right-click on the folder and
 select “Extract All”. If offered a choice of location to save the
 unzipped folder, save it to your desktop.
+
+-   Bullet 1
+-   Bullet 2
+-   Bullet 3
 
 </details>
 <details>
