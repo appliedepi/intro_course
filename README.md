@@ -85,12 +85,11 @@ you:*
 
 ### 4. Begin the first exercise
 
-Once you have completed the initial setup, all further exercise
-instructions will appear *within your RStudio window*. Each course
-module has a specific corresponding exercise, which can be accessed
-through the “Tutorials” pane in RStudio (upper-left). Watch the gif
-below that introduces you to the exercise environment (you do not need
-to follow the steps shown right now).
+The course exercises will appear *within your RStudio*. Each course
+module has a corresponding exercise, which can be accessed through the
+“Tutorials” pane in RStudio (upper-left). The gif below introduces you
+to the exercise environment (you do not need to follow the steps shown
+right now).
 
 <img src="images/README_images/exercise_demo.gif" width="100%" />
 
