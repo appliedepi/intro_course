@@ -26,14 +26,7 @@ Follow these step-by-step instructions to download the course files,
 setup an RStudio project, and to download and begin the course’s
 interactive exercises.
 
-<details>
-<!--
-NOTE: everything inside the details tag will be collapsed and effectively
-hidden from the user
--->
-<summary style="text-decoration: underline">
-Download course files
-</summary>
+### 1. Download course files
 
 [**Click
 here**](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/intro_course)
@@ -44,15 +37,7 @@ shared drive).** To “unzip” a folder once it is downloaded, right-click
 on the folder and select “Extract All”. If offered a choice of location
 to save the unzipped folder, save it to your desktop.
 
-</details>
-<details>
-<!--
-NOTE: everything inside the details tag will be collapsed and effectively
-hidden from the user
--->
-<summary markdown='span', style="text-decoration: underline">
-Create a new RStudio project
-</summary>
+### 2. Create a new RStudio project
 
 1)  Open RStudio. Ensure that you open *RStudio* and not just *R*.
 
@@ -68,15 +53,7 @@ Create a new RStudio project
 
 Voila! This will be the project for ALL of your work in this course.
 
-</details>
-<details>
-<!--
-NOTE: everything inside the details tag will be collapsed and effectively
-hidden from the user
--->
-<summary>
-Download Applied Epi course exercises
-</summary>
+### 3. Download Applied Epi course exercises
 
 The rest of the course will utilize the R package {learnr} to provide
 interactive exercises *within* your RStudio window. To access these
@@ -103,15 +80,7 @@ you:*
 -   If you continue to be prompted for package updates, you can select
     “None” and continue without further updates.
 
-</details>
-<details>
-<!--
-NOTE: everything inside the details tag will be collapsed and effectively
-hidden from the user
--->
-<summary style="text-decoration: underline">
-Begin the first exercise
-</summary>
+### 4. Begin the first exercise
 
 The course exercises will appear *within your RStudio*. Each course
 module has a corresponding exercise, which can be accessed through the
@@ -135,66 +104,6 @@ right now).
     “View” menu.  
 -   You can view the exercise in this pane, or click the small icon in
     the upper-left to pop-out into a separate window.
-
-</details>
-<details>
-<!--
-NOTE: everything inside the details tag will be collapsed and effectively
-hidden from the user
--->
-<summary style="text-decoration: underline">
-Click here for alternative installation options
-</summary>
-
-If there is a bugfix or feature that is not yet on CRAN, you can install
-it via the {drat} package:
-
-You can install {epidict} from the R4EPI repository:
-
-``` r
-# install.packages("drat")
-drat::addRepo("R4EPI")
-install.packages("epidict")
-```
-
-You can also install the in-development version from GitHub using the
-{remotes} package (but there’s no guarantee that it will be stable):
-
-``` r
-# install.packages("remotes")
-remotes::install_github("R4EPI/epidict") 
-```
-
-</details>
-<details>
-<!--
-NOTE: everything inside the details tag will be collapsed and effectively
-hidden from the user
--->
-<summary style="text-decoration: underline">
-Click here for alternative installation options
-</summary>
-
-If there is a bugfix or feature that is not yet on CRAN, you can install
-it via the {drat} package:
-
-You can install {epidict} from the R4EPI repository:
-
-``` r
-# install.packages("drat")
-drat::addRepo("R4EPI")
-install.packages("epidict")
-```
-
-You can also install the in-development version from GitHub using the
-{remotes} package (but there’s no guarantee that it will be stable):
-
-``` r
-# install.packages("remotes")
-remotes::install_github("R4EPI/epidict") 
-```
-
-</details>
 
 # Modules
 
