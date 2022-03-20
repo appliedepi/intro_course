@@ -32,7 +32,7 @@ NOTE: everything inside the details tag will be collapsed and effectively
 hidden from the user
 -->
 <summary style="text-decoration: underline">
-Click here for step-by-step instrucitons
+Click here for step-by-step instructions
 </summary>
 
 ### 1. Download course files

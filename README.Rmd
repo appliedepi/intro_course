@@ -44,8 +44,8 @@ Follow these step-by-step instructions to download the course files, setup an RS
 NOTE: everything inside the details tag will be collapsed and effectively
 hidden from the user
 -->
-<summary style='text-decoration: underline'>Click here for step-by-step instrucitons</summary>
-
+<summary style='text-decoration: underline'>Click here for step-by-step instructions</summary>  
+  
 ### 1. Download course files  
 
 [**Click here**](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/intro_course) to download a zipped folder to use in the course exercises.  
@@ -105,8 +105,7 @@ knitr::include_graphics("images/README_images/exercise_demo_short_words.gif")
   * The exercise will load. Once you see the Applied Epi logo appear in the Tutorials pane, you can begin the exercise.  
   * To see the sidebar in the exercise, you may need to adjust the Tutorials pane to be wider. You can also adjust the zoom from the "View" menu.  
   * You can view the exercise in this pane, or click the small icon in the upper-left to pop-out into a separate window.  
- 
-
+  
 </details>
 
 
