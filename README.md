@@ -30,12 +30,11 @@ interactive exercises.
 NOTE: everything inside the details tag will be collapsed and effectively
 hidden from the user
 -->
-<details>
-<summary style="text-decoration: underline">
-Click here for step-by-step instructions
-</summary>
+<details markdown=1>
+<summary markdown="span" style='text-decoration: underline'>
 
-### 1. Download course files
+1.  Download course files
+    </summary>
 
 [**Click
 here**](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/intro_course)
@@ -46,24 +45,35 @@ shared drive).** To “unzip” a folder once it is downloaded, right-click
 on the folder and select “Extract All”. If offered a choice of location
 to save the unzipped folder, save it to your desktop.
 
-### 2. Create a new RStudio project
+</details>
+<details markdown=1>
+<summary markdown="span" style='text-decoration: underline'>
 
-1.  Open RStudio. Ensure that you open *RStudio* and not just *R*.
+2.  Create a new RStudio project
+    </summary>
 
-2.  In RStudio click *File -&gt; New Project*. In the pop-up window,
+<!-- -->
+
+1)  Open RStudio. Ensure that you open *RStudio* and not just *R*.
+
+2)  In RStudio click *File -\> New Project*. In the pop-up window,
     select **“Existing directory”**.
 
 <img src="images/README_images/create_project.png" width="50%" />
 
-1.  Click “browse” and select the “intro\_course” folder on your
-    desktop, that you downloaded earlier, which contains the course
-    materials.
+3)  Click “browse” and select the “intro_course” folder on your desktop,
+    that you downloaded earlier, which contains the course materials.
 
-2.  Click “Create project”
+4)  Click “Create project”
 
 Voila! This will be the project for ALL of your work in this course.
 
-### 3. Download Applied Epi course exercises
+</details>
+<details markdown=1>
+<summary markdown="span" style='text-decoration: underline'>
+
+3.  Download Applied Epi course exercises
+    </summary>
 
 The rest of the course will utilize the R package {learnr} to provide
 interactive exercises *within* your RStudio window. To access these
@@ -90,7 +100,12 @@ you:*
 -   If you continue to be prompted for package updates, you can select
     “None” and continue without further updates.
 
-### 4. Begin the first exercise
+</details>
+<details markdown=1>
+<summary markdown="span" style='text-decoration: underline'>
+
+4.  Begin the first exercise
+    </summary>
 
 The course exercises will appear *within your RStudio*. Each course
 module has a corresponding exercise, which can be accessed through the
@@ -100,10 +115,10 @@ right now).
 
 <img src="images/README_images/exercise_demo_short_words.gif" width="100%" />
 
-1.  Click on the “Tutorial” tab in the upper-right RStudio pane (which
+1)  Click on the “Tutorial” tab in the upper-right RStudio pane (which
     also contains a tab holding your “Environment”).
 
-2.  Select the exercise “Applied Epi - R setup, syntax, data import”
+2)  Select the exercise “Applied Epi - R setup, syntax, data import”
 
 -   If you do not see any “Applied Epi” exercises, notify your
     instructor. They make some time to appear.  
