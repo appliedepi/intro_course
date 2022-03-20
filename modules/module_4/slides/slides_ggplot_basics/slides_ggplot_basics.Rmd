@@ -1293,7 +1293,9 @@ geom_histogram() +
 *facet_wrap(~hospital)
 ```
 
-Faceting can also display groups. 
+Facets are "small-multiples": tiny plots each for one unique value in a column. 
+
+Faceting can also be used to display groups. 
 
 `facet_wrap()` produces one facet  
 per unique value.  
