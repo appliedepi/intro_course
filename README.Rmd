@@ -47,7 +47,7 @@ Follow these step-by-step instructions to download the course files, setup an RS
 NOTE: everything inside the details tag will be collapsed and effectively
 hidden from the user
 -->
-<summary <summary markdown='span' style="text-decoration: underline">
+<summary markdown='span' style="text-decoration: underline">
 Download course files
 </summary>
 
@@ -66,7 +66,7 @@ Download course files
 NOTE: everything inside the details tag will be collapsed and effectively
 hidden from the user
 -->
-<summary <summary markdown='span', style="text-decoration: underline">
+<summary markdown='span', style="text-decoration: underline">
 Create a new RStudio project
 </summary>
 
@@ -97,7 +97,7 @@ Voila! This will be the project for ALL of your work in this course.
 NOTE: everything inside the details tag will be collapsed and effectively
 hidden from the user
 -->
-<summary style="text-decoration: underline">
+<summary markdown='span'>
 Download Applied Epi course exercises
 </summary>
 

@@ -31,7 +31,7 @@ interactive exercises.
 NOTE: everything inside the details tag will be collapsed and effectively
 hidden from the user
 -->
-<summary <summary markdown='span' style="text-decoration: underline">
+<summary style="text-decoration: underline">
 Download course files
 </summary>
 
@@ -50,7 +50,7 @@ to save the unzipped folder, save it to your desktop.
 NOTE: everything inside the details tag will be collapsed and effectively
 hidden from the user
 -->
-<summary <summary markdown='span', style="text-decoration: underline">
+<summary markdown='span', style="text-decoration: underline">
 Create a new RStudio project
 </summary>
 
@@ -74,7 +74,7 @@ Voila! This will be the project for ALL of your work in this course.
 NOTE: everything inside the details tag will be collapsed and effectively
 hidden from the user
 -->
-<summary style="text-decoration: underline">
+<summary>
 Download Applied Epi course exercises
 </summary>
 
