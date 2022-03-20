@@ -84,7 +84,7 @@ options(htmltools.dir.version = FALSE)
 
 ```{r, include=FALSE}
 # data prep --------------------------------------------------------------------
-surv <- rio::import(here::here("data", "surveillance_linelist_clean.rds"))
+surv <- rio::import(here::here("data", "surveillance_linelist_clean_20141201.rds"))
 ```
 
 

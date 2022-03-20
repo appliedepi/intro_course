@@ -116,12 +116,11 @@ style_mono_accent(
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
   ~Time, ~Location, ~Topic,
-  "0900-0930",     "Main",      "{ggplot2} 'Grammar of graphics' syntax",
-  "0930-0945",     "Main",      "Live demonstration",
-  "1000-1100",     "Breakouts", "Practice making simple plots",
-  "1110-1130",     "Main",      "Scales, themes, and labels",
-  "1130-1220",     "Breakouts", "Adjusting plots",
-  "1220-1230",     "Main",      "Plenary debrief"
+  "20 minutes",     "Main",      "Welcome, course logistics, Why R?",
+  "10 minutes",     "Main",      "Demo: RStudio tour and basic R syntax",
+  "20 minutes",     "Main",      "Function, packages, file paths, importing",
+  "1h 45 minutes",  "Breakouts", "Exercise",
+  "20 minutes",     "Main",      "Plenary debrief"
 )
 
 outline %>% 

@@ -56,7 +56,7 @@ pacman::p_load(
 
 # data prep --------------------------------------------------------------------
 # linelist_raw <- rio::import(here::here("data", "linelist_raw.xlsx"))
-linelist_surv <- rio::import(here::here("data", "surveillance_linelist_clean.rds"))
+linelist_surv <- rio::import(here::here("data", "surveillance_linelist_clean_20141201.rds"))
 ```
 
 ```{r  xaringan-themer, include = FALSE}
@@ -141,7 +141,36 @@ Explain that:
 - In this module, we will use the word "join" to stick to the `join_` function family from tidyverse as well as well known functions from SQL. The base R equivalent is `merge`.
 
 
-   
+  
+
+---
+# Today: objectives & schedule  
+
+**In this module we aim to help you:**  
+
+TODO
+
+
+```{r, echo=FALSE, warning=F, message=F}
+outline <- dplyr::tribble(
+  ~Time, ~Location, ~Topic,
+  "20 minutes",     "Main",      "Welcome, course logistics, Why R?",
+  "10 minutes",     "Main",      "Demo: RStudio tour and basic R syntax",
+  "20 minutes",     "Main",      "Function, packages, file paths, importing",
+  "1h 45 minutes",  "Breakouts", "Exercise",
+  "20 minutes",     "Main",      "Plenary debrief"
+)
+
+outline %>% 
+  flextable::qflextable() %>% 
+  flextable::add_footer_lines("Breaks are incorporated above, but not shown as rows")
+```
+
+???
+Note stretch breaks throughout.
+
+
+ 
    
 ---
 

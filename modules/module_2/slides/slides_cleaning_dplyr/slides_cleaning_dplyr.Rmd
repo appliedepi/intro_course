@@ -123,9 +123,7 @@ style_mono_accent(
 
 
 ```{r, echo=F, include = F}
-surv_raw <- rio::import(here::here("data", "surveillance_linelist_12012014.csv"))
-medical_linelist <- rio::import(here::here("data", "medical_linelist_12012014.xlsx"))
-
+surv_raw <- rio::import(here::here("intro_course", "surveillance_linelist_20141201.csv"))
 ```
 
 
@@ -156,10 +154,13 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "data_cleaning"
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
   ~Time, ~Location, ~Topic,
-  "0900-0945",     "Main",      "TODO",
-  "0950-1050",     "Main",      "TODO",
-  "1100-1200",     "Breakouts", "TODO",
-  "1205-1220",     "Main",      "TODO"
+  "15 minutes",     "Main",      "Review of last module",
+  "20 minutes",     "Main",      "Tidy data and data cleaning",
+  "10 minutes",     "Main",      "Demo - data cleaning", 
+  "1h 45 minutes",  "Breakouts", "Exercise",
+  "20 minutes",     "Main",      "Plenary debrief",
+  "20 minutes",     "Main",      "Demo - dates"
+
 )
 
 outline %>% 
@@ -169,6 +170,37 @@ outline %>%
 
 ???
 Note stretch breaks throughout.
+
+
+---
+# Review of previous module  
+
+- The versatility, community, and features of R  
+
+--
+
+- R projects, `import()`, and relative file paths with {here}  
+
+--
+
+- Running commands, writing comments, saving objects  
+
+--
+
+- Operators like `<`  `>`  `==`  `%in%`  
+
+--
+
+- Functions, sometimes with multiple arguments  
+
+--
+
+- Reviewing a dataset `skim()`, `summary()`  
+
+--
+
+- Columns and objects have *classes* that can be checked with `class()`  
+
 
 
 
@@ -384,7 +416,7 @@ class: medium-large-table
 
 # Review your data  
 
-We will begin working with the *"surveillance_linelist_12012014.csv"*  
+We will begin working with the *"surveillance_linelist_20141201.csv"*  
 We assigned it the name `surv_raw` when we imported it into R.    
 
 ```{r}
@@ -684,7 +716,7 @@ demo %>% filter(age > 10) %>% select(case_id, age, gender) %>% knitr::kable()
 
 
 ---
-# Vertical coding sytle
+# Vertical coding style
 
 Eventually, it is better to write in a *vertical* style  
 Newlines and indent will not impact the code, but do make it more readable!
@@ -696,7 +728,7 @@ demo %>%
 
 
 ---
-# Vertical coding sytle
+# Vertical coding style
 
 Eventually, it is better to write in a *vertical* style:  
 Newlines and indent will not impact the code, but do make it more readable!
@@ -709,7 +741,7 @@ demo %>%
 ```
 
 ---
-# Vertical coding sytle
+# Vertical coding style
 
 Eventually, it is better to write in a *vertical* style:  
 Newlines and indent will not impact the code, but do make it more readable!
@@ -726,7 +758,7 @@ demo %>%
 
 
 ---
-# Vertical coding sytle
+# Vertical coding style
 
 Eventually, it is better to write in a *vertical* style:  
 Newlines and indent will not impact the code, but do make it more readable!
@@ -743,7 +775,7 @@ demo %>%
 
 
 ---
-# Vertical coding sytle
+# Vertical coding style
 
 When piping, it is better to write code in a *vertical* style:  
 Newlines and indent will not impact the code, but make it more readable!
@@ -837,12 +869,12 @@ demo %>%
 Our pipes have only *printed* the modified `demo` - the data frame has **not** changed!  
 
 ```{r, echo=T, eval=F}
-demo %>%                    # PRINT only cases under 5 years
+demo %>%                    # PRINT only cases over 10 years
   filter(age > 10)
 ```
 
 ```{r, echo=F, eval=T}
-demo %>%                    # print only cases under 5 years
+demo %>%                    # print only cases over 10 years
   filter(age > 10) %>% 
   knitr::kable()
 ```
@@ -853,7 +885,7 @@ demo %>%                    # print only cases under 5 years
 To save: add the assignment operator **<-** to define a new data frame.  
 
 ```{r pipe-assign, eval=F, echo=T}
-demo_under5 <- demo %>%
+demo_over10 <- demo %>%
   filter(age > 10)
 ```
 

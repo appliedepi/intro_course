@@ -157,6 +157,8 @@ President and co-founder, Applied Epi
 
 ]
 
+Many other instructors will be joining us on this Pilot course  
+
 .footnote[**Thank you for your service** *to your community in these busy times for public health. We are glad that you are taking the time to learn R with us.*]
 
 ???
@@ -574,19 +576,36 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "Epi
 ---
 # Your backgrounds
 
-Pre-course survey results, describing the experience levels of course participants
+Quick introductions  
+
+- Name, institution, and role  
+- The analytical software you are most comfortable in  
+- The most recent good meal that you ate  
+
+
+---
+# Your perceptions and hopes
+
+- "I see that R is just more commonly used, especially in the humanitarian field"  
+- "it can automatize a lot of work which is appealing"  
+- "it is helping in the automated routine and deep analysis"  
+- "I am hoping to get more data wrangling practice"  
+- "use R to do descriptive data analysis and a little bit more complicated stuff if the need arises"  
+- "It will give me some confidence in quant work."  
+- "R skills in outbreak and humanitarian settings."  
 
 
 
 ---
-# Your hopes and fears
-
-Pre-course survey results
-
-Your objectives in learning R 
-Your concerns about learning R
+# Your perceptions and fears
 
 
+- "I don't believe it to be true, I've heard that R is exceedingly hard to learn and use"  
+- "has a learning curve with lots of time needed to debug the code you've written"  
+- "R has a steep learning curve"  
+
+
+]
 
 ---
 # Course objectives
@@ -633,15 +652,15 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "Int
 
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
-  ~Module, ~Date, ~`Time (GMT)`, ~Topic,
-  "1", "Mo 21/3", "0830-1200", "Welcome, RStudio, basic syntax, data import",
-  "2", "Mo 21/3", "1300-1630", "Cleaning data, core R functions, piping",
-  "3", "Tu 22/3", "0830-1200", "Grouping and summarising data",
-  "4", "Tu 22/3", "1300-1630", "Data visualization with ggplot2",
-  "5", "We 23/3", "0830-1200", "Transforming data with joins and pivots",
-  "6", "We 23/3", "1300-1630", "Heat plots, epi curves, age/sex pyramids, GIS demo",
-  "7", "Th 24/3", "0830-1200", "R Markdown reports",
-  "8", "Th 24/3", "1300-1630", "Real-life exercise"
+  ~Module, ~Date, ~Topic,
+  "1", "Mo 21/3",  "Welcome, RStudio, basic syntax, data import",
+  "2", "Mo 21/3",  "Cleaning data, core R functions, piping",
+  "3", "Tu 22/3",  "Grouping and summarising data",
+  "4", "Tu 22/3",  "Data visualization with ggplot2",
+  "5", "We 23/3",  "Transforming data with joins and pivots",
+  "6", "We 23/3",  "Heat plots, epi curves, age/sex pyramids, GIS demo",
+  "7", "Th 24/3",  "R Markdown reports",
+  "8", "Th 24/3",  "Real-life exercise"
 )
 
 outline %>% 
@@ -664,10 +683,11 @@ outline %>%
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
   ~Time, ~Location, ~Topic,
-  "0900-0945",     "Main",      "Welcome, course logistics, Why R?",
-  "0950-1050",     "Main",      "Lecture and live demonstration:\nRStudio tour, R projects, basic R syntax, functions & packages, data import",
-  "1100-1200",     "Breakouts", "Setting up a script, importing data, and reviewing a data frame",
-  "1205-1220",     "Main",      "Debrief"
+  "20 minutes",     "Main",      "Welcome, course logistics, Why R?",
+  "10 minutes",     "Main",      "Demo: RStudio tour and basic R syntax",
+  "20 minutes",     "Main",      "Function, packages, file paths, importing",
+  "1h 45 minutes",  "Breakouts", "Exercise",
+  "20 minutes",     "Main",      "Plenary debrief"
 )
 
 outline %>% 

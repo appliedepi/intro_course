@@ -82,7 +82,7 @@ style_mono_accent(
 
 ```{r, include=FALSE}
 # data prep --------------------------------------------------------------------
-surv <- rio::import(here::here("data", "surveillance_linelist_clean.rds"))
+surv <- rio::import(here::here("data", "surveillance_linelist_clean_20141201.rds"))
 ```
 
 
@@ -149,14 +149,16 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "grouping", "Gr
 * Learn 3 methods for creating descriptive summary tables  
 * Make tables of printable quality and export as PNG, Word, etc.  
 
+TODO
 
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
   ~Time, ~Location, ~Topic,
-  "0900-0945",     "Main",      "TODO",
-  "0950-1050",     "Main",      "TODO",
-  "1100-1200",     "Breakouts", "TODO",
-  "1205-1220",     "Main",      "TODO"
+  "20 minutes",     "Main",      "Welcome, course logistics, Why R?",
+  "10 minutes",     "Main",      "Demo: RStudio tour and basic R syntax",
+  "20 minutes",     "Main",      "Function, packages, file paths, importing",
+  "1h 45 minutes",  "Breakouts", "Exercise",
+  "20 minutes",     "Main",      "Plenary debrief"
 )
 
 outline %>% 
