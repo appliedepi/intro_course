@@ -605,7 +605,7 @@ Quick introductions
 - "R has a steep learning curve"  
 
 
-]
+
 
 ---
 # Course objectives
@@ -1390,7 +1390,7 @@ You had to remember one function for each type of file: `read.csv()`, `read_exce
 The {rio} package makes it easy with only one function: **`import()`**  
 
 ```{eval=F}
-import("surveillance_linelist_12012014.csv")
+import("surveillance_linelist_20141201.csv")
 ```
 
 .pull-left[
