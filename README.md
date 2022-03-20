@@ -166,6 +166,35 @@ remotes::install_github("R4EPI/epidict")
 ```
 
 </details>
+<details>
+<!--
+NOTE: everything inside the details tag will be collapsed and effectively
+hidden from the user
+-->
+<summary style="text-decoration: underline">
+Click here for alternative installation options
+</summary>
+
+If there is a bugfix or feature that is not yet on CRAN, you can install
+it via the {drat} package:
+
+You can install {epidict} from the R4EPI repository:
+
+``` r
+# install.packages("drat")
+drat::addRepo("R4EPI")
+install.packages("epidict")
+```
+
+You can also install the in-development version from GitHub using the
+{remotes} package (but there’s no guarantee that it will be stable):
+
+``` r
+# install.packages("remotes")
+remotes::install_github("R4EPI/epidict") 
+```
+
+</details>
 
 # Modules
 
