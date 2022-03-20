@@ -22,15 +22,16 @@ Click here to download the course outline (PDF) TODO
 
 # Initial setup
 
-Follow these step-by-step instructions to setup an RStudio project for
-the course, and to download the course interactive exercises.
+Follow these step-by-step instructions to download the course files,
+setup an RStudio project, and to download and begin the course’s
+interactive exercises.
 
 <details>
 <!--
 NOTE: everything inside the details tag will be collapsed and effectively
 hidden from the user
 -->
-<summary style="text-decoration: underline">
+<summary <summary markdown='span' style="text-decoration: underline">
 Download course files
 </summary>
 
@@ -49,7 +50,7 @@ to save the unzipped folder, save it to your desktop.
 NOTE: everything inside the details tag will be collapsed and effectively
 hidden from the user
 -->
-<summary style="text-decoration: underline">
+<summary <summary markdown='span', style="text-decoration: underline">
 Create a new RStudio project
 </summary>
 
