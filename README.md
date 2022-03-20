@@ -26,6 +26,15 @@ Follow these step-by-step instructions to download the course files,
 setup an RStudio project, and to download and begin the course’s
 interactive exercises.
 
+<details>
+<!--
+NOTE: everything inside the details tag will be collapsed and effectively
+hidden from the user
+-->
+<summary style="text-decoration: underline">
+Click here for step-by-step instrucitons
+</summary>
+
 ### 1. Download course files
 
 [**Click
@@ -39,17 +48,18 @@ to save the unzipped folder, save it to your desktop.
 
 ### 2. Create a new RStudio project
 
-1)  Open RStudio. Ensure that you open *RStudio* and not just *R*.
+1.  Open RStudio. Ensure that you open *RStudio* and not just *R*.
 
-2)  In RStudio click *File -\> New Project*. In the pop-up window,
+2.  In RStudio click *File -&gt; New Project*. In the pop-up window,
     select **“Existing directory”**.
 
 <img src="images/README_images/create_project.png" width="50%" />
 
-3)  Click “browse” and select the “intro_course” folder on your desktop,
-    that you downloaded earlier, which contains the course materials.
+1.  Click “browse” and select the “intro\_course” folder on your
+    desktop, that you downloaded earlier, which contains the course
+    materials.
 
-4)  Click “Create project”
+2.  Click “Create project”
 
 Voila! This will be the project for ALL of your work in this course.
 
@@ -90,10 +100,10 @@ right now).
 
 <img src="images/README_images/exercise_demo_short_words.gif" width="100%" />
 
-1)  Click on the “Tutorial” tab in the upper-right RStudio pane (which
+1.  Click on the “Tutorial” tab in the upper-right RStudio pane (which
     also contains a tab holding your “Environment”).
 
-2)  Select the exercise “Applied Epi - R setup, syntax, data import”
+2.  Select the exercise “Applied Epi - R setup, syntax, data import”
 
 -   If you do not see any “Applied Epi” exercises, notify your
     instructor. They make some time to appear.  
@@ -104,6 +114,8 @@ right now).
     “View” menu.  
 -   You can view the exercise in this pane, or click the small icon in
     the upper-left to pop-out into a separate window.
+
+</details>
 
 # Modules
 
