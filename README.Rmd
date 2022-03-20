@@ -39,16 +39,37 @@ Click here to download the course outline (PDF) TODO
 
 Follow these step-by-step instructions to setup an RStudio project for the course, and to download the course interactive exercises.  
 
-### 1. Download course files
+
+
+
+<details>
+<!--
+NOTE: everything inside the details tag will be collapsed and effectively
+hidden from the user
+-->
+<summary style="text-decoration: underline">
+1. Download course files
+</summary>
+
 
 [**Click here**](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/appliedepi/intro_course/tree/main/intro_course) to download a zipped folder to use in the course exercises.  
      
 **Unzip the folder and save it on your computer's desktop (not on a shared drive).** To "unzip" a folder once it is downloaded, right-click on the folder and select "Extract All". If offered a choice of location to save the unzipped folder, save it to your desktop.  
 
 
+</details>
 
 
-### 2. Create a new RStudio project
+
+<details>
+<!--
+NOTE: everything inside the details tag will be collapsed and effectively
+hidden from the user
+-->
+<summary style="text-decoration: underline">
+2. Create a new RStudio project
+</summary>
+
 
 1) Open RStudio. Ensure that you open *RStudio* and not just *R*.  
 
@@ -63,14 +84,23 @@ knitr::include_graphics("images/README_images/create_project.png")
 4) Click "Create project"  
 
 Voila! This will be the project for ALL of your work in this course.  
+ 
+
+
+</details>
 
 
 
 
+<details>
+<!--
+NOTE: everything inside the details tag will be collapsed and effectively
+hidden from the user
+-->
+<summary style="text-decoration: underline">
+3. Download Applied Epi course exercises
+</summary>
 
-
-
-### 3. Download Applied Epi course exercises  
 
 The rest of the course will utilize the R package {learnr} to provide interactive exercises *within* your RStudio window. To access these custom exercises, follow these instructions below. If you need help, notify your breakout facilitator.  
 
@@ -87,9 +117,23 @@ Text will begin to appear in the Console, below the command. Do not worry, R is 
   * If you see a printed warning about needing "RTools", do not worry. This is simply a warning message and the install should proceed without error.  
   * If prompted to update some R packages, select "All" to update all of the packages.  
   * If you continue to be prompted for package updates, you can select "None" and continue without further updates.  
+ 
 
 
-### 4. Begin the first exercise  
+</details>
+
+
+
+
+<details>
+<!--
+NOTE: everything inside the details tag will be collapsed and effectively
+hidden from the user
+-->
+<summary style="text-decoration: underline">
+4. Begin the first exercise
+</summary>
+
 
 The course exercises will appear *within your RStudio*. Each course module has a corresponding exercise, which can be accessed through the "Tutorials" pane in RStudio (upper-left). The gif below introduces you to the exercise environment (you do not need to follow the steps shown right now).  
 
@@ -105,35 +149,8 @@ knitr::include_graphics("images/README_images/exercise_demo_short_words.gif")
   * The exercise will load. Once you see the Applied Epi logo appear in the Tutorials pane, you can begin the exercise.  
   * To see the sidebar in the exercise, you may need to adjust the Tutorials pane to be wider. You can also adjust the zoom from the "View" menu.  
   * You can view the exercise in this pane, or click the small icon in the upper-left to pop-out into a separate window.  
-  
+ 
 
-<details>
-<!--
-NOTE: everything inside the details tag will be collapsed and effectively
-hidden from the user
--->
-<summary style="text-decoration: underline">
-Click here for alternative installation options
-</summary>
-
-If there is a bugfix or feature that is not yet on CRAN, you can install
-it via the {drat} package:
-
-You can install {epidict} from the R4EPI repository:
-
-``` r
-# install.packages("drat")
-drat::addRepo("R4EPI")
-install.packages("epidict")
-```
-
-You can also install the in-development version from GitHub using the
-{remotes} package (but there’s no guarantee that it will be stable):
-
-``` r
-# install.packages("remotes")
-remotes::install_github("R4EPI/epidict") 
-```
 
 </details>
 
