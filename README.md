@@ -26,11 +26,11 @@ Follow these step-by-step instructions to download the course files,
 setup an RStudio project, and to download and begin the course’s
 interactive exercises.
 
-<details>
 <!--
 NOTE: everything inside the details tag will be collapsed and effectively
 hidden from the user
 -->
+<details>
 <summary style="text-decoration: underline">
 Click here for step-by-step instructions
 </summary>

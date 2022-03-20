@@ -39,12 +39,12 @@ Click here to download the course outline (PDF) TODO
 
 Follow these step-by-step instructions to download the course files, setup an RStudio project, and to download and begin the course's interactive exercises.  
 
-<details>
 <!--
 NOTE: everything inside the details tag will be collapsed and effectively
 hidden from the user
 -->
-<summary style='text-decoration: underline'>Click here for step-by-step instructions</summary>  
+
+<details markdown=1><summary markdown="span" style='text-decoration: underline'>Click here for step-by-step instructions</summary>  
   
 ### 1. Download course files  
 
