@@ -31,9 +31,7 @@ NOTE: everything inside the details tag will be collapsed and effectively
 hidden from the user
 -->
 <summary style="text-decoration: underline">
-
-1.  Download course files
-
+Download course files
 </summary>
 
 [**Click
@@ -52,9 +50,7 @@ NOTE: everything inside the details tag will be collapsed and effectively
 hidden from the user
 -->
 <summary style="text-decoration: underline">
-
-2.  Create a new RStudio project
-
+Create a new RStudio project
 </summary>
 
 1)  Open RStudio. Ensure that you open *RStudio* and not just *R*.
@@ -78,9 +74,7 @@ NOTE: everything inside the details tag will be collapsed and effectively
 hidden from the user
 -->
 <summary style="text-decoration: underline">
-
-3.  Download Applied Epi course exercises
-
+Download Applied Epi course exercises
 </summary>
 
 The rest of the course will utilize the R package {learnr} to provide
@@ -115,9 +109,7 @@ NOTE: everything inside the details tag will be collapsed and effectively
 hidden from the user
 -->
 <summary style="text-decoration: underline">
-
-4.  Begin the first exercise
-
+Begin the first exercise
 </summary>
 
 The course exercises will appear *within your RStudio*. Each course
@@ -142,6 +134,35 @@ right now).
     “View” menu.  
 -   You can view the exercise in this pane, or click the small icon in
     the upper-left to pop-out into a separate window.
+
+</details>
+<details>
+<!--
+NOTE: everything inside the details tag will be collapsed and effectively
+hidden from the user
+-->
+<summary style="text-decoration: underline">
+Click here for alternative installation options
+</summary>
+
+If there is a bugfix or feature that is not yet on CRAN, you can install
+it via the {drat} package:
+
+You can install {epidict} from the R4EPI repository:
+
+``` r
+# install.packages("drat")
+drat::addRepo("R4EPI")
+install.packages("epidict")
+```
+
+You can also install the in-development version from GitHub using the
+{remotes} package (but there’s no guarantee that it will be stable):
+
+``` r
+# install.packages("remotes")
+remotes::install_github("R4EPI/epidict") 
+```
 
 </details>
 
