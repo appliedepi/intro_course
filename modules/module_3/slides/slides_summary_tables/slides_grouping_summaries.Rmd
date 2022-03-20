@@ -491,7 +491,7 @@ surv %>%
     age_avg = mean(age_years, na.rm = T),        # mean age in the group
     max_onset = max(date_onset, na.rm=T),        # latest onset date
     n_female = sum(gender == 'female', na.rm=T), # number female in group
-    pct_female = percent(n_female / n_rows))     # number female in group
+    pct_female = percent(n_female / n_rows))     # percent female in group
 ```
 
 ```{r summarise6_flair, echo=F}
@@ -523,7 +523,7 @@ surv %>%
     age_avg = mean(age_years, na.rm = T),        # mean age in the group
     max_onset = max(date_onset, na.rm=T),        # latest onset date
     n_female = sum(gender == 'female', na.rm=T), # number female in group
-    pct_female = percent(n_female / n_rows)) %>% # number female in group
+    pct_female = percent(n_female / n_rows)) %>% # percent female in group
   arrange(n_rows)                                  #<<
 ```
 
@@ -544,7 +544,7 @@ surv %>%
     age_avg = mean(age_years, na.rm = T),        # mean age in the group
     max_onset = max(date_onset, na.rm=T),        # latest onset date
     n_female = sum(gender == 'female', na.rm=T), # number female in group
-    pct_female = percent(n_female / n_rows)) %>% # number female in group
+    pct_female = percent(n_female / n_rows)) %>% # percent female in group
   arrange(desc(n_rows))                             #<<
 ```
 

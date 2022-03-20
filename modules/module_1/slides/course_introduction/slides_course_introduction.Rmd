@@ -909,7 +909,7 @@ and numeric: `ages <- c(15, 28, 100, 15, 65, 4, 10)` then `summary(ages)` and `s
 
 
 ---
-# Simple functions
+# Simple R functions
 
 .pull-left[
 
@@ -943,7 +943,7 @@ and numeric: `ages <- c(15, 28, 100, 15, 65, 4, 10)` then `summary(ages)` and `s
 
 
 ---
-# Simple functions
+# Simple R functions
 
 .pull-left[
 
@@ -1004,7 +1004,7 @@ They must be told *how* to work, and *on what* to work.
 </br>
 
 
-You specify these values to their **"arguments"**.  
+You use the function's **arguments** to specify these values.  
 
 </br>
 
@@ -1069,7 +1069,7 @@ What is returned by this Excel equation?
 Let us pretend that `oven_bake()` is a function we are using to bake bread.  
 What *arguments* might this function take?
 
-- hint: what *object* needs to be put in the oven? Which *settings* must be adjusted?
+- hint: what *object* needs to be put in the oven? Which settings must be adjusted?  
 
 --
 
@@ -1378,6 +1378,9 @@ pacman::p_load(
 ???
 This is common R, where there are many ways do a task. Our job is boil it all down and share with you the easiest and most simple approaches.  
 
+
+
+
 ---
 # Importing data with {rio}  
 
@@ -1408,6 +1411,46 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "functions_pack
 ```
 ]
 
+
+
+---
+# File paths  
+
+.pull-left[
+
+File paths tell R where to look for a file.  
+
+It should connect the *script* to the *dataset*.
+
+]
+
+.pull-right[
+
+* `r emo::ji("folder")` C:Users  
+  * `r emo::ji("folder")` Laura  
+      * `r emo::ji("folder")` Documents  
+          * `r emo::ji("folder")` intro_course  
+               * `r emo::ji("document")` **linelist.csv**
+               * `r emo::ji("document")` **analysis.R**
+
+
+]
+
+This path says to start at C: and go to the folders "Users", "Laura", "Documents"...  
+
+```{r, eval=F, echo=T}
+import("C:\Users\Laura\Documents\intro_course\data\clean\linelist.csv")
+```
+
+--
+But will this "absolute" file path work on *your* computer? Mostly likely not, because you do not have a "Laura" folder.  
+
+--
+
+"RStudio projects" allow analyses to be portable between computers.  
+
+
+
 ---
 # RStudio projects  
 
@@ -1424,6 +1467,9 @@ It is a folder with all the files associated with a distinct project:
 * etc.
 
 This makes your life immensely easier.  
+
+The project is represented by a .Rproj file in the folder.  
+
 ]
 
 .pull-right[
@@ -1433,32 +1479,49 @@ This makes your life immensely easier.
 # It dynamically creates the ../../etc filepath.
 knitr::include_graphics(xfun::relative_path(here::here("images", "functions_packages", "project_briefcase.png")))
 ```
+
 ]
 
 ???
 We will help 
 You can zip the folder and share it with a colleague, it can be hosted on a shared drive, and can be synced with a Github repository.  
 
+
+
 ---
-# File paths  
+# RStudio projects  
 
-Let's try to import a dataset "linelist.csv" into R!  
+.pull-left[
+
+Using R projects, the file path *before* the R project folder is flexible.  
+
+]
+
+.pull-right[
+
+* `r emo::ji("folder")` intro_course (R project folder)  
+     * intro_course.Rproj  
+     * `r emo::ji("document")` **linelist.csv**
+     * `r emo::ji("document")` **my_analysis.R**
+]
 
 --
 
-Will this "absolute" file path work on your computer? Or will it "break"?  
+The command **`import("linelist.csv")`** used in an R project...  
 
-```{r, eval=F, echo=T}
-import("C:\Users\Laura\Documents\intro_course\data\clean\linelist.csv")
-```
+...produces this file path on Laura's computer:  
 
---
-
-Mostly likely, it will not work.  
+`"C:\Users\Laura\Documents\`**intro_course\linelist.csv"**  
 
 --
 
-This is why we use RStudio project & the {here} package for relative file paths  
+...and produces *this* on Rajiv's Mac computer:  
+
+`"home/Rajiv/docs/`**intro_course/linelist.csv"**  
+
+
+
+
 
 
 ---
@@ -1466,9 +1529,13 @@ This is why we use RStudio project & the {here} package for relative file paths
 
 .pull-left[
 
-With {here}, file paths are ***relative* to the RStudio project root folder**.  
+But what if your script and data are in different subfolders?  
 
-The path *begins* at the R project. Everything before is flexible.  
+Normally, to connect the script and the data you would need to use (..) to backtrace 
+
+"../data/clean/linelist.csv"  
+
+And, if you moved your script, this "fragile" path would break.  
 
 
 ]
@@ -1478,27 +1545,57 @@ The path *begins* at the R project. Everything before is flexible.
 * `r emo::ji("folder")` intro_course (R project folder)  
      * intro_course.Rproj  
      * .here  
+     * `r emo::ji("folder")` scripts
+          * `r emo::ji("document")` **linelist.csv**
      * `r emo::ji("folder")` data  
           * `r emo::ji("folder")` clean  
                * `r emo::ji("document")` **linelist.csv**
-          * `r emo::ji("folder")` raw  
-     * `r emo::ji("folder")` scripts
+
+
 ]
 
+
+
+
+---
+# {here}  
+
+.pull-left[
+
+With {here}, file paths always start from the project **root (top) folder**.  
+
+The path is *relative to* the project root.  
+
+If you move your script, the path does not break.  
+
+
+]
+
+.pull-right[
+
+* `r emo::ji("folder")` intro_course (R project folder)  
+     * intro_course.Rproj  
+     * .here  
+     * `r emo::ji("folder")` scripts
+          * `r emo::ji("document")` **linelist.csv**
+     * `r emo::ji("folder")` data  
+          * `r emo::ji("folder")` clean  
+               * `r emo::ji("document")` **linelist.csv**
+
+
+]
+
+
 --
 
-The command **`here("data", "clean", "linelist.csv")`**  
+**From any** location within the R project, this path with find the linelist:  
 
-produces this file path on Laura's computer:  
+**`here("data", "clean", "linelist.csv")`**  
 
-`"C:\Users\Laura\Documents\intro_course\data\clean\linelist.csv"`  
 
---
 
-and produces *this* on Rajiv's Mac computer:  
 
-`"home/Rajiv/docs/intro_course/data/clean/linelist.csv"`  
-
+  
 
 
 ---
@@ -1506,14 +1603,13 @@ and produces *this* on Rajiv's Mac computer:
 
 Finally, we can combine `import()` and `here()` to create a command that is truly versatile:  
 
+We can send this RStudio project to a colleague, and this command will import the data even if the script is moved in the project.  
+
 ```{r, echo=T, eval=F}
 import(here("data", "clean", "linelist.csv"))
 ```
 
-It is also agnostic in terms of slash direction ( / vs. \\ )  
-
-We can zip this R project and email to a colleague, and this command will correctly import the data no matter where the R project is stored on their computer.  
-
+Note: {here} is also agnostic in terms of slash direction ( / on Mac vs. \\ on Windows)  
 
 .footnote[
 See the [EpiRHandbook section on here package](https://epirhandbook.com/import-and-export.html?q=here#here) and on [EpiRHandbook section on importing data](https://epirhandbook.com/en/import-and-export.html)
