@@ -731,7 +731,7 @@ Note stretch breaks throughout.
 --
 
 - **The exercises are long** - it is OK if you do not finish. We want to know how long they take.  
-- **The complete code is available to you** in the "learning_materials/backup" folder  
+- **The complete code is available to you** in the "scripts/backup" folder  
 
 --
 

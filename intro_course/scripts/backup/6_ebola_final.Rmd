@@ -38,21 +38,21 @@ pacman::p_load(
 # Import each dataset
 
 # surveillance
-surv_raw <- import(here("intro_course", "surveillance_linelist_20141201.csv"))
+surv_raw <- import(here("surveillance_linelist_20141201.csv"))
 
 # hospital datasets
-hosp_central  <- import(here("intro_course", "data", "raw", "hospitals", "backup", "20141201_hosp_central.csv"))
-hosp_military <- import(here("intro_course", "data", "raw", "hospitals", "backup", "20141201_hosp_military.csv"))
-hosp_other    <- import(here("intro_course", "data", "raw", "hospitals", "backup", "20141201_hosp_other.csv"))
-hosp_port     <- import(here("intro_course", "data", "raw", "hospitals", "backup", "20141201_hosp_port.csv"))
-hosp_smmh     <- import(here("intro_course", "data", "raw", "hospitals", "backup", "20141201_hosp_smmh.csv"))
-hosp_missing  <- import(here("intro_course", "data", "raw", "hospitals", "backup", "20141201_hosp_missing.csv"))
+hosp_central  <- import(here("data", "raw", "hospitals", "20141201_hosp_central.csv"))
+hosp_military <- import(here("data", "raw", "hospitals", "20141201_hosp_military.csv"))
+hosp_other    <- import(here("data", "raw", "hospitals", "20141201_hosp_other.csv"))
+hosp_port     <- import(here("data", "raw", "hospitals", "20141201_hosp_port.csv"))
+hosp_smmh     <- import(here("data", "raw", "hospitals", "20141201_hosp_smmh.csv"))
+hosp_missing  <- import(here("data", "raw", "hospitals", "20141201_hosp_missing.csv"))
 
 # laboratory dataset
-lab <- import(here("intro_course", "data", "raw", "lab_results_20141201.xlsx"))
+lab <- import(here("data", "raw", "lab_results_20141201.xlsx"))
 
 # case investigation dataset
-investigations <- import(here("intro_course", "data", "raw", "case_investigations_20141201.xlsx"))
+investigations <- import(here("data", "raw", "case_investigations_20141201.xlsx"))
 ```
 
 

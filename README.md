@@ -16,10 +16,6 @@ training, and support. Our [Epidemiologist R
 Handbook](www.epirhandbook.com) is a free R reference manual which has
 been used by 130,000 people around the world.
 
-# Course outline
-
-Click here to download the course outline (PDF) TODO
-
 # Initial setup
 
 Follow these step-by-step instructions to download the course files,

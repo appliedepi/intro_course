@@ -28,9 +28,11 @@ pacman::p_load(
 
 # import raw data
 #################
+# Note that the "backup" folder in this path may need to be deleted
 surv_raw <- import(here("data", "raw", "backup", "surveillance_linelist_20141201.csv"))
 
 # hospital datasets
+# Note that the "backup" folder in this path may need to be deleted
 hosp_central  <- import(here("data", "raw", "hospitals", "backup", "20141201_hosp_central.csv"))
 hosp_military <- import(here("data", "raw", "hospitals", "backup", "20141201_hosp_military.csv"))
 hosp_other    <- import(here("data", "raw", "hospitals", "backup", "20141201_hosp_other.csv"))
