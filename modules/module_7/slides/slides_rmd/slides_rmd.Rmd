@@ -120,17 +120,17 @@ style_mono_accent(
 
 --
 
-* Make an R Markdown script conducive to automatic updates with refreshed data  
+* Make the R Markdown script dynamically conducive to data updates  
 
 --
 
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
   ~Time, ~Location, ~Topic,
-  "0900-0930",     "Main",      "R markdown demonstration",
-  "0930-1000",     "Main",      "R markdown syntax",
-  "1000-1200",     "Breakouts", "Create your Ebola situation report",
-  "1200-1230",     "Main",      "Plenary debrief"
+  "15 minutes",     "Main",      "R markdown demonstration",
+  "30 minutes",     "Main",      "R markdown syntax",
+  "2 hours",        "Breakouts", "Create your Ebola situation report",
+  "30 minutes",     "Main",      "Plenary debrief"
 )
 
 outline %>% 
@@ -643,6 +643,14 @@ and for survey analysis:
 - Retrospective mortality and access to care  
 - Vaccination coverage  
 - Malnutrition  
+
+
+
+---
+# Breakouts  
+
+
+
 
 
 

@@ -145,20 +145,18 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "grouping", "Gr
 # Today: objectives & schedule  
 
 **In this module we aim to help you:**  
-* Gain familiarity of {dplyr} functions used to organize data in groups  
-* Learn 3 methods for creating descriptive summary tables  
+* Practice using {dplyr} to summarise data with versatility  
+* Practice using {janitor} to quickly create simple tabulations  
+* Practice using {gtsummary} to make publication-ready tables  
 * Make tables of printable quality and export as PNG, Word, etc.  
-
-TODO
 
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
   ~Time, ~Location, ~Topic,
-  "20 minutes",     "Main",      "Welcome, course logistics, Why R?",
-  "10 minutes",     "Main",      "Demo: RStudio tour and basic R syntax",
-  "20 minutes",     "Main",      "Function, packages, file paths, importing",
-  "1h 45 minutes",  "Breakouts", "Exercise",
-  "20 minutes",     "Main",      "Plenary debrief"
+  "20 minutes",     "Main",      "Approaches for grouping and summarizing data",
+  "15 minutes",     "Main",      "Demo: making tables",
+  "2 hours",        "Breakouts", "Exercise",
+  "20 minutes",     "Main",      "Plenary debrief & {flextable} demo (if time)"
 )
 
 outline %>% 
@@ -1010,7 +1008,7 @@ See tips on customization in the [Epi R Handbook chapter on Descriptive tables](
 ```{r, echo=F, eval=T}
 surv %>% 
   select(age_years, hospital, gender) %>%   
-  tbl_summary(by = gender)                                      #<<
+  tbl_summary(by = gender)   #<<
 ```
 
 ]

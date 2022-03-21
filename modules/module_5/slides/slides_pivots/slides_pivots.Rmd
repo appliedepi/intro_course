@@ -331,7 +331,7 @@ example %>%
   #flextable::color(i = 1:3, j = 1:5, "white", part = "body")    # white text
 ```
 
-* These rows will be duplicated  
+* These **identifiers will be replicated**  
 
 ]
 
@@ -358,7 +358,7 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "joins_pivots",
 ```
 
 * List the columns to pivot  
-* Provide 2 **new** column names  
+* Provide 2 **new column names**  
 
 ]
 
@@ -457,8 +457,20 @@ example %>%
 ---
 # Pivoting wider  
 
----
-# Pivoting wider  
+We won't cover pivoting wider in this course, because it is not as frequently used. 
+
+You can explore several examples in these Epi R Handbook chapters:  
+
+* [Pivoting data](https://epirhandbook.com/en/pivoting-data.html#long-to-wide)  
+* [Descriptive tables with {dplyr}](https://epirhandbook.com/en/descriptive-tables.html#tbls_pivot_wider)  
+
+```{r, eval = TRUE, echo = FALSE, out.height = "100%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+knitr::include_graphics(xfun::relative_path(here::here("images", "joins_pivots", "pivot_wider_new.png")))
+```
+
 
 
 

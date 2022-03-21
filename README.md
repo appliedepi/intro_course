@@ -242,10 +242,17 @@ accurate epidemic curve, conveying three continuous variables with a
 heat plot, and creating age/sex pyramids to convey demographics.
 
 -   [Slides: Epidemic curves in ggplot2]() TODO  
+
 -   [Slides: Heat plots in ggplot2]() TODO  
+
 -   [Slides: Age/sex pyramids in ggplot2]() TODO  
+
 -   [Slides: GIS
     demonstration](https://appliedepi.github.io/intro_course/modules/module_6/slides/slides_gis_demo/slides_gis_demo.html)
+
+-   Exercise:
+
+<img src="images/README_images/pointer_tutorial_adv_ggplot.png" width="50%" />
 
 ## Module 7: Routine reports with R Markdown
 
@@ -276,18 +283,24 @@ skills and teaching you how to review others’ code. Before closing, we
 touch upon how to find your particular community of R users, resources
 available to you for questions, and close with a feedback survey.
 
--   [Slides: COVID case study]() TODO  
--   [Slides: Code review]() TODO
+-   [Slides: COVID case
+    study](https://appliedepi.github.io/intro_course/modules/module_8/slides/slides_covid_case_study/slides_covid_case_study.html)  
+-   Exercise materials: See the folder
+    “learning_materials/covid_case_study” for the Word document report
+    to replicate, the data, and a tip sheet.  
+-   [Slides: Code review]() TODO  
+-   Code review guide TODO
 
 ## Sustained support
 
 Our instructors *know* public health. One of the signature features of
 Applied Epi’s training is that we provide follow-up support to your
-team, to help you apply your new skills to your work context. We
-schedule 1.5-hour sessions with your team at 1 week, 2 weeks, 1 month, 2
-months, and 3 months post-training. In these sessions, we help you
-troubleshoot code, advise you on analytical strategies, or guide you in
-new learning that you need.
+team, to help you apply your new skills to your work context.
+
+We schedule 1.5-hour sessions with your team at 1 week, 2 weeks, 1
+month, 2 months, and 3 months post-training. In these sessions, we help
+you troubleshoot code, advise you on analytical strategies, or guide you
+in new learning that you need.
 
 ## Notes
 
@@ -299,14 +312,14 @@ new learning that you need.
 
 # Acknowledgements
 
-Authors and contributors to the curriculum from **Applied Epi**
-included:
+Authors and contributors to this course curriculum from **Applied Epi**
+include:
 
 -   Neale Batra  
 
--   Mathilde Mousset  
-
 -   Arran Hamlet  
+
+-   Mathilde Mousset  
 
 -   Alex Spina  
 

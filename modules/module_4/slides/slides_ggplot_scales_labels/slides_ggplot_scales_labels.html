@@ -5,7 +5,6 @@
     <meta charset="utf-8" />
     <meta name="author" content="March 2022" />
     <script src="libs/header-attrs/header-attrs.js"></script>
-    <link href="libs/tabwid/tabwid.css" rel="stylesheet" />
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -71,70 +70,6 @@ class: center, middle, inverse, title-slide
 &lt;/style&gt;
 
 
-# Today: objectives &amp; schedule  
-
-**In this module we aim to help you:**  
-* Understand the {ggplot2} "Grammar of graphics"  
-* Build simple box/scatter/bar plots and histograms  
-* Adjust the scales, themes, and labels of the plots  
-
-
-
-&lt;template id="5757c1df-ac20-4a80-a165-fa00d8d83691"&gt;&lt;style&gt;
-.tabwid table{
-  border-spacing:0px !important;
-  border-collapse:collapse;
-  line-height:1;
-  margin-left:auto;
-  margin-right:auto;
-  border-width: 0;
-  display: table;
-  margin-top: 1.275em;
-  margin-bottom: 1.275em;
-  border-color: transparent;
-}
-.tabwid_left table{
-  margin-left:0;
-}
-.tabwid_right table{
-  margin-right:0;
-}
-.tabwid td {
-    padding: 0;
-}
-.tabwid a {
-  text-decoration: none;
-}
-.tabwid thead {
-    background-color: transparent;
-}
-.tabwid tfoot {
-    background-color: transparent;
-}
-.tabwid table tr {
-background-color: transparent;
-}
-&lt;/style&gt;&lt;div class="tabwid"&gt;&lt;style&gt;.cl-b7109816{}.cl-b709b974{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-b709e03e{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-b70a0794{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b70a0795{width:209.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b70a0796{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b70a0797{width:209.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b70a0798{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b70a0799{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b70a079a{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b70a079b{width:209.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b70a079c{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b70a079d{width:209.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b70a079e{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b70a2ee0{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b70a2ee1{width:209.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b70a2ee2{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b70a2ee3{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b70a2ee4{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b70a2ee5{width:209.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b70a2ee6{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b70a2ee7{width:209.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b70a2ee8{width:73.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b70a2ee9{width:70.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-b7109816'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-b70a2ee8"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;Time&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-b70a2ee9"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;Location&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-b70a2ee7"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;Topic&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-b70a0796"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;0900-0930&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-b70a0794"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;Main&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-b70a0795"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;{ggplot2} 'Grammar of graphics' syntax&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-b70a0798"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;0930-0945&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-b70a0799"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;Main&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-b70a0797"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;Live demonstration&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-b70a079c"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;1000-1100&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-b70a079a"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;Breakouts&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-b70a079b"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;Practice making simple plots&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-b70a079e"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;1110-1130&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-b70a2ee0"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;Main&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-b70a079d"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;Scales, themes, and labels&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-b70a079c"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;1130-1220&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-b70a079a"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;Breakouts&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-b70a079b"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;Adjusting plots&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-b70a2ee2"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;1220-1230&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-b70a2ee3"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;Main&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-b70a2ee1"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;Plenary debrief&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;tfoot&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td  colspan="3"class="cl-b70a2ee6"&gt;&lt;p class="cl-b709e03e"&gt;&lt;span class="cl-b709b974"&gt;Breaks are incorporated above, but not shown as rows&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;&lt;/table&gt;&lt;/div&gt;&lt;/template&gt;
-&lt;div class="flextable-shadow-host" id="fb97d63f-8958-4355-8d0e-0b5a6b1bd008"&gt;&lt;/div&gt;
-&lt;script&gt;
-var dest = document.getElementById("fb97d63f-8958-4355-8d0e-0b5a6b1bd008");
-var template = document.getElementById("5757c1df-ac20-4a80-a165-fa00d8d83691");
-var caption = template.content.querySelector("caption");
-if(caption) {
-  caption.style.cssText = "display:block;text-align:center;";
-  var newcapt = document.createElement("p");
-  newcapt.appendChild(caption)
-  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
-}
-var fantome = dest.attachShadow({mode: 'open'});
-var templateContent = template.content;
-fantome.appendChild(templateContent);
-&lt;/script&gt;
-
-
-
-
-
 
 
 ---
@@ -182,30 +117,6 @@ class: inverse, center, middle
 
 &lt;img src="../../../../images/ggplot_scales_themes/scales.png" width="50%" /&gt;
 
-
-
-
----
-# Scales - overview  
-
-Scale commands replace defaults for how aesthetics are displayed such as:  
-* *Which* colors or shapes to display  
-* *How* date or proportions are written in axis labels  
-* The min/max and frequency of axes breaks  
-
---
-
-As a generic formula, these commands are written as: **`scale_AESTHETIC_METHOD()`**.  
-
-1) `scale_` : this prefix never changes  
-
---
-
-2) AESTHETIC: `_fill_` , `_color_` , `_x_` , `_y_` , etc.  
-
---
-
-3) METHOD: `_continuous()`, `_discrete()`, `_manual()`, `_date()`, etc.  
 
 
 
@@ -282,7 +193,7 @@ Above, the fill of a bar plot uses the **default colors and axis breaks**:
 
 .pull-right[
 
-&lt;img src="slides_ggplot_scales_labels_files/figure-html/unnamed-chunk-15-1.png" width="504" /&gt;
+&lt;img src="slides_ggplot_scales_labels_files/figure-html/unnamed-chunk-14-1.png" width="504" /&gt;
 
 ]
 
@@ -318,7 +229,7 @@ within a vector `c()`.
 
 .pull-right[
 
-&lt;img src="slides_ggplot_scales_labels_files/figure-html/unnamed-chunk-17-1.png" width="504" /&gt;
+&lt;img src="slides_ggplot_scales_labels_files/figure-html/unnamed-chunk-16-1.png" width="504" /&gt;
 ]
 
 ???
@@ -355,7 +266,7 @@ Use `scale_fill_brewer()` for pleasant palettes
 
 .pull-right[
 
-&lt;img src="slides_ggplot_scales_labels_files/figure-html/unnamed-chunk-19-1.png" width="504" /&gt;
+&lt;img src="slides_ggplot_scales_labels_files/figure-html/unnamed-chunk-18-1.png" width="504" /&gt;
 ]
 
 ???
@@ -392,7 +303,7 @@ In `scale_y_continuous()` we adjust the y-axis breaks using `seq()` to define a 
 
 .pull-right[
 
-&lt;img src="slides_ggplot_scales_labels_files/figure-html/unnamed-chunk-21-1.png" width="504" /&gt;
+&lt;img src="slides_ggplot_scales_labels_files/figure-html/unnamed-chunk-20-1.png" width="504" /&gt;
 
 ]
 
@@ -432,7 +343,7 @@ In `scale_x_` or `scale_y_` commands, use `expand = c(0,0)` to remove excess spa
 
 .pull-right[
 
-&lt;img src="slides_ggplot_scales_labels_files/figure-html/unnamed-chunk-23-1.png" width="504" /&gt;
+&lt;img src="slides_ggplot_scales_labels_files/figure-html/unnamed-chunk-22-1.png" width="504" /&gt;
 
 ]
 
@@ -458,7 +369,7 @@ The default scale for date axes will vary by the range of your data.
 
 .pull-right[
 
-&lt;img src="slides_ggplot_scales_labels_files/figure-html/unnamed-chunk-25-1.png" width="504" /&gt;
+&lt;img src="slides_ggplot_scales_labels_files/figure-html/unnamed-chunk-24-1.png" width="504" /&gt;
 
 ]
 
@@ -496,7 +407,7 @@ Use `date_breaks=` values like "1 week", "2 weeks", or "3 months".
 
 .pull-right[
 
-&lt;img src="slides_ggplot_scales_labels_files/figure-html/unnamed-chunk-27-1.png" width="504" /&gt;
+&lt;img src="slides_ggplot_scales_labels_files/figure-html/unnamed-chunk-26-1.png" width="504" /&gt;
 
 ]
 
@@ -539,7 +450,7 @@ Specify date label format to `date_labels=` using
 
 .pull-right[
 
-&lt;img src="slides_ggplot_scales_labels_files/figure-html/unnamed-chunk-29-1.png" width="504" /&gt;
+&lt;img src="slides_ggplot_scales_labels_files/figure-html/unnamed-chunk-28-1.png" width="504" /&gt;
 
 ]
 
@@ -575,11 +486,22 @@ The year is not repeated on each label.
 
 .pull-right[
 
-&lt;img src="slides_ggplot_scales_labels_files/figure-html/unnamed-chunk-31-1.png" width="504" /&gt;
+&lt;img src="slides_ggplot_scales_labels_files/figure-html/unnamed-chunk-30-1.png" width="504" /&gt;
 
 ]
 
 
+
+
+
+
+---
+class: inverse, center, middle
+
+## Labels in {ggplot2}  
+
+
+&lt;img src="../../../../images/ggplot_scales_themes/labels.png" width="50%" /&gt;
 
 
 
@@ -671,7 +593,7 @@ str_glue("Data as of {Sys.Date()}")
 ```
 
 ```
-## Data as of 2022-03-20
+## Data as of 2022-03-21
 ```
 
 --

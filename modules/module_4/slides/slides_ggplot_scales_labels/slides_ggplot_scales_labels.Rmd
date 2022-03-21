@@ -137,34 +137,6 @@ surv <- rio::import(here::here("data", "surveillance_linelist_clean_20141201.rds
 ```
 
 
-# Today: objectives & schedule  
-
-**In this module we aim to help you:**  
-* Understand the {ggplot2} "Grammar of graphics"  
-* Build simple box/scatter/bar plots and histograms  
-* Adjust the scales, themes, and labels of the plots  
-
-
-```{r, echo=FALSE, warning=F, message=F}
-outline <- dplyr::tribble(
-  ~Time, ~Location, ~Topic,
-  "0900-0930",     "Main",      "{ggplot2} 'Grammar of graphics' syntax",
-  "0930-0945",     "Main",      "Live demonstration",
-  "1000-1100",     "Breakouts", "Practice making simple plots",
-  "1110-1130",     "Main",      "Scales, themes, and labels",
-  "1130-1220",     "Breakouts", "Adjusting plots",
-  "1220-1230",     "Main",      "Plenary debrief"
-)
-
-outline %>% 
-  flextable::qflextable() %>% 
-  flextable::add_footer_lines("Breaks are incorporated above, but not shown as rows")
-```
-
-
-
-
-
 
 
 ---
@@ -217,30 +189,6 @@ class: inverse, center, middle
 knitr::include_graphics(xfun::relative_path(here::here("images", "ggplot_scales_themes", "scales.png")))
 ```
 
-
-
-
----
-# Scales - overview  
-
-Scale commands replace defaults for how aesthetics are displayed such as:  
-* *Which* colors or shapes to display  
-* *How* date or proportions are written in axis labels  
-* The min/max and frequency of axes breaks  
-
---
-
-As a generic formula, these commands are written as: **`scale_AESTHETIC_METHOD()`**.  
-
-1) `scale_` : this prefix never changes  
-
---
-
-2) AESTHETIC: `_fill_` , `_color_` , `_x_` , `_y_` , etc.  
-
---
-
-3) METHOD: `_continuous()`, `_discrete()`, `_manual()`, `_date()`, etc.  
 
 
 
@@ -762,6 +710,22 @@ theme_grey(base_size = 18)
 ]
 
 
+
+
+
+
+---
+class: inverse, center, middle
+
+## Labels in {ggplot2}  
+
+
+```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+
+knitr::include_graphics(xfun::relative_path(here::here("images", "ggplot_scales_themes", "labels.png")))
+```
 
 
 

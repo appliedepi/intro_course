@@ -154,19 +154,19 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "data_cleaning"
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
   ~Time, ~Location, ~Topic,
-  "15 minutes",     "Main",      "Review of last module",
-  "20 minutes",     "Main",      "Tidy data and data cleaning",
+  "5 minutes",      "Main",       "Review of previous module",
+  "25 minutes",     "Main",      "Tidy data and data cleaning",
   "10 minutes",     "Main",      "Demo - data cleaning", 
-  "1h 45 minutes",  "Breakouts", "Exercise",
-  "20 minutes",     "Main",      "Plenary debrief",
-  "20 minutes",     "Main",      "Demo - dates"
-
+  "2h 15 minutes",  "Breakouts", "Exercise",
+  "20 minutes",     "Main",      "Plenary debrief"
 )
 
 outline %>% 
   flextable::qflextable() %>% 
   flextable::add_footer_lines("Breaks are incorporated above, but not shown as rows")
 ```
+
+**This is a *long* exercise, but very important.**  
 
 ???
 Note stretch breaks throughout.

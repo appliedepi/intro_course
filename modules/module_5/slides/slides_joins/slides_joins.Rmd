@@ -103,19 +103,21 @@ style_mono_accent(
 # Today: objectives & schedule  
 
 **In this module we aim to help you:**  
-* Learn how to join 2 or more tables together:  
-* Learn about the different sort of joins  
-* Choose which columns to use ad keys/identifier  
-* Know how to perform join safely  
+* Learn how to join 2 or more data frame together:  
+* Learn about the different sort of joins and using id key/identifier columns  
+* Practice pivoting data from wide-to-long format to create patient "timelines"  
+* Convert variables to class "factor" with the {forcats} package  
 
 
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
   ~Time, ~Location, ~Topic,
-  "0900-0945",     "Main",      "Welcome, course logistics, Why R?",
-  "0950-1050",     "Main",      "Lecture and live demonstration:\nRStudio tour, R projects, basic R syntax, functions & packages, data import",
-  "1100-1200",     "Breakouts", "Setting up a script, importing data, and reviewing a data frame",
-  "1205-1220",     "Main",      "Debrief"
+  "20 minutes",    "Main",      "Joins",
+  "1h 15 minutes", "Breakout",  "Exercise: Joining data",
+  "15 minutes",    "Main",      "Pivoting data",
+  "1 hour",        "Main",      "Exercise: Pivoting data & Factors",
+  "10 minutes",    "Main",      "Plenary debrief"
+
 )
 
 outline %>% 
@@ -144,35 +146,6 @@ Explain that:
   
 
 ---
-# Today: objectives & schedule  
-
-**In this module we aim to help you:**  
-
-TODO
-
-
-```{r, echo=FALSE, warning=F, message=F}
-outline <- dplyr::tribble(
-  ~Time, ~Location, ~Topic,
-  "20 minutes",     "Main",      "Welcome, course logistics, Why R?",
-  "10 minutes",     "Main",      "Demo: RStudio tour and basic R syntax",
-  "20 minutes",     "Main",      "Function, packages, file paths, importing",
-  "1h 45 minutes",  "Breakouts", "Exercise",
-  "20 minutes",     "Main",      "Plenary debrief"
-)
-
-outline %>% 
-  flextable::qflextable() %>% 
-  flextable::add_footer_lines("Breaks are incorporated above, but not shown as rows")
-```
-
-???
-Note stretch breaks throughout.
-
-
- 
-   
----
 
 # Situation: data is scattered between dataframes
 
@@ -182,7 +155,7 @@ Note stretch breaks throughout.
 Provide examples of situations they might encounter to highlight how common it is: 
 - connect laboratory data to patient clinical outcomes
 - connect patient data with GIS data,
-- connectGoogle mobility data to infectious disease trends
+- connect Google mobility data to infectious disease trends
 - other relevant example for their work hinted by participant survey
 
 ---
@@ -600,7 +573,7 @@ Another good check is to use the `count()` function to count the number of rows 
 ---
 class: inverse, center, middle  
 
-# Stretch break!
+# Breakouts!
 
 ```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
 # Using here() alone won't work because Rmd folder becomes the rendering root.
@@ -610,9 +583,7 @@ class: inverse, center, middle
 knitr::include_graphics(xfun::relative_path(here::here("images", "breakout", "window.png")))
 ```
 
-```{r}
-countdown(minutes = 5, seconds = 00)
-```
+
 
 
 
