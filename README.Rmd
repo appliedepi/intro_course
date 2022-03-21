@@ -223,6 +223,13 @@ In this second data visualization module we encourage you to practice learning R
 - [Slides: Age/sex pyramids in ggplot2]()  TODO  
 - [Slides: GIS demonstration](https://appliedepi.github.io/intro_course/modules/module_6/slides/slides_gis_demo/slides_gis_demo.html)  
 
+
+- Exercise:  
+
+```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
+knitr::include_graphics("images/README_images/pointer_tutorial_adv_ggplot.png")
+```
+
 ## Module 7: Routine reports with R Markdown  
 In this module, we take the R code on the Ebola case study that you have been building throughout the course and convert it into a reproducible, automated report (Word, PDF, HTML, etc.). We teach you the variations in syntax and opportunities that lie in being able to produce documents that update when incoming data is refreshed, that look professional, and can be sent to inform public health partners and stakeholders.  
 
@@ -244,7 +251,9 @@ In this last module, your skills are tested as you have to produce an R Markdown
 - [Slides: Code review]()  TODO  
 
 ## Sustained support  
-Our instructors *know* public health. One of the signature features of Applied Epi's training is that we provide follow-up support to your team, to help you apply your new skills to your work context. We schedule 1.5-hour sessions with your team at 1 week, 2 weeks, 1 month, 2 months, and 3 months post-training. In these sessions, we help you troubleshoot code, advise you on analytical strategies, or guide you in new learning that you need.  
+Our instructors *know* public health. One of the signature features of Applied Epi's training is that we provide follow-up support to your team, to help you apply your new skills to your work context.  
+
+We schedule 1.5-hour sessions with your team at 1 week, 2 weeks, 1 month, 2 months, and 3 months post-training. In these sessions, we help you troubleshoot code, advise you on analytical strategies, or guide you in new learning that you need.  
 
 
 ## Notes  
@@ -255,11 +264,11 @@ Our instructors *know* public health. One of the signature features of Applied E
 
 # Acknowledgements  
 
-Authors and contributors to the curriculum from **Applied Epi** included:  
+Authors and contributors to this course curriculum from **Applied Epi** include:  
 
 * Neale Batra  
-* Mathilde Mousset  
 * Arran Hamlet  
+* Mathilde Mousset  
 * Alex Spina  
 * Paula Blomquist  
 * Amy Mikhail  

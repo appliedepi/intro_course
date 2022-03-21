@@ -1,0 +1,64 @@
+---
+title: "COVID-19 case study tip sheet"
+subtitle: ""
+output: html_document
+theme: sandstone
+date: 'Date revised: 2022-03-20'
+---
+
+
+```{r, echo=FALSE}
+# Put logo in upper-right of document
+htmltools::img(src = knitr::image_uri(here::here("images", "logo.png")), 
+               alt = 'logo', 
+               style = 'position:absolute; top:0; right:0; padding:10px;',
+               width = "200px",
+               heigth = "200px")
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+In this sheet, you will find some hints and tips for re-creating the COVID-19 situation report.  
+
+
+
+## Inline text summary at top of report  
+
+- Think about order of your code. Don't forget that in order to print these text statement with summary statistics inline, those calculations and data cleaning need to happen *above* this text in the Rmd (but not emit any visible output).  
+
+## Page breaks  
+
+To get page breaks when you want them, insert **\\pagebreak** into the Rmd  
+
+
+## Age pyramid  
+
+- Use the {apyramid} package (don't forget to add it to your packages!)  
+- You can add labels like title and caption by adding (+) ggplot commands  
+
+## Weekly epidemic curve, by city  
+
+- Observe how the list of cities (displayed, and in the legend) has been truncated to 5 and "Other"... this was done using `fct_lump_n()`.  
+
+## Cumulative case incidence
+
+- You will need to first `summarise()` the linelist by city. The final column is created by joining the summarised table to the data frame `city_pops`. Then you have the data you need to calculate cases per population. Use `(total_cases / population)* 10000` to calculate the incidence rate per 10000 population. You can use `round()` with `digits = 1` to get the right rounding.  
+
+## Race and outcome  
+
+- This table is produced with {gtsummary} and it's function `tbl_summary()`. Add p-values by piping into `add_p()`. Don't forget to only select the columns you need before sending the data into `tbl_summary()`.  
+
+## General
+
+Review your `setup` chunk near the top and set `echo = FALSE` to not show the code in the output.  
+
+
+
+## Good luck!  
+
+Just do the best you can. This is not a test. It is part of the learning process. 
+     

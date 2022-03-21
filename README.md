@@ -252,9 +252,9 @@ heat plot, and creating age/sex pyramids to convey demographics.
 In this module, we take the R code on the Ebola case study that you have
 been building throughout the course and convert it into a reproducible,
 automated report (Word, PDF, HTML, etc.). We teach you the variations in
-syntax and opportunties that lie in being able to produce documents that
-update when incoming data is refreshed, that look professional, and can
-be sent to inform public health parters and stakeholders.
+syntax and opportunities that lie in being able to produce documents
+that update when incoming data is refreshed, that look professional, and
+can be sent to inform public health partners and stakeholders.
 
 -   Live demonstration [Instructor
     guide](https://appliedepi.github.io/intro_course/modules/module_7/slides/demo_rmd/demo_rmd_guide.html)
