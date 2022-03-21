@@ -142,7 +142,6 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "instructors", 
 President and co-founder, Applied Epi  
 @MSF @WHO @PIH @USAID @Philly @CalEIS  
 </br>
-</br>
 
 * **Paula Blomquist**  
 @PHE @EPIET @WHO @UK-PHRST
