@@ -38,21 +38,21 @@ pacman::p_load(
 # Import each dataset
 
 # surveillance
-surv_raw <- rio::import(here("data", "surveillance_linelist_12012014.csv"))
+surv_raw <- import(here("data", "raw", "surveillance_linelist_12012014.csv"))
 
 # hospital datasets
-hosp_central  <- rio::import(here("intro_course", "data", "raw", "hospitals", "20141201_hosp_central.csv"))
-hosp_military <- rio::import(here("intro_course", "data", "raw", "hospitals", "20141201_hosp_military.csv"))
-hosp_other    <- rio::import(here("intro_course", "data", "raw", "hospitals", "20141201_hosp_other.csv"))
-hosp_port     <- rio::import(here("intro_course", "data", "raw", "hospitals", "20141201_hosp_port.csv"))
-hosp_smmh     <- rio::import(here("intro_course", "data", "raw", "hospitals", "20141201_hosp_smmh.csv"))
-hosp_missing  <- rio::import(here("intro_course", "data", "raw", "hospitals", "20141201_hosp_missing.csv"))
+hosp_central  <- import(here("intro_course", "data", "raw", "hospitals", "20141201_hosp_central.csv"))
+hosp_military <- import(here("intro_course", "data", "raw", "hospitals", "20141201_hosp_military.csv"))
+hosp_other    <- import(here("intro_course", "data", "raw", "hospitals", "20141201_hosp_other.csv"))
+hosp_port     <- import(here("intro_course", "data", "raw", "hospitals", "20141201_hosp_port.csv"))
+hosp_smmh     <- import(here("intro_course", "data", "raw", "hospitals", "20141201_hosp_smmh.csv"))
+hosp_missing  <- import(here("intro_course", "data", "raw", "hospitals", "20141201_hosp_missing.csv"))
 
 # laboratory dataset
-lab <- rio::import(here("intro_course", "data", "raw", "lab_results_20141201.xlsx"))
+lab <- import(here("intro_course", "data", "raw", "lab_results_20141201.xlsx"))
 
 # case investigation dataset
-investigations <- rio::import(here("intro_course", "data", "raw", "case_investigations_20141201.xlsx"))
+investigations <- import(here("intro_course", "data", "raw", "case_investigations_20141201.xlsx"))
 ```
 
 
@@ -234,7 +234,7 @@ The outbreak of Ebola continues, although reported cases are decreasing in all d
 ## Person
 
 ```{r}
-
+# Age pyramid with ggplot modifications
 age_pyramid(
      data = combined,
      age_group = "age_cat",
@@ -242,18 +242,15 @@ age_pyramid(
      proportional = TRUE,
      show_midpoint = FALSE)+
      
-     theme_minimal()+
+  theme_minimal()+
      
-     labs(title = str_glue("Confirmed cases"),
-          x = "",
-          y = "",
-          caption = str_glue(""),
-          fill = "Gender")+
-     
-     scale_fill_discrete(labels = c("f" = "Female",
-                                    "m" = "Male"))
-
-
+  scale_fill_brewer(type = "qual", palette = 2)+
+  
+  labs(title = str_glue("Age and gender of confirmed cases"),
+       x = "Proportion of all cases",
+       y = "Age group",
+       caption = str_glue("Ebola outbreak"),
+       fill = "Gender")
 ```
 
 ## Time
@@ -261,25 +258,26 @@ age_pyramid(
 ```{r}
 
 # define weekly breaks from Monday before first case
-# Sequence of weekly Monday dates for CENTRAL HOSPITAL
 
-# Monday prior to first case
-monday_floor <- floor_date(min(combined$date_onset, na.rm=T),   "week", week_start = 1)
+# Define and save the vector
+ebola_weeks <- seq.Date(
+  from = floor_date(min(combined$date_onset, na.rm=T), unit = "week", week_start = 1),
+  to =   ceiling_date(max(combined$date_onset, na.rm=T), unit = "week", week_start = 1),
+  by =   "week")
 
-# Monday after last case
-monday_ceiling <- ceiling_date(max(combined$date_onset, na.rm=T), "week", week_start = 1)
 
-# define sequence of Mondays for histogram breaks
-weekly_breaks <- seq.Date(
-  from = monday_floor, # monday before first case
-  to   = monday_ceiling, # monday after last case
-  by   = "week")
+# Run the plot, using the vector
+ggplot(data = combined, aes(x = date_onset)) +
+  geom_histogram(breaks = ebola_weeks, closed = "left") +
+  labs(x = "Date of onset", y = "Incidence") +
+  theme_bw()
+
 
 # Make epidemic curve
 ggplot(data = combined)+
        geom_histogram(
-          mapping = aes(x = date_hospitalisation),
-          breaks = weekly_breaks,
+          mapping = aes(x = date_onset),
+          breaks = ebola_weeks,
           closed = "left")+
      
        # x-axis labels
@@ -305,9 +303,9 @@ ggplot(data = combined)+
        labs(
          title    = "Weekly incidence of cases (Monday weeks)",
          subtitle = "",
-         x        = "Week of hospitalisation",
+         x        = "Week of symptom onset",
          y        = "Weekly incident cases reported",
-         caption  = stringr::str_glue("n = {nrow(combined)} combined; Hospitalisations range from {format(min(combined$date_onset, na.rm=T), format = '%a %d %b %Y')} to {format(max(combined$date_onset, na.rm=T), format = '%a %d %b %Y')}\n{nrow(combined %>% filter(is.na(date_onset)))} combined missing date of onset and not shown"))
+         caption  = stringr::str_glue("n = {nrow(combined)} confirmed cases; Onsets range from {format(min(combined$date_onset, na.rm=T), format = '%a %d %b %Y')} to {format(max(combined$date_onset, na.rm=T), format = '%a %d %b %Y')}\n{nrow(combined %>% filter(is.na(date_onset)))} missing date of onset and not shown"))
 ```
 
 ## Place
@@ -320,99 +318,3 @@ combined %>%
      mutate(percent = scales::percent(percent, 1)) %>% 
      qflextable()
 ```
-
-<!-- ```{r} -->
-
-<!-- # Clean medical linelist -->
-
-<!-- ######################## -->
-
-<!--              # bind together the different hospital files -->
-
-<!-- med_clean <- bind_rows(central, military, missing, smmh, port, other) %>%   -->
-
-<!--      # clean column names - lowercase, underscores, etc. -->
-
-<!--      clean_names() %>% -->
-
-<!--      # rename -->
-
-<!--      rename( # NEW name    # OLD name -->
-
-<!--              date_hospitalisation = "hospitalisation_date", -->
-
-<!--              date_outcome = "outcome_date", -->
-
-<!--              time_admission = "admission_time") %>% -->
-
-<!--      # deduplicate -->
-
-<!--      distinct() %>%  -->
-
-<!--      # Make new columns -->
-
-<!--      mutate( -->
-
-<!--           across(contains("date"), ymd), -->
-
-<!--           hour_admit = hour(strptime(time_admission, format = "%H:%M")),  -->
-
-<!--           time_period = case_when( -->
-
-<!--               hour_admit > 06  & hour_admit < 12 ~ "Morning", -->
-
-<!--               hour_admit >= 12 & hour_admit < 17 ~ "Afternoon", -->
-
-<!--               hour_admit >= 17 & hour_admit < 21 ~ "Evening", -->
-
-<!--               hour_admit >= 21 | hour_admit <= 6 ~ "Night")) -->
-
-<!-- ``` -->
-
-<!-- ```{r} -->
-
-<!-- # Clean case investigation dataset -->
-
-<!-- ################################## -->
-
-<!-- source_clean <- source_raw %>%  -->
-
-<!--      # clean column names - lowercase, underscores, etc. -->
-
-<!--      clean_names() %>% -->
-
-<!--      # rename -->
-
-<!--      rename( # NEW name    # OLD name -->
-
-<!--              date_infection = "infection_date") %>% -->
-
-<!--      # deduplicate -->
-
-<!--      distinct() %>%  -->
-
-<!--      # Make new columns -->
-
-<!--      mutate(across(contains("date"), ymd)) -->
-
-<!-- ``` -->
-
-<!-- ```{r} -->
-
-<!-- # Clean lab dataset -->
-
-<!-- ################### -->
-
-<!-- lab_clean <- lab_raw %>%  -->
-
-<!--      # clean column names - lowercase, underscores, etc. -->
-
-<!--      clean_names() %>% -->
-
-<!--      # deduplicate -->
-
-<!--      distinct() -->
-
-<!-- # TODO could put TRUE/FALSE here with some higher than 40 -->
-
-<!-- ``` -->

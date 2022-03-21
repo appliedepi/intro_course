@@ -53,17 +53,7 @@ The purpose of the coding demo now is to show only simply **how R code runs** - 
 # Tour of RStudio  
 1. **R projects**
      * **Adjust the zoom** so the text is readable by the audience. Confirm with one of the assistants.  
-          * Note the **R project icon/drop-down in the upper-right**, which should say "Project: (None)".  
-          * Note that one can begin working without a project, but we recommend using R projects  
-     * **Open a new R project** (click through to standard and save in a **NEW directory**).  
-          * **Save it** as "*intro_course*" in a pre-prepared location near where you have saved the course files.  
-          * **Show the file explorer** and the new R project folder, and the .Rproj file.  
-          * **Explain the benefits of working in an R project**  
-               * An R project is like a self-contained briefcase or folder for all your project's files (data, scripts, outputs)  
-               * This reduces likelihood of broken file paths  
-               * It can be easily zipped and shared by email, or shared on sites like Github  
-     * **Close RStudio, and re-open the project** by clicking the .Rproj file.  
-          * Note the name of the project appears in the upper-right of RStudio. 
+         
      * **Open a new R script**.  
           * Explain that this is where you will write code commands.  
           * Save it as "*demo.R*".  
@@ -115,7 +105,7 @@ The purpose of the coding demo now is to show only simply **how R code runs** - 
 </br>
 
 2. **Define numeric object**  
-     * Explain that one reason R is powerful is its ability to save many datasets at once.  
+     * Explain that one reason R is powerful is its ability to save many datasets or values.  
      * Explain that you are going to define an object, and discuss R's "assignment operator" `<-`.  
      * Explain that it is **like an arrow** and takes the **value** of the right side, and assigns it to the **name** on the left.  
      * The assignment operator can be used to **create** an object, or to re-assign its value:  

@@ -140,12 +140,12 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "instructors", 
 
 * **Neale Batra**
 President and co-founder, Applied Epi  
-@MSF @WHO @CDC @USAID @Philly @CalEIS  
+@MSF @WHO @PIH @USAID @Philly @CalEIS  
 </br>
 </br>
 
 * **Paula Blomquist**  
-@PHE @EPIET @WHO @PHRST
+@PHE @EPIET @WHO @UK-PHRST
 </br>
 </br>
 
@@ -660,15 +660,15 @@ outline <- dplyr::tribble(
   "5", "We 23/3",  "Transforming data with joins and pivots",
   "6", "We 23/3",  "Heat plots, epi curves, age/sex pyramids, GIS demo",
   "7", "Th 24/3",  "R Markdown reports",
-  "8", "Th 24/3",  "Real-life exercise"
+  "8", "Th 24/3",  "COVID-19 exercise"
 )
 
 outline %>% 
   flextable::qflextable()
 ```
 
-- Each module will begin with a brief review of the previous module, and will end with a plenary debrief.  
-- Between modules, you will be asked to write answers to two self-reflective questions in the [Applied Epi Community](www.community.appliedepi.org) class thread.  
+- Each module will end with a plenary debrief.  
+- After each day, you will be asked to write answers to reflective questions in the [Applied Epi Community](www.community.appliedepi.org) class thread.  
 
 
 ---
@@ -683,11 +683,11 @@ outline %>%
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
   ~Time, ~Location, ~Topic,
-  "20 minutes",     "Main",      "Welcome, course logistics, Why R?",
+  "30 minutes",     "Main",      "Welcome, course logistics, Why R?",
   "10 minutes",     "Main",      "Demo: RStudio tour and basic R syntax",
   "20 minutes",     "Main",      "Function, packages, file paths, importing",
   "1h 45 minutes",  "Breakouts", "Exercise",
-  "20 minutes",     "Main",      "Plenary debrief"
+  "15 minutes",     "Main",      "Plenary debrief"
 )
 
 outline %>% 
@@ -703,13 +703,13 @@ Note stretch breaks throughout.
 # Data used in this course  
 
 * Ebola case study  
-     * Surveillance linelist  
+     * **Surveillance linelist** (primary dataset)  
      * Hospital linelists from 5 hospitals  
      * Aggregated case counts from one hospital  
      * Case investigation dataset  
      * Lab dataset  
 
-* Near the end of the course, you will apply your skills to a COVID dataset  
+* Near the end of the course, you will apply your skills to a COVID-19 dataset  
 
 .footnote[All data are not real. All files can be found in the course folder.]  
 
@@ -727,6 +727,11 @@ Note stretch breaks throughout.
 --
 
 - **Screen fatigue is real** - you are welcome to turn off your video, but please try to keep video on in breakout discussions  
+
+--
+
+- **The exercises are long** - it is OK if you do not finish. We want to know how long they take.  
+- **The complete code is available to you** in the "learning_materials/backup" folder  
 
 --
 
@@ -795,6 +800,8 @@ We are in this course to succeed, together
 class: inverse, center, middle  
 
 # Stretch break!
+
+(and time to ask questions)  
 
 ```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
 # Using here() alone won't work because Rmd folder becomes the rendering root.
@@ -1381,6 +1388,28 @@ This is common R, where there are many ways do a task. Our job is boil it all do
 
 
 
+
+---
+# File management  
+
+R is not just about coding - you must know how to organize your files too.  
+
+In the past, R users were often frustrated by not being able to import their data into R.  
+
+--
+
+In the last 3-5 years, several advancements have made this process easier:  
+
+* **The {rio} package** for importing data  
+* **"RStudio projects"** for holding files  
+* **The {here} package** for file paths   
+
+Knowing the details of how they work is not so important.  
+But know that using these three tools together prevents a lot of headache.  
+
+
+
+
 ---
 # Importing data with {rio}  
 
@@ -1419,8 +1448,6 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "functions_pack
 .pull-left[
 
 File paths tell R where to look for a file.  
-
-It should connect the *script* to the *dataset*.
 
 ]
 
@@ -1529,13 +1556,9 @@ The command **`import("linelist.csv")`** used in an R project...
 
 .pull-left[
 
-But what if your script and data are in different subfolders?  
+If your script and data are in different subfolders, it can cause problems.  
 
-Normally, to connect the script and the data you would need to use (..) to backtrace 
-
-"../data/clean/linelist.csv"  
-
-And, if you moved your script, this "fragile" path would break.  
+E.g. if you move your script, the file path to the data can break.  
 
 
 ]
@@ -1553,42 +1576,11 @@ And, if you moved your script, this "fragile" path would break.
 
 
 ]
-
-
-
-
----
-# {here}  
-
-.pull-left[
-
-With {here}, file paths always start from the project **root (top) folder**.  
-
-The path is *relative to* the project root.  
-
-If you move your script, the path does not break.  
-
-
-]
-
-.pull-right[
-
-* `r emo::ji("folder")` intro_course (R project folder)  
-     * intro_course.Rproj  
-     * .here  
-     * `r emo::ji("folder")` scripts
-          * `r emo::ji("document")` **linelist.csv**
-     * `r emo::ji("folder")` data  
-          * `r emo::ji("folder")` clean  
-               * `r emo::ji("document")` **linelist.csv**
-
-
-]
-
 
 --
 
-**From any** location within the R project, this path with find the linelist:  
+Using {here}, file paths always start from the project **root (top) folder** ("relative").  
+**Run from any** location within the R project, this path will find the linelist.csv  
 
 **`here("data", "clean", "linelist.csv")`**  
 
@@ -1599,17 +1591,33 @@ If you move your script, the path does not break.
 
 
 ---
-# {here} and {rio} together  
-
-Finally, we can combine `import()` and `here()` to create a command that is truly versatile:  
-
-We can send this RStudio project to a colleague, and this command will import the data even if the script is moved in the project.  
+# Projects, {here}, & {rio} together  
 
 ```{r, echo=T, eval=F}
 import(here("data", "clean", "linelist.csv"))
 ```
 
-Note: {here} is also agnostic in terms of slash direction ( / on Mac vs. \\ on Windows)  
+.pull-left[
+
+Finally, by combining `import()` and `here()` in an RStudio project, we create a command that is truly versatile.  
+
+]
+
+
+.pull-right[
+
+* `r emo::ji("folder")` intro_course (R project folder)  
+     * intro_course.Rproj  
+     * .here  
+     * `r emo::ji("folder")` scripts
+          * `r emo::ji("document")` **linelist.csv**
+     * `r emo::ji("folder")` data  
+          * `r emo::ji("folder")` clean  
+               * `r emo::ji("document")` **linelist.csv**
+
+
+]
+
 
 .footnote[
 See the [EpiRHandbook section on here package](https://epirhandbook.com/import-and-export.html?q=here#here) and on [EpiRHandbook section on importing data](https://epirhandbook.com/en/import-and-export.html)
@@ -1634,3 +1642,4 @@ class: inverse, center, middle
 knitr::include_graphics(xfun::relative_path(here::here("images", "breakout", "teamwork2.png")))
 ```
 
+Course website (initial setup and slides access): [https://appliedepi.github.io/intro_course/](https://appliedepi.github.io/intro_course/)

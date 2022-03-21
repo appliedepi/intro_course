@@ -58,7 +58,7 @@ pacman::p_load(
 
 # data prep --------------------------------------------------------------------
 # linelist_raw <- rio::import(here::here("data", "linelist_raw.xlsx"))
-surv <- rio::import(here::here("data", "surveillance_linelist_clean_20141201.rds"))
+surv <- rio::import(here::here("intro_course", "data", "clean", "backup", "linelist_combined_20141201.rds"))
 ```
 
 ```{r  xaringan-themer, include = FALSE}

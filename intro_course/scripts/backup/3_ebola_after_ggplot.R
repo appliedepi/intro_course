@@ -17,6 +17,8 @@ pacman::p_load(
      gtsummary,    # creating tables  
      scales,       # percents in tables  
      flextable,    # for making pretty tables
+     gghighlight,  # highlighting plot parts  
+     ggExtra,      # special plotting functions
      tidyverse     # for data management and visualization
 )
 
@@ -131,8 +133,8 @@ surv <- surv_raw %>%
 
 
 
-# Export cleaned file  
-#####################
+# Export cleaned surveillance linelist file  
+###########################################
 rio::export(surv, here("data", "clean", "surveillance_linelist_clean_20141201.rds"))
 
 
@@ -149,6 +151,10 @@ district_table <- surv %>%
      adorn_pct_formatting() %>% 
      qflextable()
 
+# print
+district_table
+
+# save
 save_as_docx(district_table, path = "district_table.docx")
 
 
@@ -165,6 +171,10 @@ hospital_table <- surv %>%
           max_wt_male = max(wt_kg[gender == "male"], na.rm = T)) %>%     # max weight among men
      flextable::qflextable()
 
+# print
+hospital_table
+
+# save
 save_as_docx(hospital_table, path = "hospital_table.docx")
 
 
@@ -179,3 +189,46 @@ surv %>%
 
 
 
+
+# Plots ###
+###########
+
+# histogram of cases, with district highlights
+ggplot(data = surv, mapping = aes(x = date_onset, fill = district))+
+     geom_histogram()+
+     facet_wrap(~ district)+
+     gghighlight()
+
+# bar plot of case counts
+ggplot(
+     data = surv,
+     mapping = aes(
+          x = district,
+          fill = gender)) +
+     geom_bar() +
+     scale_fill_viridis_d(na.value = "grey") +
+     scale_y_continuous(breaks = seq(from = 0,
+                                     to = 3000,
+                                     by = 500),
+                        expand = c(0,0)) +
+     scale_x_discrete(expand = c(0,0))+
+     coord_flip()
+
+
+# weekly proportion of cases with more than 7 days delay between onset and report
+delay_1wk <- surv %>%                                         # begin with surveillance linelist
+     mutate(diff_1wk = as.numeric(diff) > 7) %>%              # create column that is TRUE is diff is greater than 7
+     group_by(week = floor_date(date_report, "week")) %>%     # create column "week" and group by it  
+     summarise(                                               # begin summarise command     
+          cases = n(),                                           # number of cases in the week
+          delayed = sum(diff_1wk == TRUE, na.rm=T),              # number of delayed cases in the week 
+          delayed_pct = delayed / cases)                         # calculate proportion
+
+ggplot(data = delay_1wk, mapping = aes(x = week, y = delayed_pct))+
+     geom_line(size = 2, color = "brown")
+
+# plot with dynamic labels
+ggplot(data = delay_1wk, mapping = aes(x = week, y = delayed_pct))+
+     geom_line(size = 2, color = "brown")+
+     labs(caption = str_glue(
+     "n = {nrow(surv)}.\nReport produced on {Sys.Date()}\nData collected from {length(unique(surv$hospital))-2} major hospitals in the epidemic-affected area.\nLast reported case on {max(surv$date_report, na.rm = TRUE)}.\n{fmt_count(surv, is.na(date_report))} cases missing date of onset and not shown."))
