@@ -313,7 +313,7 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "ggplot_intro",
 
 --
 
-- The **ggplot2** *package* is the most popular data visualization tool in R  
+- The {ggplot2} *package* is the most popular data visualization tool in R  
 
 --
 
@@ -397,12 +397,6 @@ ggplot()
 `ggplot()` creates an empty canvas.  
 
 
-Alternatively, use the `%>%` pipe operator to "pipe" a data frame *into* `ggplot()`  
-
-```{r , echo = TRUE, eval = FALSE, tidy = FALSE}
-surv %>%
-  ggplot()
-```
 
 ]
 
@@ -431,6 +425,12 @@ ggplot(data = surv)
 
 Assign the data frame to use.  
 
+Alternatively, use the `%>%` pipe operator to "pipe" a data frame *into* `ggplot()`  
+
+```{r , echo = TRUE, eval = FALSE, tidy = FALSE}
+surv %>%
+  ggplot()
+```
 
 ]
 
@@ -493,7 +493,7 @@ ggplot(
 
 Plot "aesthetics" are features like position, color, shape...  
 
-`mapping = aes()` assigns "aesthetics" to columns in the data.  
+`mapping = aes()` maps "aesthetics" to columns in the data.  
 
 ]
 

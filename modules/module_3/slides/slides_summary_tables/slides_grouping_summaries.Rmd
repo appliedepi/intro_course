@@ -49,6 +49,7 @@ pacman::p_load(
   gtsummary,  # summary tables
   flextable,  # pretty tables
   scales,     # percents in tables
+  flair,      # text highlights
   kableExtra, # for output tables
   xaringanthemer  # for styling presentation 
 )
@@ -153,9 +154,11 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "grouping", "Gr
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
   ~Time, ~Location, ~Topic,
+  "15 minutes",     "Main",      "Review of previous module",
   "20 minutes",     "Main",      "Approaches for grouping and summarizing data",
-  "15 minutes",     "Main",      "Demo: making tables",
-  "2 hours",        "Breakouts", "Exercise",
+  "45 minutes",     "Breakouts", "Demo & Exercise: {janitor}",
+  "45 minutes",     "Breakouts", "Demo & Exercise: {dplyr}",
+  "45 minutes",     "Breakouts", "Demo & Exercise: {gtsummary}",
   "20 minutes",     "Main",      "Plenary debrief & {flextable} demo (if time)"
 )
 
@@ -257,6 +260,10 @@ But what if you want more than just the counts?
 --
 
 "What is the latest date of symptom onset in each group?"  
+
+--
+
+"What is the number of deaths among males in each group?"  
 
 --
 
@@ -994,7 +1001,7 @@ surv %>%
 
 ```{r, echo=T, eval=F}
 surv %>% 
-  select(hospital, age_years) %>% 
+  select(hospital, age_years, gender) %>% 
   tbl_summary(by = gender)                 #<<
 ```
 
