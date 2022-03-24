@@ -137,9 +137,10 @@ right now).
 
 We welcome you to the course and dive into the basics of how to interact
 with R and RStudio, basic R syntax, and how to organize your analytical
-projects. Finally, we cover R functions and packages, and introduce the
-core functions used to import data. Using these, we import the Ebola
-case study surveillance linelist, and begin to inspect and review it.
+projects using public health examples. We then cover R functions and
+packages, and introduce the core functions used to import data. Using
+these, we import the Ebola case study surveillance linelist, and begin
+to inspect and review it.
 
 -   [Slides: Welcome, course logistics, RStudio, and basic R
     syntax](https://appliedepi.github.io/intro_course/modules/module_1/slides/course_introduction/slides_course_introduction.html)
@@ -174,8 +175,8 @@ Informative tables are the bedrock of epidemiological and public health
 practice. In this module we introduce three tools to produce tables of
 summary statistics: {dplyr} for flexibility, {janitor} for speed, and
 {gtsummary} for beauty. Finally, we explore {flextable}, which can be
-used to beautiful any of the above approaches, add selecting colors and
-highlights, and save tables to Word, PNG, HTML, etc.
+used to beautify any of the above approaches, add colors and highlights,
+and save tables to Word, PNG, HTML, etc.
 
 -   [Slides: Grouping and summarizing
     data](https://appliedepi.github.io/intro_course/modules/module_3/slides/slides_summary_tables/slides_grouping_summaries.html)
@@ -188,11 +189,11 @@ highlights, and save tables to Word, PNG, HTML, etc.
 
 Using the {ggplot2} package to maximum effect rests upon understanding
 how to apply its “grammar of graphics” to build a plot layer-by-layer.
-We tackle this piece-by-piece, introducing concepts one-by-one so that
-you build upon previous knowledge to construct informative and colorful
-bar plots, scatter plots, histograms, line plots, text labels that
-automatically update with refreshed data (very useful for
-epidemiological reports!), and more.
+We tackle this by introducing the grammer piece-by-piece so that you
+build upon previous knowledge to construct informative and colorful bar
+plots, scatter plots, histograms, line plots, text plot labels that
+automatically refresh with updated data (very useful for epidemiological
+reports!), and more.
 
 -   [Slides: Data visualization with
     ggplot2](https://appliedepi.github.io/intro_course/modules/module_4/slides/slides_ggplot_basics/slides_ggplot_basics.html)
@@ -212,14 +213,15 @@ epidemiological reports!), and more.
 
 Public health analytics rarely involves just one data set, so now we
 practice joining data by adding hospital, laboratory, and case
-investigation data to our surveillance linelist. We engrain best
-practices for conducting joins, and prepare your for doing data
+investigation data to our surveillance linelist. We ingrain best
+practices for conducting joins, and prepare you for doing data
 transformations independently. In the second part of this module, we
 address *pivoting*, which in R means transforming data between “long”
 and “wide” formats. This is particularly relevant in public health,
-where each format has distinct benefits.  
-- [Slides: Joining
-data](https://appliedepi.github.io/intro_course/modules/module_5/slides/slides_joins/slides_joins.html)
+where each format has distinct benefits.
+
+-   [Slides: Joining
+    data](https://appliedepi.github.io/intro_course/modules/module_5/slides/slides_joins/slides_joins.html)
 
 -   Exercise:
 
@@ -236,19 +238,17 @@ data](https://appliedepi.github.io/intro_course/modules/module_5/slides/slides_j
 
 In this second data visualization module we encourage you to practice
 learning R independently (a necessary skill once you leave the class!)
-but with our support. We jump in to tackle visualizations that are
-central to descriptive epidemiology: the intricacies of crafting an
-accurate epidemic curve, conveying three continuous variables with a
-heat plot, and creating age/sex pyramids to convey demographics.
-
--   [Slides: Epidemic curves in ggplot2]() TODO  
-
--   [Slides: Heat plots in ggplot2]() TODO  
-
--   [Slides: Age/sex pyramids in ggplot2]() TODO  
+but with our support. We tackle visualizations that are central to
+descriptive epidemiology: the intricacies of crafting an accurate
+epidemic curve, conveying patterns in three variables using a heat plot,
+and creating age/sex pyramids to describe demographics. If there is
+time, we finish with a demonstration of R’s GIS/geospatial capabilities.
 
 -   [Slides: GIS
-    demonstration](https://appliedepi.github.io/intro_course/modules/module_6/slides/slides_gis_demo/slides_gis_demo.html)
+    demonstration](https://appliedepi.github.io/intro_course/modules/module_6/slides/slides_gis_demo/slides_gis_demo.html)  
+
+-   [R script: GIS
+    demonstration](https://appliedepi.github.io/intro_course/modules/module_6/demos/demo_gis/demo_gis.R)
 
 -   Exercise:
 
@@ -297,10 +297,10 @@ Our instructors *know* public health. One of the signature features of
 Applied Epi’s training is that we provide follow-up support to your
 team, to help you apply your new skills to your work context.
 
-We schedule 1.5-hour sessions with your team at 1 week, 2 weeks, 1
-month, 2 months, and 3 months post-training. In these sessions, we help
-you troubleshoot code, advise you on analytical strategies, or guide you
-in new learning that you need.
+We schedule five 1.5-hour sessions with your team at in the 3 months
+post-training. In these sessions, we help you troubleshoot code, advise
+you on analytical strategies, or guide you in new learning that you
+need.
 
 ## Notes
 
