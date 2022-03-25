@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Text box question</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for question_text {learnr}"><tr><td>question_text {learnr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Text box question</h2>
+
+<h3>Description</h3>
+
+<p>Creates a tutorial question asking the student to enter text. The default
+text input is appropriate for short or single-line text entry. For longer
+text input, set the <code>rows</code> and/or <code>cols</code> argument to create a larger text
+area.
+</p>
+<p>When used with <code><a href="../../learnr/help/answer.html">answer()</a></code>, the student's submission must match the answer
+exactly, minus whitespace trimming if enabled with <code>trim = TRUE</code>. For more
+complicated submission evaluation, use <code><a href="../../learnr/help/answer_fn.html">answer_fn()</a></code> to provide a function
+that checks the student's submission. For example, you could provide a
+function that evaluates the user's submission using
+<a href="../../base/help/regex.html">regular expressions</a>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+question_text(
+  text,
+  ...,
+  correct = "Correct!",
+  incorrect = "Incorrect",
+  try_again = incorrect,
+  allow_retry = FALSE,
+  random_answer_order = FALSE,
+  placeholder = "Enter answer here...",
+  trim = TRUE,
+  rows = NULL,
+  cols = NULL,
+  options = list()
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>text</code></td>
+<td>
+<p>Question or option text</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Answers created with <code><a href="../../learnr/help/answer.html">answer()</a></code> or <code><a href="../../learnr/help/answer_fn.html">answer_fn()</a></code>, or extra
+parameters passed onto <code><a href="../../learnr/help/question.html">question()</a></code>. Answers with custom function checking</p>
+</td></tr>
+<tr valign="top"><td><code>correct</code></td>
+<td>
+<p>For <code>question</code>, text to print for a correct answer (defaults
+to &quot;Correct!&quot;). For <code>answer</code>, a boolean indicating whether this answer is
+correct.</p>
+</td></tr>
+<tr valign="top"><td><code>incorrect</code></td>
+<td>
+<p>Text to print for an incorrect answer (defaults to &quot;Incorrect&quot;)
+when <code>allow_retry</code> is <code>FALSE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>try_again</code></td>
+<td>
+<p>Text to print for an incorrect answer (defaults to &quot;Incorrect&quot;)
+when <code>allow_retry</code> is <code>TRUE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>allow_retry</code></td>
+<td>
+<p>Allow retry for incorrect answers. Defaults to <code>FALSE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>random_answer_order</code></td>
+<td>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated"><img src="../help/figures/lifecycle-deprecated.svg" alt='[Deprecated]' /></a> Random answer
+order for text questions is automatically disabled to ensure that the
+submission is checked against each answer in the order they were provided
+by the author.</p>
+</td></tr>
+<tr valign="top"><td><code>placeholder</code></td>
+<td>
+<p>A character string giving the user a hint as to what can
+be entered into the control. Internet Explorer 8 and 9 do not support this
+option.</p>
+</td></tr>
+<tr valign="top"><td><code>trim</code></td>
+<td>
+<p>Logical to determine if whitespace before and after the answer
+should be removed.  Defaults to <code>TRUE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>rows, cols</code></td>
+<td>
+<p>Defines the size of the text input area in terms of the
+number of rows or character columns visible to the user. If either <code>rows</code>
+or <code>cols</code> are provided, the quiz input will use <code><a href="../../shiny/help/textAreaInput.html">shiny::textAreaInput()</a></code>
+for the text input, otherwise the default input element is a single-line
+<code><a href="../../shiny/help/textInput.html">shiny::textInput()</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>options</code></td>
+<td>
+<p>Extra options to be stored in the question object.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Returns a learnr question of type <code>"learnr_text"</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Interactive Questions: 
+<code><a href="../../learnr/help/question_checkbox.html">question_checkbox</a>()</code>,
+<code><a href="../../learnr/help/question_numeric.html">question_numeric</a>()</code>,
+<code><a href="../../learnr/help/question_radio.html">question_radio</a>()</code>,
+<code><a href="../../learnr/help/quiz.html">quiz</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+question_text(
+  "Please enter the word 'C0rrect' below:",
+  answer("correct", message = "Don't forget to capitalize"),
+  answer("c0rrect", message = "Don't forget to capitalize"),
+  answer("Correct", message = "Is it really an 'o'?"),
+  answer("C0rrect ", message = "Make sure you do not have a trailing space"),
+  answer("C0rrect", correct = TRUE),
+  allow_retry = TRUE,
+  trim = FALSE
+)
+
+# This question uses an answer_fn() to give a hint when we think the
+# student is on the right track but hasn't found the value yet.
+question_text(
+  "What's the most popular programming interview question?",
+  answer("fizz buzz", correct = TRUE, "That's right!"),
+  answer_fn(function(value) {
+    if (grepl("(fi|bu)zz", value)) {
+      incorrect("You're on the right track!")
+    }
+  }, label = "fizz or buzz")
+)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>learnr</em> version 0.10.1.9019 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

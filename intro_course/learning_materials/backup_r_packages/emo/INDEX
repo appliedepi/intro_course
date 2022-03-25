@@ -1,0 +1,28 @@
+clock                   emoji version of time
+day_in_synodic_cycle    Calculate the number of days in the synodic
+                        month
+fisher_lst              Letter to emoji list
+flag                    Flag emoji
+ji                      Find a single emoji
+ji_completion           emoji completion
+ji_count                Count the number of emojis in a string
+ji_detect               Detect the presence or absence of emojis in a
+                        string
+ji_extract              Extract emojis from a string
+ji_find                 List all emoji with a given keyword
+ji_fisher               Convert text to emoji (by letter)
+ji_glue                 emoji glue
+ji_keyword              emoji keywords
+ji_locate               Lodate the positio of emojis in a string
+ji_match                Extract emojis from a string
+ji_name                 emoji names
+ji_p                    Summarise your p-values with emoji
+ji_replace              Replace emojis in a string
+ji_rx                   A regular expression to catch all emojis
+ji_subset               Keep strings containing an emoji, or find
+                        positions
+jis                     full list of emojis
+keycap                  Keycap emoji sequence
+medal                   medals
+moon                    moon phase
+square                  geometric emoji

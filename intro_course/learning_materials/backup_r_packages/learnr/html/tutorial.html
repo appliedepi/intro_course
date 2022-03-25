@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Tutorial document format</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for tutorial {learnr}"><tr><td>tutorial {learnr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Tutorial document format</h2>
+
+<h3>Description</h3>
+
+<p>Long-form tutorial which includes narrative, figures, videos, exercises, and
+questions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+tutorial(
+  fig_width = 6.5,
+  fig_height = 4,
+  fig_retina = 2,
+  fig_caption = TRUE,
+  progressive = FALSE,
+  allow_skip = FALSE,
+  dev = "png",
+  df_print = "paged",
+  smart = TRUE,
+  theme = "rstudio",
+  highlight = "textmate",
+  ace_theme = "textmate",
+  mathjax = "default",
+  extra_dependencies = NULL,
+  css = NULL,
+  includes = NULL,
+  md_extensions = NULL,
+  pandoc_args = NULL,
+  language = "en",
+  lib_dir = NULL,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>fig_width</code></td>
+<td>
+<p>Default width (in inches) for figures</p>
+</td></tr>
+<tr valign="top"><td><code>fig_height</code></td>
+<td>
+<p>Default height (in inches) for figures</p>
+</td></tr>
+<tr valign="top"><td><code>fig_retina</code></td>
+<td>
+<p>Scaling to perform for retina displays (defaults to 2, which
+currently works for all widely used retina displays). Set to <code>NULL</code> to
+prevent retina scaling. Note that this will always be <code>NULL</code> when
+<code>keep_md</code> is specified (this is because <code>fig_retina</code> relies on
+outputting HTML directly into the markdown document).</p>
+</td></tr>
+<tr valign="top"><td><code>fig_caption</code></td>
+<td>
+<p><code>TRUE</code> to render figures with captions</p>
+</td></tr>
+<tr valign="top"><td><code>progressive</code></td>
+<td>
+<p>Display sub-topics progressively (i.e. wait until previous
+topics are either completed or skipped before displaying subsequent
+topics).</p>
+</td></tr>
+<tr valign="top"><td><code>allow_skip</code></td>
+<td>
+<p>Allow users to skip sub-topics (especially useful when
+<code>progressive</code> is <code>TRUE</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>dev</code></td>
+<td>
+<p>Graphics device to use for figure output (defaults to png)</p>
+</td></tr>
+<tr valign="top"><td><code>df_print</code></td>
+<td>
+<p>Method to be used for printing data frames. Valid values
+include &quot;default&quot;, &quot;kable&quot;, &quot;tibble&quot;, and &quot;paged&quot;. The &quot;default&quot; method
+uses a corresponding S3 method of <code>print</code>, typically
+<code>print.data.frame</code>. The &quot;kable&quot; method uses the
+<code><a href="../../knitr/help/kable.html">knitr::kable</a></code> function. The &quot;tibble&quot; method uses
+the <span class="pkg">tibble</span> package to print a summary of the data frame. The &quot;paged&quot;
+method creates a paginated HTML table (note that this method is only valid
+for formats that produce HTML). In addition to the named methods you can
+also pass an arbitrary function to be used for printing data frames. You
+can disable the <code>df_print</code> behavior entirely by setting the option
+<code>rmarkdown.df_print</code> to <code>FALSE</code>. See
+<a href="https://bookdown.org/yihui/rmarkdown/html-document.html#data-frame-printing">Data
+frame printing section</a> in bookdown book for examples.</p>
+</td></tr>
+<tr valign="top"><td><code>smart</code></td>
+<td>
+<p>Produce typographically correct output, converting straight
+quotes to curly quotes, <code>---</code> to em-dashes, <code>--</code> to en-dashes,
+and <code>...</code> to ellipses. Deprecated in <span class="pkg">rmarkdown</span> v2.2.0.</p>
+</td></tr>
+<tr valign="top"><td><code>theme</code></td>
+<td>
+<p>Visual theme (&quot;rstudio&quot;, default&quot;, &quot;cerulean&quot;, &quot;journal&quot;,
+&quot;flatly&quot;, &quot;readable&quot;, &quot;spacelab&quot;, &quot;united&quot;, &quot;cosmo&quot;, &quot;lumen&quot;, &quot;paper&quot;,
+&quot;sandstone&quot;, &quot;simplex&quot;, or &quot;yeti&quot;).</p>
+</td></tr>
+<tr valign="top"><td><code>highlight</code></td>
+<td>
+<p>Syntax highlighting style. Supported styles include
+&quot;default&quot;, &quot;tango&quot;, &quot;pygments&quot;, &quot;kate&quot;, &quot;monochrome&quot;, &quot;espresso&quot;,
+&quot;zenburn&quot;, &quot;haddock&quot;, and &quot;textmate&quot;. Pass ‘NULL’ to prevent syntax
+highlighting.  Note, this value only pertains to standard rmarkdown code,
+not the Ace editor highlighting.</p>
+</td></tr>
+<tr valign="top"><td><code>ace_theme</code></td>
+<td>
+<p>Ace theme supplied to the ace code editor for all exercises.
+See <code>learnr:::ACE_THEMES</code> for a list of possible values.  Defaults to
+<code>"textmate"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>mathjax</code></td>
+<td>
+<p>Include mathjax. The &quot;default&quot; option uses an https URL from a
+MathJax CDN. The &quot;local&quot; option uses a local version of MathJax (which is
+copied into the output directory). You can pass an alternate URL or pass
+<code>NULL</code> to exclude MathJax entirely.</p>
+</td></tr>
+<tr valign="top"><td><code>extra_dependencies</code></td>
+<td>
+<p>Additional function arguments to pass to the
+base R Markdown HTML output formatter <code><a href="../../rmarkdown/help/html_document_base.html">html_document_base</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>css</code></td>
+<td>
+<p>CSS and/or Sass files to include. Files with an extension of .sass
+or .scss are compiled to CSS via <code>sass::sass()</code>. Also, if <code>theme</code> is a
+<code><a href="../../bslib/help/bs_theme.html">bslib::bs_theme()</a></code> object, Sass code may reference the relevant Bootstrap
+Sass variables, functions, mixins, etc.</p>
+</td></tr>
+<tr valign="top"><td><code>includes</code></td>
+<td>
+<p>Named list of additional content to include within the
+document (typically created using the <code><a href="../../rmarkdown/help/includes.html">includes</a></code> function).</p>
+</td></tr>
+<tr valign="top"><td><code>md_extensions</code></td>
+<td>
+<p>Markdown extensions to be added or removed from the
+default definition or R Markdown. See the <code><a href="../../rmarkdown/help/rmarkdown_format.html">rmarkdown_format</a></code> for
+additional details.</p>
+</td></tr>
+<tr valign="top"><td><code>pandoc_args</code></td>
+<td>
+<p>Additional command line options to pass to pandoc</p>
+</td></tr>
+<tr valign="top"><td><code>language</code></td>
+<td>
+<p>Language or custom text of the UI elements. See
+<code>vignette("multilang", package = "learnr")</code> for more information about
+available options and formatting</p>
+</td></tr>
+<tr valign="top"><td><code>lib_dir</code></td>
+<td>
+<p>Directory to copy dependent HTML libraries (e.g. jquery,
+bootstrap, etc.) into. By default this will be the name of the document with
+<code>_files</code> appended to it.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Forward parameters to html_document</p>
+</td></tr>
+</table>
+
+<hr /><div style="text-align: center;">[Package <em>learnr</em> version 0.10.1.9019 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

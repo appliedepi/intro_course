@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Execute R code in a safe R environment</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for safe {learnr}"><tr><td>safe {learnr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Execute R code in a safe R environment</h2>
+
+<h3>Description</h3>
+
+<p>When rendering (or running) a document with R markdown, it inherits the
+current R Global environment.  This will produce unexpected behaviors,
+such as poisoning the R Global environment with existing variables.  By
+rendering the document in a new, safe R environment, a <em>vanilla</em>,
+rendered document is produced.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+safe(expr, ..., show = TRUE, env = safe_env())
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>expr</code></td>
+<td>
+<p>expression that contains all the necessary library calls to
+execute.  Expressions within callr do not inherit the existing,
+loaded libraries.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>parameters passed to <code>callr::<a href="../../callr/help/r.html">r</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>show</code></td>
+<td>
+<p>Logical that determines if output should be displayed</p>
+</td></tr>
+<tr valign="top"><td><code>env</code></td>
+<td>
+<p>Environment to evaluate the document in</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The environment variable <code>LEARNR_INTERACTIVE</code> will be set to <code>"1"</code>
+or <code>"0"</code> depending on if the calling session is interactive or not.
+</p>
+<p>Using <code>safe</code> should only be necessary when locally deployed.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Direct usage
+safe(run_tutorial("hello", package = "learnr"))
+
+# Programmatic usage
+library(rlang)
+
+expr &lt;- quote(run_tutorial("hello", package = "learnr"))
+safe(!!expr)
+
+tutorial &lt;- "hello"
+safe(run_tutorial(!!tutorial, package = "learnr"))
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>learnr</em> version 0.10.1.9019 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

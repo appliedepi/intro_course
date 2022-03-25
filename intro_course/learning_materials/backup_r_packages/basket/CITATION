@@ -1,0 +1,25 @@
+citHeader("To cite basket in publications use:")
+
+citEntry(
+  entry    = "Article",
+  title    = "{Analyzing Basket Trials under Multisource Exchangeability Assumptions}",
+  author   = personList(as.person("Michael J. Kane"),
+              as.person("Nan Chen"),
+              as.person("Alexander M. Kaizer"),
+              as.person("Xun Jiang"),
+              as.person("H. Amy Xia"),
+              as.person("Brian P. Hobbs")),
+  journal  = "{The R Journal}",
+  year     = "2021",
+  volume   = "12",
+  number   = "2",
+  pages    = "342--358",
+  url      = "https://journal.r-project.org/archive/2021/RJ-2021-020/RJ-2021-020.pdf",
+  doi      = "10.32614/RJ-2021-020",
+  textVersion = paste(
+    "Kane, M. J., Chen, N., Kaizer, A. M., Jiang, X., Xia, H. A., & Hobbs, B. P. (2021).",
+    "Analyzing Basket Trials under Multisource Exchangeability Assumptions.",
+    "The R Journal, 12(2), 342-358.",
+    "URL https://journal.r-project.org/archive/2021/RJ-2021-020/RJ-2021-020.pdf",
+    "DOI 10.32614/RJ-2021-020")
+  )

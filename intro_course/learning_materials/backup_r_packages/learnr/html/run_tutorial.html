@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Run a tutorial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for run_tutorial {learnr}"><tr><td>run_tutorial {learnr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Run a tutorial</h2>
+
+<h3>Description</h3>
+
+<p>Run a tutorial provided by an installed R package.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+run_tutorial(
+  name = NULL,
+  package = NULL,
+  ...,
+  shiny_args = NULL,
+  clean = FALSE,
+  as_rstudio_job = NULL
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>name</code></td>
+<td>
+<p>Tutorial name (subdirectory within <code>tutorials/</code> directory of
+installed <code>package</code>). Alternatively, if <code>package</code> is not provided, <code>name</code>
+may be a path to a local tutorial R Markdown file or a local directory
+containing a learnr tutorial. If <code>package</code> is provided, <code>name</code> must be the
+tutorial name.</p>
+</td></tr>
+<tr valign="top"><td><code>package</code></td>
+<td>
+<p>Name of package. If <code>name</code> is a path to the local directory
+containing a learnr tutorial, then <code>package</code> should not be provided.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Unused. Included for future expansion and to ensure named
+arguments are used.</p>
+</td></tr>
+<tr valign="top"><td><code>shiny_args</code></td>
+<td>
+<p>Additional arguments to forward to
+<code><a href="../../shiny/help/runApp.html">shiny::runApp</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>clean</code></td>
+<td>
+<p>When <code>TRUE</code>, the shiny prerendered HTML files are removed and
+the tutorial is re-rendered prior to starting the tutorial.</p>
+</td></tr>
+<tr valign="top"><td><code>as_rstudio_job</code></td>
+<td>
+<p>Runs the tutorial in the background as an RStudio job.
+This is the default behavior when <code>run_tutorial()</code> detects that RStudio is
+available and can run jobs. Set to <code>FALSE</code> to disable and to run the
+tutorial in the current R session.
+</p>
+<p>When running as an RStudio job, <code>run_tutorial()</code> sets or overrides the
+<code>launch.browser</code> option for <code>shiny_args</code>. You can instead use the
+<code>shiny.launch.browser</code> global option in your current R session to set
+the default behavior when the tutorial is run. See <a href="../../shiny/help/shinyOptions.html">the shiny options documentation</a> for more information.</p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../learnr/help/safe.html">safe</a></code> and <code><a href="../../learnr/help/available_tutorials.html">available_tutorials</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# display all "learnr" tutorials
+available_tutorials("learnr")
+
+# run basic example within learnr
+## Not run: 
+run_tutorial("hello", "learnr")
+
+## End(Not run)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>learnr</em> version 0.10.1.9019 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

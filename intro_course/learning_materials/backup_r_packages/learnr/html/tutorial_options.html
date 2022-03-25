@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Set tutorial options</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for tutorial_options {learnr}"><tr><td>tutorial_options {learnr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Set tutorial options</h2>
+
+<h3>Description</h3>
+
+<p>Set various tutorial options that control the display and evaluation of
+exercises.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+tutorial_options(
+  exercise.cap = NULL,
+  exercise.eval = FALSE,
+  exercise.timelimit = 30,
+  exercise.lines = NULL,
+  exercise.blanks = NULL,
+  exercise.checker = NULL,
+  exercise.error.check.code = NULL,
+  exercise.completion = TRUE,
+  exercise.diagnostics = TRUE,
+  exercise.startover = TRUE,
+  exercise.reveal_solution = TRUE
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>exercise.cap</code></td>
+<td>
+<p>Caption for exercise chunk (defaults to the engine's icon or the combination of the engine and <code>" code"</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>exercise.eval</code></td>
+<td>
+<p>Whether to pre-evaluate the exercise so the reader can
+see some default output (defaults to <code>FALSE</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>exercise.timelimit</code></td>
+<td>
+<p>Number of seconds to limit execution time to
+(defaults to <code>30</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>exercise.lines</code></td>
+<td>
+<p>Lines of code for exercise editor (defaults to the
+number of lines in the code chunk).</p>
+</td></tr>
+<tr valign="top"><td><code>exercise.blanks</code></td>
+<td>
+<p>A regular expression to be used to identify blanks in
+submitted code that the user should fill in. If <code>TRUE</code> (default), blanks
+are three or more underscores in a row. If <code>FALSE</code>, blank checking is not
+performed.</p>
+</td></tr>
+<tr valign="top"><td><code>exercise.checker</code></td>
+<td>
+<p>Function used to check exercise answers
+(e.g., <code>gradethis::grade_learnr()</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>exercise.error.check.code</code></td>
+<td>
+<p>A string containing R code to use for checking
+code when an exercise evaluation error occurs (e.g., <code>"gradethis::grade_code()"</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>exercise.completion</code></td>
+<td>
+<p>Use code completion in exercise editors.</p>
+</td></tr>
+<tr valign="top"><td><code>exercise.diagnostics</code></td>
+<td>
+<p>Show diagnostics in exercise editors.</p>
+</td></tr>
+<tr valign="top"><td><code>exercise.startover</code></td>
+<td>
+<p>Show &quot;Start Over&quot; button on exercise.</p>
+</td></tr>
+<tr valign="top"><td><code>exercise.reveal_solution</code></td>
+<td>
+<p>Whether to reveal the exercise solution if
+a solution chunk is provided.</p>
+</td></tr>
+</table>
+
+<hr /><div style="text-align: center;">[Package <em>learnr</em> version 0.10.1.9019 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

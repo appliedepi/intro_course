@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Wrap an expression that will be executed one time in an event...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for one_time {learnr}"><tr><td>one_time {learnr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Wrap an expression that will be executed one time in an event handler</h2>
+
+<h3>Description</h3>
+
+<p>This wraps an expression so that it will be executed one time for a tutorial,
+based on some condition. The first time the condition is true, the expression
+will be executed; after that, the expression will not be evaluated again.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+one_time(session, cond, expr, label = deparse(substitute(cond)))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>session</code></td>
+<td>
+<p>A Shiny session object.</p>
+</td></tr>
+<tr valign="top"><td><code>cond</code></td>
+<td>
+<p>A condition that is used as a filter. The first time the
+condition evaluates to true, <code>expr</code> will be evaluated; after that, <code>expr</code>
+will not be evaluated again.</p>
+</td></tr>
+<tr valign="top"><td><code>expr</code></td>
+<td>
+<p>An expression that will be evaluated once, the first time that
+<code>cond</code> is true.</p>
+</td></tr>
+<tr valign="top"><td><code>label</code></td>
+<td>
+<p>A unique identifier. This is used as an ID for the condition and
+expression; if two calls to <code>one_time()</code> uses the same label, there will be
+an ID collision and only one of them will execute. By default, <code>cond</code> is
+deparsed and used as the label.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The execution state is stored so that if the expression is executed, then the
+user quits the tutorial and then returns to it, the expression will not be
+executed a second time.
+</p>
+<p>A common use for <code>one_time</code> is to execute an expression when a section is
+viewed for the first time.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# This goes in a {r context="server-start"} chunk
+
+# The expression with message() will be executed the first time the user
+# sees the section with ID "section-exercise-with-hint".
+event_register_handler("section_viewed",
+  function(session, event, data) {
+    one_time(
+      session,
+      data$sectionId == "section-exercise-with-hint",
+      {
+        message("Seeing ", data$sectionId, " for the first time.")
+      }
+    )
+  }
+)
+
+
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>learnr</em> version 0.10.1.9019 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

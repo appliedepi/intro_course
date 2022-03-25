@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Evaluates a condition</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for evaluate_condition {gradethis}"><tr><td>evaluate_condition {gradethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Evaluates a condition</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#superseded"><img src="../help/figures/lifecycle-superseded.svg" alt='[Superseded]' /></a> Please use <code><a href="../../gradethis/help/grade_this.html">grade_this()</a></code> mixed with
+<code><a href="../../gradethis/help/pass.html">pass()</a></code>, <code><a href="../../gradethis/help/pass_if_equal.html">pass_if_equal()</a></code>, <code><a href="../../gradethis/help/fail.html">fail()</a></code>, and/or <code><a href="../../gradethis/help/fail_if_equal.html">fail_if_equal()</a></code>. Can also use
+<code><a href="../../gradethis/help/eval_gradethis.html">eval_gradethis()</a></code>.
+</p>
+<p>Evaluates the <code><a href="../../gradethis/help/condition.html">condition()</a></code> object to return a <code><a href="../../gradethis/help/graded.html">graded()</a></code> value.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+evaluate_condition(condition, ..., last_value, env)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>condition</code></td>
+<td>
+<p>a <code><a href="../../gradethis/help/condition.html">condition()</a></code> object</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>ignored</p>
+</td></tr>
+<tr valign="top"><td><code>last_value</code></td>
+<td>
+<p>The last value from evaluating the user's exercise
+submission.</p>
+</td></tr>
+<tr valign="top"><td><code>env</code></td>
+<td>
+<p>environment to evaluate the condition</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a <code><a href="../../gradethis/help/graded.html">graded()</a></code> value if <code>condi$x</code> is <code>TRUE</code> or <code>NULL</code> if <code>condi$x</code> is
+<code>FALSE</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+condi_formula_t &lt;- condition(
+  ~ identical(.result, 5),
+  message = "my correct message",
+  correct = TRUE
+)
+evaluate_condition(
+  condi_formula_t,
+  last_value = 5,
+  env = new.env()
+)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gradethis</em> version 0.2.5.9000 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

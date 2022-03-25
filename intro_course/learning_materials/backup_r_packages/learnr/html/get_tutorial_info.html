@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get information about the current tutorial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for get_tutorial_info {learnr}"><tr><td>get_tutorial_info {learnr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get information about the current tutorial</h2>
+
+<h3>Description</h3>
+
+<p>Returns information about the current tutorial. Ideally the function should
+be evaluated in a Shiny context, i.e. in a chunk with option
+<code>context = "server"</code>. Note that the values of this function may change after
+the tutorial is completely initialized. If called in a non-reactive context,
+<code>get_tutorial_info()</code> will return default values that will most likely
+correspond to the current tutorial.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+get_tutorial_info(
+  session = getDefaultReactiveDomain(),
+  tutorial_path = NULL,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>session</code></td>
+<td>
+<p>The <code>session</code> object passed to function given to
+<code>shinyServer.</code> Default is <code><a href="../../shiny/help/domains.html">shiny::getDefaultReactiveDomain()</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>tutorial_path</code></td>
+<td>
+<p>Path to a tutorial <code>.Rmd</code> source file</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+
+<p>Arguments passed on to <code><a href="../../rmarkdown/help/yaml_front_matter.html">rmarkdown::yaml_front_matter</a></code>
+</p>
+
+<dl>
+<dt><code>input</code></dt><dd><p>Input file (Rmd or plain markdown)</p>
+</dd>
+<dt><code>encoding</code></dt><dd><p>Ignored. The encoding is always assumed to be UTF-8.</p>
+</dd>
+</dl>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Returns an ordinary list with the following elements:
+</p>
+
+<ul>
+<li> <p><code>tutorial_id</code>: The ID of the tutorial, auto-generated or from the
+<code>tutorial$id</code> key in the tutorial's YAML front matter.
+</p>
+</li>
+<li> <p><code>tutorial_version</code>: The tutorial's version, auto-generated or from the
+<code>tutorial$version</code> key in the tutorial's YAML front matter.
+</p>
+</li>
+<li> <p><code>items</code>: A data frame with columns <code>order</code>, <code>label</code>, <code>type</code> and <code>data</code>
+describing the items (questions and exercises) in the tutorial. This item
+is only available in the running tutorial, not during the static
+pre-render step.
+</p>
+</li>
+<li> <p><code>user_id</code>: The current user.
+</p>
+</li>
+<li> <p><code>learnr_version</code>: The current version of the running learnr package.
+</p>
+</li>
+<li> <p><code>language</code>: The current language of the tutorial, either as chosen by the
+user or as specified in the <code>language</code> item of the YAML front matter.
+</p>
+</li></ul>
+
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../learnr/help/get_tutorial_state.html">get_tutorial_state()</a></code>
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>learnr</em> version 0.10.1.9019 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

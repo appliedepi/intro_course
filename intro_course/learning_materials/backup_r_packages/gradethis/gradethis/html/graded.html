@@ -1,0 +1,293 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Signal a final grade for a student's submission</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for graded {gradethis}"><tr><td>graded {gradethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Signal a final grade for a student's submission</h2>
+
+<h3>Description</h3>
+
+<p><code>graded()</code> is used to signal a final grade for a submission. Most likely,
+you'll want to use its helper functions: <code>pass()</code>, <code>fail()</code>,
+<code>pass_if_equal()</code>, <code>fail_if_equal()</code>, <code>pass_if()</code> and <code>fail_if()</code>. When used
+in <code><a href="../../gradethis/help/grade_this.html">grade_this()</a></code>, these functions signal a final grade and no further
+checking of the student's submitted code is performed. See the sections below
+for more details about how these functions are used in <code><a href="../../gradethis/help/grade_this.html">grade_this()</a></code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+graded(correct, message = NULL, ..., type = NULL, location = NULL)
+
+pass(
+  message = getOption("gradethis.pass", "Correct!"),
+  ...,
+  env = parent.frame(),
+  praise = getOption("gradethis.pass.praise", FALSE)
+)
+
+fail(
+  message = getOption("gradethis.fail", "Incorrect"),
+  ...,
+  env = parent.frame(),
+  hint = getOption("gradethis.fail.hint", FALSE),
+  encourage = getOption("gradethis.fail.encourage", FALSE)
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>correct</code></td>
+<td>
+<p>A logical value of whether or not the checked code is correct.</p>
+</td></tr>
+<tr valign="top"><td><code>message</code></td>
+<td>
+<p>A character string of the message to be displayed. In all
+grading helper functions other than <code><a href="../../gradethis/help/graded.html">graded()</a></code>, <code>message</code> is a template
+string that will be processed with <code><a href="../../glue/help/glue.html">glue::glue()</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Additional arguments passed to <code>graded()</code> or additional data to be
+included in the feedback object.</p>
+</td></tr>
+<tr valign="top"><td><code>type, location</code></td>
+<td>
+<p>The <code>type</code> and <code>location</code> of the feedback object
+provided to <span class="pkg">learnr</span>. See
+<a href="https://rstudio.github.io/learnr/exercises.html#Custom_checking">https://rstudio.github.io/learnr/exercises.html#Custom_checking</a> for more
+details.
+</p>
+<p><code>type</code> may be one of &quot;auto&quot;, &quot;success&quot;, &quot;info&quot;, &quot;warning&quot;, &quot;error&quot;, or
+&quot;custom&quot;.
+</p>
+<p><code>location</code> may be one of &quot;append&quot;, &quot;prepend&quot;, or &quot;replace&quot;.</p>
+</td></tr>
+<tr valign="top"><td><code>env</code></td>
+<td>
+<p>environment to evaluate the glue <code>message</code>. Most users of
+<span class="pkg">gradethis</span> will not need to use this argument.</p>
+</td></tr>
+<tr valign="top"><td><code>praise</code></td>
+<td>
+<p>Include a random praising phrase with <code><a href="../../gradethis/help/random_praise.html">random_praise()</a></code>? The
+default value of <code>praise</code> can be set using <code><a href="../../gradethis/help/gradethis_setup.html">gradethis_setup()</a></code> or the
+<code>gradethis.pass.praise</code> option.</p>
+</td></tr>
+<tr valign="top"><td><code>hint</code></td>
+<td>
+<p>Include a code feedback hint with the failing message? This
+argument only applies to <code>fail()</code> and <code>fail_if_equal()</code> and the message is
+added using the default options of <code><a href="../../gradethis/help/give_code_feedback.html">give_code_feedback()</a></code> and
+<code><a href="../../gradethis/help/maybe_code_feedback.html">maybe_code_feedback()</a></code>. The default value of <code>hint</code> can be set using
+<code><a href="../../gradethis/help/gradethis_setup.html">gradethis_setup()</a></code> or the <code>gradethis.fail.hint</code> option.</p>
+</td></tr>
+<tr valign="top"><td><code>encourage</code></td>
+<td>
+<p>Include a random encouraging phrase with
+<code><a href="../../gradethis/help/random_encouragement.html">random_encouragement()</a></code>? The default value of <code>encourage</code> can be set
+using <code><a href="../../gradethis/help/gradethis_setup.html">gradethis_setup()</a></code> or the <code>gradethis.fail.encourage</code> option.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p><code>pass()</code> signals a <em>correct</em> submission, <code>fail()</code> signals an
+<em>incorrect</em> submission, and <code>graded()</code> returns a correct or incorrect
+submission according to the value of <code>correct</code>.
+</p>
+
+
+<h3>Functions</h3>
+
+
+<ul>
+<li> <p><code>graded</code>: Prepare and signal a graded result.
+</p>
+</li>
+<li> <p><code>pass</code>: Signal a <em>passing</em> grade.
+</p>
+</li>
+<li> <p><code>fail</code>: Signal a <em>failing</em> grade.
+</p>
+</li></ul>
+
+
+<h3>Usage in <code>grade_this()</code></h3>
+
+<p>The <code>graded()</code> helper functions are all designed to be called from within
+<code>grade_this()</code>, but this has the unfortunate side-effect of making their
+default arguments somewhat opaque.
+</p>
+<p>The helper functions follow these common patterns:
+</p>
+
+<ol>
+<li><p> If you don't provide a custom <code>message</code>, the default pass or fail
+messages will be used. With the default <span class="pkg">gradethis</span> setup, the pass
+message follows the pattern <code style="white-space: pre;">{gradethis::random_praise()} Correct!</code> , and
+the fail message follows <code style="white-space: pre;">Incorrect.{gradethis::maybe_code_feedback()} {gradethis::random_encouragement()}</code>.
+</p>
+<p>You can set the default message pattern using the <code>pass</code> and <code>fail</code> in
+<code><a href="../../gradethis/help/gradethis_setup.html">gradethis_setup()</a></code>, or the options <code>gradethis.pass</code> and
+<code>gradethis.fail</code>.
+</p>
+<p>In the custom <code>message</code>, you can use <code><a href="../../glue/help/glue.html">glue::glue()</a></code> syntax to reference
+any of the available variables in <code><a href="../../gradethis/help/grade_this.html">grade_this()</a></code> or that you've created
+in your checking code: e.g. <code>"Your table has {nrow(.result)} rows."</code>.
+</p>
+</li>
+<li> <p><code>pass_if_equal()</code> and <code>fail_if_equal()</code> automatically compare their
+first argument against the <code>.result</code> of running the student's code.
+<code>pass_if_equal()</code> takes this one step further and if called without any
+arguments will compare the <code>.result</code> to the value returned by evaluating
+the <code>.solution</code> code, if available.
+</p>
+</li>
+<li><p> All <code>fail</code> helper functions have an additional <code>hint</code> parameter. If
+<code>hint = TRUE</code>, a code feedback hint is added to the custom <code>message</code>.
+You can also control <code>hint</code> globally with <code><a href="../../gradethis/help/gradethis_setup.html">gradethis_setup()</a></code>.
+</p>
+</li>
+<li><p> All helper functions include an <code>env</code> parameter, that you can generally
+ignore. It's used internally to help <code>pass()</code> and <code>fail()</code> <em>et al.</em> find
+the default argument values and to build the <code>message</code> using
+<code><a href="../../glue/help/glue.html">glue::glue()</a></code>.
+</p>
+</li></ol>
+
+
+
+<h3>Return a grade immediately</h3>
+
+<p><code>graded()</code> and its helper functions are designed to short-circuit further
+evaluation whenever they are called. If you're familiar with writing
+functions in R, you can think of <code>graded()</code> (and <code>pass()</code>, <code>fail()</code>, etc.)
+as a special version of <code>return()</code>. If a grade is created, it is returned
+immediately and no more checking will be performed.
+</p>
+<p>The immediate return behavior can be helpful when you have to perform
+complicated or long-running tests to determine if a student's code
+submission is correct. We recommend that you perform the easiest tests
+first, progressing to the most complicated tests. By taking advantage of
+early grade returns, you can simplify your checking code:</p>
+<pre>```{r}
+grade_this({
+  # is the answer a tibble?
+  if (!inherits(.result, "tibble")) {
+    fail("Your answer should be a tibble.")
+  }
+
+  # from now on we know that .result is a tibble...
+  if (nrow(.result) != 5 &amp;&amp; ncol(.result) &lt; 2) {
+    fail("Your table should have 5 rows and more than 1 column.")
+  }
+
+  # ...and now we know it has 5 rows and at least 2 columns
+  if (.result[[2]][[5]] != 5) {
+    fail("The value of the 5th row of the 2nd column should be 5.")
+  }
+
+  # all of the above checks have passed now.
+  pass()
+})
+```
+</pre>
+<p>Notice that it's important to choose a final fallback grade as the last
+value in your <code><a href="../../gradethis/help/grade_this.html">grade_this()</a></code> checking code. This last value is the default
+grade that will be given if the submission passes all other checks. If
+you're using the standard <code><a href="../../gradethis/help/gradethis_setup.html">gradethis_setup()</a></code> and you call <code>pass()</code> or
+<code>fail()</code> without arguments, <code>pass()</code> will return a random praising phrase
+and <code>fail()</code> will return code feedback (if possible) with an encouraging
+phrase.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other grading helper functions: <code><a href="../../gradethis/help/graded.html">graded()</a></code>, <code><a href="../../gradethis/help/pass.html">pass()</a></code>, <code><a href="../../gradethis/help/fail.html">fail()</a></code>,
+<code><a href="../../gradethis/help/pass_if.html">pass_if()</a></code>, <code><a href="../../gradethis/help/fail_if.html">fail_if()</a></code>, <code><a href="../../gradethis/help/pass_if_equal.html">pass_if_equal()</a></code>, <code><a href="../../gradethis/help/fail_if_equal.html">fail_if_equal()</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Suppose our exercise asks the student to prepare and execute code that
+# returns the value `42`. We'll use `grade_this()` to check their
+# submission.
+#
+# Because we are demonstrating these functions inside R documentation, we'll
+# save the function returned by `grade_this()` as `grader()`. Calling
+# `grader()` on a mock exercise submission is equivalent to running the
+# check code when the student clicks "Submit Answer" in a learnr tutorial.
+
+grader &lt;-
+  # ```{r example-check}
+  grade_this({
+    # Automatically use .result to compare to an expected value
+    pass_if_equal(42, "Great work!")
+
+    # Similarly compare .result to an expected wrong value
+    fail_if_equal(41, "You were so close!")
+    fail_if_equal(43, "Oops, a little high there!")
+
+    # or automatically pass if .result is equal to .solution
+    pass_if_equal(message = "Great work!")
+
+    # Be explicit if you need to round to avoid numerical accuracy issues
+    pass_if_equal(x = round(.result), y = 42, "Close enough!")
+    fail_if_equal(x = round(.result), y = 64, "Hmm, that's not right.")
+
+    # For more complicated calculations, call pass() or fail()
+    if (.result &gt; 100) {
+      fail("{.result} is way too high!")
+    }
+    if (.result * 100 == .solution) {
+      pass("Right answer, but {.result} is two orders of magnitude too small.")
+    }
+
+    # Fail with a hint if student code differs from the solution
+    # (Skipped automatically if there isn't a -solution chunk)
+    fail_if_code_feedback()
+
+    # Choose a default grade if none of the above have resulted in a grade
+    fail()
+  })
+# ```
+
+# Now lets try with a few different student submissions ----
+
+# Correct!
+grader(mock_this_exercise(.user_code = 42))
+
+# These were close...
+grader(mock_this_exercise(.user_code = 41))
+grader(mock_this_exercise(.user_code = 43))
+
+# Automatically use .solution if you have a *-solution chunk...
+grader(mock_this_exercise(.user_code = 42, .solution_code = 42))
+
+# Floating point arithmetic is tricky...
+grader(mock_this_exercise(.user_code = 42.000001, .solution_code = 42))
+grader(mock_this_exercise(.user_code = 64.123456, .solution_code = 42))
+
+# Complicated checking situations...
+grader(mock_this_exercise(.user_code = 101, .solution_code = 42))
+grader(mock_this_exercise(.user_code = 0.42, .solution_code = 42))
+
+# Finally fall back to the final answer...
+grader(mock_this_exercise(.user_code = "20 + 13", .solution_code = "20 + 22"))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gradethis</em> version 0.2.5.9000 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

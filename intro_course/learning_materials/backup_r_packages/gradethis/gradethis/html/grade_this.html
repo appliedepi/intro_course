@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Grade a student's submission using custom logic</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for grade_this {gradethis}"><tr><td>grade_this {gradethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Grade a student's submission using custom logic</h2>
+
+<h3>Description</h3>
+
+<p><code>grade_this()</code> allows instructors to write custom logic to evaluate, grade
+and give feedback to students. To use <code>grade_this()</code>, call it directly in
+your <code style="white-space: pre;">*-check</code> chunk:</p>
+<pre>```{r example-check}
+grade_this({
+  # custom checking code appears here
+  if (identical(.result, .solution)) {
+    pass("Great work!")
+  }
+  fail("Try again!")
+})
+```
+</pre>
+<p><code>grade_this()</code> makes available a number of objects based on the exercise and
+the student's submission that can be used to evaluate the student's submitted
+code. See <code>?"grade_this-objects"</code> for more information about these objects.
+</p>
+<p>As the instructor, you are free to use any logic to determine a student's
+grade as long as a <code><a href="../../gradethis/help/graded.html">graded()</a></code> object is signaled. The check code can also
+contain <span class="pkg">testthat</span> expectation code. Failed <span class="pkg">testthat</span> expectations
+will be turned into <code><a href="../../gradethis/help/fail.html">fail()</a></code>ed grades with the corresponding message.
+</p>
+<p>A final grade is signaled from <code>grade_this()</code> using the <code><a href="../../gradethis/help/graded.html">graded()</a></code> helper
+functions, which include <code><a href="../../gradethis/help/pass.html">pass()</a></code>, <code><a href="../../gradethis/help/fail.html">fail()</a></code>, among others. <code>grade_this()</code>
+uses condition handling to short-circuit further evaluation when a grade is
+reached. This means that you may also signal a failing grade using any of the
+<code style="white-space: pre;">expect_*()</code> functions from <span class="pkg">testthat</span>, other functions designed to work
+with <span class="pkg">testthat</span>, such as <span class="pkg">checkmate</span>, or standard R errors via
+<code>stop()</code>. Learn more about this behavior in <code><a href="../../gradethis/help/graded.html">graded()</a></code> in the section
+<strong>Return a grade immediately</strong>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+grade_this(
+  expr,
+  ...,
+  maybe_code_feedback = getOption("gradethis.maybe_code_feedback", TRUE)
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>expr</code></td>
+<td>
+<p>The grade-checking expression to be evaluated. This expression
+must either signal a grade via <code><a href="../../gradethis/help/pass.html">pass()</a></code> or <code><a href="../../gradethis/help/fail.html">fail()</a></code> functions or their
+sibling functions.
+</p>
+<p>By default, errors in this expression are converted to &quot;internal problem&quot;
+grades that mask the error for the user. If your grading logic relies on
+unit-test-styled functions, such as those from <span class="pkg">testthat</span>, you can use
+<code><a href="../../gradethis/help/fail_if_error.html">fail_if_error()</a></code> to convert errors into <code><a href="../../gradethis/help/fail.html">fail()</a></code> grades.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Ignored</p>
+</td></tr>
+<tr valign="top"><td><code>maybe_code_feedback</code></td>
+<td>
+<p>Should <code>maybe_code_feedback()</code> provide code
+feedback when used in a <code><a href="../../gradethis/help/graded.html">graded()</a></code> message? The default value can be set
+with <code><a href="../../gradethis/help/gradethis_setup.html">gradethis_setup()</a></code>.
+</p>
+<p>Typically, <code><a href="../../gradethis/help/maybe_code_feedback.html">maybe_code_feedback()</a></code> is called in the default <code><a href="../../gradethis/help/fail.html">fail()</a></code>
+message (the default can be customized the <code>fail</code> argument of
+<code><a href="../../gradethis/help/gradethis_setup.html">gradethis_setup()</a></code>). If the <code>maybe_code_feedback</code> argument is <code>FALSE</code>,
+<code>maybe_code_feedback()</code> returns an empty string.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Returns a function whose first parameter will be an environment
+containing objects specific to the exercise and submission (see <strong>Available
+variables</strong>). For local testing, you can create a version of the expected
+environment for a mock exercise submission with <code><a href="../../gradethis/help/mock_this_exercise.html">mock_this_exercise()</a></code>.
+Calling the returned function on the exercise-checking environment will
+evaluate the grade-checking <code>expr</code> and return a final grade via <code><a href="../../gradethis/help/graded.html">graded()</a></code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../gradethis/help/grade_this_code.html">grade_this_code()</a></code>, <code><a href="../../gradethis/help/mock_this_exercise.html">mock_this_exercise()</a></code>, <code><a href="../../gradethis/help/gradethis_demo.html">gradethis_demo()</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# For an interactive example run: gradethis_demo()
+
+# Suppose we have an exercise that prompts students to calculate the
+# average height of Loblolly pine trees using the `Loblolly` data set.
+# We might write an exercise `-check` chunk like the one below.
+#
+# Since grade_this() returns a function, we'll save the result of this
+# "chunk" as `grader()`, which can be called on an exercise submission
+# to evaluate the student's code, which we'll simulate with
+# `mock_this_exercise()`.
+
+grader &lt;-
+  # ```{r example-check}
+  grade_this({
+    if (length(.result) != 1) {
+      fail("I expected a single value instead of {length(.result)} values.")
+    }
+
+    if (is.na(.result)) {
+      fail("I expected a number, but your code returned a missing value.")
+    }
+
+    avg_height &lt;- mean(Loblolly$height)
+    if (identical(.result, avg_height)) {
+      pass("Great work! The average height is {round(avg_height, 2)}.")
+    }
+
+    # Always end grade_this() with a default grade.
+    # By default fail() will also give code feedback,
+    # if a solution is available.
+    fail()
+  })
+# ```
+
+# Simulate an incorrect answer: too many values...
+grader(mock_this_exercise(.user_code = Loblolly$height[1:2]))
+
+# This student submission returns a missing value...
+grader(mock_this_exercise(mean(Loblolly$Seed)))
+# This student submission isn't caught by any specific tests,
+# the final grade is determined by the default (last) value in grade_this()
+grader(mock_this_exercise(mean(Loblolly$age)))
+
+# If you have a *-solution chunk,
+# fail() without arguments gives code feedback...
+grader(
+  mock_this_exercise(
+    .user_code = mean(Loblolly$age),
+    .solution_code = mean(Loblolly$height)
+  )
+)
+
+# Finally, the "student" gets the correct answer!
+grader(mock_this_exercise(mean(Loblolly$height)))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gradethis</em> version 0.2.5.9000 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

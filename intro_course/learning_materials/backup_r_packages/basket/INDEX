@@ -1,0 +1,27 @@
+basket                  Create a Basket Trial Analysis
+basket-package          Basket Trial Analysis
+basket_map              Get the Basketwise Maximum A Posteriori
+                        Probability Matrix
+basket_name             The Names of the Baskets
+basket_pep              The Basketwise Posterior Exchangeability
+                        Probability Matrix
+cluster_baskets         Get the Cluster Members of MEM Models
+cluster_map             Get the Clusterwise Maximum A Posteriori
+                        Probability Matrix
+cluster_membership      Cluster Baskets Based on the Posterior
+                        Exchangeabilities
+cluster_pep             Get the Clusterwise Posterior Exchangeability
+                        Matrix
+get_seed                Get the Current Random Seed
+mem_exact               Fit the Exact MEM Model
+mem_mcmc                Fit the MEM Model using MCMC
+plot_density            Plot the Response Densities in Basket Trials
+plot_map                Plot the Map Exchangeability of a Basket Trial
+plot_mem                Plot the Prior, MAP, and PEP of a Basket Trial
+plot_pep                Plot the Posterior Exchangeability of a Basket
+                        Trial
+plot_pep_graph          Plot a Network Graph of the PEP Matrix
+sample_posterior        Sample Posterior Samples from a Basket Trial
+update_p0               Update Full Bayes results with different p0
+                        values
+vemu                    Summary Data from the Vemurafenib Study

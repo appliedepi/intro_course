@@ -82,16 +82,13 @@ top of script to create a date object for filtering datasets, plots/tables, etc.
 We also create a week object to make grouping data easier. In this scenario we 
 have defined the week to start on Mondays (day 1 of the week) 
 
-From these we are then able to define periods 14 and 28 days prior to our 
-report date. We can also make the appropriate labels to auto-populate
-table titles. 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 ```{r define_reporting_periods}
 
 # create a date object from the parameter
 # Minus 7 days surveillance date to account for lag in reporting lab results
-surveillance_date <- as.Date(params$surveillance_date) - 7
+surveillance_date <- ymd(params$surveillance_date) - 7
 
 ```
 
@@ -251,14 +248,12 @@ linelist <- linelist_raw %>%
 
 Here we are going to clean the date variables 
 
+In the class we have taught using the {lubridate} functions ymd(), mdy(), and dmy(), which also should correspond to the format in the raw data.
+
 The {base} way to convert columns to Date class is with as.Date(). If the
 current format is YYYY-MM-DD or YYYY/MM/DD then no other arguments are needed. 
-If the format is different, specify it to format= (for more detail see: 
+If the format is different, specify it to the argument format= (for more detail see: 
 https://epirhandbook.com/working-with-dates.html#convert-to-date )
-
-Below we also introduce using across() from {dplyr}, which allows you to apply a
-function across multiple specified columns. See
-https://epirhandbook.com/cleaning-data-and-core-functions.html#clean_across
 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -274,23 +269,27 @@ linelist <- linelist %>%
     date_hospitalized = ymd(date_hospitalized),
   ) %>% 
   
-  # remove onset, hospitalisation, and death dates prior to 2020
-  mutate(
-    date_onset = replace(date_onset, date_onset < ymd("2020-01-01"), NA),
-    date_hospitalized = replace(date_hospitalized, date_hospitalized < ymd("2020-01-01"), NA)
-    ) %>% 
+     
+  # # remove onset, hospitalisation, and death dates prior to 2020
+  # mutate(
+  #   date_onset        = replace(date_onset, date_onset < ymd("2020-01-01"), NA),
+  #   date_hospitalized = replace(date_hospitalized, date_hospitalized < ymd("2020-01-01"), NA)
+  #   ) %>% 
        
+     
+     
   # remove cases reported after the surveillance_date (for this report)
-  filter(date_report <= surveillance_date) %>% 
+  filter(date_report <= surveillance_date)  
   
+
   # create an "epiweek" column from the report date 
   # floor_date() rounds down to the closest week
-  mutate(epiweek = floor_date(date_report,
-                          # round by weeks
-                          unit = "week", 
-                          # define week to start on Sunday
-                          week_start = 7)
-  )
+  # mutate(epiweek = floor_date(date_report,
+  #                         # round by weeks
+  #                         unit = "week", 
+  #                         # define week to start on Sunday
+  #                         week_start = 7))
+  #
 
 ```
 
@@ -319,12 +318,12 @@ linelist <- linelist %>%
         # define break points
         lower = 0,
         upper = 70,
-        by = 10)) %>% 
+        by    = 10)) %>% 
 
-     mutate(gender = case_when(
-          gender == "Unknown" ~ NA_character_,
-          TRUE                ~ gender)) %>% 
-     
+     # convert "Unknown" to NA in the column gender
+     mutate(gender = na_if(gender, "Unknown")) %>% 
+
+     # convert the race values to title case 
      mutate(race = str_to_title(race))
 ```
 
@@ -401,28 +400,37 @@ weekly_breaks <- seq.Date(
 
 # open a plot with the linelist data
 ggplot(linelist, mapping = aes(x = date_report, fill = fct_lump_n(city, 5))) +
+  
   geom_histogram(
        breaks = weekly_breaks,  # use breaks defined above
        closed = "left"          # count cases from the start of a breakpoint
   ) +
+  
   scale_y_continuous(
     # make the y axis start at the origin
     expand = c(0, 0))+
+  
   scale_x_date(
-    expand            = c(0,0),           # remove excess x-axis space before and after case bars
+    expand            = c(0,0),            # remove excess x-axis space before and after case bars
     date_breaks       = "2 months",        # date labels and major vertical gridlines appear every 4 Monday weeks
     #date_minor_breaks = "week",           # minor vertical lines appear every Monday week
     labels = scales::label_date_short()
     )+
+  
   scale_fill_brewer(type = "qual")+
+  
   labs(title = "COVID-19 epidemic, Fulton County, GA",
        subtitle = "Weekly reported cases among top five cities", 
        x = "Date of report",
        y = "Number of cases",
        fill = "City",
        caption = str_glue("Fake data for course exercise.\n{nrow(linelist)} cases shown by city of residence\nCases reported from {min(linelist$date_report)} to {max(linelist$date_report)}")) + 
-  theme(legend.position = "right")+
-  theme_minimal()
+  
+    theme_minimal()+
+     
+    theme(legend.position = "right")
+  
+
 
 ```
 
@@ -451,11 +459,11 @@ city_table <- linelist %>%
   
   # create new summary columns 
   summarise(
-    total_cases = n(),
+    total_cases  = n(),
     recent_cases = sum(date_report > surveillance_date - 14)) %>% 
 
   # join with zip code populations data frame
-  left_join(city_pops, by = c("city" = "city")) %>% 
+  left_join(city_pops, by = c("city")) %>% 
    
   # add cululative case incidence  
   mutate(inc_per_10k = round((total_cases / population)* 10000, digits = 1)) %>% 
@@ -464,10 +472,7 @@ city_table <- linelist %>%
   select(-population) %>% 
 
   # sort on incidence per 10,000 population
-  arrange(desc(inc_per_10k)) %>% 
-
-  # add total row  
-  adorn_totals()  
+  arrange(desc(inc_per_10k)) 
   
 ```
 
@@ -489,7 +494,7 @@ city_table %>%
 \pagebreak 
 
 
-## Table of Race and outcome (death)  
+## Table of Race and hospitalization (Yes/No)  
 
 ```{r}
 # Compare race and died

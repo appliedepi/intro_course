@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Filesystem-based storage for tutor state data</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for filesystem_storage {learnr}"><tr><td>filesystem_storage {learnr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Filesystem-based storage for tutor state data</h2>
+
+<h3>Description</h3>
+
+<p>Tutorial state storage handler that uses the filesystem
+as a backing store. The directory will contain tutorial
+state data partitioned by user_id, tutorial_id, and
+tutorial_version (in that order)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+filesystem_storage(dir, compress = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>dir</code></td>
+<td>
+<p>Directory to store state data within</p>
+</td></tr>
+<tr valign="top"><td><code>compress</code></td>
+<td>
+<p>Should <code>.rds</code> files be compressed?</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Storage handler suitable for <code>options(tutorial.storage = ...)</code>
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>learnr</em> version 0.10.1.9019 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

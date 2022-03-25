@@ -1,0 +1,29 @@
+Type: Package
+Package: gghighlight
+Title: Highlight Lines and Points in 'ggplot2'
+Version: 0.3.2
+Authors@R: 
+    person(given = "Hiroaki",
+           family = "Yutani",
+           role = c("aut", "cre"),
+           email = "yutani.ini@gmail.com",
+           comment = c(ORCID = "0000-0002-3385-7233"))
+Description: Make it easier to explore data with highlights.
+License: MIT + file LICENSE
+URL: https://github.com/yutannihilation/gghighlight/
+BugReports: https://github.com/yutannihilation/gghighlight/issues
+Depends: ggplot2 (>= 3.0.0), R (>= 3.2.0)
+Imports: dplyr (>= 1.0.0), ggrepel, lifecycle, purrr, rlang, tibble
+Suggests: knitr, rmarkdown, sf, testthat, vdiffr (>= 0.3.0)
+VignetteBuilder: knitr
+RdMacros: lifecycle
+Encoding: UTF-8
+RoxygenNote: 7.1.1
+Config/testthat/edition: 3
+NeedsCompilation: no
+Packaged: 2021-06-05 14:26:57 UTC; yutani
+Author: Hiroaki Yutani [aut, cre] (<https://orcid.org/0000-0002-3385-7233>)
+Maintainer: Hiroaki Yutani <yutani.ini@gmail.com>
+Repository: CRAN
+Date/Publication: 2021-06-05 14:40:02 UTC
+Built: R 4.1.2; ; 2022-02-26 04:24:20 UTC; windows

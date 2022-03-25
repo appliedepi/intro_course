@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+<title>Add some flair to your source code</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Add some flair to your source code</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(flair)</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(ggplot2)</a></code></pre></div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>The primary goal of the <code>flair</code> package is to provide tools for presenting R code.</p>
+<p>It is common to show source code, in addition to code output, as part of a conference talk, workshop, or lecture. Often, we want to call attention to certain aspects of the code.</p>
+<p>For example, suppose you want to illustrate to a new learner the use of the pipe <code>%&gt;%</code>. You might want to create a slide that shows the following:</p>
+<pre><code class="language-r"><code>iris <span style="background-color:#ffff7f">%&gt;%</span><br>  group_by(Species) <span style="background-color:#ffff7f">%&gt;%</span><br>  summarize(mean(Sepal.Length))</code></code></pre>
+<pre><code>
+#&gt; # A tibble: 3 x 2
+#&gt;   Species    `mean(Sepal.Length)`
+#&gt;   &lt;fct&gt;                     &lt;dbl&gt;
+#&gt; 1 setosa                     5.01
+#&gt; 2 versicolor                 5.94
+#&gt; 3 virginica                  6.59
+</code></pre>
+<p>Without <code>flair</code>, your approach might be to type your code into your code chunk, copy-paste it to a string, and manually format that string using html to add the background highlighting to the pipes. What a headache!</p>
+<p>In this vignette, we will show you how to use the <code>flair</code> package to add decorative formatting to your source code.</p>
+</div>
+<div id="with_flair-objects" class="section level2">
+<h2><code>with_flair</code> Objects</h2>
+<p>The core element of the package is an object of the class <code>with_flair</code>. These objects contain both the natural output of your R code and your flaired-up source code.</p>
+<div id="decorating-a-code-chunk" class="section level3">
+<h3>Decorating a code chunk</h3>
+<p>The cleanest way to add flair to your code is to reference a named code chunk in R Markdown.</p>
+<p>For example, your code chunk might look like:</p>
+<pre><code>
+```{r how_to_pipe, include = FALSE}
+
+iris %&gt;%
+  group_by(Species) %&gt;%
+  summarize(mean(Sepal.Length))
+
+```
+</code></pre>
+<p>We would use the <code>decorate()</code> function, referencing our chunk named <code>how_to_pipe</code> to prepare the source code for decoration. Then we could use the function <code>flair()</code> to show our source code with the pipe operators highlighted in yellow.</p>
+<pre><code>
+```{r, echo = FALSE}
+
+decorate(&quot;how_to_pipe&quot;) %&gt;% 
+  flair(&quot;%&gt;%&quot;)
+  
+```
+</code></pre>
+<p>Note that the <code>decorate</code> and <code>flair</code> step should be in a separate chunk, since it is not itself part of the source code you wish to decorate.</p>
+<p>With the above two code chunks in our source file, the resulting knitted output looks like this:</p>
+<pre><code class="language-r"><code>iris <span style="background-color:#ffff7f">%&gt;%</span><br>  group_by(Species) <span style="background-color:#ffff7f">%&gt;%</span><br>  summarize(mean(Sepal.Length))</code></code></pre>
+<pre><code>
+#&gt; # A tibble: 3 x 2
+#&gt;   Species    `mean(Sepal.Length)`
+#&gt;   &lt;fct&gt;                     &lt;dbl&gt;
+#&gt; 1 setosa                     5.01
+#&gt; 2 versicolor                 5.94
+#&gt; 3 virginica                  6.59
+</code></pre>
+<div id="re-referencing-a-chunk" class="section level4">
+<h4>Re-referencing a chunk</h4>
+<p>A nice consequence of using the chunk label approach to <code>flair</code> is that the same chunk can be displayed multiple times, with different flair decorations, without needing to retype the original code.</p>
+<p>For example, you might want to create the following for classroom purposes:</p>
+<p><em>Where are the <strong>functions</strong>?</em></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">decorate</span>(<span class="st">&quot;how_to_pipe&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="st">  </span><span class="kw">flair_funs</span>()</a></code></pre></div>
+<pre><code class="language-r"><code>iris %&gt;%<br>  <span style="background-color:#ffff7f">group_by</span>(Species) %&gt;%<br>  <span style="background-color:#ffff7f">summarize</span>(<span style="background-color:#ffff7f">mean</span>(Sepal.Length))</code></code></pre>
+<pre><code>
+#&gt; # A tibble: 3 x 2
+#&gt;   Species    `mean(Sepal.Length)`
+#&gt;   &lt;fct&gt;                     &lt;dbl&gt;
+#&gt; 1 setosa                     5.01
+#&gt; 2 versicolor                 5.94
+#&gt; 3 virginica                  6.59
+</code></pre>
+<p><em>Where are the <strong>inputs</strong>?</em></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">decorate</span>(<span class="st">&quot;how_to_pipe&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="st">  </span><span class="kw">flair_input_vals</span>()</a></code></pre></div>
+<pre><code class="language-r"><code>iris %&gt;%<br>  group_by(<span style="background-color:#ffff7f">Species</span>) %&gt;%<br>  summarize(<span style="background-color:#ffff7f">mean(Sepal.Length</span>))</code></code></pre>
+<pre><code>
+#&gt; # A tibble: 3 x 2
+#&gt;   Species    `mean(Sepal.Length)`
+#&gt;   &lt;fct&gt;                     &lt;dbl&gt;
+#&gt; 1 setosa                     5.01
+#&gt; 2 versicolor                 5.94
+#&gt; 3 virginica                  6.59
+</code></pre>
+<p>(Here we have left the options <code>echo = TRUE</code> for the chunks that call the <code>decorate()</code> and <code>flair_*()</code> functions, for you to see the source code. In practice, you would not display these chunks.)</p>
+</div>
+</div>
+<div id="decorating-code-from-a-text-string" class="section level3">
+<h3>Decorating code from a text string</h3>
+<p>You can also use the <code>decorate</code> function to add flair to R code supplied directly as a string. For example</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">decorate</span>(<span class="st">&#39;</span></a>
+<a class="sourceLine" id="cb10-2" title="2"></a>
+<a class="sourceLine" id="cb10-3" title="3"><span class="st">iris %&gt;%</span></a>
+<a class="sourceLine" id="cb10-4" title="4"><span class="st">  group_by(Species) %&gt;%</span></a>
+<a class="sourceLine" id="cb10-5" title="5"><span class="st">  summarize(mean(Sepal.Length))</span></a>
+<a class="sourceLine" id="cb10-6" title="6"></a>
+<a class="sourceLine" id="cb10-7" title="7"><span class="st">&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-8" title="8"><span class="st">  </span><span class="kw">flair</span>(<span class="st">&quot;%&gt;%&quot;</span>)</a></code></pre></div>
+<p>produces</p>
+<pre><code class="language-r"><code>iris <span style="background-color:#ffff7f">%&gt;%</span><br>  group_by(Species) <span style="background-color:#ffff7f">%&gt;%</span><br>  summarize(mean(Sepal.Length))</code></code></pre>
+<pre><code>
+#&gt; # A tibble: 3 x 2
+#&gt;   Species    `mean(Sepal.Length)`
+#&gt;   &lt;fct&gt;                     &lt;dbl&gt;
+#&gt; 1 setosa                     5.01
+#&gt; 2 versicolor                 5.94
+#&gt; 3 virginica                  6.59
+</code></pre>
+<p>For the most part, we do not recommend this option, as it is more difficult to pre-test your code in string from than in a true chunk.</p>
+<p>However, this option is particularly nice if you want to show “bad” code that cannot normally be evaluated. For example:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">decorate</span>(<span class="st">&#39;mean(not_an_object)&#39;</span>,</a>
+<a class="sourceLine" id="cb12-2" title="2">         <span class="dt">error =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-3" title="3"><span class="st">  </span><span class="kw">flair</span>(<span class="st">&quot;not_an_object&quot;</span>)</a></code></pre></div>
+<pre><code class="language-r"><code>mean(<span style="background-color:#ffff7f">not_an_object</span>)</code></code></pre>
+<pre><code>
+#&gt; Error in mean(not_an_object): object &#39;not_an_object&#39; not found
+</code></pre>
+</div>
+<div id="being-specific-with-decorate" class="section level3">
+<h3>Being specific with <code>decorate</code></h3>
+<p>The function <code>decorate</code> does its best to tell when it is receiving input of a chunk label versus code-as-text. However, in the event that something goes awry, you can always be explicit by using functions <code>decorate_code()</code> and <code>decorate_chunk()</code></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">decorate_code</span>(<span class="st">&#39;mean(1:10)&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb14-2" title="2"><span class="st">  </span><span class="kw">flair</span>(<span class="st">&quot;(&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">decorate_chunk</span>(<span class="st">&#39;how_to_pipe&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb15-2" title="2"><span class="st">  </span><span class="kw">flair</span>(<span class="st">&quot;%&gt;%&quot;</span>)</a></code></pre></div>
+</div>
+</div>
+<div id="the-flair_-functions" class="section level2">
+<h2>The <code>flair_*</code> functions</h2>
+<p>The advantage of a <code>with_flair</code> object is that you can add formatting to the source code without altering the output. This decorative formatting is specified through the suite of <code>flair</code> functions</p>
+<div id="flair" class="section level3">
+<h3>flair</h3>
+<p>The main function you will use is simply <code>flair()</code>. This takes as arguments:</p>
+<ul>
+<li><p>A <code>flair</code> object or a text string.</p></li>
+<li><p>A fixed string pattern to match</p></li>
+<li><p>Any number of formatting parameters</p></li>
+</ul>
+<p>If no formatting parameters are supplied, <code>flair_*</code> will default to ordinary yellow-background highlighting.</p>
+<p><code>flair</code> returns a <code>with_flair</code> object, so it is pipe friendly!</p>
+<p>Refer back to the <code>how_to_pipe</code> chunk above. Suppose you want to highlight the pipe operator (<code>%&gt;%</code>) in yellow, highlight the variable name <code>Sepal.Length</code> in pink, and change the text color of <code>Species</code> to blue</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">decorate</span>(<span class="st">&#39;how_to_pipe&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb16-2" title="2"><span class="st">  </span><span class="kw">flair</span>(<span class="st">&quot;%&gt;%&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb16-3" title="3"><span class="st">  </span><span class="kw">flair</span>(<span class="st">&quot;Sepal.Length&quot;</span>, <span class="dt">background =</span> <span class="st">&quot;pink&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb16-4" title="4"><span class="st">  </span><span class="kw">flair</span>(<span class="st">&quot;Species&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;CornflowerBlue&quot;</span>)</a></code></pre></div>
+<pre><code class="language-r"><code>iris <span style="background-color:#ffff7f">%&gt;%</span><br>  group_by(<span style="color:CornflowerBlue">Species</span>) <span style="background-color:#ffff7f">%&gt;%</span><br>  summarize(mean(<span style="background-color:pink">Sepal.Length</span>))</code></code></pre>
+<pre><code>
+#&gt; # A tibble: 3 x 2
+#&gt;   Species    `mean(Sepal.Length)`
+#&gt;   &lt;fct&gt;                     &lt;dbl&gt;
+#&gt; 1 setosa                     5.01
+#&gt; 2 versicolor                 5.94
+#&gt; 3 virginica                  6.59
+</code></pre>
+</div>
+<div id="flair_lines" class="section level3">
+<h3>flair_lines</h3>
+<p>If you only need to highlight certain lines of your code, you can do so:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="kw">decorate</span>(<span class="st">&#39;how_to_pipe&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb18-2" title="2"><span class="st">  </span><span class="kw">flair_lines</span>(<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>)</a></code></pre></div>
+<pre><code class="language-r"><code>iris %&gt;%<br><span style="background-color:#ffff7f">  group_by(Species) %&gt;%</span><br><span style="background-color:#ffff7f">  summarize(mean(Sepal.Length))</span></code></code></pre>
+<pre><code>
+#&gt; # A tibble: 3 x 2
+#&gt;   Species    `mean(Sepal.Length)`
+#&gt;   &lt;fct&gt;                     &lt;dbl&gt;
+#&gt; 1 setosa                     5.01
+#&gt; 2 versicolor                 5.94
+#&gt; 3 virginica                  6.59
+</code></pre>
+<p><strong>Important Notes:</strong></p>
+<ol style="list-style-type: decimal">
+<li>Unlike the <code>echo</code> option in R Markdown chunks, <code>flair_lines</code> only counts lines with code content, not whitespace.<br />
+</li>
+<li>As of now, <code>flair_lines</code> only works with the default yellow-background highlighting. (Sorry!)</li>
+</ol>
+</div>
+<div id="flair_rx" class="section level3">
+<h3>flair_rx</h3>
+<p>The function <code>flair_rx</code> takes pattern matching input in the form of a regular expression, rather than a fixed string.</p>
+<p>(In fact, all <code>flair_*</code> functions are built on <code>flair_rx</code>.)</p>
+</div>
+<div id="syntax-highlighting" class="section level3">
+<h3>Syntax highlighting</h3>
+<p><code>flair</code> also includes a few shortcuts for highlighting specific aspects of R source code. Currently, these functions are:</p>
+<ul>
+<li><p><code>flair_funs()</code> for <em>functions</em></p></li>
+<li><p><code>flair_args()</code> for <em>arguments to functions</em></p></li>
+<li><p><code>flair_input_vals()</code> for <em>values assigned to function arguments</em></p></li>
+</ul>
+<p>For example:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1"><span class="kw">decorate</span>(<span class="st">&#39;</span></a>
+<a class="sourceLine" id="cb20-2" title="2"><span class="st">ggplot(iris, aes(x = Sepal.Length, </span></a>
+<a class="sourceLine" id="cb20-3" title="3"><span class="st">                y = Petal.Length, </span></a>
+<a class="sourceLine" id="cb20-4" title="4"><span class="st">                color = Species)) +</span></a>
+<a class="sourceLine" id="cb20-5" title="5"><span class="st">  geom_point()</span></a>
+<a class="sourceLine" id="cb20-6" title="6"></a>
+<a class="sourceLine" id="cb20-7" title="7"><span class="st">&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-8" title="8"><span class="st">  </span><span class="kw">flair_args</span>(<span class="dt">color =</span> <span class="st">&quot;CornflowerBlue&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-9" title="9"><span class="st">  </span><span class="kw">flair_funs</span>(<span class="dt">color =</span> <span class="st">&quot;Coral&quot;</span>, <span class="dt">underline =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-10" title="10"><span class="st">  </span><span class="kw">flair_input_vals</span>(<span class="dt">background =</span> <span class="st">&quot;Aquamarine&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-11" title="11"><span class="st">  </span><span class="kw">flair_rx</span>(<span class="st">&quot;[A-z]*</span><span class="ch">\\</span><span class="st">.Length&quot;</span>, <span class="dt">background =</span> <span class="st">&quot;pink&quot;</span>)</a></code></pre></div>
+<pre><code class="language-r"><code><span style="color:Coral;underline:text-decoration">ggplot</span>(<span style="background-color:Aquamarine">iris</span>, <span style="color:Coral;underline:text-decoration">aes</span>(<span style="color:CornflowerBlue">x</span> = <span style="background-color:Aquamarine"><span style="background-color:pink">Sepal.Length</span></span>, <br>                y = <span style="background-color:Aquamarine"><span style="background-color:pink">Petal.Length</span></span>, <br>                color = <span style="background-color:Aquamarine">Species</span>)) +<br>  <span style="color:Coral;underline:text-decoration">geom_point</span>()</code></code></pre>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+</div>
+<div id="errata" class="section level2">
+<h2>Errata</h2>
+<div id="evaluating-code-and-defining-objects" class="section level3">
+<h3>Evaluating code and defining objects</h3>
+<p>One nice feature the <code>decorate</code> function is that it evaluates the referenced code when it is run. This means that you can define objects in your source code, and use them later in your analysis as you normally would:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1"><span class="kw">decorate</span>(<span class="st">&#39;foo &lt;- mean(1:10)&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb21-2" title="2"><span class="st">  </span><span class="kw">flair_funs</span>()</a></code></pre></div>
+<pre><code class="language-r"><code>foo &lt;- <span style="background-color:#ffff7f">mean</span>(1:10)</code></code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">foo <span class="op">+</span><span class="st"> </span><span class="dv">5</span></a></code></pre></div>
+<pre><code>#&gt; [1] 10.5</code></pre>
+<p>A word of caution: Make sure you define your objects in your code string, not outside the <code>decorate()</code> function! For example, the following approach has two problems:</p>
+<ol style="list-style-type: decimal">
+<li><p><code>foo</code> contains the output object itself, rather than the result of the R code <code>mean(1:10)</code>, so <code>foo + 5</code> throws an error.</p></li>
+<li><p>The output object of <code>decorate</code> is being assigned to <code>foo</code> rather than printed, so no highlighted code is included in the knitted output.</p></li>
+</ol>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">foo &lt;-<span class="st"> </span><span class="kw">decorate</span>(<span class="st">&#39;mean(1:10)&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb24-2" title="2"><span class="st">  </span><span class="kw">flair_funs</span>()</a>
+<a class="sourceLine" id="cb24-3" title="3"></a>
+<a class="sourceLine" id="cb24-4" title="4">foo <span class="op">+</span><span class="st"> </span><span class="dv">5</span></a></code></pre></div>
+<pre><code>#&gt; Error in foo + 5: non-numeric argument to binary operator</code></pre>
+</div>
+<div id="a-note-about-colors" class="section level3">
+<h3>A note about colors</h3>
+<p><code>flair</code> gives you complete freedom to choose the colors of your highlighted elements, so long as the color name is a <a href="https://www.w3schools.com/colors/colors_names.asp">recognized html name</a> or a hex code.</p>
+<p>However, please remember to be judicious in your color choices, and to keep in mind <a href="https://venngage.com/blog/color-blind-friendly-palette/">how your colors appear to colorblind individuals</a>.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

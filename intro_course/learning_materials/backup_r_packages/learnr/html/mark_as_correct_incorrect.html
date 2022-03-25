@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Mark submission as correct or incorrect</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for correct {learnr}"><tr><td>correct {learnr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Mark submission as correct or incorrect</h2>
+
+<h3>Description</h3>
+
+<p>Helper method to communicate that the user's submission was correct or
+incorrect. These functions were originally designed for developers to create
+<code><a href="../../learnr/help/question_is_correct.html">question_is_correct()</a></code> methods for custom question types, but they can also
+be called inside the functions created by <code><a href="../../learnr/help/answer_fn.html">answer_fn()</a></code> to dynamically
+determine the result and message provided to the user.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+correct(messages = NULL)
+
+incorrect(messages = NULL)
+
+mark_as(correct, messages = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>messages</code></td>
+<td>
+<p>A vector of messages to be displayed.  The type of message
+will be determined by the <code>correct</code> value. Note that markdown messages are
+not rendered into HTML, but you may provide HTML using <code><a href="../../htmltools/help/HTML.html">htmltools::HTML()</a></code>
+or <a href="../../htmltools/help/builder.html">htmltools::tags</a>.</p>
+</td></tr>
+<tr valign="top"><td><code>correct</code></td>
+<td>
+<p>Logical: is the question answer is correct</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Returns a list with class <code>learnr_mark_as</code> to be returned from the
+<code><a href="../../learnr/help/question_is_correct.html">question_is_correct()</a></code> method for the learnr question type.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../learnr/help/answer_fn.html">answer_fn()</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Radio button question implementation of `question_is_correct`
+question_is_correct.radio &lt;- function(question, value, ...) {
+  for (ans in question$answers) {
+    if (as.character(ans$option) == value) {
+      return(mark_as(ans$correct, ans$message))
+    }
+  }
+  mark_as(FALSE, NULL)
+}
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>learnr</em> version 0.10.1.9019 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

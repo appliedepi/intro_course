@@ -1,0 +1,23 @@
+code_feedback           Provide automated code feedback
+debug_this              Debug an exercise submission
+fail_if_code_feedback   Signal a failing grade if mistakes are detected
+                        in the submitted code
+fail_if_error           Fail if grading code produces an error
+grade_this              Grade a student's submission using custom logic
+grade_this-objects      Checking environment objects for use in
+                        'grade_this()'
+grade_this_code         Grade student code against a solution
+graded                  Signal a final grade for a student's submission
+gradethis_error_checker
+                        An error checking function for use with learnr
+gradethis_exercise_checker
+                        A checker function to use with 'learnr'
+gradethis_setup         Setup gradethis for use within learnr
+mock_this_exercise      Mock a user submission to an exercise
+pass_if                 Signal a passing or failing grade if a
+                        condition is TRUE
+pass_if_equal           Signal a passing or failing grade if two values
+                        are equal
+pipe_warning            Inform the user about how gradethis interprets
+                        piped code
+praise                  Random praise and encouragement

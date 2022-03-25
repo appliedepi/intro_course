@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Grade student code against a solution (Legacy)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for grade_code {gradethis}"><tr><td>grade_code {gradethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Grade student code against a solution (Legacy)</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#superseded"><img src="../help/figures/lifecycle-superseded.svg" alt='[Superseded]' /></a> Please use <code><a href="../../gradethis/help/grade_this_code.html">grade_this_code()</a></code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+grade_code(
+  correct = NULL,
+  incorrect = NULL,
+  ...,
+  allow_partial_matching = getOption("gradethis.allow_partial_matching", TRUE),
+  glue_correct = getOption("gradethis.glue_correct"),
+  glue_incorrect = getOption("gradethis.glue_incorrect"),
+  glue_pipe = deprecated(),
+  grader_args = deprecated(),
+  learnr_args = deprecated()
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>correct</code></td>
+<td>
+<p>A character string to display if the student answer matches a
+known correct answer.</p>
+</td></tr>
+<tr valign="top"><td><code>incorrect</code></td>
+<td>
+<p>A character string to display if the student answer matches
+a known incorrect answer.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>ignored. Should be empty</p>
+</td></tr>
+<tr valign="top"><td><code>allow_partial_matching</code></td>
+<td>
+<p>A logical. If <code>FALSE</code>, the partial matching of
+argument names is not allowed and e.g. <code>runif(1, mi = 0)</code> will return a
+message indicating that the full formal name <code>min</code> should be used. The
+default is set via the <code>gradethis.allow_partial_matching</code> option, or by
+<code><a href="../../gradethis/help/gradethis_setup.html">gradethis_setup()</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>glue_correct</code></td>
+<td>
+<p>A glue string that returns the final correct message
+displayed. Defaults to <code>getOption("gradethis_glue_correct")</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>glue_incorrect</code></td>
+<td>
+<p>A glue string that returns the final incorrect message
+displayed. Defaults to <code>getOption("gradethis_glue_incorrect")</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>glue_pipe</code></td>
+<td>
+<p>A glue string that returns the final message displayed when
+the student uses a pipe, <code style="white-space: pre;">%&gt;%</code>. Defaults to
+<code>getOption("gradethis.pipe_warning")</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>grader_args</code></td>
+<td>
+<p>A list of parameters passed to <code>grader</code> functions
+(provided by <code><a href="../../gradethis/help/gradethis_exercise_checker.html">gradethis_exercise_checker()</a></code>). This contains:
+</p>
+
+<ul>
+<li> <p><code>user_quo</code>: Quoted R code submitted by the user. For example
+<code><a href="../../rlang/help/quo.html">rlang::quo(1)</a></code>
+</p>
+</li>
+<li> <p><code>solution_quo</code>: (Optional) Quoted solution R code provided by the
+<code style="white-space: pre;">*-solution</code> chunk for an exercise.
+</p>
+</li></ul>
+</td></tr>
+<tr valign="top"><td><code>learnr_args</code></td>
+<td>
+<p>A list of all parameters passed to
+<code><a href="../../gradethis/help/gradethis_exercise_checker.html">gradethis_exercise_checker()</a></code> by <code>learnr</code>. See
+<a href="https://rstudio.github.io/learnr/exercises.html#exercise_checking">https://rstudio.github.io/learnr/exercises.html#exercise_checking</a> for
+more details.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Checks the code expression or the code result against a solution.
+</p>
+<p><code>grade_code()</code> compares student code to a solution (i.e. model code) and
+describes the first way that the student code differs. If the student code
+exactly matches the solution, <code>grade_code()</code> returns a customizable success
+message (<code>correct</code>). If the student code does not match the solution, a
+customizable incorrect message (<code>incorrect</code>) can also be provided.
+</p>
+<p><code>grade_code()</code> provides a <em>strict</em> check in that the student code must
+exactly match the solution. It is not enough for the student code to be
+equivalent to the solution code (e.g. to return the same result as the
+solution).
+</p>
+<p>You can provide solution code for <code>grade_code()</code> to use in two ways:
+</p>
+
+<ol>
+<li><p> Pass code as a character string or a quoted expression to the solution
+argument of <code>grade_code()</code>
+</p>
+</li>
+<li><p> Make a &quot;-solution&quot; code chunk for the exercise to be checked in a learnr
+document. There is no need to supply a solution argument for <code>grade_code()</code>
+if you call it from the &quot;-check&quot; chunk of the same exercise. Likewise, there
+is no need to supply a student submitted code argument when you call
+<code>grade_code()</code> from a learnr document (learnr will provide the code that the
+student submits when it runs <code>grade_code()</code>.
+</p>
+</li></ol>
+
+<p>For best results, name all arguments provided in the solution code.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a function whose first parameter should be an environment that contains
+all necessary information to compare the code.  The result of the returned
+function will be a <code><a href="../../gradethis/help/graded.html">graded()</a></code> object. An incorrect message will describe the
+first way that the answer differs, the message will be the content of the <code>glue_pipe</code>
+argument.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../gradethis/help/grade_this_code.html">grade_this_code()</a></code>, <code><a href="../../gradethis/help/grade_code.html">grade_code()</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+gradethis_demo()
+
+## End(Not run)
+
+# This is a manual example, see grading demo for `learnr` tutorial usage
+y &lt;- expression(sqrt(log(2)))
+z &lt;- expression(sqrt(log(1)))
+grade_code(grader_args = list(user_quo = y, solution_quo = z))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gradethis</em> version 0.2.5.9000 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

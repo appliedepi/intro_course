@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Checking environment objects for use in 'grade_this()'</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for grade_this-objects {gradethis}"><tr><td>grade_this-objects {gradethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Checking environment objects for use in <code>grade_this()</code></h2>
+
+<h3>Description</h3>
+
+<p><code><a href="../../gradethis/help/grade_this.html">grade_this()</a></code> allows instructors to determine a grade and to create custom
+feedback messages using custom R code. To facilitate evaluating the
+exercise, <code><a href="../../gradethis/help/grade_this.html">grade_this()</a></code> makes available a number of objects that can be
+referenced within the <code>{ ... }</code> expression.
+</p>
+<p>All of the objects provided by <code>learnr</code> to an exercise checking function
+are available for inspection. To avoid name collisions with user or
+instructor code, the names of these objects all start with <code>.</code>.
+</p>
+
+<ul>
+<li> <p><code>.label</code>: The exercise label.
+</p>
+</li>
+<li> <p><code>.engine</code>: The exercise engine, typically 'r'.
+</p>
+</li>
+<li> <p><code>.last_value</code>: The last value returned from evaluating the user's exercise submission.
+</p>
+</li>
+<li> <p><code>.solution_code</code>: A string containing the code provided within the <code style="white-space: pre;">*-solution</code> chunk for the exercise.
+</p>
+</li>
+<li> <p><code>.user_code</code>: A string containing the code submitted by the user.
+</p>
+</li>
+<li> <p><code>.check_code</code>: A string containing the code provided within the <code style="white-space: pre;">*-check</code> or <code style="white-space: pre;">*-code-check</code> chunk for the exercise.
+</p>
+</li>
+<li> <p><code>.envir_prep</code>: A copy of the R environment after running the exercise setup code and before the execution of the student's submitted code.
+</p>
+</li>
+<li> <p><code>.envir_result</code>: The R environment after running the student's submitted code.
+</p>
+</li>
+<li> <p><code>.evaluate_result</code>: The return value from the <code><a href="../../evaluate/help/evaluate.html">evaluate::evaluate()</a></code> function (see learnr's documentation).
+</p>
+</li>
+<li> <p><code>.stage</code>: The current checking stage in the learnr exercise evaluation lifecycle: 'code_check', 'error_check', or 'check'
+</p>
+</li></ul>
+
+<p>In addition, <span class="pkg">gradethis</span> has provided some extra objects:
+</p>
+
+<ul>
+<li> <p><code>.user</code>, <code>.result</code>: The last value returned from evaluating the user's exercise submission.
+</p>
+</li>
+<li> <p><code>.solution</code>: The last value returned from evaluating the <code>.solution_code</code> for the exercise (evaluated in <code>.envir_prep</code>).
+</p>
+</li>
+<li> <p><code>.solution_code_all</code>: A list containing the code of all solutions when multiple solutions are provided in the <code style="white-space: pre;">*-solution</code> chunk for the exercise. Solutions are separated by header comments, e.g. <code style="white-space: pre;"># base_r ----</code>.
+</p>
+</li></ul>
+
+
+
+<h3>Usage</h3>
+
+<pre>
+.result
+
+.user
+
+.last_value
+
+.solution
+
+.user_code
+
+.solution_code
+
+.solution_code_all
+
+.envir_prep
+
+.envir_result
+
+.evaluate_result
+
+.label
+
+.stage
+
+.engine
+</pre>
+
+
+<h3>Format</h3>
+
+<p>An object of class <code>.result</code> (inherits from <code>gradethis_placeholder</code>) of length 0.
+</p>
+<p>An object of class <code>.user</code> (inherits from <code>.result</code>, <code>gradethis_placeholder</code>) of length 0.
+</p>
+<p>An object of class <code>.last_value</code> (inherits from <code>.result</code>, <code>gradethis_placeholder</code>) of length 0.
+</p>
+<p>An object of class <code>.solution</code> (inherits from <code>gradethis_placeholder</code>) of length 0.
+</p>
+<p>An object of class <code>.user_code</code> (inherits from <code>gradethis_placeholder</code>) of length 0.
+</p>
+<p>An object of class <code>.solution_code</code> (inherits from <code>gradethis_placeholder</code>) of length 0.
+</p>
+<p>An object of class <code>.solution_code_all</code> (inherits from <code>gradethis_placeholder</code>) of length 0.
+</p>
+<p>An object of class <code>.envir_prep</code> (inherits from <code>gradethis_placeholder</code>) of length 0.
+</p>
+<p>An object of class <code>.envir_result</code> (inherits from <code>gradethis_placeholder</code>) of length 0.
+</p>
+<p>An object of class <code>.evaluate_result</code> (inherits from <code>gradethis_placeholder</code>) of length 0.
+</p>
+<p>An object of class <code>.label</code> (inherits from <code>gradethis_placeholder</code>) of length 0.
+</p>
+<p>An object of class <code>.stage</code> (inherits from <code>gradethis_placeholder</code>) of length 0.
+</p>
+<p>An object of class <code>.engine</code> (inherits from <code>gradethis_placeholder</code>) of length 0.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>gradethis</em> version 0.2.5.9000 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

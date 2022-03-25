@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Adds comments to the output of code in a learnr block.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for announce {etude}"><tr><td>announce {etude}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Adds comments to the output of code in a learnr block.</h2>
+
+<h3>Description</h3>
+
+<p>Often the scaffolding put in a <code>{learnr}</code> exercise chunk consists of
+more than one command that produces output. By default, <code>{learnr}</code> will
+print the outputs one after the other. This can make it hard for the reader
+to determine which line of code produced which output. <code>announce()</code> can insert comments
+into the output.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+announce(code, comment)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>code</code></td>
+<td>
+<p>the code that you want to display</p>
+</td></tr>
+<tr valign="top"><td><code>comment</code></td>
+<td>
+<p>A character string to print as a comment</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Use <code>announce()</code> in either of two ways:
+</p>
+
+<ol>
+<li><p> As a simple function call, e.g. <code>announce("my message")</code> which will display
+&quot;my message&quot; as a comment at the corresponding point in the exercise chunk output.
+</p>
+</li>
+<li><p> As the receiver of a piped-in command, e.g. <code>sqrt(2 + 3) %&gt;% announce("my message")</code>. This
+will print out the code on  the LHS of the pipe, along with the message as a comment.
+</p>
+</li></ol>
+
+
+<hr /><div style="text-align: center;">[Package <em>etude</em> version 0.3.0.9001 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

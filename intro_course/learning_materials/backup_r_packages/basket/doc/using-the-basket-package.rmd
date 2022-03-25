@@ -1,0 +1,100 @@
+---
+title: "Using the basket Package"
+author: "Nan Chen, Brian Hobbs, and Michael J. Kane"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    fig_caption: yes
+    keep_tex: yes
+vignette: |
+  %\VignetteIndexEntry{Using the basket Package} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The R `basket` package provides for the designs and analysis of basket trials for [multi-source exchangeability models (MEM)](https://academic.oup.com/biostatistics/article-abstract/19/2/169/3930935), which allows arms to "share" power with similar arms in a trial. The package is intended to perform the exact or MCMC computation of the operating characteristics of different scenarios. Calculations derived from these analyses include the posterior probabilities, HPD boundaries, effective sample sizes (ESS), mean and median estimations can be calculated with this package using the MEM method. Along with providing "basketwise" analyses, the package includes similar calculations for "clusterwise" analyses where a cluster a set of similar baskets. In addition plotting tools are provided to visualize basket and cluster density as well as their exchangeability. The package includes the following main functions: 
+
+- basket() - Create a basket analysis.
+- basket_name() - Get the basket names in an analysis
+- basket_pep() - Get the Posterior Exchangeability Probability (PEP) matrix for the arms in the trial.
+- basket_map() - Get the Maximum A Posteriori (MAP) matrix for the arms in a trial.
+- cluster_pep() - Get the Posterior Exchangeability Probability (PEP) matrix for the arms in the trial.
+- cluster_map() - Get the Maximum A Posteriori (MAP) matrix for the arms in a trial.
+- sample_posterior() - Sample from the posterior distribution of the arms in the trial.
+- summary() - Summarize the results of an analysis.
+- update_p0() - Update the null that a basket response rate is above a specified value.
+- plot_density() - Plot the estimated densities of arms or clusters.
+- plot_pep() - Show the exchangeogram of the PEP matrix.
+- plot_mem() - Plot the arm prior, MAP, and PEP of a basket trial.
+
+## The Vemurafenib Study under Multi-source Exchangeability
+
+As a case study, consider the recent [vemurafenib study that was performed for multiple nonmelanoma cancers with BRAF V600 Mutations by Hynman et al.](https://www.nejm.org/doi/full/10.1056/NEJMoa1502309) This was a basket study to assess the efficacy of vemurafenib for Non-Small Cell Lung Cancer (NSCLC), ColoReCtal (CRC) treated with vemurafenib only, CRC treated with both vemurafenib and cetuximab, cholangiocarcinoma (Bile Duct), Erdheim–Chester disease or Langerhans’-cell histiocytosis (ECD/LCH), and anaplastic thyroid cancer (ATC). The results of the trials are summarized in the following table.
+
+```{r, echo = FALSE}
+library(basket)
+vw <- vemu_wide
+names(vw) <- c("Basket", "Enrolled", "Evauable", "Responders", "Prior Thrpy <= 1", "Prior Thrpy = 2", "Prior Thrpy >= 3")
+knitr::kable(vw)
+```
+
+The table indicates an association between the number of prior therapies and the success of an arm, which suggests heterogeneity in the population of arms. That is some baskets have many enrollees with many prior therapies and others do not. As a result, the response rates arms with favorable enrollment (NSCLC, ECD or LCH, and ATC) are better than those with unfavorable enrollment (CRC (vemu), CRC (vemu+cetu), and Bile Duct). In light of this we may want to allow a favorable-enrollment arm to borrow power from another favorable-enrollment arm depending on how similar they are. This essentially allow arms that are smaller, but similar to other arms to increase their sample size. This combination of actual and borrowed samples is termed the effective sample size (ESS) and is included in the analysis.
+
+An MEM analysis is performed in the `basket` package using the `basket()` function. The exact variation provides results up to numerical precision and is appropriate for trials with few arms. The Markov-chain Monte Carlo (MCMC) variation scales to larger trials with results that are generally within 2-3 significant digits of the exact version (under the default number of iterations). Both the exact and MCMC analyses are performed by specifying the size, number of responders, and null response rate. 
+
+```{r, eval = FALSE}
+# Load the basket library.
+library(basket)
+
+# Load the vemurafenib data.
+data(vemu_wide) 
+
+# Perform the analysis.
+vemu_basket <- basket(responses = vemu_wide$responders,
+                      size = vemu_wide$evaluable,
+                      name = vemu_wide$baskets,
+                      cluster_analysis = TRUE,
+                      p0 = 0.15)
+
+# Show the trial diagnostics.
+summary(vemu_basket)
+```
+
+```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+# Load the basket library.
+library(basket)
+
+# vemu_basket$basket$samples <- vemu_basket$basket$samples[1:5000,]
+# vemu_basket$cluster$samples[[1]] <- vemu_basket$cluster$samples[[1]][1:2000]
+# vemu_basket$cluster$samples[[2]] <- vemu_basket$cluster$samples[[2]][1:4000]
+# pryr::object_size(vemu_basket)
+# saveRDS(vemu_basket, "vemu-basket.rds")
+
+vemu_basket <- readRDS("vemu-basket.rds")
+
+# Show the trial diagnostics.
+summary(vemu_basket)
+```
+
+The output of the `summary` is composed of three parts. The first shows the expression that was used to construct the analysis. The second provides information about the trial at the basket level including, the probability each arm is above the specified null response rate, the mean an median response rate for each arm, the Highest Posterior Density (HPD) interval at the significance level (specified by the `hpd_alpha` parameter), and the ESS. Additionally, the arms are clustered and similar diagnostics are reported for the clusters along with the arms that compose each cluster.
+
+The analysis estimates the posterior distribution of the response rate for both the arms and the clusters. Distributions for arms and can be inspected visually via the `plot_density()` with the analysis as the argument. If only the density of the arms should be shown then the `type = "basket"` can be used. The same is true for `type = "cluster"` for the cluster density plot.
+
+```{r out.width='90%',fig.width= 8, fig.height=5,fig.align= "center"}
+plot_density(vemu_basket$basket)
+```
+
+Along with the densities, the package can show the exchangeability between the individual arms via, what we are terming, an __exchangeogram__. This is similar to a correlogram but, rather than showing correlations among variables, an exchangeogram shows the exchangeability between arms. Exchangeograms for MEM analyses can be created using the `plot_mem()` function. By default the prior exchangeability, MAP exchangeability, and posterior exchangeability are shown in a single plot, and is controlled by the default parameter `type = c("prior", "map", "pep")`. Along with the visualization, the MAP and PEP matrices can retrieved with the `basket_map()` and `basket_pep()` function for baskets and `cluster_map()` and `cluster_pep()` function for clusters.
+
+```{r out.width='100%',fig.width= 8, fig.height=5, fig.align= "center"}
+# Move the basket name labels to the left using 
+# the basket_name_hoffest option
+plot_mem(vemu_basket, text_size = 1.75, expand = c(0.5, 0.5), basket_name_hjust = 0.85)
+```

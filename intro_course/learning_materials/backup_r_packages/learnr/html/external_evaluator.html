@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: External execution evaluator</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for external_evaluator {learnr}"><tr><td>external_evaluator {learnr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>External execution evaluator</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://www.tidyverse.org/lifecycle/#experimental">Lifecycle: experimental</a>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+external_evaluator(
+  endpoint = getOption("tutorial.external.host",
+    Sys.getenv("TUTORIAL_EXTERNAL_EVALUATOR_HOST", NA)),
+  max_curl_conns = 50
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>endpoint</code></td>
+<td>
+<p>The HTTP(S) endpoint to POST the exercises to</p>
+</td></tr>
+<tr valign="top"><td><code>max_curl_conns</code></td>
+<td>
+<p>The maximum number of simultaneous HTTP requests to the
+endpoint.</p>
+</td></tr>
+</table>
+
+<hr /><div style="text-align: center;">[Package <em>learnr</em> version 0.10.1.9019 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

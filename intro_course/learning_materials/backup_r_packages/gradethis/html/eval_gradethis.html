@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Capture grades and errors</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for eval_gradethis {gradethis}"><tr><td>eval_gradethis {gradethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Capture grades and errors</h2>
+
+<h3>Description</h3>
+
+<p>Capture the first <code><a href="../../gradethis/help/graded.html">graded()</a></code> signal or error thrown when evaluating the
+<code>expr</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+eval_gradethis(expr, on_error = NULL, on_graded = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>expr</code></td>
+<td>
+<p>The expression or code block to evaluate</p>
+</td></tr>
+<tr valign="top"><td><code>on_error</code></td>
+<td>
+<p>A <code><a href="../../base/html/conditions.html">withCallingHandlers()</a></code> handler for class <code>error</code> with
+signature <code style="white-space: pre;">function(error, this_env)</code> that receives the error object and
+calling environment of the error handler. <code>on_error</code> should use
+<code><a href="../../rlang/help/return_from.html">rlang::return_from()</a></code> using <code>this_env</code> to immediately return the value and
+not continue evaluation.</p>
+</td></tr>
+<tr valign="top"><td><code>on_graded</code></td>
+<td>
+<p>A <code><a href="../../base/html/conditions.html">withCallingHandlers()</a></code> handler for class <code>graded</code> with
+signature <code style="white-space: pre;">function(grade, this_env)</code> that receives the error object and
+calling environment of the error handler. <code>on_graded</code> should use
+<code><a href="../../rlang/help/return_from.html">rlang::return_from()</a></code> using <code>this_env</code> to immediately return the value and
+not continue evaluation.</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Passes with "message 1", short-circuiting evaluation
+eval_gradethis({
+  pass("message 1")
+  pass("message 2")
+  pass("message 3")
+})
+
+# Fails with message from fail()
+eval_gradethis({
+  fail("incorrect")
+  pass("correct")
+})
+
+# Fails with message from expect_true()
+eval_gradethis({
+  testthat::expect_true(FALSE)
+  pass("message 2")
+  pass("message 3")
+})
+
+# Fails immediately with message "boom"
+eval_gradethis({
+  stop("boom")
+  pass("message 2")
+  pass("message 3")
+})
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gradethis</em> version 0.2.5.9000 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

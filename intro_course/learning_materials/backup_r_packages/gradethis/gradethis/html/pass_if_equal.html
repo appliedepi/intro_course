@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Signal a passing or failing grade if two values are equal</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for pass_if_equal {gradethis}"><tr><td>pass_if_equal {gradethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Signal a passing or failing grade if two values are equal</h2>
+
+<h3>Description</h3>
+
+<p><code>pass_if_equal()</code> and <code>fail_if_equal()</code> are two <code><a href="../../gradethis/help/graded.html">graded()</a></code> helper functions
+that signal a passing or a failing grade if two values are equal. They are
+designed to easily compare the returned value of the student's submitted
+code with the value returned by the solution or another known value:
+</p>
+
+<ul>
+<li><p> Both functions find and use <code>.result</code> as the default for <code>x</code>, the first
+item in the comparison. <code>.result</code> is the last value returned from the
+user's submitted code.
+</p>
+</li>
+<li> <p><code>pass_if_equal()</code> additionally finds and uses <code>.solution</code> as the default
+expected value <code>y</code>.
+</p>
+</li></ul>
+
+<p>See <code><a href="../../gradethis/help/graded.html">graded()</a></code> for more information on <span class="pkg">gradethis</span> grade-signaling
+functions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+pass_if_equal(
+  y = .solution,
+  message = getOption("gradethis.pass", "Correct!"),
+  x = .result,
+  ...,
+  env = parent.frame(),
+  praise = getOption("gradethis.pass.praise", FALSE)
+)
+
+fail_if_equal(
+  y,
+  message = getOption("gradethis.fail", "Incorrect"),
+  x = .result,
+  ...,
+  env = parent.frame(),
+  hint = getOption("gradethis.fail.hint", FALSE),
+  encourage = getOption("gradethis.fail.encourage", FALSE)
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>y</code></td>
+<td>
+<p>The expected value against which <code>x</code> is compared using
+<code>waldo::compare(x, y)</code>. In <code>pass_if_equal()</code>, if no value is provided, the
+exercise <code>.solution</code>, or the result of evaluating the code in the
+exercise's <code style="white-space: pre;">*-solution</code> chunk, will be used for the comparison.</p>
+</td></tr>
+<tr valign="top"><td><code>message</code></td>
+<td>
+<p>A character string of the message to be displayed. In all
+grading helper functions other than <code><a href="../../gradethis/help/graded.html">graded()</a></code>, <code>message</code> is a template
+string that will be processed with <code><a href="../../glue/help/glue.html">glue::glue()</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>First item in the comparison. By default, when used inside
+<code><a href="../../gradethis/help/grade_this.html">grade_this()</a></code>, <code>x</code> is automatically assigned the value of <code>.result</code> — in
+other words the result of running the student's submitted code. <code>x</code> is not
+the first argument since you will often want to compare the final value of
+the student's submission against a specific value, <code>y</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Additional arguments passed to <code><a href="../../gradethis/help/graded.html">graded()</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>env</code></td>
+<td>
+<p>environment to evaluate the glue <code>message</code>. Most users of
+<span class="pkg">gradethis</span> will not need to use this argument.</p>
+</td></tr>
+<tr valign="top"><td><code>praise</code></td>
+<td>
+<p>Include a random praising phrase with <code><a href="../../gradethis/help/random_praise.html">random_praise()</a></code>? The
+default value of <code>praise</code> can be set using <code><a href="../../gradethis/help/gradethis_setup.html">gradethis_setup()</a></code> or the
+<code>gradethis.pass.praise</code> option.</p>
+</td></tr>
+<tr valign="top"><td><code>hint</code></td>
+<td>
+<p>Include a code feedback hint with the failing message? This
+argument only applies to <code>fail()</code> and <code>fail_if_equal()</code> and the message is
+added using the default options of <code><a href="../../gradethis/help/give_code_feedback.html">give_code_feedback()</a></code> and
+<code><a href="../../gradethis/help/maybe_code_feedback.html">maybe_code_feedback()</a></code>. The default value of <code>hint</code> can be set using
+<code><a href="../../gradethis/help/gradethis_setup.html">gradethis_setup()</a></code> or the <code>gradethis.fail.hint</code> option.</p>
+</td></tr>
+<tr valign="top"><td><code>encourage</code></td>
+<td>
+<p>Include a random encouraging phrase with
+<code><a href="../../gradethis/help/random_encouragement.html">random_encouragement()</a></code>? The default value of <code>encourage</code> can be set
+using <code><a href="../../gradethis/help/gradethis_setup.html">gradethis_setup()</a></code> or the <code>gradethis.fail.encourage</code> option.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Returns a passing or failing grade if <code>x</code> and <code>y</code> are equal.
+</p>
+
+
+<h3>Functions</h3>
+
+
+<ul>
+<li> <p><code>pass_if_equal</code>: Signal a <em>passing</em> grade only if <code>x</code> and <code>y</code> are
+equal.
+</p>
+</li>
+<li> <p><code>fail_if_equal</code>: Signal a <em>failing</em> grade only if <code>x</code> and <code>y</code> are
+equal.
+</p>
+</li></ul>
+
+
+<h3>See Also</h3>
+
+<p>Other grading helper functions: <code><a href="../../gradethis/help/graded.html">graded()</a></code>, <code><a href="../../gradethis/help/pass.html">pass()</a></code>, <code><a href="../../gradethis/help/fail.html">fail()</a></code>,
+<code><a href="../../gradethis/help/pass_if.html">pass_if()</a></code>, <code><a href="../../gradethis/help/fail_if.html">fail_if()</a></code>, <code><a href="../../gradethis/help/pass_if_equal.html">pass_if_equal()</a></code>, <code><a href="../../gradethis/help/fail_if_equal.html">fail_if_equal()</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Suppose our prompt is to find the cars in `mtcars` with 6 cylinders...
+
+grader &lt;-
+  # ```{r example-check}
+  grade_this({
+    # Automatically pass if .result equal to .solution
+    pass_if_equal()
+
+    fail_if_equal(mtcars[mtcars$cyl == 4, ], message = "Not four cylinders")
+    fail_if_equal(mtcars[mtcars$cyl == 8, ], message = "Not eight cylinders")
+
+    # Default to failing grade with feedback
+    fail()
+  })
+# ```
+
+.solution &lt;-
+  # ```{r example-solution}
+  mtcars[mtcars$cyl == 6, ]
+# ```
+
+# Correct!
+grader(mock_this_exercise(mtcars[mtcars$cyl == 6, ], !!.solution))
+
+# These fail with specific messages
+grader(mock_this_exercise(mtcars[mtcars$cyl == 4, ], !!.solution))
+grader(mock_this_exercise(mtcars[mtcars$cyl == 8, ], !!.solution))
+
+# This fails with default feedback message
+grader(mock_this_exercise(mtcars[mtcars$mpg == 8, ], !!.solution))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gradethis</em> version 0.2.5.9000 <a href="00Index.html">Index</a>]</div>
+</div></body></html>
