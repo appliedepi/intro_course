@@ -68,7 +68,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```{r, include=FALSE}
 # data prep --------------------------------------------------------------------
-surv_raw <- rio::import(system.file("dat/surveillance_linelist_20141201.csv", package = "introexercises"))
+combined <- rio::import(system.file("dat/linelist_combined_20141201.rds", package = "introexercises"))
 ```
 
 
@@ -445,12 +445,12 @@ knitr::include_graphics("images/3_chunk.png", error = F)
 
 ```{r quiz-chunkoptions}
 quiz(caption = "Quiz - chunk options",
-  question("Which options are listed if you select 'Show output and code'?",
+  question("Which option(s) are listed if you select 'Show code and output'?",
     allow_retry = T,
     answer("show = TRUE"),
     answer("output = TRUE"),
     answer("echo = TRUE", correct = T),
-    answer("include = TRUE", correct = T)
+    answer("include = TRUE")
   ),
   question("What does the option 'include = FALSE' do?",
     allow_retry = T,
@@ -462,6 +462,12 @@ quiz(caption = "Quiz - chunk options",
 )
 ```
 
+
+
+```{r echo=TRUE}
+
+
+```
 
 **Re-knit the report as many times as you need to understand how these options work**  
 
@@ -576,11 +582,11 @@ In the YAML, you have written the parameter `district: "West II"`, which you can
 
 **Add a section to your R Markdown in the Descriptive Tables** that creates a *"spotlight analysis"* on the district that is set in the YAML `params`.  
 
-* In the Rmd text, write a sentence that introduces this section as a spotlight on X hospital, where the X changes dynamically to print the name of the hospital.  
+* In the Rmd text, write a sentence that introduces this section as a spotlight on X district, where the X changes dynamically to print the name of the district  
 
 * In a code chunk below this text, begin with the clean `combined` data frame and pipe it into a `filter()` function that restricts it to only rows that are equal to `params$district`.  
 
-* Then pipe this filtered dataset into a `tabyl()` function that shows the breakdown by hospital and by outcome (`died`).  
+* Then pipe this filtered data frame into a `tabyl()` function that shows the breakdown by hospital and by outcome (`died`).  
 
 
 
@@ -645,17 +651,18 @@ I'll tell you the answer: you need to wrap it in the {lubridate} function that m
 
 Try running `class(ymd(params$publish_date))` - you should see that this value is a date.  
 
+
+
+
+
 ### Filter logic  
 
 We want to apply a filter to `combined`, using *the Monday prior to the publish date*, because we know there is some delay in the number of cases being reported.  
 
-We can return the Sunday prior to a date using `floor_date(DATE, unit = "week")` from the {lubridate} package. To return the *priort* Sunday, we can just subtract 7 days from the date: `floor_date(DATE - 7, unit = "week")`  
+We can return the Sunday prior to a date using `floor_date(DATE, unit = "week")` from the {lubridate} package. To return the *prior* Sunday, we can just subtract 7 days from the date: `floor_date(DATE - 7, unit = "week")`  
 
+Try to write a standalone command that creates `data_date` using the above specifications.  
 
-Looking at the calendar above from 2014, we can see that if the publish date is Monday 1 December, we only want cases reported through Sunday 23 November. **This date will be our "data date".**   
-
-
-Can you see how we will build this command? Give it a try, and check the hint/solution below before running the command.  
 
 <!--
 NOTE: Below is the hint (all within details tags collapsed)
@@ -682,10 +689,6 @@ NOTE: Below is the solution (all within details tags collapsed)
 ```{r eval = F, echo=T}
 # Define data date as Sunday of prior week
 data_date <- floor_date(ymd(params$publish_date)-7, unit = "week")
-
-# Filter dataset to data date
-combined <- combined %>% 
-  filter(date_report <= data_date)
 ```
 
 </br>
@@ -693,6 +696,48 @@ combined <- combined %>%
 <!--
 NOTE: End of solution
 -->
+
+
+
+```{r, echo=T, eval=T}
+# Define data date as Sunday of prior week
+data_date <- floor_date(ymd(params$publish_date)-7, unit = "week")
+```
+
+Looking at the calendar above from 2014, we can see that if the publish date is Monday 1 December, we want our report to only include cases reported through Sunday 23 November. **This date will be our "data date".**   
+
+The next step is to build a `filter()` command using value of `data_date` on the column `date_report`. Can you guess how to build this `filter()` command? 
+
+Let's test your guess. First, run this command and note the 24 `NA` (missing) date values:  
+
+```{r, echo=T, eval=T}
+summary(combined$date_report)
+```
+
+In real life, you can decide what to do with these rows, but for this exercise we want to keep them in the dataset.  
+
+Now try the `filter()` command that you were thinking of, and afterwards, re-run the `summary()` command above. Are those missing date rows still there?  
+
+If you ran this command, the rows would have disappeared:  
+
+```{r, echo=T, eval=F}
+# Filter date_report before data_date, and REMOVES missing date_report
+combined <- combined %>% 
+  filter(date_report <= data_date)
+```
+
+Why? Because in R, `NA` is treated as infinitely large and small, is it removed by this simple filter.  
+
+Now try this one, and use it instead. It explicitly adds a logical criteria that keeps rows that have missing `date_report`.  
+
+
+```{r, echo=T, eval=F}
+# Filter date_report before data_date, and KEEPS missing date_report
+combined <- combined %>% 
+  filter(date_report <= data_date | is.na(date_report))
+```
+
+
 
 
 

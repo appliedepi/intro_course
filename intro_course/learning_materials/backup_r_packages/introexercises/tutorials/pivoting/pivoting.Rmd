@@ -218,15 +218,23 @@ In this exercise you will:
 
 
 
+## Preparation  
+
+This exercise uses the `combined` data frame that was created in the previous exercise on "Joining data". If you did not complete the exercise, or are seeing errors when trying to use `combined`, you can import a "backup" `combined` data frame in the "data/clean/backup/" folder using this command:  
+
+```{r, echo=T, eval=F}
+combined <- import(here("data", "clean", "backup", "linelist_combined_20141201.rds"))
+```
+
 
 
 
 
 ## Pivoting to plot patient timelines  
 
-Now that we have joined all the datasets together, we have a more complete picture of each patient's movement through the health system. We have information on `date_infection`, `date_onset`, `date_report`, `date_hospitalization`, and `date_outcome`.  
+Now that we have joined all the datasets joined together in `combined`, we have a more complete picture of each patient's movement through the health system. We have information on `date_infection`, `date_onset`, `date_report`, `date_hospitalization`, and `date_outcome`.  
 
-Let's create a small dataset to examine the timelines of 5 patients.  
+Let's create a small data frame to examine the timelines of 5 patients.  
 
 Here is what the end result will look like:  
 

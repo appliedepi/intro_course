@@ -68,7 +68,7 @@ surv <- rio::import(system.file("dat/surveillance_linelist_clean_20141201.rds", 
   
 hospitals <- bind_rows(rio::import(system.file("dat/hospitals/20141201_hosp_port.csv", package = "introexercises")),
                     rio::import(system.file("dat/hospitals/20141201_hosp_central.csv", package = "introexercises"))) %>% 
-             select(hospital, `hospitalisation date`, outcome, `outcome date`) %>% 
+             select(hospital, date_hospitalisation, outcome, date_outcome) %>% 
              janitor::clean_names()
 
 ## NOT USED ANYMORE
@@ -305,7 +305,7 @@ Combining datasets can sometimes be as simple as combining the rows of data fram
 
 `r fontawesome::fa("window-restore", fill = "darkgrey")` 
 
-In our case study Ebola outbreak, there are six datasets from various hospitals in the "data/raw/hospitals" subfolder of the "intro_course" R project. In Module 1, you should have re-named them to the following standardized syntax (if not, please do so now or replace them using the renamed files in the "data/raw/hospitals/**backup**" folder):  
+In our case study Ebola outbreak, there are six datasets from various hospitals in the "data/raw/hospitals" subfolder of the "intro_course" R project. In Module 1, you should have re-named them to the following standardized syntax (if not, please do so now, or replace them using the "backup" renamed files in the "data/raw/hospitals/**backup**" folder):  
 
 * 20141201_hosp_central.csv  
 * 20141201_hosp_military.csv  
@@ -381,9 +381,8 @@ NOTE: Below is the solution (all within details tags collapsed)
 <summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
 </br>
 
-```{r eval = T, echo=T, include = F}
+```{r eval = T, echo=T, warning=F, message=F}
 hosp <- bind_rows(hosp_central, hosp_port, hosp_military, hosp_smmh, hosp_other, hosp_missing)
-
 ```
 
 The order of the data frames is not important, for the purposes of this example.  
@@ -414,10 +413,8 @@ Other times, you want to combine data using *joins*, not simply binding more row
 
 Take a few minutes to review the information below. We give it to you as text descriptions, as a schematic, and as animations ([source](https://github.com/gadenbuie/tidyexplain)).  
 
-The most common joins in public health contexts are:  
+*To note, the most common joins in public health contexts are left joins and anti joins*.  
 
-- Left joins  
-- Anti joins  
 
 
 #### Schematic  
@@ -428,21 +425,22 @@ knitr::include_graphics("images/summary_joins.png", error = F)
 
 #### Text descriptions  
 
-* **Mutating joins**: add new variables to a dataframe
+##### Mutating joins: add new variables to a data frame  
 
-* **Left join**: keep all rows from the first dataframe, and import lines with a correspondence from the second dataframe.
+* **Left join**: keep all rows from the baseline data frame; add columns and matched rows from the second data frame. For unmatched records, the columns of the baseline data frame are filled as `NA`.  
 
-* **Right join**: keep all rows from the second dataframe, and import lines with a correspondence from the first dataframe.
+* **Right join**: keep only matched rows from the baseline data frame, and add columns and unmatched rows from the second data frame. For unmatched records, the columns of the second data frame are filled as `NA`. Another way to think about this is: it is a left join in which the second-listed data frame is the baseline.  
 
-* **Full join**: combine two full dataframes, keeps all rows.
+* **Full join**: combine two full data frames, keeps all rows and columns.  
 
-* **Inner join**: take the intersection of two dataframes, keeps only rows present in both dataframes
+* **Inner join**: take the intersection of two data frames, keeps only rows present in both data frames
 
-* **Filtering joins**: filter a dataframe based on another one
+##### Filtering joins: filter a data frame based on another one
 
-* **Anti join**: keep all lines from first dataframe without matches in the second dataframe  
+* **Anti join**: keep all lines from baseline data frame without matches in the second data frame; no columns are added from the second data frame.  
 
-* **Semi join**: keep all lines from first dataframe with matches in the second dataframe
+* **Semi join**: keep all lines from baseline data frame with matches in the second data frame; no columns are added from the second data frame.  
+
 
 #### Animations  
 
@@ -493,12 +491,11 @@ results %>% kbl() %>% kable_styling(full_width = FALSE,
 ```
 
 
-Which join would you use to...
-
+Now answer the quiz questions below.  
 
 ```{r quiz-joins-1}
 quiz(caption = "Which join would you use:",
-     question("To add the age and sex for all patients into the lab database, if available",
+     question("To add the age and sex for all patients into the lab database, if available there",
               answer("left_join(patients, results, by = 'ID')"),
               answer("right_join(patients, results, by = 'ID')", correct = TRUE),
               answer("inner_join(patients, results, by = 'ID')", message = "An inner join would not include patients from the results database without a match in the patient database. Rows for patient 5 and 6 would be lost"),
@@ -535,13 +532,6 @@ quiz(caption = "Which join would you use:",
               answer("full_join(patients, results, by = 'ID')"),
               answer("anti_join(patients, results, by = 'ID')", correct = TRUE),
               answer("semi_join(results, patients, by = 'ID')"),
-              allow_retry = TRUE),
-     
-     
-     question("Which of these joins would use patients as the baseline?",
-              answer("left_join(patients, results, by = 'ID')", correct = TRUE),
-              answer("right_join(results, patients, by = 'ID')", correct = TRUE),
-              answer("left_join(results, patients, by = 'ID')"), correct = FALSE,
               allow_retry = TRUE),
      
      
@@ -638,7 +628,7 @@ There is so much that can potentially go wrong when joining (and hidden from vie
 
 ### Review dimensions  
 
-Use the function `dim()` on the datasets in the code box below. This is a shortcut to return the number of rows and the number of columns. Alternatively, you can use `nrow()` and `ncol()` commands individually.  
+Use the function `dim()` on the two data frames. This is a shortcut to return the number of rows and the number of columns. Alternatively, you can use `nrow()` and `ncol()` commands individually.  
 
 **Check the dimensions (number of lines and columns) of the two data frames**.  
 
@@ -808,7 +798,7 @@ NOTE: Below is the solution (all within details tags collapsed)
 
 Did you remember to switch the order of the `by = ` as well as the data frames?  
 
-```{r anti_join_exo1-solution}
+```{r, echo=T, eval=F}
 anti_join(surv, hosp, by = c("case_id" = "ID"))
 ```
 
@@ -958,19 +948,18 @@ You have three options:
 2) Set all of the redundant columns as identifiers in the join  
   * This keep only the columns of the baseline data frame. The command would look like this:  
 
-```{r}
+```{r, echo=T, eval=F}
 test <- full_join(surv, hosp,
           by = c(
             "case_id" = "ID",
-            "age",                    # columns "age" and
-            "age_unit",               # "age_unit" are named the same in both 
-            "gender" = "gender",
-            "hospital" = "hospital"))
+            "age",                    # the other columns are
+            "age_unit",               # named the same in both 
+            "gender",
+            "hospital"))
 ```
 
 3) Remove the redundant columns *before* the merge  
   * If you do not care about retaining the redundant columns from the second data frame, simply remove them with `select()` prior to the join.  
-  
   
   
 **For this exercise, write code that uses *Option 3 above*** 
@@ -991,7 +980,7 @@ hosp <- bind_rows(hosp_central, hosp_port, hosp_military, hosp_smmh, hosp_other,
 ```
 
 
-3) Now, run a `left_join()` on `surv` and `hosp`, using "case_id" as the common identifier  
+3) Now, run a `left_join()` on `surv` and `hosp`, using "case_id" as the common identifier, and **add it to your script in the "Joining" section.**  
 
 
 <!--
@@ -1073,7 +1062,7 @@ NOTE: Below is the solution (all within details tags collapsed)
 
 ```{r eval = F, echo=T}
 # Join the two data frames with a left-join
-combined <- full_join(combined, lab, by = "case_id")
+combined <- left_join(combined, lab, by = "case_id")
 ```
 
 </br>
@@ -1120,11 +1109,12 @@ NOTE: Below is the solution (all within details tags collapsed)
 # Import lab data 
 # (add to the import section of your R script)
 investigations <- import(here("data", "raw", "case_investigations_20141201.xlsx")) %>% 
-  # remove unnecessary columns  
- select(-c(age, `age unit`, gender))   # note backticks around 
+ # remove unnecessary columns  
+ select(-c(age, age_unit, gender))
 
 # Join the two data frames with a full-join
-combined <- full_join(combined, investigations, by = "case_id")
+# (add to the joining section of your R script)
+combined <- left_join(combined, investigations, by = "case_id")
 
 ```
 
@@ -1143,22 +1133,49 @@ NOTE: End of solution
 
 ## Post-join cleaning  
 
-Now that we have these new columns, we should do some final cleaning on the `combined` dataset. 
+Now that we have these new columns, we should do some final cleaning on the `combined` data frame, after the joins.  
 
 
 ### Column names and classes 
 
-Now that we have new columns in our dataset, we should write some code to ensure that the new columns names have correct syntax and class.  
-
-
-Some of the new column have improper syntax (e.g. spaces). The few new date columns need to be adjusted to our naming style: `date_xxx` (not `xxx_date`).  
+Now that we have new columns in our data frame, we should write some code to ensure that the new columns names have correct class.  
 
 **Write a short pipe chain** to address the following issues in `combined`:  
 
-* Use one function to convert all the columns to lowercase and convert spaces to underscores  
-* Use `rename()` to switch the names of any date columns from "xxx_date" to "date_xxx"  
-* Use `mutate()` to properly classify the new date columns as class date, using a function we learned from {lubridate}  
-* Use `mutate()` to replace empty characters "" with `NA`, using `na_if()`, for the columns `outcome` and `hospital`.  
+* Use `clean_names()` to ensure all the column names have proper syntax  
+* Use `mutate()` to properly classify the three new date columns as class date, using the {lubridate} functions you learned earlier  
+  * Redefine `date_hospitalisation` as class date  
+  * Redefine `date_outcome` as class date  
+  * Redefine `date_infection` as class date  
+* Use `mutate()` to replace empty characters "" with `NA`, using `na_if()`, for the columns `outcome` and `hospital` (see your cleaning pipe chain for an example)  
+
+
+```{r quiz-cleaning-dates}
+quiz(caption = "Quiz - Date conversions",
+  question("Which {lubridate} function should you use to convert date_hospitalisation to class date?",
+    allow_retry = T,
+    answer("mdy()", correct = T),
+    answer("ymd()", message = "No, you need to choose the function that aligns with the format of the data as written PRIOR to use of the function."),
+    answer("dmy()", message = "No, you need to choose the function that aligns with the format of the data as written PRIOR to use of the function."),
+    answer("imho()", message = "In my humble opinion, this is not a real function.")
+  ),
+    question("Which {lubridate} function should you use to convert date_outcome to class date?",
+    allow_retry = T,
+    answer("mdy()", correct = T),
+    answer("ymd()", message = "No, you need to choose the function that aligns with the format of the data as written PRIOR to use of the function."),
+    answer("dmy()", message = "No, you need to choose the function that aligns with the format of the data as written PRIOR to use of the function."),
+    answer("imho()", message = "In my humble opinion, this is not a real function.")
+  ),
+    question("Which {lubridate} function should you use to convert date_infection to class date?",
+    allow_retry = T,
+    answer("mdy()", message = "No, you need to choose the function that aligns with the format of the data as written PRIOR to use of the function."),
+    answer("ymd()", correct = T),
+    answer("dmy()", message = "No, you need to choose the function that aligns with the format of the data as written PRIOR to use of the function."),
+    answer("imho()", message = "In my humble opinion, this is not a real function.")
+  )
+)
+```
+
 
 
 <!--
@@ -1169,7 +1186,7 @@ NOTE: Below is the hint (all within details tags collapsed)
 <summary style='text-decoration: underline; color: darkgreen;'>`r fontawesome::fa("lightbulb", fill = "gold")` Click to read a hint</summary>
 </br>
 
-Use `clean_names()` first to standardize the syntax. Then use `rename()` to manually adjust specific column names (new = old). To establish date class, choose between `mdy()`, `ymd()`, or `dmy()` to place within the `mutate()` function, based on the current format of the date (look at the dataset) for example:  `mutate(date_outcome = mdy(date_outcome))`
+Use `clean_names()` first to standardize the syntax. To establish date class, choose between `mdy()`, `ymd()`, or `dmy()` to place within the `mutate()` function, based on the current format of the date (look at the data frame) for example:  `mutate(date_outcome = mdy(date_outcome))`
 
 </br>
 </details>
@@ -1188,12 +1205,7 @@ combined <- combined %>%
   
   # convert all column names to lower case and remove spaces
   clean_names() %>% 
-  
-  # edit names of new date columns
-  rename(date_hospitalisation = hospitalisation_date,
-         date_outcome         = outcome_date,
-         date_infection       = infection_date) %>% 
-  
+
   # covert new columns to class date
   mutate(date_hospitalisation = mdy(date_hospitalisation),
          date_outcome         = mdy(date_outcome),
@@ -1212,25 +1224,13 @@ NOTE: End of solution
 -->
 
 
-```{r quiz-final_cleaning}
-quiz(caption = "Quiz - Final cleaning",
-  question("What is the function mdy() doing?",
-    allow_retry = T,
-    answer("Cleaning a column that is muddy", message = "The column is not clean, but mdy() does not stand for 'muddy'"),
-    answer("Converting the date column to class date", correct = T),
-    answer("outcome date"),
-    answer("age", correct = T),
-    answer("age unit", correct = T),
-    answer("gender", correct = T)
-  ),
-  question("Why did we choose mdy() for the date_outcome column?",
-    allow_retry = T,
-    answer("Because the DESIRED format of the date is MM/DD/YYYY"),
-    answer("Because the DIRTY format of the date was MM/DD/YYYY", correct = T),
-    answer("Because this is the function used for all date cleaning", message = "No, the function you use depends on what the data looks like (the dirty format)")
-  )
-)
-```
+You have some flexibility on where to put this data cleaning:  
+
+* You could do this cleaning to each of the `lab` and `investigations` data frames when they are imported  
+* You could have a part of your "Cleaning" section in which you clean these data frames  
+* You can do this final cleaning once you join, as we have done in this exercise  
+
+
 
 
 
@@ -1241,11 +1241,10 @@ At this point, we now have joins and several new import commands.
 It is important to keep our R script orderly and in a logical flow:  
 
 1) Load packages  
-2) Set parameters (e.g. current epiweek)  
-3) Import datasets  
-4) Clean primary dataset  
-5) Join datasets (and perform any residual cleaning)
-6) Begin tables and visualizations  
+3) Import data  
+4) Clean primary data frame  
+5) Join other data (and perform any residual cleaning)
+6) Tables and visualizations  
 
 Take a moment to ensure that your script aligns with the above, and that you can run it from top to bottom without any errors.  
 

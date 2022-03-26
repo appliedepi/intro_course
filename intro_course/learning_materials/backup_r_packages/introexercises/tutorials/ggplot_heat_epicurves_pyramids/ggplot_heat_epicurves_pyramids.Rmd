@@ -338,7 +338,12 @@ Open your R project and run your entire "ebola_analysis.R" script, so that you a
 
 This will involve running all the parts of your R script, including to import data, clean, perform joins, and create the `combined` dataset.  
 
-If you encounter errors, remember that you saved the `combined` data frame in your "data/clean" subfolder, so you can import it again directly to continue with the exercise (be sure to clean up your script errors later).  
+If you did not complete the joining exercise, or are seeing errors when trying to run your script, you can import a "backup" `combined` data frame in the "data/clean/backup/" folder using this command:  
+
+```{r, echo=T, eval=F}
+combined <- import(here("data", "clean", "backup", "linelist_combined_20141201.rds"))
+```
+
 
 
 
@@ -361,7 +366,7 @@ This data is in "long" format, and every possible hospital-week has a row.
 
 
 
-Go ahead and create this dataset in your RStudio using this code below. Understanding this code will not be covered here (try our advanced course in data management), but in essence it uses `count()` to get case counts by week, then creates a dataset with all possible hospital-weeks, and then joins them together.  
+Create this data frame in your RStudio using this code below. *Do not try to understand this code (try our advanced course in data management)*. In essence it uses `count()` to create a data frame of case counts by week, then creates a data frame with all possible hospital-weeks, and then joins them together.  
 
 ```{r, echo = T, eval = T, message = F}
 # count cases by hospital-week
@@ -383,7 +388,7 @@ hospital_weeks <- hospital_weeks_raw %>%
 
 ### Review documentation  
 
-`r fontawesome::fa("eye", fill = "darkblue")` Take a few minutes to review the documentation for the funtion `geom_tile()`, which is from {ggplot2}. You can access this by either:  
+`r fontawesome::fa("eye", fill = "darkblue")` Take a few minutes to review the documentation for the function `geom_tile()`, which is from {ggplot2}. You can access this by either:  
 
 1) Entering `?geom_tile` in the Console, or  
 2) Click to the "Help" pane (lower-right) and entering `geom_tile` in the search bar  
@@ -402,8 +407,8 @@ What `ggplot()` code would you write to create a heat plot that:
 <summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
 </br>
 ```{r eval = F, echo=T}
-ggplot(data = hospital_weeks) +
-  geom_tile(aes(x = week_onset, y = hospital, fill = n))
+ggplot(data = hospital_weeks, mapping = aes(x = week_onset, y = hospital, fill = n)) +
+  geom_tile()
 ```
 </br>
 </details>
@@ -437,7 +442,11 @@ quiz(
 
 `r fontawesome::fa("terminal", fill = "black")` The plot is nice, but let us do a dew more things to refine the presentation:  
 
-1) Modify `hospital_weeks` to create a new data frame: `hospital_weeks_adjusted`. In this data frame, ensure that the `NA` values in the column `hospital` are re-coded as "Missing" *and* this column is class "factor" with the levels in this order : "Central Hospital", "Military Hospital", "Port Hospital", "SMMH", "Other", "Missing".  
+1) Modify `hospital_weeks` to create a new data frame: `hospital_weeks_adjusted`. In this data frame, ensure that:  
+  * The `NA` values in the column `hospital` are re-coded as "Missing" *and* this column is class "factor" with the levels in this order : "Central Hospital", "Military Hospital", "Port Hospital", "SMMH", "Other", "Missing".  
+  * You can convert `NA` to "(Missing)" using `fct_explicit_na()` from {forcats} within `mutate()`  
+  * You can then use `fct_relevel()` also from {forcats}, in a subsequent `mutate()` to list the desired factor level order  
+  
 
 
 <!--
@@ -1114,10 +1123,10 @@ age_pyramid(
      
   scale_fill_brewer(type = "qual", palette = 2)+
   
-  labs(title = str_glue("Age and gender of confirmed cases"),
+  labs(title = "Age and gender of confirmed cases",
        x = "Proportion of all cases",
        y = "Age group",
-       caption = str_glue("Ebola outbreak"),
+       caption = "Ebola outbreak",
        fill = "Gender")
 ```
 
