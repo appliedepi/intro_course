@@ -1,0 +1,938 @@
+---
+title: "Applied Epi - Grouping and summarizing data"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css: css/css_custom.css
+    theme: "paper"
+runtime: shiny_prerendered
+description: >
+  Learn how to get started with R and RStudio, and how to import a dataset
+---
+
+<!-- NOTES: To edit images, edit them in the "images" folder that lives NEXT TO THE RMD FILE -->
+
+
+<!-- Add JavaScript code for making the exercise code larger -->
+<script language="JavaScript" src="js/exercise-font-size.js"></script>
+
+```{r setup, include=FALSE}
+# load packages ----------------------------------------------------------------
+library(learnr)
+library(gradethis)
+library(etude)      # help functions for gradethis
+library(flair)
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(janitor)
+library(flextable)
+library(fontawesome)
+library(gtsummary)
+library(scales)
+
+
+# set options for exercises and checking ---------------------------------------
+gradethis::gradethis_setup()
+
+learnr::tutorial_options(exercise.timelimit = 60)
+    # exercise.checker = gradethis::grade_learnr) 
+    # alternatively, submitr::null_code_checker
+
+# event recorder ---------------------------------------------------------------
+# see https://github.com/dtkaplan/submitr/blob/master/R/make_a_recorder.R
+
+tutorial_options(exercise.eval = FALSE)  # pre-evaluate exercises
+
+# new_recorder <- function(tutorial_id, tutorial_version, user_id, event, data) {
+#     cat(
+#       tutorial_id, 
+#       " (v", tutorial_version, "); ",
+#       format(Sys.time(), "%Y-%M%-%D %H:%M:%S %Z"), "; ",
+#       user_id, "; ",
+#       event, "; ",
+#       data$label, "; ",
+#       data$answers, "; ",
+#       data$code, "; ",
+#       data$correct, "\n", sep = "",
+#       
+#       file = here::here("event_records", "learnr_basics.txt"),
+#       append = TRUE)
+# }
+
+#options(tutorial.event_recorder = new_recorder)
+```
+
+
+```{r, include=FALSE}
+# hide non-exercise code chunks ------------------------------------------------
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r, include=FALSE}
+# data prep --------------------------------------------------------------------
+surv <- rio::import(system.file("dat/surveillance_linelist_clean_20141201.rds", package = "introexercises"))
+
+```
+
+
+
+
+## Introduction to R for Applied Epidemiology and Public Health
+
+
+### Welcome
+
+Welcome to the live course "Introduction to R for applied epidemiologists", offered by [Applied Epi](www.appliedepi.org) - a nonprofit organisation that offers open-source tools, training, and support to frontline public health practitioners.  
+
+```{r, eval = TRUE, echo = FALSE, out.width = "25%"}
+knitr::include_graphics("images/logo.png", error = F)
+```
+
+### Grouping and summarizing  
+
+This exercise focuses on **grouping and summarizing data in descriptive tables**.
+
+### Format
+
+This exercise will guide you through a set of tasks.  
+*You should perform these tasks in RStudio and on your local computer*.  
+
+#### Getting Help  
+
+There are several ways to get help:  
+
+1) Look for the "helpers" (see below)
+2) Ask your live course instructor/facilitator for help  
+3) Ask a colleague or other participant in the course for tips  
+4) Post a question in [Applied Epi Community](www.community.appliedepi.org) in the category for questions about Applied Epi Training  
+
+Here is what those "helpers" will look like:
+
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+
+<summary style='text-decoration: underline; color: darkgreen;'>`r fontawesome::fa("lightbulb", fill = "gold")` Click to read a hint</summary>
+</br>
+
+Here you will see a helpful hint!  
+
+</br>
+</details>
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+linelist %>% 
+  filter(
+    age > 25,
+    district == "Bolo"
+  )
+```
+
+Here is more explanation about why the solution works.  
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+#### Quiz questions  
+
+Please complete the quiz questions that you encounter throughout the tutorial. **Answering will help you** to comprehend the material, and will also help us to improve the exercises for future students.  
+
+To practice, please answer the following questions:  
+
+
+```{r quiz-use-helper, echo=F}
+quiz(
+  question_radio("When should I view the red 'helper' code?",
+    answer("After trying to write the code myself", correct = TRUE),
+    answer("Before I try coding", correct = FALSE),
+    correct = "Reviewing best-practice code after trying to write yourself can help you improve",
+    incorrect = "Please attempt the exercise yourself, or use the hint, before viewing the answer."
+  )
+)
+```
+
+
+```{r quiz-anxious, echo = FALSE}
+question_numeric(
+ "How anxious are you about beginning this tutorial - on a scale from 1 (least anxious) to 10 (most anxious)?",
+ answer(10, message = "Try not to worry, we will help you succeed!", correct = T),
+ answer(9, message = "Try not to worry, we will help you succeed!", correct = T),
+ answer(8, message = "Try not to worry, we will help you succeed!", correct = T),
+ answer(7, message = "Try not to worry, we will help you succeed!", correct = T),
+ answer(6, message = "Ok, we will get there together", correct = T),
+ answer(5, message = "Ok, we will get there together", correct = T),
+ answer(4, message = "I like your confidence!", correct = T),
+ answer(3, message = "I like your confidence!", correct = T),
+ answer(2, message = "I like your confidence!", correct = T),
+ answer(1, message = "I like your confidence!", correct = T),
+ allow_retry = TRUE,
+ correct = "Thanks for sharing. ",
+ min = 1,
+ max = 10,
+ step = 1
+)
+```
+
+
+
+#### Icons  
+
+You will see these icons throughout the exercises:
+
+Icon  |Meaning
+------|--------------------
+`r fontawesome::fa("eye", fill = "darkblue")`|Observe  
+`r fontawesome::fa("exclamation", fill = "red")`|Alert!  
+`r fontawesome::fa("pen", fill = "brown")`|An informative note  
+`r fontawesome::fa("terminal", fill = "black")`|Time for you to code!  
+`r fontawesome::fa("window-restore", fill = "darkgrey")`|Change to another window  
+`r fontawesome::fa("bookmark", fill = "orange")`|Remember this for later  
+
+
+
+
+
+
+
+
+
+
+## Learning objectives
+
+In this exercise you will:  
+
+* Group data using {dplyr} functions `group_by()`, `summarise()`, and `count()`  
+* Make descriptive tables with the {janitor} `tabyl()` and `adorn_()` functions  
+* Make descriptive tables with the {gtsummary} function `tbl_summary()`  
+* Convert basic R tables into HTML with {flextable}  
+
+
+
+
+## Prepare for analysis  
+
+### Open the R project  
+
+
+`r fontawesome::fa("window-restore", fill = "darkgrey")`  
+
+Open the RStudio by clicking on the "intro_course" R project, as before. Open your script: "ebola_analysis.R" where you wrote the cleaning code from the previous module.  
+
+
+### Add packages  
+
+Ensure that the following packages are included in the `pacman::p_load()` command at the top of your script:  
+
+* janitor  
+* flextable  
+* gtsummary  
+* scales  
+
+**However, ensure that the {tidyverse} package is still listed last in this command**.  
+
+
+Now, when you run this command, these packages will be installed (if not already) and loaded for use.  
+
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+pacman::p_load(
+  rio,          # for importing data
+  here,         # for locating files
+  skimr,        # for reviewing the data
+  janitor,      # for data cleaning  
+  lubridate,    # for date cleaning  
+  epikit,       # creating age categories
+  gtsummary,    # creating tables  
+  scales,       # percents in tables  
+  flextable,    # for making pretty tables
+  tidyverse     # for data management and visualization
+)
+```
+
+Don't forget to write `pacman::p_load()`, which loads the {pacman} package to be able to load all the other packages.  
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+
+
+### Run your R script  
+
+Run all the code in your script. If you have successfully finished the previous modules, this will do the following:  
+
+* Load packages  
+* Import the "raw" surveillance dataset  
+* Run a series of descriptive analyses to review the data  
+* Clean the `surv_raw` "raw" data frame using the "pipe chain", and save the clean data frame in R as `surv`  
+
+**Now you can write more code at the bottom of the script, using the cleaned data frame `surv`**
+
+
+#### Backup  
+
+If your R script causes errors, or you did not finish the last module, you can import a clean version of the surveillance linelist with the following command and use it for this exercise:  
+
+```{r}
+surv <- import(here("data", "clean", "backup", "surveillance_linelist_clean_20141201.rds"))
+```
+
+If running all the code in your R script caused errors, alert your instructor.  
+
+
+### Add a new section  
+
+Ensure that your script is well-commented (#) so that it is easy to know what is happening in each part of the script.  
+
+If you do not yet have a header over the cleaning section of your script, add one now. It could look something like this:  
+
+```{eval = F, echo=T, results = "asis"}
+# Cleaning the raw data
+#######################
+```
+
+Everyone develops their own style for adding comments and using the hash (#) symbol. For example, this style is also an option:  
+
+```{r, echo= T, eval= F, results = "asis"}
+#################################
+###   Cleaning the raw data   ###
+#################################
+```
+
+
+Just make sure that yours is easy for someone else to read.  
+
+**Now, add a header for a section called "descriptive summary tables".**  
+
+
+
+
+
+## {janitor} functions  
+
+Often, we want just a quick tabulation of counts of a categorical variable, or simply to know "what are the unique values" in a particular column.  
+
+The `tabyl()` function from {janitor} does this quickly by tabulating columns provided to it. Easy customization can follow, using the related `adorn_()` functions.  
+
+**Try making a simple `tabyl()` of the column `district`**  
+
+
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+
+<summary style='text-decoration: underline; color: darkgreen;'>`r fontawesome::fa("lightbulb", fill = "gold")` Click to read a hint</summary>
+</br>
+
+Pipe the clean `surv` data frame into `tabyl()` and write the column `district` in the parentheses.
+
+</br>
+</details>
+
+
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv %>% 
+  tabyl(district)
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+```{r quiz-tabyl}
+quiz(caption = "Quiz - tabyl()",
+  question("What is the district with the most cases recorded?",
+    allow_retry = T,
+    answer("Mountain Rural", correct = T),
+    answer("West II"),
+    answer("Central II"),
+    answer("Manhattan")
+  )
+)
+```
+
+
+
+### Adorn formatting  
+
+{janitor} includes a series of "adorn" functions that you can pipe this table into, which will make the formatting nicer.  
+
+**Add the following functions, *in this order***. Observe what each step does, one-at-a-time.  
+
+* `adorn_totals()`  
+* `adorn_pct_formatting()`  
+
+
+
+### Sorting  
+
+Currently, the table of districts is sorted alphabetically by district name. Change this by piping the result into the {dplyr} function `arrange()` and specifying to sort on column `n` descending.  
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv %>% 
+  tabyl(district) %>% 
+  adorn_totals() %>% 
+  adorn_pct_formatting() %>% 
+  arrange(desc(n))
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+**Think about the order of your steps... what happens if you add `adorn_totals()` *before* arranging by column `n`?**  
+
+**Re-arrange your steps** so that the rows are in descending order by `n`, but the Total row remains at the bottom.  
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv %>% 
+  tabyl(district) %>% 
+  arrange(desc(n)) %>% 
+  adorn_totals() %>% 
+  adorn_pct_formatting()
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+
+### Cross-tabulation  
+
+**Now try to cross-tabulate district and hospital.**  
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv %>% 
+  tabyl(district, hospital)
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+```{r quiz-tabyl2}
+quiz(caption = "Quiz - hospital tabulation",
+  question("Based on this cross-tabulation, which district is SMMH likely located in?",
+    allow_retry = T,
+    answer("West II"),
+    answer("Central II"),
+    answer("Mountain Rural", correct = T),
+    answer("East I")
+  )
+)
+```
+
+
+Try to add `adorn_()` functions below. See how they behave slightly differently on cross-tabulations than they did on tabulation of a single column.  
+
+* `adorn_totals()`  
+* `adorn_percentages()`  
+* `adorn_pct_formatting()` (also try this with `digits = 0`)  
+
+
+Then try adding these functions (only one at a time):  
+
+* `adorn_ns()`  
+* `adorn_ns("rear")`  
+* `adorn_ns("front)`  
+
+
+**Final tabyl() exercise**  
+
+Explore the data frame with `tabyl()`. Choose 2 tables to include in your R script that showcase your new abilities to use `tabyl()`.  
+
+
+
+
+
+
+
+
+
+
+## {dplyr} functions  
+
+### `count()`  
+
+The {dplyr} function `count()` provides a simple alternative way to tabulate counts.  
+
+**Try running this code:**  
+
+```{r, echo=T, eval=F}
+surv %>% 
+  count(hospital)
+```
+
+How does it compare to the simple `tabyl()` on the same column?  
+
+
+**Now, adjust the command so that instead of printing, the output is saved as a new data frame named `hospital_counts`.**  
+
+This is just to show you, that you in are in fact creating another data frame! You could conduct analyses on this data frame, or even export it as a csv or xlsx file.  
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+hospital_counts <- surv %>% 
+  count(hospital)
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+
+
+**Now try entering 2 categorical columns into the `count()` command, like `district` and `gender`** (separated by a comma).  
+
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv %>% 
+  count(hospital, gender)
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+What does this table look like? How does it compare to the cross-tabulation feature of `tabyl()`? What might be some advantages or disadvantages of this "long" format?  
+
+**Which of the two formats better adheres to the guidelines of "tidy data"?** (remember, each variable gets its own column, each observation gets its own row...)  
+
+
+
+
+
+### `group_by()` and `summarise()`  
+
+The functions `group_by()` and `summarise()` together are the most versatile tool to make a new summary data frame to hold summary statistics.  
+
+One major advantage of `summarise()` is the ability to return more customized statistical summaries like `median()`, `mean()`, `max()`, `min()`, `sd()` (standard deviation), percentiles, and the number/percent of rows that meet certain logical criteria. 
+
+
+### Summary statistics  
+
+**Try this command below**. It should produce exactly the same table as you made with `count()`.  
+
+```{r, echo=T, eval=F}
+surv %>% 
+  group_by(hospital) %>% 
+  summarise(n_rows = n())
+```
+
+You might wonder why anyone would write the command this way, when they could simply write `count()`? The answer is that you can add more lines within `summarise()` that will create new calculated summary columns.  
+
+* The `n_rows` is the *name we are designating for a new column in the summary dataset  
+* The `= n()` is a function `n()` that counts the number of rows (in this case, within the *group*/hospital)  
+
+Regard below how 3 new columns are created, each with their respective calculations:  
+
+```{r, echo=T, eval = T}
+surv %>% 
+  group_by(hospital) %>% 
+  summarise(
+    n_rows  = n(),                           # use function n() to count the number of rows
+    age_avg = mean(age_years, na.rm = T),    # mean age in the group
+    max_onset = max(date_onset, na.rm=T)     # latest onset date
+)
+```
+
+In the later two rows, within the statistical functions, the column to be used is listed (e.g. `age_years`) and any other relevant arguments (e.g. `na.rm = TRUE` for most mathematical functions).  
+
+
+### Logical criteria using `sum()`  
+
+You can use `sum()` within `summarise()` to return the number of rows that meet a logical criteria. The expression within is counted if it evaluates to TRUE. For example:
+
+* `sum(age_years < 18, na.rm=T)`  
+* `sum(gender == "male", na.rm=T)`  
+* `sum(response %in% c("Likely", "Very Likely"))`
+
+Note the use of `na.rm = TRUE` within mathematical functions like `sum()`, otherwise `NA` will be returned if there are any missing values in the assessed values.  
+
+**Write a `summarise()` command that returns, for each `hospital`, the number of female cases.**  
+
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv %>% 
+  group_by(hospital) %>% 
+  summarise(fem = sum(gender == "female", na.rm = TRUE))
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+**What would you change to the calculation to the number of male cases?** What about the number of cases with unknown/missing gender? (hint: it involves using ` = sum(is.na(gender), na.rm=T)`)  
+
+
+
+
+
+
+
+
+### Percents  
+
+
+Once you begin calculating these columns, you may want to divide one by another, to create a percent.  
+
+Once you have defined a column within `summarise()`, you can reference in *lower* parts of the same `summarise()` command. For example:  
+
+* You calculate the total number of cases per hospital, and call it `n_cases`  
+* You calculate the number of male cases per hospital, and call it `males`  
+* You calculate the proportion male using the two previous  
+
+```{r, echo=T, eval=F}
+surv %>% 
+  group_by(hospital) %>% 
+  summarise(
+    n_cases   = n(),
+    males     = sum(gender == "male", na.rm=T),
+    males_pct = males/n_cases
+  )
+```
+
+What does that percent look like? Is it really a percent? Or more of a (decimal) proportion?  
+
+There is a function you can use to quickly transform this proportion into a percent - it is the function `percent()` from the package {scales}.  
+
+**Try this now**  
+
+```{r, echo=T, eval=F}
+surv %>% 
+  group_by(hospital) %>% 
+  summarise(
+    n_cases   = n(),
+    males     = sum(gender == "male", na.rm=T),
+    males_pct = percent(males/n_cases)
+  )
+```
+
+For more details, see the chapter on Descriptive tables in the [Epi R Handbook](https://epirhandbook.com/en/descriptive-tables.html#dplyr-package).  
+
+
+### Rounding  
+
+If you need to round a number produced by `summarise()`, wrap it in the function `round()` and use argument `digits = ` to adjust the number of decimals.  
+
+Try running this code, with, and without the `round()` function:  
+
+```{r, echo=T}
+surv %>% 
+  group_by(hospital) %>% 
+  summarise(
+    mean_age = round(mean(age_years, na.rm = T), digits = 0)
+  )
+```
+
+As you remove `round()`, don't forget to also remove the comma and `digits = 0`, which are the second argument of that function. 
+
+
+
+### Conditional statistics
+
+One of the more advanced calculation tools you can use are subsetting brackets `[ ]`. These symbols can be used after a column and will filter it according to whatever logical criteria you write inside.  
+
+For example, if placed within `summarise()`, `max_temp_fvr = max(temp[fever == "yes"], na.rm = T)` will return the maximum temperature recorded in the group, *but only among the cases that did report a fever*.  
+
+It is a complicated command - ask your facilitator if you do not understand it.  
+
+
+
+### Final exercise  
+
+Create a data frame that summarises the following, for each hospital:  
+
+* Number of cases  
+* The most recent onset date  
+* Number of cases under age 5 years  
+* The percent of cases that reported vomiting  
+* The maximum weight, *among male cases*  
+
+Be sure to write this command in your R script, and adjust your command to save this data frame in your R Environment as `hospital_info`, to keep for later.  
+
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv %>% 
+  group_by(hospital) %>%                       # get statistics for each hospital
+  summarise(
+    n_cases   = n(),                                         # number of rows (cases)
+    max_onset = max(date_onset, na.rm = T),                  # latest onset date
+    under5    = sum(age_years <= 5, na.rm = T),              # number of children under 5
+    vomit_n   = sum(vomit == "yes", na.rm=T),                # number vomiting
+    vomit_pct = percent(vomit_n / n_cases),                  # percent vomiting
+    max_wt_male = max(wt_kg[gender == "male"], na.rm = T)    # max weight among men
+  )
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+
+When making a complex summary table with {dplyr}, be sure to read the chapter in the [Epi R Handbook](https://epirhandbook.com/en/descriptive-tables.html#dplyr-package), as there are details that we did not have time to cover here.  
+
+
+
+## {flextable}  
+
+The {flextable} package can accept a data frame in R and convert it into an HTML table that can be saved as a pretty table file.  
+
+This is useful if you create a table with {janitor} or with {dplyr}, but want to put it in an HTML report, a Word document or PDF, or even just print it as a PNG image.  
+
+### qflextable()  
+
+The most simple command from {flextable} is `qflextable`, which stands for "quick flextable". It makes some fast ratio and formatting adjustments, and transforms the table. **Look for it to appear in your RStudio Viewer pane.**  
+
+```{r, echo=T}
+surv %>% 
+  group_by(hospital) %>%                                     # get statistics for each hospital
+  summarise(
+    n_cases   = n(),                                         # number of rows (cases)
+    max_onset = max(date_onset, na.rm = T),                  # latest onset date
+    under5    = sum(age_years <= 5, na.rm = T),              # number of children under 5
+    vomit_n   = sum(vomit == "yes", na.rm=T),                # number vomiting
+    vomit_pct = percent(vomit_n / n_cases),                  # percent vomiting
+    max_wt_male = max(wt_kg[gender == "male"], na.rm = T)) %>%     # max weight among men
+  qflextable()
+```
+
+
+Try the same thing with one of your {janitor} tables.  
+
+
+There are a lot of further adjustments that you can make to your flextable. See the [Tables for presentation chapter of the Epi R Handbook](https://epirhandbook.com/en/tables-for-presentation.html#tables-for-presentation).  
+
+
+Here is one example, of a different table, used in the Handbook:  
+
+```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
+knitr::include_graphics("images/flextable.png", error = F)
+```
+
+
+
+
+### Saving an image  
+
+You can export the tables to Word, PowerPoint or HTML or as an image (PNG) files.  
+
+To do this, 
+
+1) Save the table as a named object using the assignment operator `<-`  
+2) Write one of the {flextable} functions below as a *separate command* (**not** a pipe from your previous code):  
+
+* `save_as_docx()`  
+* `save_as_pptx()`  
+* `save_as_image()`  
+* `save_as_html()`  
+
+Within the parentheses of the function, provide the name of the table object in  (e.g. `my_table`), and then the file path to save to (including the file name and extension, in quotes), for example:  
+
+```{r, echo=T, eval=F}
+# saves the table object my_table as "hospital_table.docx"
+save_as_docx(my_table, path = "hospital_table.docx")
+```
+
+(Look for the file to appear in the root/top folder of your RStudio project)  
+
+or try to save as a PNG image like this:    
+
+
+```{r, echo=T, eval=F}
+# saves the table as hospital_table.png in the root folder of your R project
+save_as_image(my_table, path = "hospital_table.png")
+```
+
+Note that you will need to install Phantom JS (free) for the `save_as_image()` to work. You can do this by running the command `webshot::install_phantomjs()`.  
+
+
+
+## {gtsummary} functions  
+
+The final approach that you should practice is with the {gtsummary} function `tbl_summary`.  
+
+This package aims to produce *publication-ready images* with very simple and short code. Indeed, you *can* make very complex and detailed adjustments to these tables, but it is also easy to get a sharp table with very little code.  
+
+### Select columns  
+
+The important difference from the previous methods is that you should first `select()` only the columns that you want to use in the table.  
+
+**Pipe `surv` into `select()`, select two columns, and pipe into `tbl_summary()`**  
+
+What was produced for the categorical variables?  
+
+What was produced for the continuous variables?  
+
+### Stratified tables  
+
+You can also add a `by = ` argument to the `tbl_summary()` command, and designate a column to stratify the table (in columns). Do not forget to include this column in the `select()` command above!  
+
+**Try to make a table that assesses `district`, `age_cat`, all of the symptoms columns, weight, and height**  
+
+**Now make the same table, stratified by `gender`.**  
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+surv %>% 
+  select(district, age_cat, fever, chills, cough, aches, vomit, wt_kg, ht_cm, gender) %>% 
+  tbl_summary(by = gender)
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+### Add p-values  
+
+Although in this example it does not make much sense to run statistical tests (we do not yet have an "outcome" in our data set), it is easy to add tests with a p-value in these tables. One simple option is to pipe to `add_p()`.  
+
+```{r eval = T, echo=T, warning=F, message=F}
+surv %>% 
+  select(district, age_cat, fever, chills, cough, aches, vomit, wt_kg, ht_cm, gender) %>% 
+  tbl_summary(by = gender) %>% 
+  add_p()
+```
+
+You can see at the bottom the details of where the p-value originates. This can be adjusted.  
+
+Read more about the many ways to customize a {gtsummary} table [here](https://epirhandbook.com/en/descriptive-tables.html#tbl_gt).  
+
+
+
+
+## End  
+
+Congratulations! You finished the module on summary tables!
+
+
+
+
+
+

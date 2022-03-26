@@ -373,16 +373,40 @@ COVID-19 situation report.</p>
 <div id="inline-text-summary-at-top-of-report" class="section level2">
 <h2>Inline text summary at top of report</h2>
 <ul>
-<li>Think about order of your code. Don’t forget that in order to print
-these text statement with summary statistics inline, those calculations
-and data cleaning need to happen <em>above</em> this text in the Rmd
-(but not emit any visible output).</li>
+<li><p>Think about order of your code. Don’t forget that in order to
+print these text statement with summary statistics inline, those
+calculations and data cleaning need to happen <em>above</em> this text
+in the Rmd (but not emit any visible output).</p></li>
+<li><p>To display dates in a specific format, you can wrap the date in
+<code>format()</code> and supply the <code>strptime</code> syntax that
+you prefer, for example:</p></li>
 </ul>
+<pre class="r"><code>format(Sys.Date(), format = &quot;%d %B, %Y&quot;)</code></pre>
+<pre><code>## [1] &quot;26 March, 2022&quot;</code></pre>
+<ul>
+<li>To display counts and (%) quickly, you can use the
+<code>fmt_count()</code> function from {epikit}. This accepts the name
+of a data frame, and then a logical statement used to filter rows.</li>
+</ul>
+<pre class="r"><code>fmt_count(combined, outcome == &quot;Death&quot;)</code></pre>
+<pre><code>## [1] &quot;312 (45.9%)&quot;</code></pre>
 </div>
 <div id="page-breaks" class="section level2">
 <h2>Page breaks</h2>
 <p>To get page breaks when you want them, insert
 <strong>\pagebreak</strong> into the Rmd</p>
+</div>
+<div id="data-cleaning" class="section level2">
+<h2>Data cleaning</h2>
+<ul>
+<li><p>Remember to convert your date columns to class date using one of
+the {lubridate} functions, <code>dmy()</code>, <code>mdy()</code>, or
+<code>ymd()</code> based on the format of the dates <em>prior</em> to
+applying the function.</p></li>
+<li><p>Consider creating a <code>data_date</code> or
+<code>report_date</code> object that you use as a cutoff (or with a 7
+day delay). You could define this in the YAML</p></li>
+</ul>
 </div>
 <div id="age-pyramid" class="section level2">
 <h2>Age pyramid</h2>
@@ -399,8 +423,10 @@ commands</li>
 <ul>
 <li>Observe how the list of cities (displayed, and in the legend) has
 been truncated to 5 and “Other”… this was done using
-<code>fct_lump_n()</code>.</li>
+<code>fct_lump_n()</code> within the ggplot command, for example:</li>
 </ul>
+<pre class="r"><code>ggplot(data = combined, mapping = aes(x = date_report, fill = fct_lump_n(hospital, 5)))+
+     geom....</code></pre>
 </div>
 <div id="cumulative-case-incidence" class="section level2">
 <h2>Cumulative case incidence</h2>

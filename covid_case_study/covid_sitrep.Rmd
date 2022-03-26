@@ -270,11 +270,11 @@ linelist <- linelist %>%
   ) %>% 
   
      
-  # # remove onset, hospitalisation, and death dates prior to 2020
+  # remove onset, hospitalisation, and death dates prior to 2020
   # mutate(
   #   date_onset        = replace(date_onset, date_onset < ymd("2020-01-01"), NA),
   #   date_hospitalized = replace(date_hospitalized, date_hospitalized < ymd("2020-01-01"), NA)
-  #   ) %>% 
+  #   ) %>%
        
      
      

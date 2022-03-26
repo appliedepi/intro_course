@@ -22,6 +22,11 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
+```{r, echo=F}
+pacman::p_load(rio, here, epikit, tidyverse)
+combined <- import(here("intro_course", "data", "clean", "backup", "linelist_combined_20141201.rds"))
+```
+
 In this sheet, you will find some hints and tips for re-creating the COVID-19 situation report.  
 
 
@@ -30,9 +35,29 @@ In this sheet, you will find some hints and tips for re-creating the COVID-19 si
 
 - Think about order of your code. Don't forget that in order to print these text statement with summary statistics inline, those calculations and data cleaning need to happen *above* this text in the Rmd (but not emit any visible output).  
 
+- To display dates in a specific format, you can wrap the date in `format()` and supply the `strptime` syntax that you prefer, for example:
+
+```{r, echo=T, eval=T}
+format(Sys.Date(), format = "%d %B, %Y")
+```
+- To display counts and (%) quickly, you can use the `fmt_count()` function from {epikit}. This accepts the name of a data frame, and then a logical statement used to filter rows.  
+
+```{r, echo=T, eval=T}
+fmt_count(combined, outcome == "Death")
+```
+
+
 ## Page breaks  
 
 To get page breaks when you want them, insert **\\pagebreak** into the Rmd  
+
+## Data cleaning
+
+- Remember to convert your date columns to class date using one of the {lubridate} functions, `dmy()`, `mdy()`, or `ymd()` based on the format of the dates *prior* to applying the function.  
+
+- Consider creating a `data_date` or `report_date` object that you use as a cutoff (or with a 7 day delay). You could define this in the YAML
+
+
 
 
 ## Age pyramid  
@@ -42,7 +67,14 @@ To get page breaks when you want them, insert **\\pagebreak** into the Rmd
 
 ## Weekly epidemic curve, by city  
 
-- Observe how the list of cities (displayed, and in the legend) has been truncated to 5 and "Other"... this was done using `fct_lump_n()`.  
+- Observe how the list of cities (displayed, and in the legend) has been truncated to 5 and "Other"... this was done using `fct_lump_n()` within the ggplot command, for example:  
+
+
+```{r, echo=T, eval=F}
+ggplot(data = combined, mapping = aes(x = date_report, fill = fct_lump_n(hospital, 5)))+
+     geom....
+```
+
 
 ## Cumulative case incidence
 

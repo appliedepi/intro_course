@@ -131,7 +131,7 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "joins_pivots",
 
 --
 
-* We will use the `pivot_wider()` and `pivot_larger()` functions from the {tidyr} package
+* We will use the `pivot_wider()` and `pivot_longer()` functions from the {tidyr} package
 
 --
 
@@ -202,12 +202,8 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "data_cleaning"
 
 ---
 # Pivot longer  
-
-
 .pull-left[
-
-Data are often stored in “wide” format  
-
+Data entry is often in “wide” format  
 ```{r}
 example <- tribble(
      ~country, ~`1999`, ~`2000`,     ~`2001`,  ~`2002`, 
@@ -225,12 +221,8 @@ example %>%
 ]
 
 --
-
-
 .pull-right[
-
 **Easier to analyse in "long" format**  
-
 ```{r}
 example %>%
   pivot_longer(cols=2:5, names_to="year", values_to = "cases") %>% 
