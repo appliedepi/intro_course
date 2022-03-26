@@ -1,4 +1,4 @@
-hospital,ID,age,age unit,gender,hospitalisation date,admission time,outcome,outcome date
+hospital,ID,age,age_unit,gender,date_hospitalisation,time_admission,outcome,date_outcome
 St. Mark's Maternity Hospital (SMMH),9b5dec,22,years,m,9/11/2014,19:44,Death,9/14/2014
 St. Mark's Maternity Hospital (SMMH),668458,19,years,m,10/23/2014,15:50,,10/27/2014
 St. Mark's Maternity Hospital (SMMH),4c8369,27,years,f,10/28/2014,12:56,Death,10/31/2014

@@ -50,6 +50,7 @@ pacman::p_load(
   ggExtra,    # extras
   scales,     # formatting of scales
   cowplot,    # combining plots
+  flair,      # flair colored text
   tidyverse,  # data management and visualization
   xaringanthemer,  # for styling presentation 
 )
@@ -139,7 +140,6 @@ surv <- rio::import(here::here("data", "surveillance_linelist_clean_20141201.rds
 
 
 
----
 # Grammar of Graphics  
 
 Let's return to that sequence that builds a ggplot: 
@@ -325,7 +325,8 @@ theme_gray(base_size = 18)
 
 ]
 
-
+???
+Ignore the overlapping x-axis labels, for code simplicity we are not adjusting these in this slide.  
 
 ---
 # Scales - adjusted fill 
@@ -741,7 +742,7 @@ ggplot(
   data = surv,
   mapping = aes(
     x = date_onset,
-    fill = district)) +
+    fill = hospital)) +
 geom_histogram() +
 scale_x_date(
   date_breaks = "2 weeks",
@@ -781,7 +782,7 @@ ggplot(
   data = surv,
   mapping = aes(
     x = date_onset,
-    fill = district)) +
+    fill = hospital)) +
 geom_histogram() +
 scale_x_date(
   date_breaks = "2 weeks",
@@ -794,7 +795,7 @@ scale_fill_brewer(type = "qual",
 *  x = "Date",
 *  y = "Number of cases",
 *  caption = "Fictional Ebola data",
-*  fill = "District"
+*  fill = "Hospital"
 ) +
 ```
 
@@ -825,7 +826,7 @@ labs(
   x = "Date",
   y = "Number of cases",
   caption = "Fictional Ebola data",
-  fill = "District"
+  fill = "Hospital"
 ) +
 theme_grey(base_size = 18)
 ```
@@ -905,13 +906,13 @@ The power of {ggplot2} - you can make extremely small adjustments
 
 ```{r, eval=F, echo=T}
 # Try one of these...
-theme_bw()+
-theme_classic()+
-theme_dark()+
-theme_gray()+
-theme_minimal()+
-theme_light()+
-theme_void()+
+theme_minimal()
+theme_light()
+theme_bw()
+theme_gray()
+theme_dark()
+theme_void()
+theme_classic()
 ```
 
 Try the argument `base_size = 16` to quickly increase text size.  

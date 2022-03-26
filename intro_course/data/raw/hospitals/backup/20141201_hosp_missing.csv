@@ -1,4 +1,4 @@
-hospital,ID,age,age unit,gender,hospitalisation date,admission time,outcome,outcome date
+hospital,ID,age,age_unit,gender,date_hospitalisation,time_admission,outcome,date_outcome
 Missing,92d002,16,years,f,8/20/2014,13:34,Recover,
 Missing,544bd1,10,years,f,8/30/2014,13:24,Death,9/2/2014
 Missing,6056ba,0,years,f,10/21/2014,,Death,11/5/2014

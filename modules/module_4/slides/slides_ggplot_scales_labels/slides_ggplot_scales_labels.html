@@ -72,7 +72,6 @@ class: center, middle, inverse, title-slide
 
 
 
----
 # Grammar of Graphics  
 
 Let's return to that sequence that builds a ggplot: 
@@ -197,7 +196,8 @@ Above, the fill of a bar plot uses the **default colors and axis breaks**:
 
 ]
 
-
+???
+Ignore the overlapping x-axis labels, for code simplicity we are not adjusting these in this slide.  
 
 ---
 # Scales - adjusted fill 
@@ -518,7 +518,7 @@ ggplot(
   data = surv,
   mapping = aes(
     x = date_onset,
-    fill = district)) +
+    fill = hospital)) +
 geom_histogram() +
 scale_x_date(
   date_breaks = "2 weeks",
@@ -548,7 +548,7 @@ ggplot(
   data = surv,
   mapping = aes(
     x = date_onset,
-    fill = district)) +
+    fill = hospital)) +
 geom_histogram() +
 scale_x_date(
   date_breaks = "2 weeks",
@@ -561,7 +561,7 @@ scale_fill_brewer(type = "qual",
 *  x = "Date",
 *  y = "Number of cases",
 *  caption = "Fictional Ebola data",
-*  fill = "District"
+*  fill = "Hospital"
 ) +
 ```
 
@@ -593,7 +593,7 @@ str_glue("Data as of {Sys.Date()}")
 ```
 
 ```
-## Data as of 2022-03-21
+## Data as of 2022-03-25
 ```
 
 --
@@ -657,13 +657,13 @@ The power of {ggplot2} - you can make extremely small adjustments
 
 ```r
 # Try one of these...
-theme_bw()+
-theme_classic()+
-theme_dark()+
-theme_gray()+
-theme_minimal()+
-theme_light()+
-theme_void()+
+theme_minimal()
+theme_light()
+theme_bw()
+theme_gray()
+theme_dark()
+theme_void()
+theme_classic()
 ```
 
 Try the argument `base_size = 16` to quickly increase text size.  

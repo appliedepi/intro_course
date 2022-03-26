@@ -1097,7 +1097,7 @@ Aesthetics can be assigned to either:
 </br>
 </br>
 
-* **A data column**: `aes(fill = gender)`  
+* **A data column**: `aes(fill = hospital)`  
   - Assigned *inside* `aes()`
   - Displays data as "groups"  
   

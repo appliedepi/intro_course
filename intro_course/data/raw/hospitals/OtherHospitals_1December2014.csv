@@ -1,4 +1,4 @@
-hospital,ID,age,age unit,gender,hospitalisation date,admission time,outcome,outcome date
+hospital,ID,age,age_unit,gender,date_hospitalisation,time_admission,outcome,date_outcome
 Other,694928,23,years,m,11/9/2014,4:37,,11/21/2014
 Other,2ae019,37,years,m,5/11/2014,7:41,,4/30/2014
 Other,27c07d,20,years,m,9/15/2014,16:46,Recover,9/27/2014

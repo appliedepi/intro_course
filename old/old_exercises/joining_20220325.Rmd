@@ -1,0 +1,1430 @@
+---
+title: "Applied Epi - Joining data"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css: css/css_custom.css
+    theme: "paper"
+runtime: shiny_prerendered
+description: >
+  Learn how to join and transform data
+---
+
+```{r setup, include=FALSE}
+# load packages ----------------------------------------------------------------
+library(gradethis)
+library(etude)
+library(learnr)
+library(dplyr)
+library(flair)
+library(ggplot2)
+library(lubridate)
+library(fontawesome)
+library(janitor)
+library(kableExtra)
+
+
+# set options for exercises and checking ---------------------------------------
+gradethis::gradethis_setup()
+
+learnr::tutorial_options(exercise.timelimit = 60)
+    # exercise.checker = gradethis::grade_learnr) 
+    # alternatively, submitr::null_code_checker
+
+# event recorder ---------------------------------------------------------------
+# see https://github.com/dtkaplan/submitr/blob/master/R/make_a_recorder.R
+
+tutorial_options(exercise.eval = FALSE)  # pre-evaluate exercises
+
+# new_recorder <- function(tutorial_id, tutorial_version, user_id, event, data) {
+#     cat(
+#       tutorial_id, 
+#       " (v", tutorial_version, "); ",
+#       format(Sys.time(), "%Y-%M%-%D %H:%M:%S %Z"), "; ",
+#       user_id, "; ",
+#       event, "; ",
+#       data$label, "; ",
+#       data$answers, "; ",
+#       data$code, "; ",
+#       data$correct, "\n", sep = "",
+#       
+#       file = here::here("event_records", "learnr_basics.txt"),
+#       append = TRUE)
+# }
+
+#options(tutorial.event_recorder = new_recorder)
+```
+
+
+```{r, include=FALSE}
+# hide non-exercise code chunks ------------------------------------------------
+knitr::opts_chunk$set(echo = FALSE)
+
+
+# Data prep --------------------------------------------------------------------
+# Import
+surv <- rio::import(system.file("dat/surveillance_linelist_clean_20141201.rds", package = "introexercises")) 
+  
+surv_small <- rio::import(system.file("dat/surveillance_linelist_clean_20141201.rds", package = "introexercises")) %>% 
+     select(case_id, hospital, case_id, age_years,  wt_kg, 
+            ht_cm,  date_onset, admin3pcod)
+
+hospitals <- bind_rows(rio::import(system.file("dat/hospitals/20141201_hosp_port.csv", package = "introexercises")),
+                    rio::import(system.file("dat/hospitals/20141201_hosp_central.csv", package = "introexercises"))) %>% 
+             select(hospital, `hospitalisation date`, outcome, `outcome date`) %>% 
+             janitor::clean_names()
+
+geo_data <- rio::import(system.file("dat/pop/sle_admpop_adm3_2020.csv", package = "introexercises")) %>% 
+                 select(-c(Female, Male), -starts_with("T"))
+
+
+# Make the hospital information dataframe
+hospital_dirty = data.frame(
+  hosp_name     = c("central hospital", "military", "military", "port", "St. Mark's", "ignace", "sisters"),
+  catchment_pop = c(1950280, 40500, 10000, 50280, 12000, 5000, 4200),
+  level         = c("Tertiary", "Secondary", "Primary", "Secondary", "Secondary", "Primary", "Primary")
+)
+
+hospital_clean <- hospital_dirty %>% 
+  mutate(
+    hosp_name = case_when(
+      # criteria                       # new value
+      hosp_name == "military"          ~ "Military Hospital",
+      hosp_name == "port"              ~ "Port Hospital",
+      hosp_name == "St. Mark's"        ~ "St. Mark's Maternity Hospital (SMMH)",
+      hosp_name == "central hospital"  ~ "Central Hospital",
+      TRUE                             ~ hosp_name
+      )
+    )
+
+# Create smaller linelists for the easier exemples
+df_patient <- tibble(ID = c("patient_1", "patient_2", "patient_3", 
+                            "patient_4", "patient_10"), 
+                     sexe = c("F", "M", "M", "F", "F"), 
+                     age = c(5, 10, 2, 15, 14), 
+                     age_unit = c("Year", "Year", "Year", "Year", "Year"))
+
+df_lab <- tibble(ID = c("patient_1", "patient_2", "patient_4", 
+                        "patient_5", "patient_6"), 
+                 test_result = c("positive", "negative", 
+                                 "negative", "positive", "positive"))
+
+
+df1 <- tibble(ID = c("patient_1", "patient_2", "patient_3"),
+              sexe = c("F", "M", "M"))
+              
+df2 <- tibble(ID = c("patient_1", "patient_1", "patient_1", "patient_2", "patient_4"),
+              date_test = as.Date(c("2021-12-01", "2021-12-26", "2022-01-05", "2021-12-18", "2022-01-01")),
+                 test_result = c("positive", "negative", "negative", "positive", "positive"))
+
+hosp_central <- rio::import(system.file("dat/hospitals/20141201_hosp_central.csv", package = "introexercises"))
+hosp_military <- rio::import(system.file("dat/hospitals/20141201_hosp_military.csv", package = "introexercises"))
+hosp_port <- rio::import(system.file("dat/hospitals/20141201_hosp_port.csv", package = "introexercises"))
+hosp_smmh <- rio::import(system.file("dat/hospitals/20141201_hosp_smmh.csv", package = "introexercises"))
+hosp_other <- rio::import(system.file("dat/hospitals/20141201_hosp_other.csv", package = "introexercises"))
+hosp_missing <- rio::import(system.file("dat/hospitals/20141201_hosp_missing.csv", package = "introexercises"))
+
+lab <- rio::import(system.file("dat/lab_results_20141201.xlsx", package = "introexercises"))
+investigations <- rio::import(system.file("dat/case_investigations_20141201.xlsx", package = "introexercises"))
+
+```
+
+```{r, include=FALSE}
+# hide non-exercise code chunks ------------------------------------------------
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+
+
+## Introduction to R for Applied Epidemiology and Public Health
+
+
+### Welcome
+
+Welcome to the live course "Introduction to R for applied epidemiologists", offered by [Applied Epi](www.appliedepi.org) - a nonprofit organisation that offers open-source tools, training, and support to frontline public health practitioners.  
+
+```{r, eval = TRUE, echo = FALSE, out.width = "25%"}
+knitr::include_graphics("images/logo.png", error = F)
+```
+
+### Joining data  
+
+This exercise focuses on **joining data frames**.
+
+### Format
+
+This exercise will guide you through a set of tasks.  
+*You should perform these tasks in RStudio and on your local computer*.  
+
+#### Getting Help  
+
+There are several ways to get help:  
+
+1) Look for the "helpers" (see below)
+2) Ask your live course instructor/facilitator for help  
+3) Ask a colleague or other participant in the course for tips  
+4) Post a question in [Applied Epi Community](www.community.appliedepi.org) in the category for questions about Applied Epi Training  
+
+Here is what those "helpers" will look like:
+
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+
+<summary style='text-decoration: underline; color: darkgreen;'>`r fontawesome::fa("lightbulb", fill = "gold")` Click to read a hint</summary>
+</br>
+
+Here you will see a helpful hint!  
+
+</br>
+</details>
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+linelist %>% 
+  filter(
+    age > 25,
+    district == "Bolo"
+  )
+```
+
+Here is more explanation about why the solution works.  
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+#### Quiz questions  
+
+Please complete the quiz questions that you encounter throughout the tutorial. **Answering will help you** to comprehend the material, and will also help us to improve the exercises for future students.  
+
+To practice, please answer the following questions:  
+
+
+```{r quiz-use-helper, echo=F}
+quiz(
+  question_radio("When should I view the red 'helper' code?",
+    answer("After trying to write the code myself", correct = TRUE),
+    answer("Before I try coding", correct = FALSE),
+    correct = "Reviewing best-practice code after trying to write yourself can help you improve",
+    incorrect = "Please attempt the exercise yourself, or use the hint, before viewing the answer."
+  )
+)
+```
+
+
+```{r quiz-anxious, echo = FALSE}
+question_numeric(
+ "How anxious are you about beginning this tutorial - on a scale from 1 (least anxious) to 10 (most anxious)?",
+ answer(10, message = "Try not to worry, we will help you succeed!", correct = T),
+ answer(9, message = "Try not to worry, we will help you succeed!", correct = T),
+ answer(8, message = "Try not to worry, we will help you succeed!", correct = T),
+ answer(7, message = "Try not to worry, we will help you succeed!", correct = T),
+ answer(6, message = "Ok, we will get there together", correct = T),
+ answer(5, message = "Ok, we will get there together", correct = T),
+ answer(4, message = "I like your confidence!", correct = T),
+ answer(3, message = "I like your confidence!", correct = T),
+ answer(2, message = "I like your confidence!", correct = T),
+ answer(1, message = "I like your confidence!", correct = T),
+ allow_retry = TRUE,
+ correct = "Thanks for sharing. ",
+ min = 1,
+ max = 10,
+ step = 1
+)
+```
+
+
+
+#### Icons  
+
+You will see these icons throughout the exercises:
+
+Icon  |Meaning
+------|--------------------
+`r fontawesome::fa("eye", fill = "darkblue")`|Observe  
+`r fontawesome::fa("exclamation", fill = "red")`|Alert!  
+`r fontawesome::fa("pen", fill = "brown")`|An informative note  
+`r fontawesome::fa("terminal", fill = "black")`|Time for you to code!  
+`r fontawesome::fa("window-restore", fill = "darkgrey")`|Change to another window  
+`r fontawesome::fa("bookmark", fill = "orange")`|Remember this for later  
+
+
+
+
+## Learning objectives
+
+In this exercise you will:  
+
+* Review the types of joins, and their corresponding commands in R  
+* Understand which joins to apply and when  
+* Combine several hospital case linelists together by binding rows  
+* Join together surveillance linelist, medical linelist, and other lab and case investigation datasets  
+
+
+
+
+
+## Joins review  
+
+Let us take a moment to review the different types of joins:  
+
+### Review of join types  
+
+Take a few minutes to review the informaton below. We give it to you as text descriptions, as a schematic, and as animations ([source](https://github.com/gadenbuie/tidyexplain))  
+
+#### Schematic  
+
+```{r eval = TRUE, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("images/summary_joins.png", error = F)
+```
+
+#### Text descriptions  
+
+* **Mutating joins**: add new variables to a dataframe
+
+* **Left join**: keep all rows from the first dataframe, and import lines with a correspondence from the second dataframe.
+
+* **Right join**: keep all rows from the second dataframe, and import lines with a correspondence from the first dataframe.
+
+* **Full join**: combine two full dataframes, keeps all rows.
+
+* **Inner join**: take the intersection of two dataframes, keeps only rows present in both dataframes
+
+* **Filtering joins**: filter a dataframe based on another one
+
+* **Anti join**: keep all lines from first dataframe without matches in the second dataframe  
+
+* **semi join**: keep all lines from first dataframe with matches in the second dataframe
+
+#### Animations  
+
+```{r eval = TRUE, echo=FALSE, out.width = '75%'}
+knitr::include_graphics("images/left-join.gif", error = F)
+```
+
+```{r eval = TRUE, echo=FALSE, out.width = '75%'}
+knitr::include_graphics("images/right-join.gif", error = F)
+```
+
+```{r eval = TRUE, echo=FALSE, out.width = '75%'}
+knitr::include_graphics("images/full-join.gif", error = F)
+```
+
+```{r eval = TRUE, echo=FALSE, out.width = '75%'}
+knitr::include_graphics("images/inner-join.gif", error = F)
+```
+
+```{r eval = TRUE, echo=FALSE, out.width = '75%'}
+knitr::include_graphics("images/anti-join.gif", error = F)
+```
+
+```{r eval = TRUE, echo=FALSE, out.width = '75%'}
+knitr::include_graphics("images/semi-join.gif", error = F)
+```
+
+
+#### Further resources
+
+- Tidyverse site presentation of [mutating joins](https://dplyr.tidyverse.org/articles/two-table.html#mutating-joins) and [filtering joins](https://dplyr.tidyverse.org/articles/two-table.html#filtering-joins): some explanations + examples  
+
+- Tidyverse reference page on [mutating joins](https://dplyr.tidyverse.org/reference/mutate-joins.html): here you will find the full list of arguments for the joins functions  
+
+- Epi R Handbook page [on joins](https://epirhandbook.com/en/joining-data.html#joining-data)  
+
+
+### Show your understanding  
+
+Review these two mini dataframes containing patient data (named `df_patient`) and lab results (named `df_lab`).  
+
+```{r echo = FALSE, fig.show='hold'}
+df_patient %>% kbl() %>% kable_styling(full_width = FALSE, 
+                                       bootstrap_options = c("striped", "hover", "condensed"))
+
+df_lab %>% kbl() %>% kable_styling(full_width = FALSE, 
+                                   bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+
+Which join would you use to...
+
+
+```{r quiz-joins-1}
+quiz(caption = "Which join would you use:",
+     question("To add the age and sex for all patients into the lab database, if available",
+              answer("left_join(df_patient, df_lab, by = 'ID')"),
+              answer("right_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
+              answer("inner_join(df_patient, df_lab, by = 'ID')", message = "An inner join would not include patients from the lab database without a match in the patient database. Rows for patient 5 and 6 would be lost"),
+              answer("full_join(df_patient, df_lab, by = 'ID')", message = "An full join would bring in rows with no lab test from the patient database and add unwanted NA. Here we want to use the lab dataframe as the reference."),
+              answer("anti_join(df_patient, df_lab, by = 'ID')"),
+              answer("semi_join(df_patient, df_lab, by = 'ID')"),
+              allow_retry = TRUE),
+     
+     
+     question("To get a dataframe with patients for which we have data for age, sex and test result",
+              answer("left_join(df_patient, df_lab, by = 'ID')"),
+              answer("right_join(df_patient, df_lab, by = 'ID')"),
+              answer("inner_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
+              answer("full_join(df_patient, df_lab, by = 'ID')", message = "The full join would include all lines from the two dataframes, even if they do not have a match in the other dataframe"),
+              answer("anti_join(df_patient, df_lab, by = 'ID')"),
+              answer("semi_join(df_patient, df_lab, by = 'ID')"),
+              allow_retry = TRUE),
+     
+     
+     question("To keep all the patients from the lab dataframe for which we have age and sex data (but not add those columns to the lab dataframe)",
+              answer("left_join(df_lab, df_patient, by = 'ID')"),
+              answer("right_join(df_patient, df_lab, by = 'ID')"),
+              answer("inner_join(df_lab, df_patient, by = 'ID')", message = "You are close. But an inner join in this case would import the columns from the df_patient dataframe, which we do not want"),
+              answer("full_join(df_lab, df_patient,  by = 'ID')"),
+              answer("anti_join(df_patient, df_lab, by = 'ID')"),
+              answer("semi_join(df_lab, df_patient, by = 'ID')", correct = TRUE),
+              allow_retry = TRUE), 
+     
+     
+     question("To get the list of patients for whom we have age and sex, but no test result",
+              answer("left_join(df_patient, df_lab, by = 'ID')"),
+              answer("right_join(df_patient, df_lab, by = 'ID')"),
+              answer("inner_join(df_patient, df_lab, by = 'ID')"),
+              answer("full_join(df_patient, df_lab, by = 'ID')"),
+              answer("anti_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
+              answer("semi_join(df_lab, df_patient, by = 'ID')"),
+              allow_retry = TRUE),
+     
+     
+     question("Which of these joins would use df_patient as the baseline?",
+              answer("left_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
+              answer("right_join(df_lab, df_patient, by = 'ID')", correct = TRUE),
+              answer("left_join(df_lab, df_patient, by = 'ID')"), correct = FALSE,
+              allow_retry = TRUE),
+     
+     
+     question("Which of these would return only the rows found in df_patient?",
+              answer("inner_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
+              answer("full_join(df_patient, df_lab, by = 'ID')", correct = FALSE),
+              answer("left_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
+              allow_retry = TRUE),
+     
+     
+     question("Which of these would use NA to fill-in values in rows that did not match?",
+              answer("full_join(df_patient, df_lab, by = 'ID')", correct = TRUE),
+              answer("semi_join(df_patient, df_lab, by = 'ID')", correct = FALSE),
+              answer("anti_join(df_patient, df_lab, by = 'ID')", correct = FALSE),
+              answer("inner_join(df_patient, df_lab, by = 'ID')", correct = FALSE),
+              allow_retry = TRUE)
+)
+```
+
+
+## Practice with simple datasets
+
+### Syntax
+
+The syntax of the join functions is always the same:  
+
+```{r echo = TRUE, eval=FALSE}
+XXX_join(dataframe1,                             # "left" dataframe
+         dataframe2,                             # "right" dataframe
+         by = c("identifier1", "identifier2"))   # Columns used to match the two dataframes
+
+
+# Or, with a pipe:
+dataframe1 %>%                                        # "left" dataframe
+     XXX_join(dataframe2,                             # "right" dataframe
+              by = c("identifier1", "identifier2"))   # Columns used to match the two dataframes
+```
+
+
+### Left join
+
+How would you perform a *left join* of `df_patient` with `df_lab` (where `df_patient` is used as reference/baseline dataframe)?
+
+```{r left_join_syntax, exercise = TRUE}
+
+```
+
+```{r left_join_syntax-hint}
+Because we want `df_patient` as the baseline, it should be listed first.
+```
+
+```{r left_join_syntax-check}
+grade_this({
+     # Automatically pass if .result equal to .solution
+     pass_if_equal(message = "Excellent")
+     # Default to failing grade with feedback
+     fail()
+})
+```
+
+```{r left_join_syntax-solution}
+df_patient %>% 
+     left_join(df_lab, by = "ID")
+```
+
+
+### Anti-join
+
+Write the command that returns *all rows from the lab database for which we do not have age and sex data*.
+
+```{r anti_join_syntax, exercise = TRUE}
+
+```
+
+```{r anti_join_syntax-hint}
+Because we want `df_lab` as the baseline, it should be listed first. Do not forget the by=
+```
+
+```{r anti_join_syntax-check}
+grade_this({
+     # Automatically pass if .result equal to .solution
+     pass_if_equal(message = "Excellent")
+     # Default to failing grade with feedback
+     fail()
+})
+```
+
+```{r anti_join_syntax-solution}
+df_lab %>% 
+     anti_join(df_patient, by = "ID")
+```
+
+
+### Troubleshooting line duplication
+
+When one dataframe has **several lines for some of the patients**, duplications may occur (depending on the join).
+
+Let us now consider these small dataframes, named `df1` and `df2` (below): 
+
+```{r echo = FALSE, fig.show="hold"}
+df1 %>% kbl() %>% kable_styling(full_width = FALSE, 
+                                       bootstrap_options = c("striped", "hover", "condensed"))
+
+df2 %>% kbl() %>% kable_styling(full_width = FALSE, 
+                                   bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+
+How would you *count the number of lines for each patient*? Try it for the `df2` dataframe:  
+
+```{r nb_lines, exercise = TRUE}
+
+```
+
+```{r nb_lines-hint}
+There are several ways, but a very quick way is to use the `count()` function.
+```
+
+```{r nb_lines-check}
+grade_this({
+     # Automatically pass if .result equal to .solution
+     pass_if_equal(message = "Excellent")
+     # Default to failing grade with feedback
+     fail()
+})
+```
+
+```{r nb_lines-solution}
+count(df2, ID)
+```
+
+And if we do this for the `df1` dataframe:  
+
+```{r eval = TRUE, echo = FALSE}
+count(df1, ID)
+```
+
+So we see that in the lab dataframes, some patients have several lines (they were tested more than once). This will affect our joins.
+
+```{r quiz-duplication-1}
+quiz(
+     question("When runing the command left_join(df1, df2, by = 'ID'), how many lines will be returned for patient 1?",
+              answer("0", message = "The left dataframe has a row for patient 1. This row could be duplicated if the right dataframe had more than one, but it cannot be dropped when using a left join."),
+              answer("1", message = "The lab dataframe has three rows for patient 1, what do you think will happen to them?"),
+              answer("2"),
+              answer("3", correct = TRUE),
+              answer("4", message = ""),
+              allow_retry = TRUE),
+     
+     question("What about patient 2?",
+              answer("0", message = "The left dataframe has a row for patient 2. This row could be duplicated if the right dataframe had more than one, but it cannot be dropped when using a left join."),
+              answer("1", correct = TRUE),
+              answer("2", message = "The right dataframe has only one row for patient 2, so it's a parfect one-on-one match"),
+              answer("3", message = "The right dataframe has only one row for patient 2, so it's a parfect one-on-one match"),
+              answer("4", message = "The right dataframe has only one row for patient 2, so it's a parfect one-on-one match"),
+              allow_retry = TRUE),
+     
+     question("When runing the command right_join(df1, df2, by = 'ID'), what do you think the values in the sexe column will be for patient 4?",
+              answer("F", message = "What is the value of sexe for patient 4 in the df1 dataframe?"),
+              answer("M", message = "What is the value of sexe for patient 4 in the df1 dataframe?"),
+              answer("There won't be a patient_4 row, it will be dropped", message = "This is a right join, so df2 is used as a reference dataframe, none of its rows will be dropped, even if no match is found in the df1 dataframe"),
+              answer("NA", correct = TRUE),
+              allow_retry = TRUE)
+     
+)
+
+```
+
+
+
+
+
+
+## Binding rows  
+
+### Prepare  
+
+**Open your R project and R script.**  
+
+**Run the code from the top of your script**:  
+
+* Load packages  
+* Import and clean the surveillance linelist  
+
+**Below your cleaning code (pipe chain), create a new script section for "Joining data"**.  
+
+```{r, results="asis", echo=T}
+
+####################
+### Joining data ###
+####################
+
+```
+
+
+
+### Hospital datasets  
+
+Joining datasets can sometimes be as simple as combining the rows of data frames that have exactly the same columns. For example, if you have multiple study sites, or clinical sites, that are sending you data in exactly the same format.  
+
+`r fontawesome::fa("window-restore", fill = "darkgrey")` 
+
+In our case study Ebola outbreak, there are six datasets from various hospitals in the "data/raw/hospitals" subfolder of the "intro_course" R project. In Module 1, you should have re-named them to the following standardized syntax (if not, please do so now):  
+
+* 20141201_hosp_central.csv  
+* 20141201_hosp_military.csv  
+* 20141201_hosp_port.csv  
+* 20141201_hosp_smmh.csv  
+* 20141201_hosp_other.csv  
+* 20141201_hosp_missing.csv  
+
+Each file corresponds with a particular hospital (Central, Military, Port, St. Mark's) and there are datasets containing record for patients from other hospitals, or for whom the hospital is missing.  
+
+**Near the top of your R script (in the section for importing data), write and run some commands to import the hospital linelist files from the "data/raw/hospitals" subfolder.** Name the data frames in R as `hosp_central`, `hosp_port`, `hosp_missing`, etc. 
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+As a reminder, you should write these commands in the importing section of your script, for optimal organization.  
+
+```{r eval = F, echo=T}
+hosp_central <- import(here("data", "raw", "hospitals", "20141201_hosp_central.csv"))
+hosp_military <- import(here("data", "raw", "hospitals", "20141201_hosp_military.csv"))
+hosp_port <- import(here("data", "raw", "hospitals", "20141201_hosp_port.csv"))
+hosp_smmh <- import(here("data", "raw", "hospitals", "20141201_hosp_smmh.csv"))
+hosp_other <- import(here("data", "raw", "hospitals", "20141201_hosp_other.csv"))
+hosp_missing <- import(here("data", "raw", "hospitals", "20141201_hosp_missing.csv"))
+
+```
+
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+`r fontawesome::fa("eye", fill = "darkblue")` **Open the data frames in R, and observe the column names**  
+
+```{r quiz-hosp_linelists}
+quiz(caption = "Quiz - Hospital linelists",
+    question("Are the column names the same in each of the six hospital linelists?",
+    allow_retry = T,
+    answer("Yes", correct = T),
+    answer("No")
+  )
+)
+```
+ 
+Because the columns have the same names, you should be able to simply "bind" the rows together - digitally stacking the 6 data frames on top of one another. 
+
+This is best done with the function `bind_rows()`, from the package {dplyr}. This function is flexible in that the columns do not even have to be in the same order for the data frames to be bound together. The function will align the columns automatically - the columns only have to have the same names.  
+
+Here is the syntax - it is quite simple:  
+
+```{r, echo=T, eval=F}
+bind_rows(df1, df2, df3, df4, ...)
+```
+
+Above, "dfX" would be replaced by the names of the data frames that you want to combine.
+
+**In the "Joining data" section of your script**, write and run a command that binds together the six hospital datasets, and saves the result as `hosp`.  
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = T, echo=T, include = F}
+hosp <- bind_rows(hosp_central, hosp_port, hosp_military, hosp_smmh, hosp_other, hosp_missing)
+
+```
+
+The order of the data frames is not important, for the purposes of this example.  
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+`r fontawesome::fa("eye", fill = "darkblue")` Now click open and view the `hosp` data frame that you have created. Does it look correct?  
+
+* Is there a column `hospital` with various values?  
+* Do the number of rows equal the sum of all the smaller datasets combined?  
+* Is the number of columns consistent with the smaller datasets?  
+* Are the column names the same as in the smaller datasets?  
+* What is the name of the unique identifier column?  
+
+
+
+
+
+
+## Practice joins
+
+Now that we have a `hosp` hospital linelist, let's join it into the `surv` surveillance linelist.  
+
+### Inspect data before joining  
+
+It is critically important to **know your datasets before joining** them together. This prepares you to anticipate what will happen when you join.  
+
+There is so much that can potentially go wrong when joining (and hidden from view!) that you must know things in advance such as:  
+
+* The dimensions (number of rows and columns) of your datasets  
+* Whether there are duplicates in either of the datasets  
+* Whether the identifiers are written similarly in both datasets  
+* How the contents of the two datasets overlap  
+* Which column names are present in both datasets  
+
+
+
+### Review dimensions  
+
+Use the function `dim()` on the datasets in the code box below. This is a shortcut to return the number of rows and the number of columns. Alternatively, you can use `nrow()` and `ncol()` commands individually.  
+
+*Check the dimensions (number of lines and columns) of the two data frames*.  
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+dim(surv)
+dim(hosp)
+```
+
+The order of the data frames is not important, for the purposes of this example.  
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+### Review duplicates  
+
+
+Now, it would be good to understand whether there are duplicated lines? Recall that duplicates may result in joins that increase the number of rows in the baseline dataframe.  
+
+Show the *IDs from the surv dataframe with more than one row per patient*:  
+
+```{r nb_lines2, exercise = TRUE}
+surv %>% 
+```
+
+```{r nb_lines2-hint-1}
+There are several ways, but a very quick way is to use the `count()` function.
+```
+
+```{r nb_lines2-hint-2}
+To only keep lines with that satisfy a condition in one or several columns you can use the `filter()` function. 
+```
+
+```{r nb_lines2-check}
+grade_this({
+     # Automatically pass if .result equal to .solution
+     pass_if_equal(message = "Excellent")
+     # Default to failing grade with feedback
+     fail()
+})
+```
+
+```{r nb_lines2-solution}
+surv %>% 
+     count(case_id) %>% 
+     filter(n > 1)        # the column n is automatically created by count()
+```
+
+Now, do the same for the hospital dataframe: 
+
+```{r nb_lines3, exercise = TRUE}
+
+```
+
+
+So we know that there are some patients who have several rows in the `surv` file. Ideally we would go and investigate these duplicates to see if they correspond to different visits, or if some patients were wrongly entered twice, but since our focus is on joining, let's keep them all for now.
+
+
+### Review identifier values  
+
+Before joining, it is extremely important to consider whether the column(s) *used to match the two dataframes* are clean.  
+
+The `join` functions from **dplyr** are using _exact matching_: the values need to be _exactly the same_ in both dataframes to be matched. 
+
+Note: There are packages that perform probabilistic ("_fuzzy_") matching, but we will not see them today (refer to the [chapter on joining in the epirhandbook](https://epirhandbook.com/en/joining-data.html#probabalistic-matching)).
+
+In our case, do we know if the patient IDs were entered in the same way in both dataframes? If data comes from a clean SQL database and is a primary key, probably. With excel data entered by many different people in emergency settings, maybe not. **In general, it is a good rule to scrutinize the columns you want to use as identifer/keys to join your dataframes**.
+
+Spend a bit of time looking at the structure of the values in the column `case_id`. Do they follow the same pattern? Are some IDs common between the two databases?
+
+Let's look together at a sample of IDs from both dataframes:  
+
+```{r echo = TRUE, eval = TRUE}
+# for each dataset, sort and print the first 10 case_id values
+
+# for the surveillance dataset
+surv %>% arrange(case_id) %>% pull(case_id) %>% head(10)
+
+# for the hospital dataset
+hosp %>% arrange(ID) %>% pull(ID) %>% head(10)
+```
+
+They seem to match. Are there IDs in common between the two dataframes? The `intersect()` function lets you know which elements are in common between two vectors.
+
+```{r echo = TRUE, eval = TRUE}
+# return the values that are common in both columns (print the first 10)
+intersect(surv$case_id, hosp$ID) %>%
+  head(10)
+```
+
+There are definitely IDs in common.  
+
+With very dirty data, you would want to inspect your IDs more, especially the ones who don't match, in case several patterns of IDs were used within the same file.
+
+### Review overlap  
+
+Now, to understand how the two datasets relate to each other, you can perform an `anti_join()` in both directions.
+
+```{r anti_join_exo1, exercise = TRUE}
+# Perform an anti-join to see the rows from the surv dataframe that have no match in the hospitals dataframe
+
+
+```
+
+
+```{r anti_join_exo1-hint-1}
+anti_join(df1, df2, by = "ID")
+```
+
+```{r anti_join_exo1-hint-2}
+Use the correct data frame names, and for by= remember that the column names differ, so use c("case_id" = "ID")
+```
+
+```{r anti_join_exo1-check}
+grade_this({
+     # Automatically pass if .result equal to .solution
+     pass_if_equal(message = "Excellent")
+     # Default to failing grade with feedback
+     fail()
+})
+```
+
+
+```{r anti_join_exo1-solution}
+anti_join(surv, hosp, by = c("case_id" = "ID"))
+```
+
+
+Now in the other direction: 
+
+```{r anti_join_exo2, exercise = TRUE}
+# Perform an anti-join to see the rows from the hospital dataframe that have no match in the surv dataframe
+
+
+```
+
+
+```{r anti_join_exo2-hint}
+anti_join(df1, df2, by = "ID")  
+```
+
+```{r anti_join_exo2-hint-2}
+Remember that the order/baseline has switched, so switch the by= value to c("ID" = "case_id")
+```
+
+```{r anti_join_exo2-check}
+grade_this({
+     # Automatically pass if .result equal to .solution
+     pass_if_equal(message = "Excellent")
+     # Default to failing grade with feedback
+     fail()
+})
+```
+
+
+```{r anti_join_exo2-solution}
+anti_join(hosp, surv, by = c("ID" = "case_id"))
+```
+
+So we see that the `surv` dataframe has all the pateitns that are in the `hospitals`  dataframe, and that the `hospitals` dataframe is mostly a subset of the surv patients (except for seven rows).
+
+```{r quiz-data-inspection}
+quiz(caption = "Quiz - Data inspections",
+    question("If you were to conduct a full_join() of hosp into surv, how many additional rows would you expect to appear in the joined data frame?",
+    allow_retry = T,
+    answer("0"),
+    answer("17"),
+    answer("7", correct = T),
+    answer("5 rows would be removed")
+  )
+)
+```
+
+
+
+
+
+### Review column names  
+
+It is important to know what the column names are in each dataset.  
+
+Review again the column names of each dataset:  
+
+```{r, echo=T, eval=T}
+surv %>% colnames()
+```
+
+```{r, echo=T, eval=T}
+hosp %>% colnames()
+```
+
+Which column names exist in both datasets?  
+
+```{r quiz-cols_align}
+quiz(caption = "Quiz - Compare columns",
+  question("Which columns in the hosp linelist also exist in the surv linelist?",
+    allow_retry = T,
+    answer("hospital", correct = T),
+    answer("outcome date"),
+    answer("age", correct = T),
+    answer("age unit", correct = T),
+    answer("gender", correct = T)
+  ),
+  question("Which columns exist only in the hosp linelist?",
+    allow_retry = T,
+    answer("hospitalisation date", correct = T),
+    answer("age"),
+    answer("admission time", correct = T),
+    answer("outcome", correct = T),
+    answer("outcome date", correct = T)
+  )
+)
+```
+
+Let's do an experiment: **run a command in your RStudio to join the two data frames**:  
+
+* Use a `full_join()`  
+* Use `surv` as the baseline/reference data frame  
+* As before, use `c("case_id" - "ID")` as the link between the data frames  
+* Save the result as `test_join`  
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+test_join <- surv %>% 
+  full_join(hosp, by = c("case_id" = "ID"))
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+What are the dimensions of the new data frame?  
+
+Run **`dim(test_join)`** and compare with the previous dimensions of `surv`.  
+
+
+`r fontawesome::fa("eye", fill = "darkblue")`
+
+Now, click on `test_join` in your R Environment to view it closely. See the columns near the left side that were part of the orginal `surv` data frame, and then scroll to the right to see the new columns that have been added, from the `hosp` data frame.  
+
+**What do you notice about the columns `gender`, `age`, `age_unit`, and `hospital`?**  
+
+```{r quiz-join-dup}
+quiz(caption = "Quiz - Joins",
+    question("What happened to these columns?",
+    allow_retry = T,
+    answer("They were removed"),
+    answer("They were all moved to the left end of the data frame"),
+    answer("They appear twice - once with '.x' appended, and again with '.y' appended", correct = T)
+  )
+)
+```
+
+These column names existed in both data frames, so when the data were joined, R had to differentiate between them by adding the suffixes `.x` and `.y`.  
+
+**Are the values the same in both `gender.x` and `gender.y`** How can you examine this?  
+
+Since they are now in the same dataset, you can cross-tabulate the two columns.  
+
+```{r, eval=F, echo=T}
+# cross tabulate the two columns in the joined dataset
+test_join %>% 
+  tabyl(gender.x, gender.y)
+```
+
+
+You can see that `gender.x` (from the original `surv` dataset, which was cleaned by you in a previous module) has the values "female" and "male".  
+
+In contrast, `gender.y`, which came from the hospital linelist, has uncleaned values "f", "m", "", and NA.  
+
+
+**What to do with this situation?** This is a classic scenario when trying to combine datasets - what to do with redundant columns.  
+
+**But are they truly redundant columns?** You will need to ask yourself these questions:  
+
+* Do you want to keep the gender, age, hospital, etc values from the hospital linelist - for records?  
+* If the age or gender for a patient differ between `surv` and `hosp`, which one will you consider to be correct?  
+
+These are questions that only you can answer about your dataset.  
+
+You have three options:  
+
+1) Perform the join as above, to keep all the columns  
+  * This will create the .x and .y suffices, which you can edit with `rename()`  
+
+2) Set all of the redundant columns as identifiers in the join  
+  * This keep only the columns of the baseline data frame. Our command would look like this:  
+
+```{r}
+test <- full_join(surv,
+          hosp,
+          by = c(
+            "case_id" = "ID",
+            "age",                    # column "age" is named the same in both datasets
+            "age_unit" = "age unit",
+            "gender" = "gender",
+            "hospital" = "hospital"))
+```
+
+3) Remove the redundant columns *before* the merge  
+  * If you do not care about retaining the redundant columns from the second data frame, simply remove them with `select()` prior to the join.  
+  
+  
+  
+**For this exercise, write code that uses *Option 3 above* 
+
+* Modify `hosp` with a select command to select only "ID" and new columns. Re-save it as `hosp`  
+* Take advantage of the re-naming functionality of `select()`, to rename "ID" to "case_id", so that the join command will be more simple.  
+* Run a `full_join()` on `surv` and `hosp`, using "case_id" as the common identifier  
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+
+# Modify the hosp dataset
+hosp <- hosp %>% 
+  # select specific columns from hosp, and re-name ID as case_ID
+  select(
+    case_id = ID,               # select and rename
+    `hospitalisation date`,     # select
+    `admission time`,           # select
+    `outcome date`,             # select
+    outcome)                    # select
+
+# Join the two data frames with a full-join
+combined <- full_join(surv, hosp, by = "case_id")
+
+```
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+
+## Join lab data  
+
+Now we need to join the dataset of laboratory testing results. 
+
+**Complete the following steps to join the lab dataset into the `combined` data frame**  
+
+1) In the importing section of your script, write and run a command to import the CSV file located at "data/raw/lab_results_20141201.xlsx" and save it as `lab`  
+2) In the **Joining data** section of your script, write and run commands to compare the `combined` and `lab` datasets, then conduct a `full_join()` to add the `lab` column to `combined`  
+
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+
+# Import lab data
+# (place this near the top of your script, in the importing section)
+lab <- import(here("data", "raw", "lab_results_20141201.xlsx"))
+
+# Join the two data frames with a full-join
+# (place this in the Joining data section of your script)
+combined <- full_join(combined, lab, by = "case_id")
+
+```
+
+Don't forget to use the correct file extension for the lab file (.xlsx)!  
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+`r fontawesome::fa("eye", fill = "darkblue")` **Verify manually that the join occurred correctly.**  
+
+
+## Add case investigation data  
+
+Finally, we need to add new data from case investigations. Teams have called and conducted home visits to do detective work. They have recorded the likely source cases, dates of infection, and context of infection for some of the cases.  
+
+**Complete the following steps to join the case investigations dataset into the `combined` data frame**  
+1) In the **importing section** of your script, write and run a command to import the CSV file located at "data/raw/case_investigations_20141201.xlsx" and save it as `investigations`  
+2) In the **Joining data** section of your script, write and run commands to:  
+  * Compare the `combined` and `investigations` datasets  
+  * `select()` only the columns from `investigations` that you need  
+  * Conduct a `full_join()` to add the `investigations` columns to `combined`  
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+
+# Import lab data 
+# (add to the import section of your R script)
+investigations <- import(here("data", "raw", "case_investigations_20141201.xlsx"))
+
+# keep only certain columns  
+# (add to the Joining data section of your R script)
+investigations <- investigations %>% 
+  select(-c(age, `age unit`, gender))
+
+# Join the two data frames with a full-join
+combined <- full_join(combined, investigations, by = "case_id")
+
+```
+
+Don't forget to use the correct file extension for the file (.xlsx)!  
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+`r fontawesome::fa("eye", fill = "darkblue")` **Verify manually that the join occurred correctly.**  
+
+
+
+## Post-join cleaning  
+
+Now that we have these new columns, we should do some final cleaning on the `combined` dataset. 
+
+
+### Column names and classes 
+
+Now that we have new columns in our dataset, we should write some code to ensure that the new columns names have correct syntax and class.  
+
+
+Some of the new column have improper syntax (e.g. spaces). The few new date columns need to be adjusted to our naming style: `date_xxx` (not `xxx_date`).  
+
+**Write a short pipe chain** to address the following issues in `combined`:  
+
+* Use one function to convert all the columns to lowercase and convert spaces to underscores  
+* Use `rename()` to switch the names of any date columns from "xxx_date" to "date_xxx"  
+* Use `mutate()` to properly classify the new date columns as class date, using a function we learned from {lubridate}  
+* Use `mutate()` to replace empty characters "" with `NA`, using `na_if()`, for the columns `outcome` and `hospital`.  
+
+
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+
+<summary style='text-decoration: underline; color: darkgreen;'>`r fontawesome::fa("lightbulb", fill = "gold")` Click to read a hint</summary>
+</br>
+
+Use `clean_names()` first to standardize the syntax. Then use `rename()` to manually adjust specific column names (new = old). To establish date class, choose between `mdy()`, `ymd()`, or `dmy()` to place within the `mutate()` function, based on the current format of the date (look at the dataset) for example:  `mutate(date_outcome = mdy(date_outcome))`
+
+</br>
+</details>
+
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+
+<details>
+<summary style='text-decoration: underline; color: red;'>`r fontawesome::fa("check", fill = "red")`Click to see a solution (try it yourself first!)</summary>
+</br>
+
+```{r eval = F, echo=T}
+# Clean the new columns that have been joined to 'combined'
+combined <- combined %>% 
+  
+  # convert all column names to lower case and remove spaces
+  clean_names() %>% 
+  
+  # edit names of new date columns
+  rename(date_hospitalisation = hospitalisation_date,
+         date_outcome         = outcome_date,
+         date_infection       = infection_date) %>% 
+  
+  # covert new columns to class date
+  mutate(date_hospitalisation = mdy(date_hospitalisation),
+         date_outcome         = mdy(date_outcome),
+         date_infection       = ymd(date_infection)) %>% 
+  
+  # clean outcome and hospital missings
+  mutate(outcome = na_if(outcome, ""),
+         hospital = na_if(hospital, ""))
+```
+
+
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+
+```{r quiz-final_cleaning}
+quiz(caption = "Quiz - Final cleaning",
+  question("What is the function mdy() doing?",
+    allow_retry = T,
+    answer("Cleaning a column that is muddy", message = "The column is not clean, but mdy() does not stand for 'muddy'"),
+    answer("Converting the date column to class date", correct = T),
+    answer("outcome date"),
+    answer("age", correct = T),
+    answer("age unit", correct = T),
+    answer("gender", correct = T)
+  ),
+  question("Why did we choose mdy() for the date_outcome column?",
+    allow_retry = T,
+    answer("Because the DESIRED format of the date is MM/DD/YYYY"),
+    answer("Because the DIRTY format of the date was MM/DD/YYYY", correct = T),
+    answer("Because this is the function used for all date cleaning", message = "No, the function you use depends on what the data looks like (the dirty format)")
+  )
+)
+```
+
+
+
+## Clean up script  
+
+At this point, we now have joins and several new import commands. 
+
+It is important to keep our R script orderly and in a logical flow:  
+
+1) Load packages  
+2) Set parameters (e.g. current epiweek)  
+3) Import datasets  
+4) Clean primary dataset  
+5) Join datasets (and perform any residual cleaning)
+6) Begin tables and visualizations  
+
+Take a moment to ensure that your script aligns with the above, and that you can run it from top to bottom without any errors.  
+
+
+
+
+
+
+
+## End  
+
+Congratulations! You have finished this exercise on joining data.  
+
+We now have a much more complete dataset to work with, including columns like `outcome`, `date_hospitalisation`, `blood_ct`, and `source`.  
+
+Remember to save your R script before leaving RStudio.
+
+
+
+
+<!-- ## Extra : dirty identifiers -->
+
+<!-- What happens when the identifiers columns are "dirty", "messy", and not equal to each other?   -->
+
+<!-- For example if you are trying to match names, addresses, or telephone numbers?   -->
+
+<!-- Well, it depends on how many different values there are, and how much they differ between the two datasets. Sometimes you may be able to clean one of the columns by hand quickly. If that is not a viable solution, you can try [probabilistic/fuzzy matching (Epi R Handbook page)](https://epirhandbook.com/en/joining-data.html#probabilistic-matching) with packages such as [fastLink](https://github.com/kosukeimai/fastLink) or [fuzzyjoin](https://varianceexplained.org/fuzzyjoin/index.html). -->
+
+
+<!-- Try your cleaning skills on this scenario:   -->
+
+<!-- You want to merge these two datasets: `hospital_clean` and `hospital_dirty`, in order to add some hospital data to the `surv` dataframe. Here is what the dataframe looks like:  -->
+
+<!-- ```{r  eval = TRUE, echo = FALSE} -->
+<!-- hospital_dirty %>%  -->
+<!--      kbl() %>%  -->
+<!--      kable_styling(full_width = FALSE,  -->
+<!--                    bootstrap_options = c("striped", "hover", "condensed")) -->
+<!-- ``` -->
+
+<!-- ```{r  eval = TRUE, echo = FALSE} -->
+<!-- hospital_clean %>%  -->
+<!--      kbl() %>%  -->
+<!--      kable_styling(full_width = FALSE,  -->
+<!--                    bootstrap_options = c("striped", "hover", "condensed")) -->
+<!-- ``` -->
+
+
+<!-- Now, join the hospital data to the surv data. -->
+
+<!-- ```{r dirty_hospit, exercise = TRUE} -->
+
+<!-- ``` -->
+
+<!-- ```{r dirty_hospit-hint-1} -->
+<!-- You can use the `unique()` or `distinct()` functions to identify differences in the columns to match -->
+<!-- ``` -->
+
+<!-- ```{r dirty_hospit-hint-2} -->
+<!-- How can you clean the hospital_dirty hospital names? -->
+<!-- ``` -->
+
+<!-- ```{r dirty_hospit-hint-3} -->
+<!-- You can use such functions as `replace()` and `case_when()` to rename values within a column using `mutate()`. -->
+<!-- ``` -->
+
+<!-- ```{r dirty_hospit-hint-4} -->
+<!-- Sometimes it can easiest to convert a column to all lowercase or all uppercase. If you need to convert all values in a column to UPPER or lower case, use `mutate()` and wrap the column with one of these functions from stringr such as `str_to_upper()`, `str_to_lower()`, `str_to_title()`. -->
+<!-- ``` -->
+
+
+<!-- ```{r dirty_hospit-check} -->
+<!-- grade_this({ -->
+<!--      # Automatically pass if .result equal to .solution -->
+<!--      pass_if_equal(message = "Excellent") -->
+<!--      # Default to failing grade with feedback -->
+<!--      fail() -->
+<!-- }) -->
+<!-- ``` -->
+
+<!-- ```{r dirty_hospit-solution} -->
+<!-- left_join(surv, hospital_clean, by = c("hospital" = "hosp_name")) -->
+<!-- ``` -->
+
+
+
+
+<!-- ### Add geo data -->
+
+<!-- We now want to add administrative data to patient data in the `surv` data frame, using the `geo_data` dataframe. Here is the ten first lines of this new dataframe: -->
+
+
+<!-- ```{r  eval = TRUE, echo = FALSE} -->
+<!-- geo_data %>%  -->
+<!--      head(10) %>%  -->
+<!--      kbl() %>%  -->
+<!--      kable_styling(full_width = FALSE,  -->
+<!--                    bootstrap_options = c("striped", "hover", "condensed")) -->
+<!-- ``` -->
+
+<!-- Exercise: *add administrative data to each patient of the `surv` linelist*. -->
+
+<!-- ```{r join_geo, exercise = TRUE} -->
+<!-- # Add administrative data to each patient of the surv linelist. -->
+
+<!-- ``` -->
+
+
+<!-- ```{r join_geo-hint-1} -->
+<!-- Unsure of what to do? Which sort of join would fit most the wording of the question? -->
+<!-- ``` -->
+
+
+<!-- ```{r join_geo-hint-2} -->
+<!-- Have you picked one or several identifier columns? Do they have the same name in both datasets? Inspect the content of the columns, will the match work? -->
+<!-- ``` -->
+
+<!-- ```{r join_geo-hint-3} -->
+<!-- Have you picked one or several identifier columns? Do they have the same name in both datasets? Inspect the content of the columns, will the match work? -->
+<!-- ``` -->
+
+
+<!-- ```{r join_geo-check} -->
+<!-- grade_this({ -->
+<!--      # Automatically pass if .result equal to .solution -->
+<!--      pass_if_equal(message = "Excellent") -->
+<!--      # Default to failing grade with feedback -->
+<!--      fail() -->
+<!-- }) -->
+<!-- ``` -->
+
+
+<!-- ```{r join_geo-solution} -->
+<!-- # Solution -->
+<!-- left_join(surv, geo_data, by = c("admin3pcod" = "ADM3_PCODE")) -->
+<!-- ``` -->
+

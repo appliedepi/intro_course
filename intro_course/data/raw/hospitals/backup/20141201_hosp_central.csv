@@ -1,4 +1,4 @@
-﻿hospital,ID,age,age unit,gender,hospitalisation date,admission time,outcome,outcome date
+﻿hospital,ID,age,age_unit,gender,date_hospitalisation,time_admission,outcome,date_outcome
 Central Hospital,dc1730,13,years,m,9/27/2014,15:24,Death,10/8/2014
 Central Hospital,7bb784,9,months,m,10/22/2014,7:22,Recover,11/7/2014
 Central Hospital,6f8014,16,years,m,11/19/2014,6:39,Death,11/22/2014

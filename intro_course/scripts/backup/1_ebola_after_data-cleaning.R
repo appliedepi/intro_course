@@ -68,33 +68,36 @@ surv <- surv_raw %>%
      mutate(date_onset = mdy(date_onset)) %>% 
      mutate(date_report = mdy(date_report)) %>% 
      
-     # create epiweek columns  
-     mutate(week_onset = floor_date(date_onset, unit = "week", week_start = 1)) %>% 
-     mutate(week_report = floor_date(date_report, unit = "week", week_start = 1)) %>% 
-     
      # convert age to numeric class
      mutate(age = as.numeric(age)) %>% 
      
-     # properly record missing values
+     # convert "Unknown" gender to NA
+     mutate(gender = na_if(gender, "Unknown")) %>% 
+     
+     # properly record missing values in many character columns
      mutate(across(.cols = where(is.character), .fns = na_if, "")) %>% 
      
-     # Make date-difference column  
-     mutate(diff = date_report - date_onset) %>% 
+     # re-code hospital column
+     mutate(hospital = recode(hospital,
+                              # for reference: OLD = NEW
+                              "Mitilary Hospital"  = "Military Hospital",
+                              "Port"               = "Port Hospital",
+                              "Port Hopital"       = "Port Hospital",
+                              "St. Mark's Maternity Hospital (SMMH)" = "SMMH")) %>%
      
-     # convert negative values to NA
-     mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
-            bmi   = ifelse(bmi < 0,   NA, bmi)) %>% 
+     # convert negative weight values to NA
+     mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg))  %>% 
      
      # convert gender values to full words
-     mutate(gender = case_when(               # re-define gender as: 
-          gender == 'm' ~ 'male',                # when "m", change to "male"   
-          gender == 'f' ~ 'female',              # when "f", change to "female" 
-          TRUE          ~ gender)) %>%           # any other value, remain as before
+     mutate(gender = case_when(          # re-define gender as: 
+          gender == "m" ~ "male",           # when "m", change to "male"   
+          gender == "f" ~ "female",         # when "f", change to "female" 
+          TRUE          ~ gender)) %>%      # any other value, remain as before
      
      # create age-in-years
      mutate(age_years = case_when(
-          age_unit == "years"  ~ age,            # if age is given in years
           age_unit == "months" ~ age/12,         # if age is given in months
+          age_unit == "years"  ~ age,            # if age is given in years
           is.na(age_unit)      ~ age,            # if age unit is missing, assume years
           TRUE                 ~ NA_real_)) %>%  # any other circumstance, assign missing
      
@@ -105,19 +108,14 @@ surv <- surv_raw %>%
           upper = 70,
           by = 10)) %>% 
      
+     # Make date-difference column  
+     mutate(diff = date_report - date_onset) %>% 
+     
      # create column marking TRUE if district of residence and detection differ
      mutate(moved = district_res != district_det) %>% 
      
      # create new column that prioritizes district of detection
      mutate(district = coalesce(district_det, district_res)) %>% 
-     
-     # re-code hospital column
-     mutate(hospital = recode(hospital,
-                              # for reference: OLD = NEW
-                              "Mitilary Hospital"  = "Military Hospital",
-                              "Port"               = "Port Hospital",
-                              "Port Hopital"       = "Port Hospital",
-                              "St. Mark's Maternity Hospital (SMMH)" = "SMMH")) %>% 
      
      # remove suspect cases
      filter(case_def == "Confirmed")
@@ -130,15 +128,6 @@ surv <- surv_raw %>%
 
 # Export cleaned file  
 #####################
-rio::export(surv, here("data", "clean", "surveillance_linelist_clean.rds"))
+rio::export(surv, here("data", "clean", "surveillance_linelist_clean_20141201.rds"))
 
 
-
-
-# Save values for use later
-##########################
-last_date_onset <- max(surv$date_onset, na.rm=T)
-last_date_report <- max(surv$date_report, na.rm=T)
-
-last_week_onset <- max(surv$week_onset, na.rm=T)
-last_week_report <- max(surv$week_report, na.rm=T)

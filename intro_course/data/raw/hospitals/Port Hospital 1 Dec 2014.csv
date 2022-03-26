@@ -1,4 +1,4 @@
-hospital,ID,age,age unit,gender,hospitalisation date,admission time,outcome,outcome date
+hospital,ID,age,age_unit,gender,date_hospitalisation,time_admission,outcome,date_outcome
 Port Hospital,86340d,1,years,f,10/31/2014,12:36,Recover,11/15/2014
 Port Hospital,eb5aeb,8,years,f,11/1/2014,13:22,Recover,
 Port Hospital,5a65bb,4,years,m,9/22/2014,15:19,Recover,

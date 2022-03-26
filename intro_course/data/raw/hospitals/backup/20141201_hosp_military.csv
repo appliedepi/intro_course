@@ -1,4 +1,4 @@
-hospital,ID,age,age unit,gender,hospitalisation date,admission time,outcome,outcome date
+hospital,ID,age,age_unit,gender,date_hospitalisation,time_admission,outcome,date_outcome
 Military Hospital,8f654c,6,years,f,10/19/2014,,Recover,11/13/2014
 Military Hospital,1e55cd,8,years,m,9/27/2014,12:41,Death,9/29/2014
 Military Hospital,9d4019,17,years,m,5/16/2014,12:11,,6/6/2014
