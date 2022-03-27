@@ -287,9 +287,7 @@ available to you for questions, and close with a feedback survey.
     study](https://appliedepi.github.io/intro_course/modules/module_8/slides/slides_covid_case_study/slides_covid_case_study.html)  
 -   Exercise materials: See the folder
     “learning_materials/covid_case_study” for the Word document report
-    to replicate, the data, and a tip sheet.  
--   [Slides: Code review]() TODO  
--   Code review guide TODO
+    to replicate, the data, and a tip sheet.
 
 ## Sustained support
 
