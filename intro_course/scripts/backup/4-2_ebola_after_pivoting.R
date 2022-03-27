@@ -1,7 +1,7 @@
 
 ###################################
 # Ebola outbreak case study
-# Script after data cleaning module
+# Script after pivoting module
 ###################################
 
 # load packages
@@ -37,10 +37,13 @@ hosp_smmh     <- import(here("data", "raw", "hospitals", "20141201_hosp_smmh.csv
 hosp_missing  <- import(here("data", "raw", "hospitals", "20141201_hosp_missing.csv"))
 
 # laboratory dataset
-lab <- import(here("data", "raw", "lab_results_20141201.xlsx"))
+lab <- import(here("data", "raw", "lab_results_20141201.xlsx")) %>% 
+     clean_names()
 
-# case investigation dataset
-investigations <- import(here("data", "raw", "case_investigations_20141201.xlsx"))
+# Import lab data 
+investigations <- import(here("data", "raw", "case_investigations_20141201.xlsx")) %>% 
+     # remove unnecessary columns  
+     select(-c(age, age_unit, gender))
 
 
 
@@ -65,8 +68,14 @@ surv_raw %>%
 
 
 
-# Make clean dataset
-####################
+# import raw data
+#################
+surv_raw <- import(here("data", "raw", "surveillance_linelist_20141201.csv"))
+
+
+# preliminary look at data  
+##########################
+# column names
 surv <- surv_raw %>% 
      
      # automatically clean column names
@@ -89,33 +98,36 @@ surv <- surv_raw %>%
      mutate(date_onset = mdy(date_onset)) %>% 
      mutate(date_report = mdy(date_report)) %>% 
      
-     # create epiweek columns  
-     mutate(week_onset = floor_date(date_onset, unit = "week", week_start = 1)) %>% 
-     mutate(week_report = floor_date(date_report, unit = "week", week_start = 1)) %>% 
-     
      # convert age to numeric class
      mutate(age = as.numeric(age)) %>% 
      
-     # properly record missing values
+     # convert "Unknown" gender to NA
+     mutate(gender = na_if(gender, "Unknown")) %>% 
+     
+     # properly record missing values in many character columns
      mutate(across(.cols = where(is.character), .fns = na_if, "")) %>% 
      
-     # Make date-difference column  
-     mutate(diff = date_report - date_onset) %>% 
+     # re-code hospital column
+     mutate(hospital = recode(hospital,
+                              # for reference: OLD = NEW
+                              "Mitilary Hospital"  = "Military Hospital",
+                              "Port"               = "Port Hospital",
+                              "Port Hopital"       = "Port Hospital",
+                              "St. Mark's Maternity Hospital (SMMH)" = "SMMH")) %>%
      
-     # convert negative values to NA
-     mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg),
-            bmi   = ifelse(bmi < 0,   NA, bmi)) %>% 
+     # convert negative weight values to NA
+     mutate(wt_kg = ifelse(wt_kg < 0, NA, wt_kg))  %>% 
      
      # convert gender values to full words
-     mutate(gender = case_when(               # re-define gender as: 
-          gender == 'm' ~ 'male',                # when "m", change to "male"   
-          gender == 'f' ~ 'female',              # when "f", change to "female" 
-          TRUE          ~ gender)) %>%           # any other value, remain as before
+     mutate(gender = case_when(          # re-define gender as: 
+          gender == "m" ~ "male",           # when "m", change to "male"   
+          gender == "f" ~ "female",         # when "f", change to "female" 
+          TRUE          ~ gender)) %>%      # any other value, remain as before
      
      # create age-in-years
      mutate(age_years = case_when(
-          age_unit == "years"  ~ age,            # if age is given in years
           age_unit == "months" ~ age/12,         # if age is given in months
+          age_unit == "years"  ~ age,            # if age is given in years
           is.na(age_unit)      ~ age,            # if age unit is missing, assume years
           TRUE                 ~ NA_real_)) %>%  # any other circumstance, assign missing
      
@@ -126,19 +138,14 @@ surv <- surv_raw %>%
           upper = 70,
           by = 10)) %>% 
      
+     # Make date-difference column  
+     mutate(diff = date_report - date_onset) %>% 
+     
      # create column marking TRUE if district of residence and detection differ
      mutate(moved = district_res != district_det) %>% 
      
      # create new column that prioritizes district of detection
      mutate(district = coalesce(district_det, district_res)) %>% 
-     
-     # re-code hospital column
-     mutate(hospital = recode(hospital,
-                              # for reference: OLD = NEW
-                              "Mitilary Hospital"  = "Military Hospital",
-                              "Port"               = "Port Hospital",
-                              "Port Hopital"       = "Port Hospital",
-                              "St. Mark's Maternity Hospital (SMMH)" = "SMMH")) %>% 
      
      # remove suspect cases
      filter(case_def == "Confirmed")
@@ -149,12 +156,9 @@ surv <- surv_raw %>%
 
 
 
-# Export cleaned surveillance linelist file  
-###########################################
+# Export cleaned file  
+#####################
 rio::export(surv, here("data", "clean", "surveillance_linelist_clean_20141201.rds"))
-
-
-
 
 
 
@@ -165,34 +169,25 @@ rio::export(surv, here("data", "clean", "surveillance_linelist_clean_20141201.rd
 
 # Creat combined dataset by joining other datasets to the surveillance linelist
 ###############################################################################
-# bind the rows of the hospital linelists
-hosp <- bind_rows(hosp_central, hosp_port, hosp_military, hosp_smmh, hosp_other, hosp_missing)
-
-# Modify the hosp dataset
-hosp <- hosp %>% 
+hosp <- bind_rows(hosp_central, hosp_port, hosp_military, hosp_smmh, hosp_other, hosp_missing) %>% 
      # select specific columns from hosp, and re-name ID as case_ID
      select(
-          case_id = ID,               # select and rename
-          `hospitalisation date`,     # select
-          `admission time`,           # select
-          `outcome date`,             # select
-          outcome)                    # select
+          case_id = ID,          # select and rename
+          date_hospitalisation,  # select
+          time_admission,        # select
+          date_outcome,          # select
+          outcome)               # select
 
 # Join the two data frames with a full-join
-combined <- full_join(surv, hosp, by = "case_id")
+combined <- left_join(surv, hosp, by = "case_id")
 
 # Join the surveillance and hospital data frames with a full-join
 # (place this in the Joining data section of your script)
-combined <- full_join(combined, lab, by = "case_id")
+combined <- left_join(combined, lab, by = "case_id")
 
-# Case investigations dataset
-# keep only certain columns  
-# (add to the Joining data section of your R script)
-investigations <- investigations %>% 
-     select(-c(age, `age unit`, gender))
 
 # Join the two data frames with a full-join
-combined <- full_join(combined, investigations, by = "case_id")
+combined <- left_join(combined, investigations, by = "case_id")
 
 # Clean the new columns that have been joined to 'combined'
 combined <- combined %>% 
@@ -200,23 +195,18 @@ combined <- combined %>%
      # convert all column names to lower case and remove spaces
      clean_names() %>% 
      
-     # edit names of new date columns
-     rename(date_hospitalisation = hospitalisation_date,
-            date_outcome         = outcome_date,
-            date_infection       = infection_date) %>% 
-     
      # covert new columns to class date
      mutate(date_hospitalisation = mdy(date_hospitalisation),
             date_outcome         = mdy(date_outcome),
-            date_infection       = ymd(date_infection))
+            date_infection       = ymd(date_infection)) %>% 
+     
+     # clean outcome and hospital missings
+     mutate(outcome = na_if(outcome, ""),
+            hospital = na_if(hospital, ""))
 
 
-# Define data date as Sunday of prior week
-data_date <- floor_date(ymd(params$publish_date)-7, unit = "week")
 
-# Filter combined dataset to data_date
-combined <- combined %>% 
-     filter(date_report <= data_date)
+
 
 # save the combined dataset
 export(combined, here("data", "linelist_combined_20141201.rds"))
@@ -324,7 +314,7 @@ ggplot(data = delay_1wk, mapping = aes(x = week, y = delayed_pct))+
 ggplot(data = delay_1wk, mapping = aes(x = week, y = delayed_pct))+
      geom_line(size = 2, color = "brown")+
      labs(caption = str_glue(
-     "n = {nrow(surv)}.\nReport produced on {Sys.Date()}\nData collected from {length(unique(surv$hospital))-2} major hospitals in the epidemic-affected area.\nLast reported case on {max(surv$date_report, na.rm = TRUE)}.\n{fmt_count(surv, is.na(date_report))} cases missing date of onset and not shown."))
+          "n = {nrow(surv)}.\nReport produced on {Sys.Date()}\nData collected from {length(unique(surv$hospital))-2} major hospitals in the epidemic-affected area.\nLast reported case on {max(surv$date_report, na.rm = TRUE)}.\n{fmt_count(surv, is.na(date_report))} cases missing date of onset and not shown."))
 
 
 

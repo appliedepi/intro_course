@@ -1,7 +1,7 @@
 
 ###################################
 # Ebola outbreak case study
-# Script after data cleaning module
+# Script after ggplot epi module
 ###################################
 
 # load packages
@@ -43,8 +43,10 @@ hosp_missing  <- import(here("data", "raw", "hospitals", "backup", "20141201_hos
 # laboratory dataset
 lab <- import(here("data", "raw", "lab_results_20141201.xlsx"))
 
-# case investigation dataset
-investigations <- import(here("data", "raw", "case_investigations_20141201.xlsx"))
+# Import lab data 
+investigations <- import(here("data", "raw", "case_investigations_20141201.xlsx")) %>% 
+     # remove unnecessary columns  
+     select(-c(age, age_unit, gender))
 
 
 
@@ -190,33 +192,24 @@ rio::export(surv, here("data", "clean", "surveillance_linelist_clean_20141201.rd
 # Creat combined dataset by joining other datasets to the surveillance linelist
 ###############################################################################
 # bind the rows of the hospital linelists
-hosp <- bind_rows(hosp_central, hosp_port, hosp_military, hosp_smmh, hosp_other, hosp_missing)
-
-# Modify the hosp dataset
-hosp <- hosp %>% 
+hosp <- bind_rows(hosp_central, hosp_port, hosp_military, hosp_smmh, hosp_other, hosp_missing) %>% 
      # select specific columns from hosp, and re-name ID as case_ID
      select(
-          case_id = ID,               # select and rename
-          `hospitalisation date`,     # select
-          `admission time`,           # select
-          `outcome date`,             # select
-          outcome)                    # select
+          case_id = ID,          # select and rename
+          date_hospitalisation,  # select
+          time_admission,        # select
+          date_outcome,          # select
+          outcome)               # select
 
 # Join the two data frames with a full-join
-combined <- full_join(surv, hosp, by = "case_id")
+combined <- left_join(surv, hosp, by = "case_id")
 
 # Join the surveillance and hospital data frames with a full-join
 # (place this in the Joining data section of your script)
-combined <- full_join(combined, lab, by = "case_id")
-
-# Case investigations dataset
-# keep only certain columns  
-# (add to the Joining data section of your R script)
-investigations <- investigations %>% 
-     select(-c(age, `age unit`, gender))
+combined <- left_join(combined, lab, by = "case_id")
 
 # Join the two data frames with a full-join
-combined <- full_join(combined, investigations, by = "case_id")
+combined <- left_join(combined, investigations, by = "case_id")
 
 # Clean the new columns that have been joined to 'combined'
 combined <- combined %>% 
@@ -224,15 +217,18 @@ combined <- combined %>%
      # convert all column names to lower case and remove spaces
      clean_names() %>% 
      
-     # edit names of new date columns
-     rename(date_hospitalisation = hospitalisation_date,
-            date_outcome         = outcome_date,
-            date_infection       = infection_date) %>% 
-     
      # covert new columns to class date
      mutate(date_hospitalisation = mdy(date_hospitalisation),
             date_outcome         = mdy(date_outcome),
-            date_infection       = ymd(date_infection))
+            date_infection       = ymd(date_infection)) %>% 
+     
+     # clean outcome and hospital missings
+     mutate(outcome = na_if(outcome, ""),
+            hospital = na_if(hospital, ""))
+
+
+
+
 
 
 # save the combined dataset

@@ -1,7 +1,7 @@
 
 ###################################
 # Ebola outbreak case study
-# Script after data cleaning module
+# Script after grouping/summarising module
 ###################################
 
 # load packages
