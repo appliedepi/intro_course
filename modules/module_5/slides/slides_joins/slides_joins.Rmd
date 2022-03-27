@@ -103,8 +103,8 @@ style_mono_accent(
 # Today: objectives & schedule  
 
 **In this module we aim to help you:**  
-* Learn how to join 2 or more data frame together:  
-* Learn about the different sort of joins and using id key/identifier columns  
+* Learn how to join two or more data frames together  
+* Learn about the different joins and using id key/identifier columns  
 * Practice pivoting data from wide-to-long format to create patient "timelines"  
 * Convert variables to class "factor" with the {forcats} package  
 
@@ -157,6 +157,41 @@ Provide examples of situations they might encounter to highlight how common it i
 - connect patient data with GIS data,
 - connect Google mobility data to infectious disease trends
 - other relevant example for their work hinted by participant survey
+
+
+
+
+
+
+---
+# Types of joins
+
+#### Several types of joins
+* **Mutating joins**: add new variable to a dataframe
+     * **Left join** / **Right join**: add data to a dataframe
+     * **Full join**: combine two full dataframes
+     * **Inner join**: take the intersection of two dataframes
+* **Filtering joins**: filter a dataframe based on another one
+     * **Anti join** / **semi join**
+
+#### General syntax
+* We use the `join` functions from **dplyr** package
+* Homogeneous syntax:
+
+```{r include=TRUE, echo=TRUE, eval=FALSE}
+xxx_join(dataframe_1, dataframe_2, 
+         by = "key_id")
+```
+
+
+???
+Insist that there are globally two types of joins, the mutating joins, who will add new columns, and potentially affect the number of lines, and the filtering joins, wich will not add any new columns, just change the rows in one dataset.
+
+Explain that the function are always in this form, two dataframes, the first one is nicknamed _left_ dataframe, the second is nicknamed the _right_ dataframe. The *by* argument: provide columns used for identifying matches between observations
+
+
+
+
 
 ---
 
@@ -233,31 +268,10 @@ For the purpose of the slides, we created two _mini_ dataframes to see what's ha
 **Note that both datasets have the ID of the patient in common, but a slightly different name (a very common situation)**. We call this column the KEY, or the identifier column. It allows to *match* observations in both dataframes.
 
 
----
-# Types of joins
-
-#### Several types of joins
-* **Mutating joins**: add new variable to a dataframe
-     * **Left join** / **Right join**: add data to a dataframe
-     * **Full join**: combine two full dataframes
-     * **Inner join**: take the intersection of two dataframes
-* **Filtering joins**: filter a dataframe based on another one
-     * **Anti join** / **semi join**
-
-#### General syntax
-* We use the `join` functions from **dplyr** package
-* Homogeneous syntax:
-
-```{r include=TRUE, echo=TRUE, eval=FALSE}
-xxx_join(dataframe_1, dataframe_2, 
-         by = "key_id")
-```
 
 
-???
-Insist that there are globally two types of joins, the mutating joins, who will add new columns, and potentially affect the number of lines, and the filtering joins, wich will not add any new columns, just change the rows in one dataset.
 
-Explain that the function are always in this form, two dataframes, the first one is nicknamed _left_ dataframe, the second is nicknamed the _right_ dataframe. The *by* argument: provide columns used for identifying matches between observations
+
 
 ---
 # Left join
@@ -696,7 +710,7 @@ patients %>%
 
 --
 
-* IF the **identifier column has the same name** in both data frames:  
+* Simple syntax if **identifier column has the same name** in both data frames:  
 ```{r echo = TRUE, eval=FALSE, include=TRUE}
 left_join(patients, hosp,       
            by = "case_id")   #<<
@@ -748,6 +762,13 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "joins_pivots",
 
 ???
 Anti joins are very useful for seeing which rows in a dataset do *not* match
+
+
+
+---
+# Real-life challenges  
+
+
 
 
 ---

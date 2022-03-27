@@ -156,8 +156,6 @@ President and co-founder, Applied Epi
 
 ]
 
-Many other instructors will be joining us on this Pilot course  
-
 .footnote[**Thank you for your service** *to your community in these busy times for public health. We are glad that you are taking the time to learn R with us.*]
 
 ???
@@ -585,13 +583,13 @@ Quick introductions
 ---
 # Your perceptions and hopes
 
-- "I see that R is just more commonly used, especially in the humanitarian field"  
-- "it can automatize a lot of work which is appealing"  
-- "it is helping in the automated routine and deep analysis"  
-- "I am hoping to get more data wrangling practice"  
-- "use R to do descriptive data analysis and a little bit more complicated stuff if the need arises"  
-- "It will give me some confidence in quant work."  
-- "R skills in outbreak and humanitarian settings."  
+- "I am looking forward to becoming proficient in R as this is the the software used most in our work"
+- "I would like to become more confident in using R, writing my own code..."  
+- "Capacity to clean a set of data, produce high level descriptive analyses..."  
+- "Complex statistical analysis and data visualization"  
+- "get more data wrangling practice with epidemiological data"  
+- "basic understanding of what it takes to learn R"
+ 
 
 
 
@@ -599,8 +597,8 @@ Quick introductions
 # Your perceptions and fears
 
 
-- "I don't believe it to be true, I've heard that R is exceedingly hard to learn and use"  
-- "has a learning curve with lots of time needed to debug the code you've written"  
+- "There is a lot to learn. More complicated than STATA."  
+- "It can be difficult to work out why the script has not worked."  
 - "R has a steep learning curve"  
 
 
@@ -652,15 +650,17 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "Int
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
   ~Module, ~Date, ~Topic,
-  "1", "Mo 21/3",  "Welcome, RStudio, basic syntax, data import",
-  "2", "Mo 21/3",  "Cleaning data, core R functions, piping",
-  "3", "Tu 22/3",  "Grouping and summarising data",
-  "4", "Tu 22/3",  "Data visualization with ggplot2",
-  "5", "We 23/3",  "Transforming data with joins and pivots",
-  "6", "We 23/3",  "Heat plots, epi curves, age/sex pyramids, GIS demo",
-  "7", "Th 24/3",  "R Markdown reports",
-  "8", "Th 24/3",  "COVID-19 exercise"
-)
+  "1", "Mo 28/3",  "Welcome, RStudio, basic syntax, data import",
+  "1", "Mo 28/3",  "Basic syntax, data import",
+  "2", "Tu 29/3",  "Cleaning data, core R functions, piping",
+  "2", "Tu 29/3",  "Cleaning data, core R functions, piping",
+  "3", "We 30/3",  "Grouping and summarising data",
+  "4", "We 30/3",  "Data visualization with ggplot2",
+  "5", "Th 31/3",  "Transforming data with joins and pivots",
+  "6", "Th 31/3",  "Heat plots, epi curves, age/sex pyramids, GIS demo",
+  "7", "Fr 1/4",   "R Markdown reports",
+  "8", "Fr 1/4",   "COVID-19 exercise",
+  )
 
 outline %>% 
   flextable::qflextable()
@@ -683,9 +683,10 @@ outline %>%
 outline <- dplyr::tribble(
   ~Time, ~Location, ~Topic,
   "30 minutes",     "Main",      "Welcome, course logistics, Why R?",
-  "10 minutes",     "Main",      "Demo: RStudio tour and basic R syntax",
-  "20 minutes",     "Main",      "Function, packages, file paths, importing",
-  "1h 45 minutes",  "Breakouts", "Exercise",
+  "20 minutes",     "Main",      "Demo: RStudio tour and basic R syntax",
+  "20 minutes",     "Main",      "Functions, packages",
+  "20 minutes",     "Main",      "Demo: Functions and packages",
+  "1h 30 minutes",  "Breakouts", "Exercise",
   "15 minutes",     "Main",      "Plenary debrief"
 )
 
@@ -1388,6 +1389,20 @@ This is common R, where there are many ways do a task. Our job is boil it all do
 
 
 
+
+
+
+
+---
+class: inverse, center, middle  
+
+# Pause  
+
+???
+If 5-day course, pause here and give demo of the initial setup and tutorials.  
+
+
+
 ---
 # File management  
 
@@ -1568,7 +1583,7 @@ E.g. if you move your script, the file path to the data can break.
      * intro_course.Rproj  
      * .here  
      * `r emo::ji("folder")` scripts
-          * `r emo::ji("document")` **linelist.csv**
+          * `r emo::ji("document")` **my_analysis.R**
      * `r emo::ji("folder")` data  
           * `r emo::ji("folder")` clean  
                * `r emo::ji("document")` **linelist.csv**
@@ -1609,7 +1624,7 @@ Finally, by combining `import()` and `here()` in an RStudio project, we create a
      * intro_course.Rproj  
      * .here  
      * `r emo::ji("folder")` scripts
-          * `r emo::ji("document")` **linelist.csv**
+          * `r emo::ji("document")` **my_analysis.R**
      * `r emo::ji("folder")` data  
           * `r emo::ji("folder")` clean  
                * `r emo::ji("document")` **linelist.csv**
