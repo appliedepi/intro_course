@@ -2220,7 +2220,41 @@ Congratulations! You have completed the first exercise in this course!
 
 Be sure to save your R script, and check-in with your facilitator.  
 
-If you still have time remaining, try installing the package {praise} and see what its function `praise()` does.  
+
+## Extras  
+
+If you still have time remaining, try some of the activities below.  
+
+### Installing fun packages  
+
+Try installing the R package {praise}, and then see what its function `praise()` does.  
+
+```{r, echo=T, eval=F}
+praise()
+```
+
+
+
+### Customizing RStudio  
+
+Read the information at [this link](https://support.rstudio.com/hc/en-us/articles/200549016-Customizing-the-RStudio-IDE#appearance) and adjust the settings of your RStudio via the "Tools" menu and clicking "Global Options". Which Appearance settings do you prefer?  
+
+
+### R user communities  
+
+Look through [this list](https://jumpingrivers.github.io/meetingsR/r-user-groups.html) of R User communities and find one near you. See also this list of [R-Ladies](https://rladies.org/) chapters. R-Ladies is one of the biggest groups of R users in the world!  
+
+
+### Review the basics  
+
+Read through the "R Basics" chapter of the [Epi R Handbook](https://epirhandbook.com/en/r-basics.html#r-basics) - it is full of things that you have learned today, but also topics that will be new. 
+
+If you are confused by any section, ask your instructor for clarification.  
+
+
+
+
+
 
 
 
