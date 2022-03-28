@@ -20,6 +20,7 @@ pacman::p_load(
      gghighlight,  # highlighting plot parts  
      ggExtra,      # special plotting functions
      apyramid,     # age pyramids
+     tsibble,      # epiweeks
      viridis,      # color blind color schemes
      tidyverse     # for data management and visualization
 )
@@ -227,7 +228,9 @@ combined <- combined %>%
             hospital = na_if(hospital, ""))
 
 
-
+combined <- combined %>% 
+     mutate(week_onset      = yearweek(date_onset, week_start = 1), ## create week of onset variable  
+            week_onset_date = as.Date(week_onset))                  ## create a date version 
 
 
 

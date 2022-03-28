@@ -27,6 +27,7 @@ pacman::p_load(
      gtsummary,
      scales,
      gghighlight,
+     tsibble,
      ggExtra,
      flextable,
      tidyverse
@@ -181,6 +182,11 @@ combined <- combined %>%
   # clean outcome and hospital missings
   mutate(outcome = na_if(outcome, ""),
          hospital = na_if(hospital, ""))
+
+# create epiweeks
+combined <- combined %>% 
+  mutate(week_onset      = yearweek(date_onset, week_start = 1), ## create week of onset variable  
+         week_onset_date = as.Date(week_onset))                  ## create a date version 
 ```
 
 
