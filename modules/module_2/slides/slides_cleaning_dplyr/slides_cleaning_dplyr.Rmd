@@ -154,11 +154,11 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "data_cleaning"
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
   ~Time, ~Location, ~Topic,
-  "5 minutes",      "Main",       "Review of previous module",
-  "25 minutes",     "Main",      "Tidy data and data cleaning",
-  "10 minutes",     "Main",      "Demo - data cleaning", 
-  "2h 15 minutes",  "Breakouts", "Exercise",
-  "20 minutes",     "Main",      "Plenary debrief"
+  "10 minutes",      "Main",      "Review of previous module",
+  "30 minutes",     "Main",      "Tidy data and data cleaning",
+  "15 minutes",     "Main",      "Demo - data cleaning", 
+  "1h 30minutes",  "Breakouts",   "Exercise",
+  "30 minutes",     "Main",      "Plenary debrief"
 )
 
 outline %>% 
