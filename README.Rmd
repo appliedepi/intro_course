@@ -33,6 +33,9 @@ knitr::opts_chunk$set(
 
 Follow these step-by-step instructions to download the course files, setup an RStudio project, and to download and begin the course's interactive exercises.  
 
+**Click each of the steps below to expand the instructions**  
+
+
 <!--
 NOTE: everything inside the details tag will be collapsed and effectively
 hidden from the user

@@ -1,34 +1,33 @@
-#################################
-###    MY EXAMPLE R SCRIPT    ###
-#################################
-# Write a comment after one or more hash symbols
 
-# load packages
-###############
+# About this script -------------------------------------------------------
+
+# Purpose: Create a daily epidemic curve of confirmed cases
+# Author: Neale Batra
+# Last updated: 31 March, 2022
+# Contact email: contact@appliedepi.org
+
+
+# Load packages -----------------------------------------------------------
 pacman::p_load(
      rio,         
      here,        
-     tidyverse,   
-     lubridate,   
-     incidence2     
-     )
+     lubridate,
+     tidyverse)
 
-# load linelist data
-####################
-linelist_raw <- import(here("data", "case_linelists",
-                            "linelist_cleaned.rds"))
+# Import linelist data ----------------------------------------------------
+linelist_raw <- import(here("data", "case_linelists", "linelist_clean.csv"))
 
-# clean linelist
-################
-linelist <- linelist_raw %>% 
-   mutate(
-    date_onset = as.Date(date_onset),               # ensure is class Date
-    epiweek_onset = floor_date(date_onset, "week")) # create epiweek column
 
-# plot daily epicurve
-#####################
-daily_incidence <- incidence(linelist, "date_onset", interval = "week", groups = "age_cat", na_as_group = T)
+# Clean the linelist ------------------------------------------------------
+linelist_clean <- linelist_raw %>% 
+   filter(case_def == "Confirmed") %>%        # filter to confirmed cases
+   mutate(date_onset = ymd(date_onset)) %>%   # convert column to class date
+   
 
-plot(daily_incidence, fill = age_cat, col_pal = muted, title = "Epidemic curve")
+# Plot daily case incidence -----------------------------------------------
+ggplot(data = linelist_clean, mapping = aes(x = date_onset))+
+     geom_histogram()
 
-ggsave(here("outputs", "epicurves", "daily_incidence.png")) # save as PNG
+
+# Save epicurve as PNG ----------------------------------------------------
+ggsave(here("outputs", "epicurves", "daily_incidence.png"))
