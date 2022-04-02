@@ -44,6 +44,7 @@ pacman::p_load(
   rio,        # importing data  
   here,       # relative file pathways  
   janitor,    # data cleaning and tables
+  lubridate,  # dates
   ggExtra,    # extras
   scales,     # formatting of scales
   tidyverse,  # data management and visualization
@@ -923,7 +924,7 @@ ggplot(
   data = surv,        # use case linelist
   mapping = aes(      # make aesthetic mappings for all geoms
     x = age_years,    # assign x-axis to age column
-    y = ht_cm)) +     # assign y-axis to duration of hospitalization
+    y = ht_cm)) +     # assign y-axis to height
 geom_point()          # display data as points
 ```
 
