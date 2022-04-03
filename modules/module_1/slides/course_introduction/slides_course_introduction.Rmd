@@ -1,7 +1,7 @@
 ---
 title: "Introduction to R for<br>Applied Epidemiology"
 subtitle: "Welcome and course overview"
-author: "March 2022"
+author: "April 2022"
 date: '[contact@appliedepi.org](mailto:contact@appliedepi.org)'
 output:
   xaringan::moon_reader:
@@ -104,59 +104,11 @@ surv <- rio::import(xfun::relative_path(here::here("data", "surveillance_linelis
 
 # Thank you for joining us  
 
-.left-column[
+Brief introductions from the instructors  
 
-```{r, eval = TRUE, echo = FALSE, out.width = "55%"}
-# Using here() alone won't work because Rmd folder becomes the rendering root.
-# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
-# It dynamically creates the ../../etc filepath.
-
-knitr::include_graphics(xfun::relative_path(here::here("images", "instructors", "neale.png")))
-```
+**Thank you for your service** *to your community in these busy times for public health. We are glad that you are taking the time to learn R with us.*  
 
 
-
-```{r, eval = TRUE, echo = FALSE, out.width = "55%"}
-# Using here() alone won't work because Rmd folder becomes the rendering root.
-# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
-# It dynamically creates the ../../etc filepath.
-
-knitr::include_graphics(xfun::relative_path(here::here("images", "instructors", "paula.png")))
-```
-
-
-
-```{r, eval = TRUE, echo = FALSE, out.width = "55%"}
-# Using here() alone won't work because Rmd folder becomes the rendering root.
-# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
-# It dynamically creates the ../../etc filepath.
-
-knitr::include_graphics(xfun::relative_path(here::here("images", "instructors", "arran.png")))
-```
-
-]
-
-.right-column[
-
-* **Neale Batra**
-President and co-founder, Applied Epi  
-@MSF @WHO @PIH @USAID @Philly @CalEIS  
-</br>
-
-* **Paula Blomquist**  
-@PHE @EPIET @WHO @UK-PHRST
-</br>
-</br>
-
-
-* **Arran Hamlet**  
-@Imperial @WHO
-</br>
-</br>
-
-]
-
-.footnote[**Thank you for your service** *to your community in these busy times for public health. We are glad that you are taking the time to learn R with us.*]
 
 ???
 Do a brief round of introductions  
@@ -557,7 +509,7 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "Epi
 ```
 
 - 50 chapters of free best-practice code examples - available online and offline
-- 130,000 users globally (35,000 in low & middle-income countries)
+- 150,000 users globally (35,000 in low & middle-income countries)
 - Being translated into 10 languages
 
 
@@ -568,16 +520,6 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "Epi
 
 
 
-
-
----
-# Your backgrounds
-
-Quick introductions  
-
-- Name, institution, and role  
-- The analytical software you are most comfortable in  
-- The most recent good meal that you ate  
 
 
 ---
@@ -650,16 +592,14 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "Int
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
   ~Module, ~Date, ~Topic,
-  "1", "Mo 28/3",  "Welcome, RStudio, basic syntax, data import",
-  "1", "Mo 28/3",  "Basic syntax, data import",
-  "2", "Tu 29/3",  "Cleaning data, core R functions, piping",
-  "2", "Tu 29/3",  "Cleaning data, core R functions, piping",
-  "3", "We 30/3",  "Grouping and summarising data",
-  "4", "We 30/3",  "Data visualization with ggplot2",
-  "5", "Th 31/3",  "Transforming data with joins and pivots",
-  "6", "Th 31/3",  "Heat plots, epi curves, age/sex pyramids, GIS demo",
-  "7", "Fr 1/4",   "R Markdown reports",
-  "8", "Fr 1/4",   "COVID-19 exercise",
+  "1", "Mo 4/4",  "RStudio, basic syntax, data import",
+  "2", "Mo 4/4",  "Cleaning data, core R functions, piping",
+  "3", "Tu 4/5",  "Grouping and summarising data",
+  "4", "Tu 4/5",  "Data visualization with ggplot2",
+  "5", "We 4/6",  "Transforming data with joins and pivots",
+  "6", "We 4/6",  "Heat plots, epi curves, age/sex pyramids, GIS demo",
+  "7", "Th 4/7",  "R Markdown reports",
+  "8", "Th 4/7",  "COVID-19 exercise",
   )
 
 outline %>% 
@@ -682,11 +622,11 @@ outline %>%
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
   ~Time, ~Location, ~Topic,
-  "30 minutes",     "Main",      "Welcome, course logistics, Why R?",
-  "20 minutes",     "Main",      "Demo: RStudio tour and basic R syntax",
+  "20 minutes",     "Main",      "Welcome, course logistics, Why R?",
+  "10 minutes",     "Main",      "Demo: RStudio tour and basic R syntax",
   "20 minutes",     "Main",      "Functions, packages",
-  "20 minutes",     "Main",      "Demo: Functions and packages",
-  "1h 30 minutes",  "Breakouts", "Exercise",
+  "15 minutes",     "Main",      "Demo & project setup",
+  "2 hours",        "Breakouts", "Exercise",
   "15 minutes",     "Main",      "Plenary debrief"
 )
 
@@ -733,9 +673,6 @@ Note stretch breaks throughout.
 - **The exercises are long** - it is OK if you do not finish. We want to know how long they take.  
 - **The complete code is available to you** in the "scripts/backup" folder  
 
---
-
-- **Post questions in the Meet Q&A tool** - an instructor will be monitoring and will answer in the chat or verbally  
 
 --
 
