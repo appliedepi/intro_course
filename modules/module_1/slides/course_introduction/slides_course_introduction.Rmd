@@ -630,7 +630,7 @@ outline %>%
 ---
 # Breakouts and support  
 
-- **General pattern:** Brief explanation -> Live demonstration -> breakout exercises -> plenary debrief  
+- **General pattern:** Explanation -> Live demo -> Exercises -> Plenary debrief  
 
 --
 
@@ -643,12 +643,15 @@ outline %>%
 --
 
 - **The exercises are long** - it is OK if you do not finish. We want to know how long they take.  
+
+--
+
 - **The complete code is available to you** in the "scripts/backup" folder  
 
 
 --
 
-- **Extra support** is available during lunch, in a breakout room, for participants who are confused  
+- **Extra support** is available during lunch if you are confused  
 
 
 

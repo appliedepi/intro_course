@@ -14,13 +14,15 @@ health practitioners.
 supporting frontline practitioners through open-course analytical tools,
 training, and support. Our [Epidemiologist R
 Handbook](www.epirhandbook.com) is a free R reference manual which has
-been used by 130,000 people around the world.
+been used by 150,000 people around the world.
 
 # Initial setup
 
 Follow these step-by-step instructions to download the course files,
 setup an RStudio project, and to download and begin the course’s
 interactive exercises.
+
+**Click each of the steps below to expand the instructions**
 
 <!--
 NOTE: everything inside the details tag will be collapsed and effectively
@@ -243,12 +245,6 @@ descriptive epidemiology: the intricacies of crafting an accurate
 epidemic curve, conveying patterns in three variables using a heat plot,
 and creating age/sex pyramids to describe demographics. If there is
 time, we finish with a demonstration of R’s GIS/geospatial capabilities.
-
--   [Slides: GIS
-    demonstration](https://appliedepi.github.io/intro_course/modules/module_6/slides/slides_gis_demo/slides_gis_demo.html)  
-
--   [R script: GIS
-    demonstration](https://appliedepi.github.io/intro_course/modules/module_6/demos/demo_gis/demo_gis.R)
 
 -   Exercise:
 
