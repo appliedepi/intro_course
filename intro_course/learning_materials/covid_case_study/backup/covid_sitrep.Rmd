@@ -111,15 +111,10 @@ https://epirhandbook.com/import-and-export.html
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 ```{r import}
-  
-# import the raw case data set
-  # define the path using {here} then pass that to the {rio} import function
-  # specify the sheet to read using which (default is to read first sheet)
-linelist_raw <- rio::import(
-  file = here::here("covid_case_study", "covid_example_data.xlsx"))
+# import the raw case data set and city populations
+linelist_raw <- import(here("intro_course", "learning_materials", "covid_case_study", "covid_example_data.xlsx"))
 
-city_pops <- rio::import(
-  file = here::here("covid_case_study", "city_pops.xlsx"))
+city_pops <- import(here("intro_course", "learning_materials", "covid_case_study", "city_pops.xlsx"))
 
 ```
 
@@ -162,18 +157,6 @@ skim(linelist_raw)
 # you can run this for any column -- just replace the column name
 unique(linelist_raw$case_gender) 
 
-
-# we can also loop through all categorical variables to look at all possibilities
-# see later in the script for introductions to using iteration
-purrr::map(
-  # all column names (inputs)
-  .x = linelist_raw %>% 
-    select(where(is_character)) %>% 
-    names(), 
-  # applies select() then unique() to each column
-  .f = ~select(linelist_raw, .x) %>% 
-    unique()
-  )
 ```
 
 
@@ -199,44 +182,28 @@ https://epirhandbook.com/cleaning-data-and-core-functions.html#column-names
 
 # create a new object called linelist and assign linelist_raw with renamed columns
 linelist <- linelist_raw %>% 
-  # use select() to retain columns and rename them 
-     # NEW name = OLD name
-     # aligned for readability
-  select( 
-    pid                 = PID,
-    date_report         = reprt_creationdt_FALSE,      
+  # convert all column names to lower case with no spaces
+  clean_names() %>% 
+  
+  # use rename() to rename columns 
+  # NEW name = OLD name
+  # aligned for readability
+  rename( 
+    date_report         = report_dt,      
     age                 = case_age,                    
     gender              = case_gender,
     race                = case_race,
     eth                 = case_eth,
-    city                = City,
     zip                 = case_zip,
-    # county              = case_county,
-    # district            = case_district,
-    # state               = case_state,
-    contact_id          = Contact_id, 
-    date_onset          = sym_startdt_FALSE,
-    sym_fever,
-    sym_subjfever,
-    sym_myalgia,
-    sym_losstastesmell,
-    sym_sorethroat,
-    sym_cough,
-    sym_headache,
-    sym_resolved,
-    date_recovery       = sym_resolveddt_FALSE, 
+    date_onset          = sym_startdt,
+    date_recovery       = sym_resolveddt, 
     contact_hh          = contact_household,
-    hospitalized,  
-    date_hospitalized   = hosp_admidt_FALSE,
-    date_discharge      = hosp_dischdt_FALSE,
-    died,  
-    died_covid,  
-    date_died           = died_dt_FALSE,
-    confirmed_case, 
-    covid_dx, 
-    date_positive       = pos_sampledt_FALSE,
-    lat                 = latitude_JITT,
-    lon                 = longitude_JITT
+    date_hospitalized   = hosp_admidt,
+    date_discharge      = hosp_dischdt,
+    date_died           = died_dt,
+    date_positive       = pos_sampledt,
+    lat                 = latitude_jitt,
+    lon                 = longitude_jitt
     )
 
 ```
@@ -261,27 +228,22 @@ https://epirhandbook.com/working-with-dates.html#convert-to-date )
 ```{r clean_dates}
 
 linelist <- linelist %>% 
+  
   # convert all date columns to date type 
-  # note that dates must be formatted correctly - in some cases date parsers from lubridate can be used here
   mutate(
     date_report =       ymd(date_report),
     date_onset =        ymd(date_onset),
-    date_hospitalized = ymd(date_hospitalized),
-  ) %>% 
+    date_hospitalized = ymd(date_hospitalized)) %>% 
   
-     
+  # remove cases reported after the surveillance_date (for this report)
+  filter(date_report <= surveillance_date)  
+  
   # remove onset, hospitalisation, and death dates prior to 2020
   # mutate(
   #   date_onset        = replace(date_onset, date_onset < ymd("2020-01-01"), NA),
   #   date_hospitalized = replace(date_hospitalized, date_hospitalized < ymd("2020-01-01"), NA)
   #   ) %>%
-       
      
-     
-  # remove cases reported after the surveillance_date (for this report)
-  filter(date_report <= surveillance_date)  
-  
-
   # create an "epiweek" column from the report date 
   # floor_date() rounds down to the closest week
   # mutate(epiweek = floor_date(date_report,
@@ -361,6 +323,7 @@ https://epirhandbook.com/demographic-pyramids-and-likert-scales.html
 linelist %>% 
   
  age_pyramid(
+  
   age_group = "age_group",
   split_by = "gender",
   
@@ -395,7 +358,7 @@ linelist %>%
 weekly_breaks <- seq.Date(
       from = floor_date(min(linelist$date_report, na.rm=T),   "week", week_start = 1), # Monday before first case
       to   = ceiling_date(max(linelist$date_report, na.rm=T), "week", week_start = 1), # Monday after last case
-      by   = "week")    # bins are 7-days 
+      by   = "week")                                                                   # bins are 7-days 
 
 
 # open a plot with the linelist data
@@ -433,6 +396,23 @@ ggplot(linelist, mapping = aes(x = date_report, fill = fct_lump_n(city, 5))) +
 
 
 ```
+
+
+
+
+\pagebreak 
+
+
+## Table of race and hospitalization  
+
+```{r}
+# Compare race and died
+linelist %>% 
+     select(race, hospitalized) %>% 
+     tbl_summary(by = hospitalized, percent = "row") %>% 
+     add_p()
+```
+
 
 
 \pagebreak 
@@ -486,22 +466,6 @@ city_table %>%
       total_cases = "Total cases",                  
       recent_cases = "Cases in last 14 days",
       inc_per_10k = "Cumulative incidence per 10,000") 
-```
-
-
-
-
-\pagebreak 
-
-
-## Table of Race and hospitalization (Yes/No)  
-
-```{r}
-# Compare race and died
-linelist %>% 
-     select(race, hospitalized) %>% 
-     tbl_summary(by = hospitalized, percent = "row") %>% 
-     add_p()
 ```
 
 

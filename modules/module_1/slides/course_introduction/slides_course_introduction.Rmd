@@ -607,36 +607,7 @@ outline %>%
 ```
 
 - Each module will end with a plenary debrief.  
-- After each day, you will be asked to write answers to reflective questions in the [Applied Epi Community](www.community.appliedepi.org) class thread.  
 
-
----
-# Today: objectives & schedule  
-
-**In this module we aim to help you:**  
-* Understand R within the ecosystem of analytical tools  
-* Navigate RStudio and R projects  
-* Write a basic R script to load packages, import data, and view a dataset  
-
-
-```{r, echo=FALSE, warning=F, message=F}
-outline <- dplyr::tribble(
-  ~Time, ~Location, ~Topic,
-  "20 minutes",     "Main",      "Welcome, course logistics, Why R?",
-  "10 minutes",     "Main",      "Demo: RStudio tour and basic R syntax",
-  "20 minutes",     "Main",      "Functions, packages",
-  "15 minutes",     "Main",      "Demo & project setup",
-  "2 hours",        "Breakouts", "Exercise",
-  "15 minutes",     "Main",      "Plenary debrief"
-)
-
-outline %>% 
-  flextable::qflextable() %>% 
-  flextable::add_footer_lines("Breaks are incorporated above, but not shown as rows")
-```
-
-???
-Note stretch breaks throughout.
 
 
 ---
@@ -645,13 +616,14 @@ Note stretch breaks throughout.
 * Ebola case study  
      * **Surveillance linelist** (primary dataset)  
      * Hospital linelists from 5 hospitals  
-     * Aggregated case counts from one hospital  
      * Case investigation dataset  
      * Lab dataset  
 
-* Near the end of the course, you will apply your skills to a COVID-19 dataset  
-
+* COVID-19 case study  
+     * Near the end of the course, you will apply your skills to new datasets  
+     
 .footnote[All data are not real. All files can be found in the course folder.]  
+
 
 
 
@@ -729,6 +701,36 @@ Note stretch breaks throughout.
 
 ???
 We are in this course to succeed, together
+
+
+
+---
+# Today: objectives & schedule  
+
+**In this module we aim to help you:**  
+* Understand R within the ecosystem of analytical tools  
+* Navigate RStudio and R projects  
+* Write a basic R script to load packages, import data, and view a dataset  
+
+
+```{r, echo=FALSE, warning=F, message=F}
+outline <- dplyr::tribble(
+  ~Time, ~Location, ~Topic,
+  "20 minutes",     "Main",      "Welcome, course logistics, Why R?",
+  "10 minutes",     "Main",      "Demo: RStudio tour and basic R syntax",
+  "20 minutes",     "Main",      "Functions, packages",
+  "15 minutes",     "Main",      "Demo & project setup",
+  "2 hours",        "Breakouts", "Exercise",
+  "15 minutes",     "Main",      "Plenary debrief"
+)
+
+outline %>% 
+  flextable::qflextable() %>% 
+  flextable::add_footer_lines("Breaks are incorporated above, but not shown as rows")
+```
+
+???
+Note stretch breaks throughout.
 
 
 
@@ -953,7 +955,7 @@ You use the function's **arguments** to specify these values.
 </br>
 
 
-Arguments are like inputs and settings, with *names* to distinguish them:
+Arguments are like inputs and settings, with *names*  
 
 ]
 
@@ -991,11 +993,12 @@ Once again, Excel is not so different from R:
   
 --
 
-  * Some arguments are optional  
+  * Arguments can reference other values  
   
 --
   
-  * They can reference other values  
+  * Some arguments are optional  
+
   
 
 
@@ -1036,9 +1039,16 @@ Imagine we have this dataset imported into R, saved with the name **`surv`**.
 We want to create a cross-tabulation of the columns `case_def` and `gender`.  
 
 ```{r include=FALSE}
-surv <- surv %>% 
-     select(case_def, gender, age) %>% 
-     head(8)
+surv <- tribble(
+     ~case_def, ~gender, ~age,
+     "Confirmed", "female", 1,
+     "Confirmed", "male", 16,
+     "Suspect", "female", 10,
+     "Suspect", "female", 10,
+     "Confirmed", "male", 64,
+     "Confirmed", "male", 8,
+     "Confirmed", "female", 22,
+     "Confirmed", "female", 31)
 ```
 
 ```{r, echo=F, eval=T}
@@ -1059,9 +1069,6 @@ surv %>% knitr::kable()
 ```
 
 --
-
-Here is the function, with no values provided to the arguments.  
-
 
 ```{r, results = "asis", echo = FALSE}
 "tbl_cross(data =        , row =        , col =        )" %>%
@@ -1109,7 +1116,7 @@ The dataset we want to cross-tabulate is named `surv`
   cat()
 ```
 
-We want the `gender` values to form the rows of the cross-table 
+We want the rows of the cross-table to come from the column `gender`  
 
 ```{r, results = "asis", echo = FALSE}
 "tbl_cross(data = surv, row = gender, col =         )" %>%
@@ -1142,7 +1149,7 @@ We want the `gender` values to form the rows of the cross-table
   cat()
 ```
 
-We want the `case_def` values to form the columns of the cross-table 
+We want the columns of the cross-table to come from the column  `case_def`  
 
 ```{r, results = "asis", echo = FALSE}
 "tbl_cross(data = surv, row = gender, col = case_def)" %>%

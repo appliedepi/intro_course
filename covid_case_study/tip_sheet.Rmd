@@ -51,38 +51,61 @@ fmt_count(combined, outcome == "Death")
 
 To get page breaks when you want them, insert **\\pagebreak** into the Rmd  
 
+
 ## Data cleaning
 
-- Remember to convert your date columns to class date using one of the {lubridate} functions, `dmy()`, `mdy()`, or `ymd()` based on the format of the dates *prior* to applying the function.  
+- You can begin by using the `clean_names()` function from {janitor} to convert all column names to lowercase with no spaces or special characters  
 
-- Consider creating a `data_date` or `report_date` object that you use as a cutoff (or with a 7 day delay). You could define this in the YAML
+- Then you can use `rename()` - REMEMBER the expected syntax is **NEW = OLD**  
+
+- Convert the important date columns to class "date" using one of the {lubridate} functions, `dmy()`, `mdy()`, or `ymd()`. **Use the function that corresponds to the how the dates are formatted  prior to applying the function.**  
+
+- If you are confident, consider creating a `data_date` or `report_date` value that you use as a cutoff (or with a 7 day delay). You could define this in the YAML `params`.  
 
 
 
 
 ## Age pyramid  
 
-- Use the {apyramid} package (don't forget to add it to your packages!)  
-- You can add labels like title and caption by adding (+) ggplot commands  
+- Use the {apyramid} package and its `age_pyramid()` function (don't forget to add {apyramid} to your packages!)   - This creates a ggplot object, so you can modify it by adding a `+` afterward and then use `labs()` to add labels like title and caption  
 
 ## Weekly epidemic curve, by city  
+
+- To break the histogram into weeks, you can either set `binwidth = 7`, or to be more precise you can define a series of weekly break values that start the Monday prior to the first case, and end the Monday after the last case.  
+
+```{r, echo=T, eval=F}
+weekly_breaks <- seq.Date(
+      from = floor_date(min(linelist$date_report, na.rm=T),   "week", week_start = 1), # Monday before first case
+      to   = ceiling_date(max(linelist$date_report, na.rm=T), "week", week_start = 1), # Monday after last case
+      by   = "week")                                                                   # bins are 7-days 
+
+```
+
+- The you need to use these breaks within `geom_histogram()`.  
+
+- To make the dates appear nicely efficient (no duplicate years), recall how to assign `label_date_short()` to the `labels = ` argument of `geom_histogram()`.  
 
 - Observe how the list of cities (displayed, and in the legend) has been truncated to 5 and "Other"... this was done using `fct_lump_n()` within the ggplot command, for example:  
 
 
 ```{r, echo=T, eval=F}
-ggplot(data = combined, mapping = aes(x = date_report, fill = fct_lump_n(hospital, 5)))+
+ggplot(data = linelist, mapping = aes(x = report_dt, fill = fct_lump_n(city, 5)))+
      geom....
 ```
 
 
-## Cumulative case incidence
-
-- You will need to first `summarise()` the linelist by city. The final column is created by joining the summarised table to the data frame `city_pops`. Then you have the data you need to calculate cases per population. Use `(total_cases / population)* 10000` to calculate the incidence rate per 10000 population. You can use `round()` with `digits = 1` to get the right rounding.  
-
 ## Race and outcome  
 
 - This table is produced with {gtsummary} and it's function `tbl_summary()`. Add p-values by piping into `add_p()`. Don't forget to only select the columns you need before sending the data into `tbl_summary()`.  
+
+## Cumulative case incidence table  
+
+- You will need to first use `group_by()` by city and then `summarise()` the number of cases per city.  
+- You add other columns using `sum()` and logical statements within (don't forget `na.rm = T`).  
+- The final column for cumulative incidence is created by joining the summarized table to the data frame `city_pops`. You want to keep all the rows in the summarized table, but only the rows in `city_pops` that match.  
+- You then have the population data to calculate the number of cumulative cases per population. Use `(total_cases / population) * 10000` to calculate the incidence rate per 10000 population.  
+- You can use `round()` with `digits = 1` to get the rounding on the cumulative incidence.  
+
 
 ## General
 

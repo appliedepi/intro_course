@@ -382,14 +382,14 @@ in the Rmd (but not emit any visible output).</p></li>
 you prefer, for example:</p></li>
 </ul>
 <pre class="r"><code>format(Sys.Date(), format = &quot;%d %B, %Y&quot;)</code></pre>
-<pre><code>## [1] &quot;26 March, 2022&quot;</code></pre>
+<pre><code>## [1] &quot;03 April, 2022&quot;</code></pre>
 <ul>
 <li>To display counts and (%) quickly, you can use the
 <code>fmt_count()</code> function from {epikit}. This accepts the name
 of a data frame, and then a logical statement used to filter rows.</li>
 </ul>
 <pre class="r"><code>fmt_count(combined, outcome == &quot;Death&quot;)</code></pre>
-<pre><code>## [1] &quot;312 (45.9%)&quot;</code></pre>
+<pre><code>## [1] &quot;308 (46.5%)&quot;</code></pre>
 </div>
 <div id="page-breaks" class="section level2">
 <h2>Page breaks</h2>
@@ -399,46 +399,58 @@ of a data frame, and then a logical statement used to filter rows.</li>
 <div id="data-cleaning" class="section level2">
 <h2>Data cleaning</h2>
 <ul>
-<li><p>Remember to convert your date columns to class date using one of
+<li><p>You can begin by using the <code>clean_names()</code> function
+from {janitor} to convert all column names to lowercase with no spaces
+or special characters</p></li>
+<li><p>Then you can use <code>rename()</code> - REMEMBER the expected
+syntax is <strong>NEW = OLD</strong></p></li>
+<li><p>Convert the important date columns to class “date” using one of
 the {lubridate} functions, <code>dmy()</code>, <code>mdy()</code>, or
-<code>ymd()</code> based on the format of the dates <em>prior</em> to
-applying the function.</p></li>
-<li><p>Consider creating a <code>data_date</code> or
-<code>report_date</code> object that you use as a cutoff (or with a 7
-day delay). You could define this in the YAML</p></li>
+<code>ymd()</code>. <strong>Use the function that corresponds to the how
+the dates are formatted prior to applying the
+function.</strong></p></li>
+<li><p>If you are confident, consider creating a <code>data_date</code>
+or <code>report_date</code> value that you use as a cutoff (or with a 7
+day delay). You could define this in the YAML
+<code>params</code>.</p></li>
 </ul>
 </div>
 <div id="age-pyramid" class="section level2">
 <h2>Age pyramid</h2>
 <ul>
-<li>Use the {apyramid} package (don’t forget to add it to your
-packages!)<br />
-</li>
-<li>You can add labels like title and caption by adding (+) ggplot
-commands</li>
+<li>Use the {apyramid} package and its <code>age_pyramid()</code>
+function (don’t forget to add {apyramid} to your packages!) - This
+creates a ggplot object, so you can modify it by adding a <code>+</code>
+afterward and then use <code>labs()</code> to add labels like title and
+caption</li>
 </ul>
 </div>
 <div id="weekly-epidemic-curve-by-city" class="section level2">
 <h2>Weekly epidemic curve, by city</h2>
 <ul>
-<li>Observe how the list of cities (displayed, and in the legend) has
-been truncated to 5 and “Other”… this was done using
-<code>fct_lump_n()</code> within the ggplot command, for example:</li>
+<li>To break the histogram into weeks, you can either set
+<code>binwidth = 7</code>, or to be more precise you can define a series
+of weekly break values that start the Monday prior to the first case,
+and end the Monday after the last case.</li>
 </ul>
-<pre class="r"><code>ggplot(data = combined, mapping = aes(x = date_report, fill = fct_lump_n(hospital, 5)))+
-     geom....</code></pre>
-</div>
-<div id="cumulative-case-incidence" class="section level2">
-<h2>Cumulative case incidence</h2>
+<pre class="r"><code>weekly_breaks &lt;- seq.Date(
+      from = floor_date(min(linelist$date_report, na.rm=T),   &quot;week&quot;, week_start = 1), # Monday before first case
+      to   = ceiling_date(max(linelist$date_report, na.rm=T), &quot;week&quot;, week_start = 1), # Monday after last case
+      by   = &quot;week&quot;)                                                                   # bins are 7-days </code></pre>
 <ul>
-<li>You will need to first <code>summarise()</code> the linelist by
-city. The final column is created by joining the summarised table to the
-data frame <code>city_pops</code>. Then you have the data you need to
-calculate cases per population. Use
-<code>(total_cases / population)* 10000</code> to calculate the
-incidence rate per 10000 population. You can use <code>round()</code>
-with <code>digits = 1</code> to get the right rounding.</li>
+<li><p>The you need to use these breaks within
+<code>geom_histogram()</code>.</p></li>
+<li><p>To make the dates appear nicely efficient (no duplicate years),
+recall how to assign <code>label_date_short()</code> to the
+<code>labels =</code> argument of
+<code>geom_histogram()</code>.</p></li>
+<li><p>Observe how the list of cities (displayed, and in the legend) has
+been truncated to 5 and “Other”… this was done using
+<code>fct_lump_n()</code> within the ggplot command, for
+example:</p></li>
 </ul>
+<pre class="r"><code>ggplot(data = linelist, mapping = aes(x = report_dt, fill = fct_lump_n(city, 5)))+
+     geom....</code></pre>
 </div>
 <div id="race-and-outcome" class="section level2">
 <h2>Race and outcome</h2>
@@ -447,6 +459,29 @@ with <code>digits = 1</code> to get the right rounding.</li>
 <code>tbl_summary()</code>. Add p-values by piping into
 <code>add_p()</code>. Don’t forget to only select the columns you need
 before sending the data into <code>tbl_summary()</code>.</li>
+</ul>
+</div>
+<div id="cumulative-case-incidence-table" class="section level2">
+<h2>Cumulative case incidence table</h2>
+<ul>
+<li>You will need to first use <code>group_by()</code> by city and then
+<code>summarise()</code> the number of cases per city.<br />
+</li>
+<li>You add other columns using <code>sum()</code> and logical
+statements within (don’t forget <code>na.rm = T</code>).<br />
+</li>
+<li>The final column for cumulative incidence is created by joining the
+summarized table to the data frame <code>city_pops</code>. You want to
+keep all the rows in the summarized table, but only the rows in
+<code>city_pops</code> that match.<br />
+</li>
+<li>You then have the population data to calculate the number of
+cumulative cases per population. Use
+<code>(total_cases / population) * 10000</code> to calculate the
+incidence rate per 10000 population.<br />
+</li>
+<li>You can use <code>round()</code> with <code>digits = 1</code> to get
+the rounding on the cumulative incidence.</li>
 </ul>
 </div>
 <div id="general" class="section level2">

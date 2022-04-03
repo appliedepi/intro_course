@@ -835,29 +835,19 @@ But how do we *edit* the column names?
 
 # Renaming columns
 
-You can either use `rename()`, or make the changes within `select()`:  
+Typically we use `rename()`:  
 
 --
 
-1) Using `rename()`  
+Write the NEW name and the OLD name as below:  
 
 ```{r, echo=T}
 demo %>% 
   clean_names() %>% 
-  rename(date_onset = "onset_date",    # syntax: New = "Old" #<<
-         age_years  = "age") %>%                             #<<
-  names()
-```
-
---
-
-2) Within `select()` (Be careful! Only the columns you write are kept.)  
-
-```{r, echo=T}
-demo %>% 
-  clean_names() %>% 
-  select(date_onset = "onset_date",  # change names... and keep ONLY those listed #<<
-         age_years  = "age") %>%                                                  #<<
+  rename(
+       # NEW      = OLD
+       age_years  = age,                    #<<
+       date_onset = onset_date) %>%         #<<
   names()
 ```
 
