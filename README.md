@@ -78,26 +78,33 @@ interactive exercises *within* your RStudio window. To access these
 custom exercises, follow these instructions below. If you need help,
 notify your breakout facilitator.
 
-**Copy and paste this command into your R Console as shown below, then
-press the “Enter” key to run the command:**
+**Go to the “Tools” menu of RStudio, and select “Install packages”.**
 
-**`remotes::install_github("appliedepi/introexercises", dep = TRUE, force = TRUE)`**
+<img src="images/README_images/zip_tools_menu.png" width="75%" />
 
-<img src="images/README_images/install_exercises.png" width="75%" />
+**In the pop-up window, select “zip” from the first drop-down menu.**
 
-Text will begin to appear in the Console, below the command. Do not
-worry, R is simply downloading the tutorials from the internet and
-printing updates. *Watch the print-out for any questions that R may ask
-you:*
+<img src="images/README_images/zip_drop_down.png" width="50%" />
 
--   If you see a printed warning about needing “RTools”, do not worry.
-    This is simply a warning message and the install should proceed
-    without error.  
--   If prompted to update some R packages, select “All” to update all of
-    the packages.  
--   If you continue to be prompted for package updates, you can select
-    “None” and continue without further updates.
+**Another window should appear to select a file (if not, select
+“Browse”). Navigate to the folder
+“Desktop/intro_courses/learning_materials/backup_r\_packages”.** Note
+the 8 zipped folders here - each one is an R package. Select the first
+one “basket”, press “Open”, then click “Install”. R will run a brief
+command to install this package. **Repeat this step to install each of
+the 8 zipped folders.**
 
+<img src="images/README_images/zip_package_select.png" width="75%" />
+
+<!-- **Copy and paste this command into your R Console as shown below, then press the "Enter" key to run the command:**   -->
+<!-- **`remotes::install_github("appliedepi/introexercises", dep = TRUE, force = TRUE)`**   -->
+<!-- ```{r, eval = TRUE, echo = FALSE, out.width = "75%"} -->
+<!-- knitr::include_graphics("images/README_images/install_exercises.png") -->
+<!-- ``` -->
+<!-- Text will begin to appear in the Console, below the command. Do not worry, R is simply downloading the tutorials from the internet and printing updates. *Watch the print-out for any questions that R may ask you:*   -->
+<!--   * If you see a printed warning about needing "RTools", do not worry. This is simply a warning message and the install should proceed without error.   -->
+<!--   * If prompted to update some R packages, select "All" to update all of the packages.   -->
+<!--   * If you continue to be prompted for package updates, you can select "None" and continue without further updates.   -->
 </details>
 <details markdown=1>
 <summary markdown="span" style='text-decoration: underline'>
@@ -105,7 +112,7 @@ you:*
 4.  Begin the first exercise
     </summary>
 
-The course exercises will appear *within your RStudio*. Each course
+Now, the course exercises will appear *within your RStudio*. Each course
 module has a corresponding exercise, which can be accessed through the
 “Tutorials” pane in RStudio (upper-left). The gif below introduces you
 to the exercise environment (you do not need to follow the steps shown
@@ -114,12 +121,14 @@ right now).
 <img src="images/README_images/exercise_demo_short_words.gif" width="100%" />
 
 1)  Click on the “Tutorial” tab in the upper-right RStudio pane (which
-    also contains a tab holding your “Environment”).
+    also contains a tab holding your “Environment”).  
 
-2)  Select the exercise “Applied Epi - R setup, syntax, data import”
+-   Scroll down and review the listed exercises. If you do not see any
+    “Applied Epi” exercises listed, close and re-open RStudio. They may
+    take a minute to appear.
 
--   If you do not see any “Applied Epi” exercises, notify your
-    instructor. They make some time to appear.  
+2)  Select the exercise “Applied Epi - R setup, syntax, data import”  
+
 -   The exercise will load. Once you see the Applied Epi logo appear in
     the Tutorials pane, you can begin the exercise.  
 -   To see the sidebar in the exercise, you may need to adjust the
