@@ -7,6 +7,10 @@ output:
   html_document: default
 params:
   surveillance_date: '2021-06-30'
+  select_date:
+    label: "Date of report:"
+    value: "`r Sys.Date()`"
+    input: date
 ---
 
 
@@ -112,9 +116,9 @@ https://epirhandbook.com/import-and-export.html
 
 ```{r import}
 # import the raw case data set and city populations
-linelist_raw <- import(here("intro_course", "learning_materials", "covid_case_study", "covid_example_data.xlsx"))
+linelist_raw <- import(here("learning_materials", "covid_case_study", "covid_example_data.xlsx"))
 
-city_pops <- import(here("intro_course", "learning_materials", "covid_case_study", "city_pops.xlsx"))
+city_pops <- import(here("learning_materials", "covid_case_study", "city_pops.xlsx"))
 
 ```
 
@@ -286,7 +290,10 @@ linelist <- linelist %>%
      mutate(gender = na_if(gender, "Unknown")) %>% 
 
      # convert the race values to title case 
-     mutate(race = str_to_title(race))
+     mutate(race = str_to_title(race)) %>% 
+     
+     # filter to confirmed cases only
+     filter(confirmed_case == "Yes")
 ```
 
 

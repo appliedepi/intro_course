@@ -78,6 +78,31 @@ interactive exercises *within* your RStudio window. To access these
 custom exercises, follow these instructions below. If you need help,
 notify your breakout facilitator.
 
+**Preferred approach: Copy and paste this command into your R Console as
+shown below, then press the “Enter” key to run the command:**
+
+> `remotes::install_github("appliedepi/introexercises", dep = TRUE, force = TRUE)`
+
+<img src="images/README_images/install_exercises.png" width="75%" />
+
+Text will begin to appear in the Console, below the command. Do not
+worry, R is simply downloading the tutorials from the internet and
+printing updates. *Watch the print-out for any questions that R may ask
+you:*
+
+-   If you encounter an error referencing HTTP or “proxy”, then
+    downloading from Github may be blocked by your institution. Proceed
+    to the backup steps below.  
+-   If you see a printed warning about needing “RTools”, do not worry.
+    This is simply a warning message and the install should proceed
+    without error.
+-   If prompted to update some R packages, select “All” to update all of
+    the packages.
+-   If you continue to be prompted for package updates, you can select
+    “None” and continue without further updates.
+
+**Backup option:**
+
 **Go to the “Tools” menu of RStudio, and select “Install packages”.**
 
 <img src="images/README_images/zip_tools_menu.png" width="75%" />
@@ -96,15 +121,6 @@ the 8 zipped folders.**
 
 <img src="images/README_images/zip_package_select.png" width="75%" />
 
-<!-- **Copy and paste this command into your R Console as shown below, then press the "Enter" key to run the command:**   -->
-<!-- **`remotes::install_github("appliedepi/introexercises", dep = TRUE, force = TRUE)`**   -->
-<!-- ```{r, eval = TRUE, echo = FALSE, out.width = "75%"} -->
-<!-- knitr::include_graphics("images/README_images/install_exercises.png") -->
-<!-- ``` -->
-<!-- Text will begin to appear in the Console, below the command. Do not worry, R is simply downloading the tutorials from the internet and printing updates. *Watch the print-out for any questions that R may ask you:*   -->
-<!--   * If you see a printed warning about needing "RTools", do not worry. This is simply a warning message and the install should proceed without error.   -->
-<!--   * If prompted to update some R packages, select "All" to update all of the packages.   -->
-<!--   * If you continue to be prompted for package updates, you can select "None" and continue without further updates.   -->
 </details>
 <details markdown=1>
 <summary markdown="span" style='text-decoration: underline'>
