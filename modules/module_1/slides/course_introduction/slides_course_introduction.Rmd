@@ -591,15 +591,15 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "Int
 
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
-  ~Module, ~Date, ~Topic,
-  "1", "Mo 4/4",  "RStudio, basic syntax, data import",
-  "2", "Mo 4/4",  "Cleaning data, core R functions, piping",
-  "3", "Tu 4/5",  "Grouping and summarising data",
-  "4", "Tu 4/5",  "Data visualization with ggplot2",
-  "5", "We 4/6",  "Transforming data with joins and pivots",
-  "6", "We 4/6",  "Heat plots, epi curves, age/sex pyramids, GIS demo",
-  "7", "Th 4/7",  "R Markdown reports",
-  "8", "Th 4/7",  "COVID-19 exercise",
+  ~Module, ~Topic,
+  "1",   "RStudio, basic syntax, data import",
+  "2",   "Cleaning data, core R functions, piping",
+  "3",   "Grouping and summarising data",
+  "4",   "Data visualization with ggplot2",
+  "5",   "Transforming data with joins and pivots",
+  "6",   "Heat plots, epi curves, age/sex pyramids, GIS demo",
+  "7",   "R Markdown reports",
+  "8",   "COVID-19 exercise",
   )
 
 outline %>% 
@@ -756,6 +756,53 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "breakout", "st
 ```{r}
 countdown(minutes = 5, seconds = 00)
 ```
+
+
+
+
+---
+# RStudio projects  
+
+
+
+.pull-left[
+
+All the work in this course will take place within an **RStudio project** - a self-contained and portable R working environment.  
+
+It is a folder with all the files associated with a distinct project:  
+* Data files  
+* R scripts  
+* Outputs  
+* etc.
+
+This makes your life immensely easier.  
+
+The project is represented by a .Rproj file in the folder.  
+
+]
+
+.pull-right[
+```{r, eval = TRUE, echo = FALSE, out.width = "85%"}
+# Using here() alone won't work because Rmd folder becomes the rendering root.
+# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
+# It dynamically creates the ../../etc filepath.
+knitr::include_graphics(xfun::relative_path(here::here("images", "functions_packages", "project_briefcase.png")))
+```
+
+* `r emo::ji("folder")` intro_course  
+     * intro_course.Rproj  
+     * `r emo::ji("document")` **linelist.csv**
+     * `r emo::ji("document")` **my_analysis.R**
+     
+]
+
+???
+We will help 
+You can zip the folder and share it with a colleague, it can be hosted on a shared drive, and can be synced with a Github repository.  
+
+
+
+
 
 
 
