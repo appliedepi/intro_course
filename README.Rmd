@@ -47,6 +47,9 @@ hidden from the user
      
 **Unzip the folder and save it on your computer's desktop (not on a shared drive).** To "unzip" a folder once it is downloaded, right-click on the folder and select "Extract All". If offered a choice of location to save the unzipped folder, save it to your desktop.  
 
+*If you are unable to download, try **[this link](https://appliedepi-test-website-airspace.netlify.app/files/intro_course.zip)***, or ask your course organizer for an emailed version.  
+
+
 </details>
 
 
@@ -79,46 +82,48 @@ Voila! This will be the project for ALL of your work in this course.
 
 
 
-<details markdown=1><summary markdown="span" style='text-decoration: underline'>3. Download Applied Epi course exercises</summary>  
+<details markdown=1><summary markdown="span" style='text-decoration: underline'>3. Access Applied Epi course exercises</summary>  
   
   
-The rest of the course will utilize the R package {learnr} to provide interactive exercises *within* your RStudio window. To access these custom exercises, follow these instructions below. If you need help, notify your breakout facilitator.  
+Ask your instructor for the link to the online interactive exercises. If you have unreliable internet, ask your instructor for assistance.  
 
-**Preferred approach: Copy and paste this command into your R Console as shown below, then press the "Enter" key to run the command:**
+<!-- The rest of the course will utilize the R package {learnr} to provide interactive exercises *within* your RStudio window. To access these custom exercises, follow these instructions below. If you need help, notify your breakout facilitator.   -->
 
->`remotes::install_github("appliedepi/introexercises", dep = TRUE, force = TRUE)`
+<!-- **Preferred approach: Copy and paste this command into your R Console as shown below, then press the "Enter" key to run the command:** -->
 
-```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
-knitr::include_graphics("images/README_images/install_exercises.png")
-```
+<!-- >`remotes::install_github("appliedepi/introexercises", dep = TRUE, force = TRUE)` -->
 
-Text will begin to appear in the Console, below the command. Do not worry, R is simply downloading the tutorials from the internet and printing updates. *Watch the print-out for any questions that R may ask you:*
+<!-- ```{r, eval = TRUE, echo = FALSE, out.width = "75%"} -->
+<!-- knitr::include_graphics("images/README_images/install_exercises.png") -->
+<!-- ``` -->
 
-  * If you encounter an error referencing HTTP or "proxy", then downloading from Github may be blocked by your institution. Proceed to the backup steps below.  
-  * If you see a printed warning about needing "RTools", do not worry. This is simply a warning message and the install should proceed without error.
-  * If prompted to update some R packages, select "All" to update all of the packages.
-  * If you continue to be prompted for package updates, you can select "None" and continue without further updates.
+<!-- Text will begin to appear in the Console, below the command. Do not worry, R is simply downloading the tutorials from the internet and printing updates. *Watch the print-out for any questions that R may ask you:* -->
+
+<!--   * If you encounter an error referencing HTTP or "proxy", then downloading from Github may be blocked by your institution. Proceed to the backup steps below.   -->
+<!--   * If you see a printed warning about needing "RTools", do not worry. This is simply a warning message and the install should proceed without error. -->
+<!--   * If prompted to update some R packages, select "All" to update all of the packages. -->
+<!--   * If you continue to be prompted for package updates, you can select "None" and continue without further updates. -->
 
 
-**Backup option:**  
+<!-- **Backup option:**   -->
 
-**Go to the "Tools" menu of RStudio, and select "Install packages".**  
+<!-- **Go to the "Tools" menu of RStudio, and select "Install packages".**   -->
 
-```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
-knitr::include_graphics("images/README_images/zip_tools_menu.png")
-```
+<!-- ```{r, eval = TRUE, echo = FALSE, out.width = "75%"} -->
+<!-- knitr::include_graphics("images/README_images/zip_tools_menu.png") -->
+<!-- ``` -->
 
-**In the pop-up window, select "zip" from the first drop-down menu.**  
+<!-- **In the pop-up window, select "zip" from the first drop-down menu.**   -->
 
-```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
-knitr::include_graphics("images/README_images/zip_drop_down.png")
-```
+<!-- ```{r, eval = TRUE, echo = FALSE, out.width = "50%"} -->
+<!-- knitr::include_graphics("images/README_images/zip_drop_down.png") -->
+<!-- ``` -->
 
-**Another window should appear to select a file (if not, select "Browse"). Navigate to the folder "Desktop/intro_courses/learning_materials/backup_r_packages".** Note the 8 zipped folders here - each one is an R package. Select the first one "basket", press "Open", then click "Install". R will run a brief command to install this package. **Repeat this step to install each of the 8 zipped folders.**  
+<!-- **Another window should appear to select a file (if not, select "Browse"). Navigate to the folder "Desktop/intro_courses/learning_materials/backup_r_packages".** Note the 8 zipped folders here - each one is an R package. Select the first one "basket", press "Open", then click "Install". R will run a brief command to install this package. **Repeat this step to install each of the 8 zipped folders.**   -->
 
-```{r, eval = TRUE, echo = FALSE, out.width = "75%"}
-knitr::include_graphics("images/README_images/zip_package_select.png")
-```
+<!-- ```{r, eval = TRUE, echo = FALSE, out.width = "75%"} -->
+<!-- knitr::include_graphics("images/README_images/zip_package_select.png") -->
+<!-- ``` -->
 
 
 
