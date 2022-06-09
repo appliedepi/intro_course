@@ -1,7 +1,7 @@
 ---
 title: "Introduction to R for<br>Applied Epidemiology"
 subtitle: "Welcome and course overview"
-author: "April 2022"
+author: "2022"
 date: '[contact@appliedepi.org](mailto:contact@appliedepi.org)'
 output:
   xaringan::moon_reader:
@@ -259,7 +259,7 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "r_p
 - It is the most widely used statistical programming language. 
 
 ---
-# Learning curve 
+# Easier to learn than ever
 
 R has become easier to learn in the last 5 years
 
@@ -350,13 +350,12 @@ Slide source: Paula Bianca Blomquist
 
 .pull-left[
 - Daily COVID-19 reports by Public Health England  
-  - Reports sent to 317 local authorities  
+  - Reports for 317 local authorities  
   - Guide local investigations  
-  - *R* bringing together data on:  
-      - cases, testing, mortality & many others  
-  - Caters to authorities needs  
+  - *R* joins data on:  
+      - cases, testing, mortality...  
+  - Caters to practical needs  
       - MS word to be editable  
-      - Integrated in to local reports  
 ]
 
 .pull-right[
@@ -398,7 +397,7 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "aut
 ]
 
 .footnote[
-Slide source: Paula Bianca Blomquist & [World Health Organization](https://worldhealthorg.shinyapps.io/covid/)  
+Slide source: [World Health Organization](https://worldhealthorg.shinyapps.io/covid/)  
 
 See [Epi R Handbook chapter](https://epirhandbook.com/dashboards-with-shiny.html) on organizing shiny dashboards
 ]
@@ -415,9 +414,9 @@ See [Epi R Handbook chapter](https://epirhandbook.com/dashboards-with-shiny.html
 ---
 ## About Applied Epi
 
-We are **elevating frontline epidemiology**
+We are **elevating frontline epidemiology** with open-source analytics tools
 
-Our team of **150 practitioners** live in over **35 countries**. 
+Our team of **170 practitioners** live in over **40 countries**. 
 
 .pull-left[
 - Local government epidemiologists and public health practitioners
@@ -509,7 +508,7 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "Epi
 ```
 
 - 50 chapters of free best-practice code examples - available online and offline
-- 150,000 users globally (35,000 in low & middle-income countries)
+- 200,000 users globally (40,000 in low & middle-income countries)
 - Being translated into 10 languages
 
 
@@ -523,25 +522,7 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "Epi
 
 
 ---
-# Your perceptions and hopes
-
-- "I am looking forward to becoming proficient in R as this is the the software used most in our work"
-- "I would like to become more confident in using R, writing my own code..."  
-- "Capacity to clean a set of data, produce high level descriptive analyses..."  
-- "Complex statistical analysis and data visualization"  
-- "get more data wrangling practice with epidemiological data"  
-- "basic understanding of what it takes to learn R"
- 
-
-
-
----
-# Your perceptions and fears
-
-
-- "There is a lot to learn. More complicated than STATA."  
-- "It can be difficult to work out why the script has not worked."  
-- "R has a steep learning curve"  
+# Your perceptions, hopes, and fears
 
 
 
@@ -570,19 +551,9 @@ We want to help you:
 ---
 # Course format
 
-```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
-# Using here() alone won't work because Rmd folder becomes the rendering root.
-# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
-# It dynamically creates the ../../etc filepath.
+- **Part 1. Classroom instruction** 10 half-day modules (35 hours)
 
-knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "IntroCourseTimeline2.png")))
-```
-
-35 hours of synchronous time together  
-
-- **Part 1. Classroom instruction** 8 half-day modules
-
-- **Part 2. Sustained support** Five 1.5-hour follow-up group support sessions to help you apply R to your work context
+- **Part 2. Follow-up support** 1.5-hour group support sessions to help you apply R to your work context
 
 .footnote[We offer subscription **"R Help Desk"** services for further on-call support]
 
@@ -592,21 +563,21 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "welcome", "Int
 ```{r, echo=FALSE, warning=F, message=F}
 outline <- dplyr::tribble(
   ~Module, ~Topic,
-  "1",   "RStudio, basic syntax, data import",
-  "2",   "Cleaning data, core R functions, piping",
-  "3",   "Grouping and summarising data",
-  "4",   "Data visualization with ggplot2",
-  "5",   "Transforming data with joins and pivots",
-  "6",   "Heat plots, epi curves, age/sex pyramids, GIS demo",
-  "7",   "R Markdown reports",
-  "8",   "COVID-19 exercise",
+  "1",   "RStudio and basic R syntax",
+  "2",   "Data import and file management",
+  "3",   "Cleaning data, core R functions, piping",
+  "4",   "More complex data cleaning",
+  "5",   "Grouping and summarising data",
+  "6",   "Data visualization with ggplot2",
+  "7",   "Transforming data with joins and pivots",
+  "8",   "Heat plots, epi curves, age/sex pyramids, GIS demo",
+  "9",   "R Markdown reports",
+  "10",   "COVID-19 exercise",
   )
 
 outline %>% 
   flextable::qflextable()
 ```
-
-- Each module will end with a plenary debrief.  
 
 
 
@@ -628,30 +599,31 @@ outline %>%
 
 
 ---
-# Breakouts and support  
+# Exercises
 
-- **General pattern:** Explanation -> Live demo -> Exercises -> Plenary debrief  
+Most learning happens when you are coding, and have rapid on-hand assistance
 
---
-
-- **Assistant instructors** will facilitate breakout groups and lead plenary debriefs  
+- **Each module:** Explanation -> Live demo -> Exercises -> Plenary debrief  
 
 --
 
-- **Screen fatigue is real** - you are welcome to turn off your video, but please try to keep video on in breakout discussions  
+- **Coding assistance** raise your hand during the exercise for 1-on-1 support
 
 --
 
-- **The exercises are long** - it is OK if you do not finish. We want to know how long they take.  
+- **Screen share** helps instructors catch your errors early
 
 --
 
-- **The complete code is available to you** in the "scripts/backup" folder  
-
+- **Screen fatigue is real**  
 
 --
 
-- **Extra support** is available during lunch if you are confused  
+- **The exercises are long** - it is OK if you do not finish. The complete code is available to you in the "scripts/backup" folder  
+
+--
+
+- **Extra support** is available if you are confused  
 
 
 
@@ -708,12 +680,12 @@ We are in this course to succeed, together
 
 
 ---
-# Today: objectives & schedule  
+# This session: objectives & schedule  
 
 **In this module we aim to help you:**  
 * Understand R within the ecosystem of analytical tools  
 * Navigate RStudio and R projects  
-* Write a basic R script to load packages, import data, and view a dataset  
+* Write basic R code to load packages, use functions, save objects, and perform calculation  
 
 
 ```{r, echo=FALSE, warning=F, message=F}
@@ -729,7 +701,7 @@ outline <- dplyr::tribble(
 
 outline %>% 
   flextable::qflextable() %>% 
-  flextable::add_footer_lines("Breaks are incorporated above, but not shown as rows")
+  flextable::add_footer_lines("Take breaks as you wish during the exercise")
 ```
 
 ???
