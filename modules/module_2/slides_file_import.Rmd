@@ -382,7 +382,7 @@ class: inverse, center, middle
 
 
 
-## Breakout  
+## Exercise  
 
 
 ```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
