@@ -1,0 +1,2047 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+<meta name="progressive" content="true" />
+<meta name="allow-skip" content="true" />
+<meta name="learnr-version-prerender" content="0.10.1.9020" />
+
+<title>Applied Epi - More data cleaning</title>
+
+<!-- header-includes START -->
+<!-- HEAD_CONTENT -->
+<!-- header-includes END -->
+<!-- HEAD_CONTENT -->
+
+<!-- highlightjs -->
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+<!-- taken from https://github.com/rstudio/rmarkdown/blob/de8a9c38618903627ca509f5401d50a0876079f7/inst/rmd/h/default.html#L293-L343 -->
+<!-- tabsets -->
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+<!-- end tabsets -->
+
+
+</head>
+
+<body>
+
+
+
+<div class="pageContent band">
+<div class="bandContent page">
+
+<div class="topics">
+
+<!-- NOTES: To edit images, edit them in the "images" folder that lives NEXT TO THE RMD FILE -->
+<!-- Add JavaScript code for making the exercise code larger -->
+<script language="JavaScript" src="js/exercise-font-size.js"></script>
+<div
+id="section-introduction-to-r-for-applied-epidemiology-and-public-health"
+class="section level2">
+<h2>Introduction to R for Applied Epidemiology and Public Health</h2>
+<div id="section-welcome" class="section level3">
+<h3>Welcome</h3>
+<p>Welcome to the live course “Introduction to R for applied
+epidemiology”, offered by <a href="www.appliedepi.org">Applied Epi</a> -
+a nonprofit organisation that offers open-source tools, training, and
+support to frontline public health practitioners.</p>
+<p><img src="images/logo.png" width="25%" /></p>
+</div>
+<div id="section-data-cleaning" class="section level3">
+<h3>Data cleaning</h3>
+<p>This exercise focuses on <strong>logical recoding of values,
+filtering rows, creating age categories, and other more complex data
+cleaning tasks</strong>.</p>
+</div>
+<div id="section-format" class="section level3">
+<h3>Format</h3>
+<p>This exercise will guide you through a set of tasks.<br />
+<em>You should perform these tasks in RStudio and on your local
+computer</em>.</p>
+<div id="section-getting-help" class="section level4">
+<h4>Getting Help</h4>
+<p>There are several ways to get help:</p>
+<ol style="list-style-type: decimal">
+<li>Look for the “helpers” (see below)</li>
+<li>Ask your live course instructor/facilitator for help<br />
+</li>
+<li>Ask a colleague or other participant in the course for tips<br />
+</li>
+<li>Post a question in <a href="www.community.appliedepi.org">Applied
+Epi Community</a> in the category for questions about Applied Epi
+Training</li>
+</ol>
+<p>Here is what those “helpers” will look like:</p>
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+<summary style="text-decoration: underline; color: darkgreen;">
+<svg aria-hidden="true" role="img" viewBox="0 0 352 512" style="height:1em;width:0.69em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:gold;overflow:visible;position:relative;"><path d="M96.06 454.35c.01 6.29 1.87 12.45 5.36 17.69l17.09 25.69a31.99 31.99 0 0 0 26.64 14.28h61.71a31.99 31.99 0 0 0 26.64-14.28l17.09-25.69a31.989 31.989 0 0 0 5.36-17.69l.04-38.35H96.01l.05 38.35zM0 176c0 44.37 16.45 84.85 43.56 115.78 16.52 18.85 42.36 58.23 52.21 91.45.04.26.07.52.11.78h160.24c.04-.26.07-.51.11-.78 9.85-33.22 35.69-72.6 52.21-91.45C335.55 260.85 352 220.37 352 176 352 78.61 272.91-.3 175.45 0 73.44.31 0 82.97 0 176zm176-80c-44.11 0-80 35.89-80 80 0 8.84-7.16 16-16 16s-16-7.16-16-16c0-61.76 50.24-112 112-112 8.84 0 16 7.16 16 16s-7.16 16-16 16z"/></svg>
+Click to read a hint
+</summary>
+<p></br></p>
+<p>Here you will see a helpful hint!</p>
+</br>
+</details>
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+<details>
+<summary style="text-decoration: underline; color: red;">
+<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:red;overflow:visible;position:relative;"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg>Click
+to see a solution (try it yourself first!)
+</summary>
+<p></br></p>
+<pre class="r"><code>linelist %&gt;% 
+  filter(
+    age &gt; 25,
+    district == &quot;Bolo&quot;
+  )</code></pre>
+<p>Here is more explanation about why the solution works.</p>
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+</div>
+<div id="section-quiz-questions" class="section level4">
+<h4>Quiz questions</h4>
+<p>Please complete the quiz questions that you encounter throughout the
+tutorial. <strong>Answering will help you</strong> to comprehend the
+material, and will also help us to improve the exercises for future
+students.</p>
+<p>To practice, please answer the following questions:</p>
+<p><div class="panel-heading tutorial-quiz-title"><span data-i18n="text.quiz">Quiz</span></div></p>
+<div class="panel panel-default">
+<div data-label="quiz-use-helper-1" class="tutorial-question panel-body">
+<div id="quiz-use-helper-1-answer_container" class="shiny-html-output"></div>
+<div id="quiz-use-helper-1-message_container" class="shiny-html-output"></div>
+<div id="quiz-use-helper-1-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div>
+<div class="panel panel-default">
+<div data-label="quiz-anxious" class="tutorial-question panel-body">
+<div id="quiz-anxious-answer_container" class="shiny-html-output"></div>
+<div id="quiz-anxious-message_container" class="shiny-html-output"></div>
+<div id="quiz-anxious-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div>
+</div>
+<div id="section-icons" class="section level4">
+<h4>Icons</h4>
+<p>You will see these icons throughout the exercises:</p>
+<table>
+<colgroup>
+<col width="23%" />
+<col width="76%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Icon</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:darkblue;overflow:visible;position:relative;"><path d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z"/></svg></td>
+<td>Observe</td>
+</tr>
+<tr class="even">
+<td><svg aria-hidden="true" role="img" viewBox="0 0 192 512" style="height:1em;width:0.38em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:red;overflow:visible;position:relative;"><path d="M176 432c0 44.112-35.888 80-80 80s-80-35.888-80-80 35.888-80 80-80 80 35.888 80 80zM25.26 25.199l13.6 272C39.499 309.972 50.041 320 62.83 320h66.34c12.789 0 23.331-10.028 23.97-22.801l13.6-272C167.425 11.49 156.496 0 142.77 0H49.23C35.504 0 24.575 11.49 25.26 25.199z"/></svg></td>
+<td>Alert!</td>
+</tr>
+<tr class="odd">
+<td><svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:brown;overflow:visible;position:relative;"><path d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z"/></svg></td>
+<td>An informative note</td>
+</tr>
+<tr class="even">
+<td><svg aria-hidden="true" role="img" viewBox="0 0 640 512" style="height:1em;width:1.25em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:black;overflow:visible;position:relative;"><path d="M257.981 272.971L63.638 467.314c-9.373 9.373-24.569 9.373-33.941 0L7.029 444.647c-9.357-9.357-9.375-24.522-.04-33.901L161.011 256 6.99 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L257.981 239.03c9.373 9.372 9.373 24.568 0 33.941zM640 456v-32c0-13.255-10.745-24-24-24H312c-13.255 0-24 10.745-24 24v32c0 13.255 10.745 24 24 24h304c13.255 0 24-10.745 24-24z"/></svg></td>
+<td>Time for you to code!</td>
+</tr>
+<tr class="odd">
+<td><svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:darkgrey;overflow:visible;position:relative;"><path d="M512 48v288c0 26.5-21.5 48-48 48h-48V176c0-44.1-35.9-80-80-80H128V48c0-26.5 21.5-48 48-48h288c26.5 0 48 21.5 48 48zM384 176v288c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V176c0-26.5 21.5-48 48-48h288c26.5 0 48 21.5 48 48zm-68 28c0-6.6-5.4-12-12-12H76c-6.6 0-12 5.4-12 12v52h252v-52z"/></svg></td>
+<td>Change to another window</td>
+</tr>
+<tr class="even">
+<td><svg aria-hidden="true" role="img" viewBox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M0 512V48C0 21.49 21.49 0 48 0h288c26.51 0 48 21.49 48 48v464L192 400 0 512z"/></svg></td>
+<td>Remember this for later</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="section-learning-objectives" class="section level2">
+<h2>Learning objectives</h2>
+<p>In this exercise you will:</p>
+<ul>
+<li>Continue to apply a series of {dplyr} functions to clean a messy raw
+dataset<br />
+</li>
+<li>Apply advanced logic to recode columns<br />
+</li>
+<li>Finalize your cleaning pipe chain<br />
+</li>
+<li>Perhaps a series of mini-exercises to test your comprehension</li>
+</ul>
+</div>
+<div id="section-setup" class="section level2">
+<h2>Setup</h2>
+<p>As before, open RStudio by double-clicking on the intro_course.Rproj
+file in the “intro_course” folder.</p>
+<p>Then do the following:</p>
+<ul>
+<li>Run all the commands from the top of your script to the bottom
+<ul>
+<li>The {pacman} command to load packages<br />
+</li>
+<li>The command to import the raw data<br />
+</li>
+<li>The cleaning pipe chain</li>
+</ul></li>
+</ul>
+<p>You should also have “Exploratory analysis” or “Testing” sections in
+your script. Take a moment to organize these in a coherent manner so
+they do not interrupt the flow of your script by causing errors. For
+purposes of reproducibility, you should be able to run your entire
+script with no errors. This will make sharing the script with colleagues
+much easier.</p>
+<p>Now we will continue by adding further commands to your cleaning pipe
+chain…</p>
+</div>
+<div id="section-logical-recoding" class="section level2">
+<h2>Logical recoding</h2>
+<p>Sometimes, the recoding we want is not as simple as replacing one
+value for another. Instead, we use logical criteria and logical
+operators, and often reference values in several columns.</p>
+<div id="section-negative-values" class="section level3">
+<h3>Negative values</h3>
+<p>In the weight column <code>wt_kg</code>, there are some negative
+values. Open the data frame in the viewer (e.g. by clicking the data
+frame name in the Environment pane) and sort the dataset by clicking on
+the <code>wt_kg</code> column. Note the negative values.</p>
+<p>Alternatively, in your Testing section, run the {base} command
+<code>summary()</code> on the column <code>surv$wt_kg</code> to return
+key summary statistics on this numeric column:</p>
+<pre class="r"><code>summary(surv$wt_kg)</code></pre>
+<p>This must be some data entry error. To avoid errors in any future
+calculations or plots, convert these values to <code>NA</code>
+(missing). Remember, you should make edits like this here in the script.
+This is better than editing in CSV file, because here there is a record
+of changes performed.</p>
+<p>The logic we want to apply is simple: “If <code>wt_kg</code>
+negative, convert it to <code>NA</code>, otherwise remain the same.”
+Therefore, we can use the <code>ifelse()</code> function within
+<code>mutate()</code>.</p>
+<p>The syntax is:
+<code>ifelse(CONDITION APPLIED TO ROW, OUTCOME IF TRUE, OUTCOME IF FALSE)</code></p>
+<pre class="r"><code>mutate(wt_kg = ifelse(wt_kg &lt; 0, NA, wt_kg))</code></pre>
+<p><strong>Add this to your pipe chain and verify that it worked
+correctly.</strong></p>
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+<details>
+<summary style="text-decoration: underline; color: red;">
+<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:red;overflow:visible;position:relative;"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg>Click
+to see a solution (try it yourself first!)
+</summary>
+<p></br></p>
+<pre class="r"><code>surv &lt;- surv_raw %&gt;% 
+  
+  # automatically clean column names
+  clean_names() %&gt;% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    date_report = date_of_report,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %&gt;%
+     
+  # remove unnecessary column
+  select(-row_num) %&gt;% 
+
+  # de-duplicate rows  
+  distinct() %&gt;% 
+     
+  # convert date_onset to date class
+  mutate(date_onset = mdy(date_onset)) %&gt;% 
+  mutate(date_report = mdy(date_report)) %&gt;% 
+     
+  # convert age to numeric class
+  mutate(age = as.numeric(age)) %&gt;% 
+  
+  # convert &quot;Unknown&quot; gender to NA
+  mutate(gender = na_if(gender, &quot;Unknown&quot;)) %&gt;% 
+     
+  # properly record missing values in many character columns
+  mutate(across(.cols = where(is.character), .fns = na_if, &quot;&quot;)) %&gt;% 
+  
+  # re-code hospital column
+  mutate(hospital = recode(hospital,
+    # for reference: OLD = NEW
+    &quot;Mitilary Hospital&quot;  = &quot;Military Hospital&quot;,
+    &quot;Port&quot;               = &quot;Port Hospital&quot;,
+    &quot;Port Hopital&quot;       = &quot;Port Hospital&quot;,
+    &quot;St. Mark&#39;s Maternity Hospital (SMMH)&quot; = &quot;SMMH&quot;)) %&gt;%
+  
+  # recode gender
+  mutate(gender = recode(gender,
+    &quot;m&quot; = &quot;male&quot;,
+    &quot;f&quot; = &quot;female&quot;)) %&gt;% 
+       
+  # convert negative weight values to NA
+  mutate(wt_kg = ifelse(wt_kg &lt; 0, NA, wt_kg)) </code></pre>
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+<p>Now re-run your <code>summary()</code> command to check the new range
+of the values:</p>
+<pre class="r"><code>summary(surv$wt_kg)</code></pre>
+</div>
+<div id="section-review-logical-operators" class="section level3">
+<h3>Review logical operators</h3>
+<p>As you clean, it is important to know these logical and relational
+operators. There is no need to memorize them (see the <a
+href="https://epirhandbook.com/en/r-basics.html">Epi R Handbook basics
+chapter</a>), but they are here for you review quickly.</p>
+<div id="section-relational-operators" class="section level4">
+<h4>Relational operators</h4>
+<p>Relational operators compare values and are often used when defining
+new variables and subsets of datasets. Here are the common relational
+operators in R:</p>
+<table>
+<colgroup>
+<col width="12%" />
+<col width="6%" />
+<col width="7%" />
+<col width="73%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Meaning</th>
+<th>Operator</th>
+<th>Example</th>
+<th>Example Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Equal to</td>
+<td><code>==</code></td>
+<td><code>"A" == "a"</code></td>
+<td><code>FALSE</code> (because R is case sensitive) <em>Note that ==
+(double equals) is different from = (single equals), see note
+below</em></td>
+</tr>
+<tr class="even">
+<td>Not equal to</td>
+<td><code>!=</code></td>
+<td><code>2 != 0</code></td>
+<td><code>TRUE</code></td>
+</tr>
+<tr class="odd">
+<td>Greater than</td>
+<td><code>&gt;</code></td>
+<td><code>4 &gt; 2</code></td>
+<td><code>TRUE</code></td>
+</tr>
+<tr class="even">
+<td>Less than</td>
+<td><code>&lt;</code></td>
+<td><code>4 &lt; 2</code></td>
+<td><code>FALSE</code></td>
+</tr>
+<tr class="odd">
+<td>Greater than or equal to</td>
+<td><code>&gt;=</code></td>
+<td><code>6 &gt;= 4</code></td>
+<td><code>TRUE</code></td>
+</tr>
+<tr class="even">
+<td>Less than or equal to</td>
+<td><code>&lt;=</code></td>
+<td><code>6 &lt;= 4</code></td>
+<td><code>FALSE</code></td>
+</tr>
+<tr class="odd">
+<td>Value is missing</td>
+<td><code>is.na()</code></td>
+<td><code>is.na(7)</code></td>
+<td><code>FALSE</code></td>
+</tr>
+<tr class="even">
+<td>Value is not missing</td>
+<td><code>!is.na()</code></td>
+<td><code>!is.na(7)</code></td>
+<td><code>TRUE</code></td>
+</tr>
+</tbody>
+</table>
+<p>Note that the <code>==</code> (double equals) <strong>asks the
+question</strong> to R: “IS the value on the right equal to the value on
+the left?. The result is either <code>TRUE</code> or
+<code>FALSE</code>.</p>
+<ul>
+<li><code>age == 12</code> Asks is the value in column <code>age</code>
+for a given row equal to 12?</li>
+</ul>
+<p>In contrast, the <code>=</code> (single equals) is used to assign
+values, such as for an argument within a function:</p>
+<ul>
+<li><code>max(age, na.rm = TRUE)</code> This sets the
+<code>na.rm=</code> argument to <code>TRUE</code><br />
+</li>
+<li><code>paste(jurisdictions, collapse = ",")</code> This sets the
+collapse argument to a comma</li>
+</ul>
+</div>
+<div id="section-logical-operators" class="section level4">
+<h4>Logical operators</h4>
+<p>Logical operators, such as AND and OR, are often used to connect
+relational operators and create more complicated criteria. Complex
+statements might require parentheses ( ) for grouping and order of
+application.</p>
+<table>
+<colgroup>
+<col width="23%" />
+<col width="76%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Meaning</th>
+<th>Operator</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>AND</td>
+<td><code>&amp;</code></td>
+</tr>
+<tr class="even">
+<td>OR</td>
+<td><code>|</code> (vertical bar)</td>
+</tr>
+<tr class="odd">
+<td>Parentheses</td>
+<td><code>( )</code> Used to group criteria together and clarify order
+of operations</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="section-other-simple-logic-recoding-options"
+class="section level4">
+<h4>Other simple logic recoding options</h4>
+<p>Now that you have learned simple logical re-coding, you can use
+<code>ifelse()</code> for many situations. Here are two other simple
+logical recoding functions that you should bookmark to read about
+later:</p>
+<ul>
+<li><a
+href="https://dplyr.tidyverse.org/reference/if_else.html"><code>if_else()</code></a>
+is particularly useful if re-coding dates<br />
+</li>
+<li><a
+href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/replace"><code>replace()</code></a>
+can be a shortcut for <code>ifelse()</code> logical recoding</li>
+</ul>
+</div>
+</div>
+<div id="section-case_when-complex-recoding" class="section level3">
+<h3><code>case_when()</code> complex recoding</h3>
+<p>For more complex re-coding, you will likely switch to using <a
+href="https://dplyr.tidyverse.org/reference/case_when.html"><code>case_when()</code></a>
+from {dplyr}.</p>
+<p>This function allows you to run the equivalent of multiple
+<code>ifelse()</code> statements in a series - it is R’s equivalent to
+the SQL <code>CASE WHEN</code> statement.</p>
+<p>It is just a coincidence that the <code>case_when()</code> function
+has a name that sounds like it was made for building case definitions!
+It is a general function - it is not specific to public health. Still,
+here is a demonstration of a <code>case_when()</code> command, used
+within <code>mutate()</code>, to create a case definition column:</p>
+<pre class="r"><code>mutate(case_def = case_when(                               # create new column case_def, using the function case_when()
+    
+    lab_confirmed == TRUE             ~ &quot;Confirmed&quot;,  # if lab confirmed, assign as Confirmed
+    epilink == &quot;yes&quot; &amp; fever == &quot;yes&quot; ~ &quot;Suspect&quot;,    # else, if epilink and fever, assign as Suspect
+    TRUE                              ~ &quot;To investigate&quot;)) # else, assing as &quot;to investigate&quot;</code></pre>
+<p>Let us examine what is happening in the above command:</p>
+<p><strong>Setup</strong></p>
+<ul>
+<li><code>case_when()</code> is nested within a <code>mutate()</code> -
+just like <code>if_else()</code> and <code>na_if()</code>
+<ul>
+<li>To the left of the equals is the name of the column we want to
+create or adjust: <code>case_def</code><br />
+</li>
+<li>To the right of the equals is the <code>case_when()</code> function,
+used to assing the values for this new column</li>
+</ul></li>
+</ul>
+<p><strong>Structure within the <code>case_when()</code></strong>:</p>
+<ul>
+<li><code>case_when()</code> commands consist of formulae that have a
+Right-Hand Side (RHS) and a Left-Hand Side (LHS), separated by a “tilde”
+~<br />
+</li>
+<li>Multiple formulae are separated by commas and places on new
+lines<br />
+</li>
+<li>Within each formula: on the left side of the tilde are logical
+criteria, and on the right side are the outcome values to assign if
+those criteria are met
+<ul>
+<li>The <em>left</em> side is a logical statement that can evaluate to
+<code>TRUE</code> or <code>FALSE</code> for a given row in the data
+<ul>
+<li>You can reference other columns in these logical statements<br />
+</li>
+</ul></li>
+<li>The <em>right</em> side is the value that is used if the
+<em>left</em> side is <code>TRUE</code> for a given row
+<ul>
+<li><strong>Importantly</strong>, all values on the <em>right</em> side
+must be of the same class (e.g. either character, numeric, integer,
+etc.)</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><strong>How the new values are assigned</strong>:</p>
+<p>Every row in the data frame is evaluated for the top logical
+statement (<code>lab_confirmed == TRUE</code>). If this statement is
+TRUE for that data frame row, its value in column <code>case_def</code>
+is set as “Confirmed”. However if <code>lab_confirmed</code> is not
+<code>TRUE</code>, then the <code>case_when()</code> function advances
+to check if the second logical statement is valid for that row, and the
+process repeats. Thus, for each row in the data frame, the first logical
+statement that evaluates to <code>TRUE</code> is used.</p>
+<p><strong>Therefore, it is very important to write the formulae in an
+intentional order - typically from very specific (at the top) to very
+broad (at the bottom)</strong>.</p>
+<p>If none of the logical statements apply to a row in the data, that
+row’s value is assigned <code>NA</code> by default, unless a
+<code>TRUE</code> statement is written as the last statement, as shown
+above. When the bottom logical statement is simply written as
+<code>TRUE</code>, this applies for any other situation that has not
+triggered one of the logical statements above.</p>
+<p>In the case definition example above, if a patient is lab confirmed
+they are immediately categorized as a “Confirmed”. If lab confirmation
+is <code>FALSE</code> or missing, then the second formula is checked: if
+they have an epidemiological link and a fever the patient is categorized
+as a “Suspect”. Finally, any row that has not met either of those
+criteria is marked as “To investigate”.</p>
+<p><strong>Add the above <code>mutate()</code> command to the bottom of
+your pipe chain.</strong></p>
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+<details>
+<summary style="text-decoration: underline; color: red;">
+<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:red;overflow:visible;position:relative;"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg>Click
+to see a solution (try it yourself first!)
+</summary>
+<p></br></p>
+<pre class="r"><code>surv &lt;- surv_raw %&gt;% 
+  
+  # automatically clean column names
+  clean_names() %&gt;% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    date_report = date_of_report,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %&gt;%
+     
+  # remove unnecessary column
+  select(-row_num) %&gt;% 
+
+  # de-duplicate rows  
+  distinct() %&gt;% 
+     
+  # convert date_onset to date class
+  mutate(date_onset = mdy(date_onset)) %&gt;% 
+  mutate(date_report = mdy(date_report)) %&gt;% 
+     
+  # convert age to numeric class
+  mutate(age = as.numeric(age)) %&gt;% 
+  
+  # convert &quot;Unknown&quot; gender to NA
+  mutate(gender = na_if(gender, &quot;Unknown&quot;)) %&gt;% 
+     
+  # properly record missing values in many character columns
+  mutate(across(.cols = where(is.character), .fns = na_if, &quot;&quot;)) %&gt;% 
+  
+  # re-code hospital column
+  mutate(hospital = recode(hospital,
+    # for reference: OLD = NEW
+    &quot;Mitilary Hospital&quot;  = &quot;Military Hospital&quot;,
+    &quot;Port&quot;               = &quot;Port Hospital&quot;,
+    &quot;Port Hopital&quot;       = &quot;Port Hospital&quot;,
+    &quot;St. Mark&#39;s Maternity Hospital (SMMH)&quot; = &quot;SMMH&quot;)) %&gt;%
+  
+  # recode gender
+  mutate(gender = recode(gender,
+    &quot;m&quot; = &quot;male&quot;,
+    &quot;f&quot; = &quot;female&quot;)) %&gt;% 
+
+  # convert negative weight values to NA
+  mutate(wt_kg = ifelse(wt_kg &lt; 0, NA, wt_kg)) %&gt;% 
+  
+  # create case definition
+  mutate(case_def = case_when(
+    lab_confirmed == TRUE             ~ &quot;Confirmed&quot;,
+    epilink == &quot;yes&quot; &amp; fever == &quot;yes&quot; ~ &quot;Suspect&quot;,
+    TRUE                              ~ &quot;To investigate&quot;))</code></pre>
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+<p>Now we can tabulate the new column <code>case_def</code> and see the
+results (in the Testing section):</p>
+<pre class="r"><code>surv %&gt;% 
+  tabyl(case_def)</code></pre>
+<p>It is also wise to go look at the dataset to confirm that the logic
+was applied the way that you intended!</p>
+<p><svg aria-hidden="true" role="img" viewBox="0 0 192 512" style="height:1em;width:0.38em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:red;overflow:visible;position:relative;"><path d="M176 432c0 44.112-35.888 80-80 80s-80-35.888-80-80 35.888-80 80-80 80 35.888 80 80zM25.26 25.199l13.6 272C39.499 309.972 50.041 320 62.83 320h66.34c12.789 0 23.331-10.028 23.97-22.801l13.6-272C167.425 11.49 156.496 0 142.77 0H49.23C35.504 0 24.575 11.49 25.26 25.199z"/></svg>
+<em>DANGER: All outcome values on the RIGHT-side must all be the same
+class - either numeric, integer, character, date, logical, etc.
+Sometimes, this requires assigning variations of <code>NA</code> such as
+<code>NA_character_</code>, <code>NA_real_</code> (for numeric), and
+<code>as.Date(NA)</code>. Read more in the dates chapter of <a
+href="https://www.epirhandbook.com/en/working-with-dates.html">the Epi R
+Handbook</a>.</em></p>
+</div>
+<div id="section-create-column-age_years" class="section level3">
+<h3>Create column <code>age_years</code></h3>
+<p>Now apply your <code>case_when()</code> knowledge to this next
+scenario.</p>
+<p>Create a new column <strong><code>age_years</code></strong> that
+converts the value in column <strong><code>age</code></strong>
+correctly, depending on whether the value in
+<strong><code>age_unit</code></strong> is “years” or “months”.</p>
+<p>Below we give you the outline of the command - it is your
+responsibility to fill in the logic statements on the right, and the
+calculations on the right.</p>
+<pre class="r"><code>  # create age-in-years
+  mutate(age_years = case_when(
+    
+    # logic for age_unit    # adjustment to make age_years  
+    if_months               ~ calculation,    # return: age / 12
+    if_years                ~ calculation,    # return: age 
+    if_missing              ~ age))           # if unit is missing, assume years </code></pre>
+<!--
+NOTE: Below is the hint (all within details tags collapsed)
+-->
+<details>
+<summary style="text-decoration: underline; color: darkgreen;">
+<svg aria-hidden="true" role="img" viewBox="0 0 352 512" style="height:1em;width:0.69em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:gold;overflow:visible;position:relative;"><path d="M96.06 454.35c.01 6.29 1.87 12.45 5.36 17.69l17.09 25.69a31.99 31.99 0 0 0 26.64 14.28h61.71a31.99 31.99 0 0 0 26.64-14.28l17.09-25.69a31.989 31.989 0 0 0 5.36-17.69l.04-38.35H96.01l.05 38.35zM0 176c0 44.37 16.45 84.85 43.56 115.78 16.52 18.85 42.36 58.23 52.21 91.45.04.26.07.52.11.78h160.24c.04-.26.07-.51.11-.78 9.85-33.22 35.69-72.6 52.21-91.45C335.55 260.85 352 220.37 352 176 352 78.61 272.91-.3 175.45 0 73.44.31 0 82.97 0 176zm176-80c-44.11 0-80 35.89-80 80 0 8.84-7.16 16-16 16s-16-7.16-16-16c0-61.76 50.24-112 112-112 8.84 0 16 7.16 16 16s-7.16 16-16 16z"/></svg>
+Click to read a hint
+</summary>
+<p></br></p>
+<p>Within the parentheses of <code>case_when()</code>, on the left side
+of each ~ you are writing logical criteria that will be assessed for
+each row in the dataset, and on the right side of the ~ you write the
+resulting value to be returned.</p>
+<p>The first logical criteria should be: “is <code>age_unit</code> equal
+to”months”? In code, this is written <code>age_unit == "months"</code>
+(note the double equals, which asks the question of equivalence). One
+the right side of the ~, you would write an equation that would produce
+the correct outcome in the new column <code>age_years</code>. In this
+case, it would be the value in <code>age</code> divided by 12. In code
+this would be written as: <code>age_unit == "months" ~ age / 12</code>.
+Don’t forget a comma at the end, and to continue on the next line with
+the next logical criteria.</p>
+<p>If you happen to encounter this error:
+<code>'names' attribute [1] must be the same length as the vector [0]</code>,
+then confirm that you converted the <code>age</code> column to class
+numeric earlier in the pipe chain. This error is because by dividing by
+12, we are introducing decimals, which is not acceptable if the column
+is still “integer” class.</p>
+</br>
+</details>
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+<details>
+<summary style="text-decoration: underline; color: red;">
+<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:red;overflow:visible;position:relative;"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg>Click
+to see a solution (try it yourself first!)
+</summary>
+<p></br></p>
+<pre class="r"><code>surv &lt;- surv_raw %&gt;% 
+  
+  # automatically clean column names
+  clean_names() %&gt;% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    date_report = date_of_report,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %&gt;%
+     
+  # remove unnecessary column
+  select(-row_num) %&gt;% 
+
+  # de-duplicate rows  
+  distinct() %&gt;% 
+     
+  # convert date_onset to date class
+  mutate(date_onset = mdy(date_onset)) %&gt;% 
+  mutate(date_report = mdy(date_report)) %&gt;% 
+     
+  # convert age to numeric class
+  mutate(age = as.numeric(age)) %&gt;% 
+  
+  # convert &quot;Unknown&quot; gender to NA
+  mutate(gender = na_if(gender, &quot;Unknown&quot;)) %&gt;% 
+     
+  # properly record missing values in many character columns
+  mutate(across(.cols = where(is.character), .fns = na_if, &quot;&quot;)) %&gt;% 
+  
+  # re-code hospital column
+  mutate(hospital = recode(hospital,
+    # for reference: OLD = NEW
+    &quot;Mitilary Hospital&quot;  = &quot;Military Hospital&quot;,
+    &quot;Port&quot;               = &quot;Port Hospital&quot;,
+    &quot;Port Hopital&quot;       = &quot;Port Hospital&quot;,
+    &quot;St. Mark&#39;s Maternity Hospital (SMMH)&quot; = &quot;SMMH&quot;)) %&gt;%
+  
+  # recode gender
+  mutate(gender = recode(gender,
+    &quot;m&quot; = &quot;male&quot;,
+    &quot;f&quot; = &quot;female&quot;)) %&gt;% 
+       
+  # convert negative weight values to NA
+  mutate(wt_kg = ifelse(wt_kg &lt; 0, NA, wt_kg))  %&gt;% 
+
+  # create case definition
+  mutate(case_def = case_when(
+    lab_confirmed == TRUE             ~ &quot;Confirmed&quot;,
+    epilink == &quot;yes&quot; &amp; fever == &quot;yes&quot; ~ &quot;Suspect&quot;,
+    TRUE                              ~ &quot;To investigate&quot;)) %&gt;% 
+     
+  # create age-in-years
+  mutate(age_years = case_when(
+    age_unit == &quot;months&quot; ~ age/12,   # if age is given in months
+    age_unit == &quot;years&quot;  ~ age,      # if age is given in years
+    is.na(age_unit)      ~ age))     # if age_unit missing assume years, else NA</code></pre>
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+<p>That was difficult! If the above exercise with
+<code>case_when()</code> was very challenging for you, do not despair!
+<code>case_when()</code> can be difficult, but will come with practice.
+Talk with your facilitator about the errors or difficulties you
+encountered. It will come!</p>
+<p>It is important to remember that in <code>case_when()</code>, all of
+the right-side values must be of the same class (numeric, integer,
+character, date, logical, etc). Sometimes, this requires assigning
+variations of <code>NA</code> such as <code>NA_character_</code>,
+<code>NA_real_</code> (for numeric), and <code>as.Date(NA)</code>. Read
+more in the dates chapter of <a
+href="https://www.epirhandbook.com/en/working-with-dates.html">the Epi R
+Handbook</a>. In this scenario, we want any circumstance not caught by a
+logic statement to return <code>NA</code>, so we can leave it.</p>
+</div>
+</div>
+<div id="section-age-categories" class="section level2">
+<h2>Age categories</h2>
+<p>Now that we have a valid <code>age_years</code> column, let’s create
+a categorical column for “age category”.</p>
+<p>There are several ways to do this (see <a
+href="https://epirhandbook.com/en/cleaning-data-and-core-functions.html#num_cats">this
+chapter of the Epi R Handbook</a> for details), but here we just apply
+the most simple method.</p>
+<p>The function <code>age_categories()</code> from {epikit} can be used
+within <code>mutate()</code> to define a new column <code>age_cat</code>
+with 10-year age categories.</p>
+<p>The arguments for <code>age_categories</code> are:</p>
+<ol style="list-style-type: decimal">
+<li>The numeric column to divide into categories
+(<code>age_years</code>)<br />
+</li>
+<li><code>lower =</code> A number that is the lower numeric boundary
+(0)<br />
+</li>
+<li><code>upper =</code> A number that is the upper numeric boundary for
+categories (e.g. set this to 70, so that all ages above 70 are put in
+the category “70+”)<br />
+</li>
+<li><code>by =</code> A number for the width of the categories (10)</li>
+</ol>
+<p><strong>Try adding this command to the pipe chain</strong> If you get
+stuck, see the solution code hidden below.</p>
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+<details>
+<summary style="text-decoration: underline; color: red;">
+<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:red;overflow:visible;position:relative;"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg>Click
+to see a solution (try it yourself first!)
+</summary>
+<p></br></p>
+<pre class="r"><code>surv &lt;- surv_raw %&gt;% 
+  
+  # automatically clean column names
+  clean_names() %&gt;% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    date_report = date_of_report,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %&gt;%
+     
+  # remove unnecessary column
+  select(-row_num) %&gt;% 
+
+  # de-duplicate rows  
+  distinct() %&gt;% 
+     
+  # convert date_onset to date class
+  mutate(date_onset = mdy(date_onset)) %&gt;% 
+  mutate(date_report = mdy(date_report)) %&gt;% 
+     
+  # convert age to numeric class
+  mutate(age = as.numeric(age)) %&gt;% 
+  
+  # convert &quot;Unknown&quot; gender to NA
+  mutate(gender = na_if(gender, &quot;Unknown&quot;)) %&gt;% 
+     
+  # properly record missing values in many character columns
+  mutate(across(.cols = where(is.character), .fns = na_if, &quot;&quot;)) %&gt;% 
+  
+  # re-code hospital column
+  mutate(hospital = recode(hospital,
+    # for reference: OLD = NEW
+    &quot;Mitilary Hospital&quot;  = &quot;Military Hospital&quot;,
+    &quot;Port&quot;               = &quot;Port Hospital&quot;,
+    &quot;Port Hopital&quot;       = &quot;Port Hospital&quot;,
+    &quot;St. Mark&#39;s Maternity Hospital (SMMH)&quot; = &quot;SMMH&quot;)) %&gt;%
+  
+  # recode gender
+  mutate(gender = recode(gender,
+    &quot;m&quot; = &quot;male&quot;,
+    &quot;f&quot; = &quot;female&quot;)) %&gt;% 
+       
+  # convert negative weight values to NA
+  mutate(wt_kg = ifelse(wt_kg &lt; 0, NA, wt_kg))  %&gt;% 
+
+  # create case definition
+  mutate(case_def = case_when(
+    lab_confirmed == TRUE             ~ &quot;Confirmed&quot;,
+    epilink == &quot;yes&quot; &amp; fever == &quot;yes&quot; ~ &quot;Suspect&quot;,
+    TRUE                              ~ &quot;To investigate&quot;)) %&gt;% 
+     
+  # create age-in-years
+  mutate(age_years = case_when(
+    age_unit == &quot;months&quot; ~ age/12,   # if age is given in months
+    age_unit == &quot;years&quot;  ~ age,      # if age is given in years
+    is.na(age_unit)      ~ age)) %&gt;% # if unit missing assume years, else NA
+       
+  # create age category column
+  mutate(age_cat = age_categories(         # create new column
+    age_years,                             # numeric column to make groups from
+    lower = 0,
+    upper = 70,
+    by = 10))</code></pre>
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+<p>You can also define your age categories other ways, for example, by
+providing a <em>vector</em> of age breaks such as
+<code>c(0, 5, 10, 15, 20, 30, 40, 50)</code>. Ask your instructor if you
+want to know how to do this. Or read about in the function’s
+documentation by entering <code>?age_categories</code> in the R console,
+or by searching for <code>age_categories</code> in the Help pane of
+RStudio (lower-right).</p>
+<p><svg aria-hidden="true" role="img" viewBox="0 0 192 512" style="height:1em;width:0.38em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:red;overflow:visible;position:relative;"><path d="M176 432c0 44.112-35.888 80-80 80s-80-35.888-80-80 35.888-80 80-80 80 35.888 80 80zM25.26 25.199l13.6 272C39.499 309.972 50.041 320 62.83 320h66.34c12.789 0 23.331-10.028 23.97-22.801l13.6-272C167.425 11.49 156.496 0 142.77 0H49.23C35.504 0 24.575 11.49 25.26 25.199z"/></svg>
+<strong>Have you saved your script lately?</strong></p>
+</div>
+<div id="section-date-differences" class="section level2">
+<h2>Date differences</h2>
+<p>Now that both of the date columns are correctly classified as “date”,
+we can do math on them with simple + and - operators.</p>
+<p><strong>Add a <code>mutate()</code> command to the pipe chain, to
+create a new column named <code>diff</code></strong>. Define this new
+column to equal the number of days between <code>date_onset</code> and
+<code>date_report</code> for each case.</p>
+<details>
+<summary style="text-decoration: underline; color: red;">
+<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:red;overflow:visible;position:relative;"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg>Click
+to see a solution (try it yourself first!)
+</summary>
+<p></br></p>
+<pre class="r"><code>surv &lt;- surv_raw %&gt;% 
+  
+  # automatically clean column names
+  clean_names() %&gt;% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    date_report = date_of_report,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %&gt;%
+     
+  # remove unnecessary column
+  select(-row_num) %&gt;% 
+
+  # de-duplicate rows  
+  distinct() %&gt;% 
+     
+  # convert date_onset to date class
+  mutate(date_onset = mdy(date_onset)) %&gt;% 
+  mutate(date_report = mdy(date_report)) %&gt;% 
+     
+  # convert age to numeric class
+  mutate(age = as.numeric(age)) %&gt;% 
+  
+  # convert &quot;Unknown&quot; gender to NA
+  mutate(gender = na_if(gender, &quot;Unknown&quot;)) %&gt;% 
+     
+  # properly record missing values in many character columns
+  mutate(across(.cols = where(is.character), .fns = na_if, &quot;&quot;)) %&gt;% 
+  
+  # re-code hospital column
+  mutate(hospital = recode(hospital,
+    # for reference: OLD = NEW
+    &quot;Mitilary Hospital&quot;  = &quot;Military Hospital&quot;,
+    &quot;Port&quot;               = &quot;Port Hospital&quot;,
+    &quot;Port Hopital&quot;       = &quot;Port Hospital&quot;,
+    &quot;St. Mark&#39;s Maternity Hospital (SMMH)&quot; = &quot;SMMH&quot;)) %&gt;%
+  
+  # recode gender
+  mutate(gender = recode(gender,
+    &quot;m&quot; = &quot;male&quot;,
+    &quot;f&quot; = &quot;female&quot;)) %&gt;% 
+       
+  # convert negative weight values to NA
+  mutate(wt_kg = ifelse(wt_kg &lt; 0, NA, wt_kg))  %&gt;% 
+
+  # create case definition
+  mutate(case_def = case_when(
+    lab_confirmed == TRUE             ~ &quot;Confirmed&quot;,
+    epilink == &quot;yes&quot; &amp; fever == &quot;yes&quot; ~ &quot;Suspect&quot;,
+    TRUE                              ~ &quot;To investigate&quot;)) %&gt;% 
+  
+  # create age-in-years
+  mutate(age_years = case_when(
+    age_unit == &quot;months&quot; ~ age/12,   # if age is given in months
+    age_unit == &quot;years&quot;  ~ age,      # if age is given in years
+    is.na(age_unit)      ~ age)) %&gt;% # if unit missing assume years, else NA
+       
+  # create age category column
+  mutate(age_cat = age_categories(         # create new column
+    age_years,                             # numeric column to make groups from
+    lower = 0,
+    upper = 70,
+    by = 10)) %&gt;% 
+     
+  # Make date-difference column  
+  mutate(diff = date_report - date_onset)</code></pre>
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+<p>Check the calculation for a few rows, manually. Is it how you
+expect?</p>
+<p>Note that this column’s values appear like “4 days” - this is a
+special class called “difftime”. If you want the result to be purely
+numeric, you have to wrap the result of the calculation in the {base}
+function <code>as.numeric()</code>. That would look like this:</p>
+<pre class="r"><code>mutate(diff = as.numeric(date_report - date_onset))</code></pre>
+<p>Note that currently, a patient with <code>date_onset</code> and
+<code>date_report</code> on 9 November 2014 would be recorded with
+<code>diff</code> of 0 days. In your work context, you may want to add a
+<code>+1</code> after the end of the <code>as.numeric()</code> command,
+if you prefer same day admission to be recorded as 1 and not 0.</p>
+</div>
+<div id="section-location" class="section level2">
+<h2>Location</h2>
+<p>We have two columns that express districts (locations) - of the
+cases’s residence, and where they were detected as a case.</p>
+<p><strong>How similar are these two columns?</strong></p>
+<p>One way to assess how similar the columns are, is to <em>create a new
+column</em> that indicates whether the two column’s values in that row
+are different. Then, you can tabulate this new column.</p>
+<p>The syntax is actually quite simple, using <code>mutate()</code> and
+the <code>!=</code> operator (which means NOT EQUAL TO). <strong>Add
+this to your pipe chain</strong>.</p>
+<pre class="r"><code># New column will be TRUE if the two values are different
+mutate(moved = district_res != district_det)</code></pre>
+<p>Now try to assess the differences manually in RStudio. <strong>Open
+the <code>surv</code> dataset in the viewer</strong> (by clicking on it
+in the Environment pane) and click the filter button on the upper-left
+to limit the view to rows in which the new column <code>moved</code> is
+TRUE. Was the logic for the new column applied correctly? Are TRUE and
+FALSE appearing where they should be?</p>
+<p><div class="panel-heading tutorial-quiz-title">Quiz - Moving cases</div></p>
+<div class="panel panel-default">
+<div data-label="quiz-moved-1" class="tutorial-question panel-body">
+<div id="quiz-moved-1-answer_container" class="shiny-html-output"></div>
+<div id="quiz-moved-1-message_container" class="shiny-html-output"></div>
+<div id="quiz-moved-1-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div>
+<p>You can use R code to find the answer as well, by using the
+<code>tabyl()</code> command on the new column:</p>
+<pre class="r"><code>surv %&gt;% 
+  tabyl(moved)</code></pre>
+<div id="section-prioritize-certain-values" class="section level3">
+<h3>Prioritize certain values</h3>
+<p>Now that you know there is some discrepancy, which of these values
+should be prioritized? District of residence, or district of
+detection?</p>
+<p>This is a question that each outbreak epidemiology team must answer
+given their knowledge of the data collection process, and of the
+outbreak itself. <strong>For this exercise, we will prioritize location
+of detection</strong>, because it might better reflect the nearby
+populations who are at higher risk for infection (which can be best
+understood by good case investigation).</p>
+<p><strong>Create a new column in the data simply named
+<code>district</code>.</strong> Create it using the
+<code>coalesce()</code> function, which will take its first value if it
+is available, else it will take its second value. This function allows
+us to “fill-in” missing values by using the first non-missing value
+(given a preference order), or to prioritize one value over another if
+they differ.</p>
+<pre class="r"><code># Add this command to the pipechain
+mutate(district = coalesce(district_det, district_res))</code></pre>
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+<details>
+<summary style="text-decoration: underline; color: red;">
+<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:red;overflow:visible;position:relative;"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg>Click
+to see a solution (try it yourself first!)
+</summary>
+<p></br></p>
+<pre class="r"><code>surv &lt;- surv_raw %&gt;% 
+  
+  # automatically clean column names
+  clean_names() %&gt;% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    date_report = date_of_report,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %&gt;%
+     
+  # remove unnecessary column
+  select(-row_num) %&gt;% 
+
+  # de-duplicate rows  
+  distinct() %&gt;% 
+     
+  # convert date_onset to date class
+  mutate(date_onset = mdy(date_onset)) %&gt;% 
+  mutate(date_report = mdy(date_report)) %&gt;% 
+     
+  # convert age to numeric class
+  mutate(age = as.numeric(age)) %&gt;% 
+  
+  # convert &quot;Unknown&quot; gender to NA
+  mutate(gender = na_if(gender, &quot;Unknown&quot;)) %&gt;% 
+     
+  # properly record missing values in many character columns
+  mutate(across(.cols = where(is.character), .fns = na_if, &quot;&quot;)) %&gt;% 
+  
+  # re-code hospital column
+  mutate(hospital = recode(hospital,
+    # for reference: OLD = NEW
+    &quot;Mitilary Hospital&quot;  = &quot;Military Hospital&quot;,
+    &quot;Port&quot;               = &quot;Port Hospital&quot;,
+    &quot;Port Hopital&quot;       = &quot;Port Hospital&quot;,
+    &quot;St. Mark&#39;s Maternity Hospital (SMMH)&quot; = &quot;SMMH&quot;)) %&gt;%
+  
+  # recode gender
+  mutate(gender = recode(gender,
+    &quot;m&quot; = &quot;male&quot;,
+    &quot;f&quot; = &quot;female&quot;)) %&gt;% 
+       
+  # convert negative weight values to NA
+  mutate(wt_kg = ifelse(wt_kg &lt; 0, NA, wt_kg))  %&gt;% 
+
+  # create case definition
+  mutate(case_def = case_when(
+    lab_confirmed == TRUE             ~ &quot;Confirmed&quot;,
+    epilink == &quot;yes&quot; &amp; fever == &quot;yes&quot; ~ &quot;Suspect&quot;,
+    TRUE                              ~ &quot;To investigate&quot;)) %&gt;% 
+     
+  # create age-in-years
+  mutate(age_years = case_when(
+    age_unit == &quot;months&quot; ~ age/12,   # if age is given in months
+    age_unit == &quot;years&quot;  ~ age,      # if age is given in years
+    is.na(age_unit)      ~ age)) %&gt;% # if unit missing assume years, else NA
+       
+  # create age category column
+  mutate(age_cat = age_categories(         # create new column
+    age_years,                             # numeric column to make groups from
+    lower = 0,
+    upper = 70,
+    by = 10)) %&gt;% 
+     
+  # Make date-difference column  
+  mutate(diff = date_report - date_onset) %&gt;% 
+     
+  # create column marking TRUE if district of residence and detection differ
+  mutate(moved = district_res != district_det) %&gt;% 
+  
+  # create new column that prioritizes district of detection
+  mutate(district = coalesce(district_det, district_res))</code></pre>
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+<p><strong>View the dataset in the RStudio viewer again, and verify with
+your eye that this code worked as expected</strong></p>
+<p>Use the following command to answer the question below:</p>
+<pre class="r"><code># cross tabulate &quot;moved&quot; column with &quot;district_res&quot; column
+surv %&gt;% 
+  tabyl(moved, district_res)</code></pre>
+<p><div class="panel-heading tutorial-quiz-title">Quiz - Moving cases origin</div></p>
+<div class="panel panel-default">
+<div data-label="quiz-moved-home-1" class="tutorial-question panel-body">
+<div id="quiz-moved-home-1-answer_container" class="shiny-html-output"></div>
+<div id="quiz-moved-home-1-message_container" class="shiny-html-output"></div>
+<div id="quiz-moved-home-1-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div>
+<p><svg aria-hidden="true" role="img" viewBox="0 0 192 512" style="height:1em;width:0.38em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:red;overflow:visible;position:relative;"><path d="M176 432c0 44.112-35.888 80-80 80s-80-35.888-80-80 35.888-80 80-80 80 35.888 80 80zM25.26 25.199l13.6 272C39.499 309.972 50.041 320 62.83 320h66.34c12.789 0 23.331-10.028 23.97-22.801l13.6-272C167.425 11.49 156.496 0 142.77 0H49.23C35.504 0 24.575 11.49 25.26 25.199z"/></svg>
+<strong>Have you saved your script lately?</strong></p>
+</div>
+</div>
+<div id="section-filter-rows" class="section level2">
+<h2>Filter rows</h2>
+<p>Sub-setting rows is done with the function <code>filter()</code>.
+Inside the parentheses you write logical criteria that are applied to
+each row. Rows that meet the criteria are kept.</p>
+<div id="section-remove-suspect-cases" class="section level3">
+<h3>Remove suspect cases</h3>
+<p>For the purposes of this exercise, we will remove any “suspect” cases
+from the dataset.</p>
+<p>The simplest way of filtering, is to use a logical condition (“==”,
+“!=”, “&gt;”, “&lt;”, etc), so that only rows where the logical
+statement is <code>TRUE</code> are kept. For example here, we are only
+keeping rows where the gender is equal to “female”.</p>
+<pre class="r"><code>filter(gender == &quot;female&quot;)</code></pre>
+<p>Multiple logical criteria can be combined using &amp; (and), | (or),
+and parentheses.</p>
+<p><strong>Add a <code>filter()</code> command that restricts the
+dataset to only cases where <code>case_def</code> is
+“Confirmed”.</strong></p>
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+<details>
+<summary style="text-decoration: underline; color: red;">
+<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:red;overflow:visible;position:relative;"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg>Click
+to see a solution (try it yourself first!)
+</summary>
+<p></br></p>
+<pre class="r"><code>surv &lt;- surv_raw %&gt;% 
+  
+  # automatically clean column names
+  clean_names() %&gt;% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    date_report = date_of_report,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %&gt;%
+     
+  # remove unnecessary column
+  select(-row_num) %&gt;% 
+
+  # de-duplicate rows  
+  distinct() %&gt;% 
+     
+  # convert date_onset to date class
+  mutate(date_onset = mdy(date_onset)) %&gt;% 
+  mutate(date_report = mdy(date_report)) %&gt;% 
+     
+  # convert age to numeric class
+  mutate(age = as.numeric(age)) %&gt;% 
+  
+  # convert &quot;Unknown&quot; gender to NA
+  mutate(gender = na_if(gender, &quot;Unknown&quot;)) %&gt;% 
+     
+  # properly record missing values in many character columns
+  mutate(across(.cols = where(is.character), .fns = na_if, &quot;&quot;)) %&gt;% 
+  
+  # re-code hospital column
+  mutate(hospital = recode(hospital,
+    # for reference: OLD = NEW
+    &quot;Mitilary Hospital&quot;  = &quot;Military Hospital&quot;,
+    &quot;Port&quot;               = &quot;Port Hospital&quot;,
+    &quot;Port Hopital&quot;       = &quot;Port Hospital&quot;,
+    &quot;St. Mark&#39;s Maternity Hospital (SMMH)&quot; = &quot;SMMH&quot;)) %&gt;%
+  
+  # recode gender
+  mutate(gender = recode(gender,
+    &quot;m&quot; = &quot;male&quot;,
+    &quot;f&quot; = &quot;female&quot;)) %&gt;% 
+       
+  # convert negative weight values to NA
+  mutate(wt_kg = ifelse(wt_kg &lt; 0, NA, wt_kg))  %&gt;% 
+
+  # create case definition
+  mutate(case_def = case_when(
+    lab_confirmed == TRUE             ~ &quot;Confirmed&quot;,
+    epilink == &quot;yes&quot; &amp; fever == &quot;yes&quot; ~ &quot;Suspect&quot;,
+    TRUE                              ~ &quot;To investigate&quot;)) %&gt;% 
+
+  # create age-in-years
+  mutate(age_years = case_when(
+    age_unit == &quot;months&quot; ~ age/12,   # if age is given in months
+    age_unit == &quot;years&quot;  ~ age,      # if age is given in years
+    is.na(age_unit)      ~ age)) %&gt;% # if unit missing assume years, else NA
+       
+  # create age category column
+  mutate(age_cat = age_categories(         # create new column
+    age_years,                             # numeric column to make groups from
+    lower = 0,
+    upper = 70,
+    by = 10)) %&gt;% 
+     
+  # Make date-difference column  
+  mutate(diff = date_report - date_onset) %&gt;% 
+     
+  # create column marking TRUE if district of residence and detection differ
+  mutate(moved = district_res != district_det) %&gt;% 
+  
+  # create new column that prioritizes district of detection
+  mutate(district = coalesce(district_det, district_res)) %&gt;% 
+     
+  # remove suspect cases
+  filter(case_def == &quot;Confirmed&quot;)</code></pre>
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+<p><svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:darkblue;overflow:visible;position:relative;"><path d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z"/></svg>
+<strong>Now review your cleaning pipe chain, and the one in the solution
+above.</strong> Ensure that all the cleaning steps in the solution are
+also present in your R script “ebola_analysis.R”.</p>
+</div>
+</div>
+<div id="section-re-arrange-columns" class="section level2">
+<h2>Re-arrange columns</h2>
+<p>Click on your data frame <code>surv</code> and review the order of
+the column.</p>
+<p><div class="panel-heading tutorial-quiz-title">Quiz - Re-arrange columns</div></p>
+<div class="panel panel-default">
+<div data-label="quiz-columns-order-1" class="tutorial-question panel-body">
+<div id="quiz-columns-order-1-answer_container" class="shiny-html-output"></div>
+<div id="quiz-columns-order-1-message_container" class="shiny-html-output"></div>
+<div id="quiz-columns-order-1-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div>
+<p>This location has no effect on being able to reference columns within
+a pipe chain, nor referencing columns with a <code>$</code>. However, if
+we want to export this clean data frame and send to it a colleague, we
+may prefer that some columns are naturally placed next to each other -
+for example <code>age</code> and <code>age_years</code>.</p>
+<p>If you remember from the data cleaning section on
+<code>select()</code>, you can use the <code>select()</code> command to
+<em>re-arrange</em> columns as well as to select certain columns.</p>
+<p>You can also list some columns, to move them to the beginning, and
+finish the <code>select()</code> statement by using the “helper”
+<code>everything()</code>. This will include all the other columns.</p>
+<p>Note the empty parentheses at the end of <code>everything()</code>).
+There are other such “tidyselect” helpers available to you such as
+<code>contains()</code> and <code>starts_with()</code>, which you can
+write <em>within</em> the <code>select()</code> command like
+<code>contains("date_")</code>. Read more about these helpers in this <a
+href="https://epirhandbook.com/en/cleaning-data-and-core-functions.html#clean_tidyselect">Epi
+R Handbook chapter</a>.</p>
+<p><strong>Can you add a <code>select()</code> command to your pipe
+chain that does re-arranges the columns into the following
+order:</strong></p>
+<ul>
+<li><code>case_id</code>, any column that starts with “date_”,
+<code>diff</code>, <code>gender</code>, <code>age</code>,
+<code>age_unit</code>, <code>age_years</code>, <code>age_cat5</code>,
+<code>hospital</code>, <code>district</code>, ,
+<code>district_res</code>, <code>district_det</code>,
+<code>moved</code>, all other columns</li>
+</ul>
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+<details>
+<summary style="text-decoration: underline; color: red;">
+<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:red;overflow:visible;position:relative;"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg>Click
+to see a solution (try it yourself first!)
+</summary>
+<p></br></p>
+<pre class="r"><code>surv &lt;- surv_raw %&gt;% 
+  
+  # automatically clean column names
+  clean_names() %&gt;% 
+  
+  # manually clean column names   
+  rename(
+    date_onset = onset_date,
+    date_report = date_of_report,
+    district_res = adm3_name_res,
+    district_det = adm3_name_det) %&gt;%
+     
+  # remove unnecessary column
+  select(-row_num) %&gt;% 
+
+  # de-duplicate rows  
+  distinct() %&gt;% 
+     
+  # convert date_onset to date class
+  mutate(date_onset = mdy(date_onset)) %&gt;% 
+  mutate(date_report = mdy(date_report)) %&gt;% 
+     
+  # convert age to numeric class
+  mutate(age = as.numeric(age)) %&gt;% 
+  
+  # convert &quot;Unknown&quot; gender to NA
+  mutate(gender = na_if(gender, &quot;Unknown&quot;)) %&gt;% 
+     
+  # properly record missing values in many character columns
+  mutate(across(.cols = where(is.character), .fns = na_if, &quot;&quot;)) %&gt;% 
+  
+  # re-code hospital column
+  mutate(hospital = recode(hospital,
+    # for reference: OLD = NEW
+    &quot;Mitilary Hospital&quot;  = &quot;Military Hospital&quot;,
+    &quot;Port&quot;               = &quot;Port Hospital&quot;,
+    &quot;Port Hopital&quot;       = &quot;Port Hospital&quot;,
+    &quot;St. Mark&#39;s Maternity Hospital (SMMH)&quot; = &quot;SMMH&quot;)) %&gt;%
+  
+  # recode gender
+  mutate(gender = recode(gender,
+    &quot;m&quot; = &quot;male&quot;,
+    &quot;f&quot; = &quot;female&quot;)) %&gt;% 
+       
+  # convert negative weight values to NA
+  mutate(wt_kg = ifelse(wt_kg &lt; 0, NA, wt_kg))  %&gt;% 
+
+  # create case definition
+  mutate(case_def = case_when(
+    lab_confirmed == TRUE             ~ &quot;Confirmed&quot;,
+    epilink == &quot;yes&quot; &amp; fever == &quot;yes&quot; ~ &quot;Suspect&quot;,
+    TRUE                              ~ &quot;To investigate&quot;)) %&gt;% 
+     
+  # create age-in-years
+  mutate(age_years = case_when(
+    age_unit == &quot;months&quot; ~ age/12,   # if age is given in months
+    age_unit == &quot;years&quot;  ~ age,      # if age is given in years
+    is.na(age_unit)      ~ age)) %&gt;% # if unit missing assume years, else NA
+       
+  # create age category column
+  mutate(age_cat = age_categories(         # create new column
+    age_years,                             # numeric column to make groups from
+    lower = 0,
+    upper = 70,
+    by = 10)) %&gt;% 
+     
+  # Make date-difference column  
+  mutate(diff = date_report - date_onset) %&gt;% 
+     
+  # create column marking TRUE if district of residence and detection differ
+  mutate(moved = district_res != district_det) %&gt;% 
+  
+  # create new column that prioritizes district of detection
+  mutate(district = coalesce(district_det, district_res)) %&gt;% 
+     
+  # remove suspect cases
+  filter(case_def == &quot;Confirmed&quot;) %&gt;% 
+  
+  # re-arrange columns
+  select(case_id, starts_with(&quot;date&quot;), diff, gender, age, age_unit, age_years, age_cat, hospital, district, district_res, district_det, moved, everything())</code></pre>
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+<p><svg aria-hidden="true" role="img" viewBox="0 0 192 512" style="height:1em;width:0.38em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:red;overflow:visible;position:relative;"><path d="M176 432c0 44.112-35.888 80-80 80s-80-35.888-80-80 35.888-80 80-80 80 35.888 80 80zM25.26 25.199l13.6 272C39.499 309.972 50.041 320 62.83 320h66.34c12.789 0 23.331-10.028 23.97-22.801l13.6-272C167.425 11.49 156.496 0 142.77 0H49.23C35.504 0 24.575 11.49 25.26 25.199z"/></svg>
+It is important to note that filtering will by default remove missing
+values. E.g. <code>filter(case_def == "Confirmed")</code> will remove
+rows in which <code>case_def</code> is missing (<code>NA</code>).</p>
+<p>Likewise, filtering based on a numeric or date criteria will also
+remove missing values. For example:</p>
+<ul>
+<li><code>filter(age &gt; 12)</code> will keep only rows in which
+<code>age</code> is greater than 12. Rows with missing age will be
+removed.<br />
+</li>
+<li><code>filter(date_onset &gt; ymd("2014-11-25")</code> will keep only
+rows in which <code>date_onset</code> is after 25 November 2014. Rows
+with missing date of onset will be removed.</li>
+</ul>
+<p>To keep rows with missing values, add an “OR” bar and then the
+<code>is.na()</code> function to the filter:</p>
+<ul>
+<li><code>filter(age &gt; 12 | is.na(age))</code><br />
+</li>
+<li><code>filter(date_onset &gt; ymd("2014-11-25") | is.na(date_onset))</code></li>
+</ul>
+<p>The statements above allow rows to remain that meet the first
+criteria, or that have missing values.</p>
+</div>
+<div id="section-export-clean-dataset" class="section level2">
+<h2>Export clean dataset</h2>
+<p>Now that we have cleaned this dataset, we should save it in our file
+directory for later use, and perhaps to share with other people.</p>
+<p>We can use the <code>export()</code> function from the {rio} package
+- this is the same package that we used to <code>import()</code> the raw
+data. <em>This is a standalone command - <strong>not part of your pipe
+chain</strong></em>. The arguments that it expects are:</p>
+<ol style="list-style-type: decimal">
+<li>The R object (data frame) that should be exported<br />
+</li>
+<li>The desired name for the file, in quotation marks, with extension
+(e.g. “surveillance_linelist_clean_20141201.csv”)</li>
+</ol>
+<p>The standalone command below (not part of your pipe chain) will save
+<code>surv</code> as a CSV file to the root folder of your R project.
+<strong>Run the command and go look for it with your file
+explorer</strong>.</p>
+<pre class="r"><code># Export cleaned file to the root folder of the R project  
+export(surv, &quot;surveillance_linelist_clean_20141201.csv&quot;)</code></pre>
+<div id="section-saving-as-.rds" class="section level3">
+<h3>Saving as .rds</h3>
+<p>If you save the file as .xlsx or .csv, any person using R to further
+analyze the data will have to re-clean it by again specifying the column
+classes. To avoid this, save the clean dataset as an “.rds” file. RDS is
+a file format specific to R, and is very useful if you know you will
+work with the exported data again in R.</p>
+<p>For example, if you work in an epidemiology team and need to send
+files to a GIS team for mapping, and they use R as well, just send them
+the .rds file! Then all the column classes are retained and they have
+less cleaning work to do.</p>
+<p>In the example below, we save <code>surv</code> as a .rds file. We
+also specify that we want it to be saved in a subfolder (“data/clean”)
+by writing a file path using <code>here()</code> in the same way that we
+did to import the data. <strong>Try this one too!</strong></p>
+<pre class="r"><code># Export cleaned file  
+export(surv, here(&quot;data&quot;, &quot;clean&quot;, &quot;surveillance_linelist_clean_20141201.rds&quot;))</code></pre>
+<p>Above, we write the name of the R object (<code>surv</code>), and
+then provide the file path and file namethat we want to save it to
+(using the same <code>here()</code> syntax that we used to import data).
+Note the file extension “.rds”.</p>
+<p>If you wanted to export the data as CSV or Excel, you would simply
+change the file extension in the command to: .csv or .xlsx</p>
+</div>
+</div>
+<div id="section-end" class="section level2">
+<h2>End</h2>
+<p>Congratulations! You have completed the cleaning exercise! This is a
+huge step in your introduction to R. You have now been introduced to
+most of the important data management functions in R.</p>
+<p>Be sure to save your R script, and check-in with your
+facilitator.</p>
+<p><strong>In case you did not finish, do not worry.</strong> <em>In the
+case that you can not finish, look in the “scripts/backup” folder. You
+will find R scripts for the Ebola analysis at every stage of this
+course. So you can always us these as a “backup” for later
+modules.</em></p>
+</div>
+<div id="section-extras" class="section level2">
+<h2>Extras</h2>
+<p>Here are some exercises to practice what you have learned. Can you
+create these data frames, <em>starting from the clean <code>surv</code>
+data frame</em>?</p>
+<div id="section-spotlight-on-children" class="section level3">
+<h3>Spotlight on children</h3>
+<p><strong>Create a separate data frame for children and save it to the
+“outputs” folder as “children_spotlight.csv”</strong></p>
+<ul>
+<li>Start from the clean data frame <code>surv</code> and assign this
+new data frame with the name <code>children</code><br />
+</li>
+<li>Reduce the data frame to only contain cases with age less than 18
+years<br />
+</li>
+<li>Create a new column <code>infant</code> that says “Infant” if the
+case is less than 1 year old, and says “Non-infant” otherwise<br />
+</li>
+<li>Reduce the data frame to only show the columns <code>case_id</code>,
+<code>age_years</code>, <code>infant</code>, <code>gender</code>,
+<code>district</code>, <code>hospital</code>, and
+<code>date_report</code><br />
+</li>
+<li>In a <em>separate command</em>, save this <code>children</code> data
+frame to the <em>root folder</em> of your RStudio project as
+“children_spotlight.csv”</li>
+</ul>
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+<details>
+<summary style="text-decoration: underline; color: red;">
+<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:red;overflow:visible;position:relative;"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg>Click
+to see a solution (try it yourself first!)
+</summary>
+<p></br></p>
+<pre class="r"><code># create data frame with only child cases
+children &lt;- surv %&gt;% 
+  filter(age_years &lt; 18) %&gt;% 
+  mutate(infant = ifelse(age_years &lt; 1, &quot;Infant&quot;, &quot;Non-infant&quot;)) %&gt;% 
+  select(case_id, age_years, infant, gender, district, hospital, date_report)
+
+# export
+export(children, &quot;children_spotlight.csv&quot;)</code></pre>
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+</div>
+<div id="section-gis-dataset" class="section level3">
+<h3>GIS dataset</h3>
+<p>Your GIS team needs a data frame to put into their routine maps for
+this outbreak. They use R, so they expect a .rds file containin the
+<code>case_id</code>, any columns containing information on location or
+whether the patient moved significantly from their residence before
+being detected.</p>
+<p>They have access to your RStudio project and expect the file to be
+saved into the “outputs” sub-folder <em>with the current date of the
+data at the end of the file name</em>.</p>
+<p><strong>Can you make this file for them?</strong></p>
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+<details>
+<summary style="text-decoration: underline; color: red;">
+<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:red;overflow:visible;position:relative;"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg>Click
+to see a solution (try it yourself first!)
+</summary>
+<p></br></p>
+<pre class="r"><code># create data frame with only gis information
+gis &lt;- surv %&gt;% 
+  select(case_id, district, district_res, district_det, moved, lat, lon)
+
+# export
+export(gis, here(&quot;outputs&quot;, &quot;gis_ebola_cases_20141201.rds&quot;))</code></pre>
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+</div>
+<div id="section-string-detection" class="section level3">
+<h3>String detection</h3>
+<p>The R package {stringr} is part of the {tidyverse} and contains many
+different functions to handle words and character “strings”. If you ever
+want to split, unite, or search within a character value, you should
+look in the <a
+href="https://epirhandbook.com/en/characters-and-strings.html">Characters
+and strings chapter of the Epi R Handbook</a>.</p>
+<p>For example the function <code>str_detect()</code> returns
+<code>TRUE</code> or <code>FALSE</code> depending on whether particular
+characters are found within a specified value. The true arguments
+are:</p>
+<ol style="list-style-type: decimal">
+<li><code>string =</code> this is the column or text to search in<br />
+</li>
+<li><code>pattern =</code> this the character pattern to search for</li>
+</ol>
+<p>For example:</p>
+<ul>
+<li><code>str_detect(string = name, pattern = "Isha")</code> will return
+<code>TRUE</code> if the characters “Isha” are found in a particular row
+of the colunm <code>name</code><br />
+</li>
+<li><code>str_detect(string = occupation, pattern = "nurse")</code> will
+return <code>TRUE</code> if the characters “nurse” are found in a
+particular row of the colunm <code>occupation</code></li>
+</ul>
+<p>Be aware that this function is <em>case sensitive</em> by default.
+You can adjust this using the tip found <a
+href="https://epirhandbook.com/en/characters-and-strings.html#detect-a-pattern">here</a>
+in the Epi R Handbook.</p>
+<p><strong>Now, starting with the clean data frame <code>surv</code>,
+create a new data frame that contains only the cases reported from
+district whose names contains “West”.</strong> Then export this as
+“western_district_cases.csv” to the “outputs” folder.</p>
+<p><div class="panel-heading tutorial-quiz-title">Quiz - Western districts</div></p>
+<div class="panel panel-default">
+<div data-label="quiz-western-1" class="tutorial-question panel-body">
+<div id="quiz-western-1-answer_container" class="shiny-html-output"></div>
+<div id="quiz-western-1-message_container" class="shiny-html-output"></div>
+<div id="quiz-western-1-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div>
+<!--
+NOTE: Below is the solution (all within details tags collapsed)
+-->
+<details>
+<summary style="text-decoration: underline; color: red;">
+<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:red;overflow:visible;position:relative;"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg>Click
+to see a solution (try it yourself first!)
+</summary>
+<p></br></p>
+<pre class="r"><code># create data frame with only cases from the &quot;West&quot; districts
+western_district_cases &lt;- surv %&gt;% 
+  filter(str_detect(string = district, pattern = &quot;West&quot;))
+
+# export
+export(western_district_cases, here(&quot;outputs&quot;, &quot;western_district_cases.csv&quot;))</code></pre>
+</br>
+</details>
+<!--
+NOTE: End of solution
+-->
+
+<script type="application/shiny-prerendered" data-context="server-start">
+# load packages ----------------------------------------------------------------
+library(introexercises) # get data for exercises  
+library(learnr)         # create lessons from rmd
+library(gradethis)      # evaluate exercises
+library(dplyr)          # wrangle data  
+library(stringr)        # strings
+library(flair)          # highlight code
+library(ggplot2)        # visualise data     
+library(lubridate)      # work with dates  
+library(epikit)         # for emojis   
+library(skimr)          # browse data
+library(fontawesome)    # for emojis  
+library(janitor)        # clean data
+# library(RMariaDB)       # connect to sql database 
+
+## set options for exercises and checking ---------------------------------------
+
+## Define how exercises are evaluated 
+gradethis::gradethis_setup(
+  ## note: the below arguments are passed to learnr::tutorial_options
+  ## set the maximum execution time limit in seconds
+  exercise.timelimit = 60, 
+  ## set how exercises should be checked (defaults to NULL - individually defined)
+  # exercise.checker = gradethis::grade_learnr
+  ## set whether to pre-evaluate exercises (so users see answers)
+  exercise.eval = FALSE 
+)
+
+# ## event recorder ---------------------------------------------------------------
+# ## see for details: 
+# ## https://pkgs.rstudio.com/learnr/articles/publishing.html#events
+# ## https://github.com/dtkaplan/submitr/blob/master/R/make_a_recorder.R
+# 
+# ## connect to your sql database
+# sqldtbase <- dbConnect(RMariaDB::MariaDB(),
+#                        user     = Sys.getenv("userid"),
+#                        password = Sys.getenv("pwd"),
+#                        dbname   = 'excersize_log',
+#                        host     = "144.126.246.140")
+# 
+# 
+# ## define a function to collect data 
+# ## note that tutorial_id is defined in YAML
+#     ## you could set the tutorial_version too (by specifying version:) but use package version instead 
+# recorder_function <- function(tutorial_id, tutorial_version, user_id, event, data) {
+#     
+#   ## define a sql query 
+#   ## first bracket defines variable names
+#   ## values bracket defines what goes in each variable
+#   event_log <- paste("INSERT INTO responses (
+#                        tutorial_id, 
+#                        tutorial_version, 
+#                        date_time, 
+#                        user_id, 
+#                        event, 
+#                        section,
+#                        label, 
+#                        question, 
+#                        answer, 
+#                        code, 
+#                        correct)
+#                        VALUES('", tutorial_id,  "', 
+#                        '", tutorial_version, "', 
+#                        '", format(Sys.time(), "%Y-%M%-%D %H:%M:%S %Z"), "',
+#                        '", Sys.getenv("SHINYPROXY_PROXY_ID"), "',
+#                        '", event, "',
+#                        '", data$section, "',
+#                        '", data$label,  "',
+#                        '", paste0('"', data$question, '"'),  "',
+#                        '", paste0('"', data$answer,   '"'),  "',
+#                        '", paste0('"', data$code,     '"'),  "',
+#                        '", data$correct, "')",
+#                        sep = '')
+# 
+#     # Execute the query on the sqldtbase that we connected to above
+#     rsInsert <- dbSendQuery(sqldtbase, event_log)
+#   
+# }
+# 
+# options(tutorial.event_recorder = recorder_function)
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::register_http_handlers(session, metadata = list(id = "cleaning2"))
+</script>
+
+
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::prepare_tutorial_state(session)
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::i18n_observe_tutorial_language(input, session)
+</script>
+
+
+<script type="application/shiny-prerendered" data-context="server">
+session$onSessionEnded(function() {
+        learnr:::event_trigger(session, "session_stop")
+      })
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz-use-helper-1", 
+    question = structure("When should I view the red &#39;helper&#39; code?", html = TRUE, class = c("html", 
+    "character")), answers = list(structure(list(id = "lnr_ans_2e4e7e0", 
+        option = "After trying to write the code myself", value = "After trying to write the code myself", 
+        label = structure("After trying to write the code myself", html = TRUE, class = c("html", 
+        "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_9c69363", 
+        option = "Before I try coding", value = "Before I try coding", 
+        label = structure("Before I try coding", html = TRUE, class = c("html", 
+        "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+    "tutorial_quiz_answer"))), button_labels = list(submit = structure("<span data-i18n=\"button.questionsubmit\">Submit Answer<\u002fspan>", html = TRUE, class = c("html", 
+    "character")), try_again = structure("<span data-i18n=\"button.questiontryagain\">Try Again<\u002fspan>", html = TRUE, class = c("html", 
+    "character"))), messages = list(correct = structure("Reviewing best-practice code after trying to write yourself can help you improve", html = TRUE, class = c("html", 
+    "character")), try_again = structure("Please attempt the exercise yourself, or use the hint, before viewing the answer.", html = TRUE, class = c("html", 
+    "character")), incorrect = structure("Please attempt the exercise yourself, or use the hint, before viewing the answer.", html = TRUE, class = c("html", 
+    "character")), message = NULL, post_message = NULL), ids = list(
+        answer = "quiz-use-helper-1-answer", question = "quiz-use-helper-1"), 
+    loading = structure("<strong>Loading:<\u002fstrong> \nWhen should I view the red &#39;helper&#39; code?\n<br/><br/><br/>", html = TRUE, class = c("html", 
+    "character")), random_answer_order = FALSE, allow_retry = FALSE, 
+    seed = 603450048.218997, options = list()), class = c("learnr_radio", 
+"tutorial_question")), session = session)
+</script>
+
+
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_numeric", label = "quiz-anxious", 
+    question = structure("How anxious are you about beginning this tutorial - on a scale from 1 (least anxious) to 10 (most anxious)?", html = TRUE, class = c("html", 
+    "character")), answers = list(structure(list(id = "lnr_ans_496d151", 
+        option = "10", value = 10, label = structure("10", html = TRUE, class = c("html", 
+        "character")), correct = TRUE, message = structure("Try not to worry, we will help you succeed!", html = TRUE, class = c("html", 
+        "character")), type = "literal"), class = c("tutorial_question_answer", 
+    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_7046543", 
+        option = "9", value = 9, label = structure("9", html = TRUE, class = c("html", 
+        "character")), correct = TRUE, message = structure("Try not to worry, we will help you succeed!", html = TRUE, class = c("html", 
+        "character")), type = "literal"), class = c("tutorial_question_answer", 
+    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_475656a", 
+        option = "8", value = 8, label = structure("8", html = TRUE, class = c("html", 
+        "character")), correct = TRUE, message = structure("Try not to worry, we will help you succeed!", html = TRUE, class = c("html", 
+        "character")), type = "literal"), class = c("tutorial_question_answer", 
+    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_290f589", 
+        option = "7", value = 7, label = structure("7", html = TRUE, class = c("html", 
+        "character")), correct = TRUE, message = structure("Try not to worry, we will help you succeed!", html = TRUE, class = c("html", 
+        "character")), type = "literal"), class = c("tutorial_question_answer", 
+    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_dfeb64d", 
+        option = "6", value = 6, label = structure("6", html = TRUE, class = c("html", 
+        "character")), correct = TRUE, message = structure("Ok, we will get there together", html = TRUE, class = c("html", 
+        "character")), type = "literal"), class = c("tutorial_question_answer", 
+    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_c0c4b4d", 
+        option = "5", value = 5, label = structure("5", html = TRUE, class = c("html", 
+        "character")), correct = TRUE, message = structure("Ok, we will get there together", html = TRUE, class = c("html", 
+        "character")), type = "literal"), class = c("tutorial_question_answer", 
+    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_31b79ed", 
+        option = "4", value = 4, label = structure("4", html = TRUE, class = c("html", 
+        "character")), correct = TRUE, message = structure("I like your confidence!", html = TRUE, class = c("html", 
+        "character")), type = "literal"), class = c("tutorial_question_answer", 
+    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_fbe567f", 
+        option = "3", value = 3, label = structure("3", html = TRUE, class = c("html", 
+        "character")), correct = TRUE, message = structure("I like your confidence!", html = TRUE, class = c("html", 
+        "character")), type = "literal"), class = c("tutorial_question_answer", 
+    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_71b123c", 
+        option = "2", value = 2, label = structure("2", html = TRUE, class = c("html", 
+        "character")), correct = TRUE, message = structure("I like your confidence!", html = TRUE, class = c("html", 
+        "character")), type = "literal"), class = c("tutorial_question_answer", 
+    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_ce85998", 
+        option = "1", value = 1, label = structure("1", html = TRUE, class = c("html", 
+        "character")), correct = TRUE, message = structure("I like your confidence!", html = TRUE, class = c("html", 
+        "character")), type = "literal"), class = c("tutorial_question_answer", 
+    "tutorial_quiz_answer"))), button_labels = list(submit = structure("<span data-i18n=\"button.questionsubmit\">Submit Answer<\u002fspan>", html = TRUE, class = c("html", 
+    "character")), try_again = structure("<span data-i18n=\"button.questiontryagain\">Try Again<\u002fspan>", html = TRUE, class = c("html", 
+    "character"))), messages = list(correct = structure("Thanks for sharing. ", html = TRUE, class = c("html", 
+    "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", 
+    "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
+    "character")), message = NULL, post_message = NULL), ids = list(
+        answer = "quiz-anxious-answer", question = "quiz-anxious"), 
+    loading = structure("<strong>Loading:<\u002fstrong> \nHow anxious are you about beginning this tutorial - on a scale from 1 (least anxious) to 10 (most anxious)?\n<br/><br/><br/>", html = TRUE, class = c("html", 
+    "character")), random_answer_order = FALSE, allow_retry = TRUE, 
+    seed = 1497537166.30265, options = list(min = 1, max = 10, 
+        step = 1, tolerance = 1.5e-08)), class = c("learnr_numeric", 
+"tutorial_question")), session = session)
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_numeric", label = "quiz-moved-1", 
+    question = structure("How many cases have different districts of residence and of detection?", html = TRUE, class = c("html", 
+    "character")), answers = list(structure(list(id = "lnr_ans_108af4c", 
+        option = "21", value = 21, label = structure("21", html = TRUE, class = c("html", 
+        "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+    "tutorial_quiz_answer"))), button_labels = list(submit = structure("<span data-i18n=\"button.questionsubmit\">Submit Answer<\u002fspan>", html = TRUE, class = c("html", 
+    "character")), try_again = structure("<span data-i18n=\"button.questiontryagain\">Try Again<\u002fspan>", html = TRUE, class = c("html", 
+    "character"))), messages = list(correct = structure("Correct, nice work.", html = TRUE, class = c("html", 
+    "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", 
+    "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
+    "character")), message = NULL, post_message = NULL), ids = list(
+        answer = "quiz-moved-1-answer", question = "quiz-moved-1"), 
+    loading = structure("<strong>Loading:<\u002fstrong> \nHow many cases have different districts of residence and of detection?\n<br/><br/><br/>", html = TRUE, class = c("html", 
+    "character")), random_answer_order = FALSE, allow_retry = TRUE, 
+    seed = 1314517688.38788, options = list(min = 1, max = 700, 
+        step = 1, tolerance = 1.5e-08)), class = c("learnr_numeric", 
+"tutorial_question")), session = session)
+</script>
+
+
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_numeric", label = "quiz-moved-home-1", 
+    question = structure("Of cases with different residence and detection locations, how many had residence in &#39;Mountain Rural&#39; district?", html = TRUE, class = c("html", 
+    "character")), answers = list(structure(list(id = "lnr_ans_866c459", 
+        option = "4", value = 4, label = structure("4", html = TRUE, class = c("html", 
+        "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+    "tutorial_quiz_answer"))), button_labels = list(submit = structure("<span data-i18n=\"button.questionsubmit\">Submit Answer<\u002fspan>", html = TRUE, class = c("html", 
+    "character")), try_again = structure("<span data-i18n=\"button.questiontryagain\">Try Again<\u002fspan>", html = TRUE, class = c("html", 
+    "character"))), messages = list(correct = structure("Correct, nice work.", html = TRUE, class = c("html", 
+    "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", 
+    "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
+    "character")), message = NULL, post_message = NULL), ids = list(
+        answer = "quiz-moved-home-1-answer", question = "quiz-moved-home-1"), 
+    loading = structure("<strong>Loading:<\u002fstrong> \nOf cases with different residence and detection locations, how many had residence in &#39;Mountain Rural&#39; district?\n<br/><br/><br/>", html = TRUE, class = c("html", 
+    "character")), random_answer_order = FALSE, allow_retry = TRUE, 
+    seed = 1690872092.71263, options = list(min = 1, max = 700, 
+        step = 1, tolerance = 1.5e-08)), class = c("learnr_numeric", 
+"tutorial_question")), session = session)
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz-columns-order-1", 
+    question = structure("Where did the new columns appear, that you have created during this exercise?", html = TRUE, class = c("html", 
+    "character")), answers = list(structure(list(id = "lnr_ans_2ee552a", 
+        option = "On the left-most side of the data frame", value = "On the left-most side of the data frame", 
+        label = structure("On the left-most side of the data frame", html = TRUE, class = c("html", 
+        "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_2a23be5", 
+        option = "On the right-most side of the data frame", 
+        value = "On the right-most side of the data frame", label = structure("On the right-most side of the data frame", html = TRUE, class = c("html", 
+        "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_b69b0a", 
+        option = "In the middle of the data frame", value = "In the middle of the data frame", 
+        label = structure("In the middle of the data frame", html = TRUE, class = c("html", 
+        "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+    "tutorial_quiz_answer"))), button_labels = list(submit = structure("<span data-i18n=\"button.questionsubmit\">Submit Answer<\u002fspan>", html = TRUE, class = c("html", 
+    "character")), try_again = structure("<span data-i18n=\"button.questiontryagain\">Try Again<\u002fspan>", html = TRUE, class = c("html", 
+    "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", 
+    "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", 
+    "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
+    "character")), message = NULL, post_message = NULL), ids = list(
+        answer = "quiz-columns-order-1-answer", question = "quiz-columns-order-1"), 
+    loading = structure("<strong>Loading:<\u002fstrong> \nWhere did the new columns appear, that you have created during this exercise?\n<br/><br/><br/>", html = TRUE, class = c("html", 
+    "character")), random_answer_order = FALSE, allow_retry = TRUE, 
+    seed = 92050801.4571355, options = list()), class = c("learnr_radio", 
+"tutorial_question")), session = session)
+</script>
+
+
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz-western-1", 
+    question = structure("How many cases were there in western districts?", html = TRUE, class = c("html", 
+    "character")), answers = list(structure(list(id = "lnr_ans_81c1295", 
+        option = "170", value = "170", label = structure("170", html = TRUE, class = c("html", 
+        "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_b0ffdfa", 
+        option = "258", value = "258", label = structure("258", html = TRUE, class = c("html", 
+        "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_9aac8dd", 
+        option = "418", value = "418", label = structure("418", html = TRUE, class = c("html", 
+        "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+    "tutorial_quiz_answer"))), button_labels = list(submit = structure("<span data-i18n=\"button.questionsubmit\">Submit Answer<\u002fspan>", html = TRUE, class = c("html", 
+    "character")), try_again = structure("<span data-i18n=\"button.questiontryagain\">Try Again<\u002fspan>", html = TRUE, class = c("html", 
+    "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", 
+    "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", 
+    "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
+    "character")), message = NULL, post_message = NULL), ids = list(
+        answer = "quiz-western-1-answer", question = "quiz-western-1"), 
+    loading = structure("<strong>Loading:<\u002fstrong> \nHow many cases were there in western districts?\n<br/><br/><br/>", html = TRUE, class = c("html", 
+    "character")), random_answer_order = FALSE, allow_retry = TRUE, 
+    seed = 621245453.71071, options = list()), class = c("learnr_radio", 
+"tutorial_question")), session = session)
+</script>
+ <!--html_preserve-->
+<script type="application/shiny-prerendered" data-context="dependencies">
+{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["header-attrs"]},{"type":"character","attributes":{},"value":["2.13"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["rmd/h/pandoc"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["header-attrs.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["rmarkdown"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["2.13"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["jquery"]},{"type":"character","attributes":{},"value":["3.6.0"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/3.6.0"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["jquery-3.6.0.min.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["jquerylib"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.1.4"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["bootstrap"]},{"type":"character","attributes":{},"value":["3.3.5"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["rmd/h/bootstrap"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["viewport"]}},"value":[{"type":"character","attributes":{},"value":["width=device-width, initial-scale=1"]}]},{"type":"character","attributes":{},"value":["js/bootstrap.min.js","shim/html5shiv.min.js","shim/respond.min.js"]},{"type":"character","attributes":{},"value":["css/paper.min.css"]},{"type":"character","attributes":{},"value":["<style>h1 {font-size: 34px;}\n       h1.title {font-size: 38px;}\n       h2 {font-size: 30px;}\n       h3 {font-size: 24px;}\n       h4 {font-size: 18px;}\n       h5 {font-size: 16px;}\n       h6 {font-size: 12px;}\n       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}\n       pre:not([class]) { background-color: white }<\/style>"]},{"type":"NULL"},{"type":"character","attributes":{},"value":["rmarkdown"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["2.13"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["pagedtable"]},{"type":"character","attributes":{},"value":["1.1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["rmd/h/pagedtable-1.1"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["js/pagedtable.js"]},{"type":"character","attributes":{},"value":["css/pagedtable.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["rmarkdown"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["2.13"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["highlightjs"]},{"type":"character","attributes":{},"value":["9.12.0"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["rmd/h/highlightjs"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["highlight.js"]},{"type":"character","attributes":{},"value":["textmate.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["rmarkdown"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["2.13"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["tutorial"]},{"type":"character","attributes":{},"value":["0.10.1.9020"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/tutorial"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["tutorial.js"]},{"type":"character","attributes":{},"value":["tutorial.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.10.1.9020"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["i18n"]},{"type":"character","attributes":{},"value":["1.2.0"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/i18n"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["i18next.min.js","tutorial-i18n-init.js"]},{"type":"NULL"},{"type":"character","attributes":{},"value":["<script id=\"i18n-cstm-trns\" type=\"application/json\">{\"language\":\"en\",\"resources\":{\"en\":{\"translation\":{\"button\":{\"runcode\":\"Run Code\",\"runcodetitle\":\"$t(button.runcode) ({{kbd}})\",\"hint\":\"Hint\",\"hint_plural\":\"Hints\",\"hinttitle\":\"$t(button.hint)\",\"hintnext\":\"Next Hint\",\"hintprev\":\"Previous Hint\",\"solution\":\"Solution\",\"solutiontitle\":\"$t(button.solution)\",\"copyclipboard\":\"Copy to Clipboard\",\"startover\":\"Start Over\",\"startovertitle\":\"$t(button.startover)\",\"continue\":\"Continue\",\"submitanswer\":\"Submit Answer\",\"submitanswertitle\":\"$t(button.submitanswer)\",\"previoustopic\":\"Previous Topic\",\"nexttopic\":\"Next Topic\",\"questionsubmit\":\"$t(button.submitanswer)\",\"questiontryagain\":\"Try Again\"},\"text\":{\"startover\":\"Start Over\",\"areyousure\":\"Are you sure you want to start over? (all exercise progress will be reset)\",\"youmustcomplete\":\"You must complete the\",\"exercise\":\"exercise\",\"exercise_plural\":\"exercises\",\"inthissection\":\"in this section before continuing.\",\"code\":\"Code\",\"enginecap\":\"{{engine}} $t(text.code)\",\"quiz\":\"Quiz\",\"blank\":\"blank\",\"blank_plural\":\"blanks\",\"exercisecontainsblank\":\"This exercise contains {{count}} $t(text.blank).\",\"pleasereplaceblank\":\"Please replace {{blank}} with valid code.\",\"unparsable\":\"It looks like this might not be valid R code. R cannot determine how to turn your text into a complete command. You may have forgotten to fill in a blank, to remove an underscore, to include a comma between arguments, or to close an opening <code>&quot;<\\/code>, <code>'<\\/code>, <code>(<\\/code> or <code>{<\\/code> with a matching <code>&quot;<\\/code>, <code>'<\\/code>, <code>)<\\/code> or <code>}<\\/code>.\\n\",\"unparsablequotes\":\"<p>It looks like your R code contains specially formatted quotation marks or &quot;curly&quot; quotes (<code>{{character}}<\\/code>) around character strings, making your code invalid. R requires character values to be contained in straight quotation marks (<code>&quot;<\\/code> or <code>'<\\/code>).<\\/p> {{code}} <p>Don't worry, this is a common source of errors when you copy code from another app that applies its own formatting to text. You can try replacing the code on that line with the following. There may be other places that need to be fixed, too.<\\/p> {{suggestion}}\\n\",\"unparsableunicode\":\"<p>It looks like your R code contains an unexpected special character (<code>{{character}}<\\/code>) that makes your code invalid.<\\/p> {{code}} <p>Sometimes your code may contain a special character that looks like a regular character, especially if you copy and paste the code from another app. Try deleting the special character from your code and retyping it manually.<\\/p>\\n\",\"unparsableunicodesuggestion\":\"<p>It looks like your R code contains an unexpected special character (<code>{{character}}<\\/code>) that makes your code invalid.<\\/p> {{code}} <p>Sometimes your code may contain a special character that looks like a regular character, especially if you copy and paste the code from another app. You can try replacing the code on that line with the following. There may be other places that need to be fixed, too.<\\/p> {{suggestion}}\\n\",\"and\":\"and\",\"or\":\"or\",\"listcomma\":\", \",\"oxfordcomma\":\",\"}}},\"fr\":{\"translation\":{\"button\":{\"runcode\":\"Lancer le Code\",\"runcodetitle\":\"$t(button.runcode) ({{kbd}})\",\"hint\":\"Indication\",\"hint_plural\":\"Indications\",\"hinttitle\":\"$t(button.hint)\",\"hintnext\":\"Indication Suivante\",\"hintprev\":\"Indication Précédente\",\"solution\":\"Solution\",\"solutiontitle\":\"$t(button.solution)\",\"copyclipboard\":\"Copier dans le Presse-papier\",\"startover\":\"Recommencer\",\"startovertitle\":\"$t(button.startover)\",\"continue\":\"Continuer\",\"submitanswer\":\"Soumettre\",\"submitanswertitle\":\"$t(button.submitanswer)\",\"previoustopic\":\"Chapitre Précédent\",\"nexttopic\":\"Chapitre Suivant\",\"questionsubmit\":\"$t(button.submitanswer)\",\"questiontryagain\":\"Réessayer\"},\"text\":{\"startover\":\"Recommencer\",\"areyousure\":\"Êtes-vous certains de vouloir recommencer? (La progression sera remise à zéro)\",\"youmustcomplete\":\"Vous devez d'abord compléter\",\"exercise\":\"l'exercice\",\"exercise_plural\":\"des exercices\",\"inthissection\":\"de cette section avec de continuer.\",\"code\":\"Code\",\"enginecap\":\"$t(text.code) {{engine}}\",\"quiz\":\"Quiz\",\"and\":\"et\",\"or\":\"ou\",\"oxfordcomma\":\"\"}}},\"es\":{\"translation\":{\"button\":{\"runcode\":\"Ejecutar código\",\"runcodetitle\":\"$t(button.runcode) ({{kbd}})\",\"hint\":\"Pista\",\"hint_plural\":\"Pistas\",\"hinttitle\":\"$t(button.hint)\",\"hintnext\":\"Siguiente pista\",\"hintprev\":\"Pista anterior\",\"solution\":\"Solución\",\"solutiontitle\":\"$t(button.solution)\",\"copyclipboard\":\"Copiar al portapapeles\",\"startover\":\"Reiniciar\",\"startovertitle\":\"$t(button.startover)\",\"continue\":\"Continuar\",\"submitanswer\":\"Enviar respuesta\",\"submitanswertitle\":\"$t(button.submitanswer)\",\"previoustopic\":\"Tema anterior\",\"nexttopic\":\"Tema siguiente\",\"questionsubmit\":\"$t(button.submitanswer)\",\"questiontryagain\":\"Volver a intentar\"},\"text\":{\"startover\":\"Reiniciar\",\"areyousure\":\"¿De verdad quieres empezar de nuevo? (todo el progreso del ejercicio se perderá)\",\"youmustcomplete\":\"Debes completar\",\"exercise\":\"el ejercicio\",\"exercise_plural\":\"los ejercicios\",\"inthissection\":\"en esta sección antes de continuar.\",\"code\":\"Código\",\"enginecap\":\"$t(text.code) {{engine}}\",\"quiz\":\"Cuestionario\",\"and\":\"y\",\"or\":\"o\",\"oxfordcomma\":\"\"}}},\"pt\":{\"translation\":{\"button\":{\"runcode\":\"Executar código\",\"runcodetitle\":\"$t(button.runcode) ({{kbd}})\",\"hint\":\"Dica\",\"hint_plural\":\"Dicas\",\"hinttitle\":\"$t(button.hint)\",\"hintnext\":\"Próxima dica\",\"hintprev\":\"Dica anterior\",\"solution\":\"Solução\",\"solutiontitle\":\"$t(button.solution)\",\"copyclipboard\":\"Copiar para a área de transferência\",\"startover\":\"Reiniciar\",\"startovertitle\":\"$t(button.startover)\",\"continue\":\"Continuar\",\"submitanswer\":\"Enviar resposta\",\"submitanswertitle\":\"$t(button.submitanswer)\",\"previoustopic\":\"Tópico anterior\",\"nexttopic\":\"Próximo tópico\",\"questionsubmit\":\"$t(button.submitanswer)\",\"questiontryagain\":\"Tentar novamente\"},\"text\":{\"startover\":\"Reiniciar\",\"areyousure\":\"Tem certeza que deseja começar novamente? (todo o progresso feito será perdido)\",\"youmustcomplete\":\"Você deve completar\",\"exercise\":\"o exercício\",\"exercise_plural\":\"os exercícios\",\"inthissection\":\"nesta seção antes de continuar.\",\"code\":\"Código\",\"enginecap\":\"$t(text.code) {{engine}}\",\"quiz\":\"Quiz\",\"and\":\"e\",\"or\":\"ou\",\"oxfordcomma\":\"\"}}},\"tr\":{\"translation\":{\"button\":{\"runcode\":\"Çalistirma Kodu\",\"runcodetitle\":\"$t(button.runcode) ({{kbd}})\",\"hint\":\"Ipucu\",\"hint_plural\":\"Ipuçlari\",\"hinttitle\":\"$t(button.hint)\",\"hintnext\":\"Sonraki Ipucu\",\"hintprev\":\"Önceki Ipucu\",\"solution\":\"Çözüm\",\"solutiontitle\":\"$t(button.solution)\",\"copyclipboard\":\"Pano'ya Kopyala\",\"startover\":\"Bastan Baslamak\",\"startovertitle\":\"$t(button.startover)\",\"continue\":\"Devam et\",\"submitanswer\":\"Cevabi onayla\",\"submitanswertitle\":\"$t(button.submitanswer)\",\"previoustopic\":\"Önceki Konu\",\"nexttopic\":\"Sonraki Konu\",\"questionsubmit\":\"$t(button.submitanswer)\",\"questiontryagain\":\"Tekrar Deneyin\"},\"text\":{\"startover\":\"Bastan Baslamak\",\"areyousure\":\"Bastan baslamak istediginizden emin misiniz? (tüm egzersiz ilerlemesi kaybolacak)\",\"youmustcomplete\":\"Tamamlamalisin\",\"exercise\":\"egzersiz\",\"exercise_plural\":\"egzersizler\",\"inthissection\":\"devam etmeden önce bu bölümde\",\"code\":\"Kod\",\"enginecap\":\"$t(text.code) {{engine}}\",\"quiz\":\"Sinav\",\"oxfordcomma\":\"\"}}},\"emo\":{\"translation\":{\"button\":{\"runcode\":\"<U+0001F3C3>\",\"runcodetitle\":\"$t(button.runcode) ({{kbd}})\",\"hint\":\"<U+0001F4A1>\",\"hint_plural\":\"$t(button.hint)\",\"hinttitle\":\"$t(button.hint)\",\"solution\":\"<U+0001F3AF>\",\"solutiontitle\":\"$t(button.solution)\",\"copyclipboard\":\"<U+0001F4CB>\",\"startover\":\"<U+23EE>\",\"startovertitle\":\"Start Over\",\"continue\":\"<U+2705>\",\"submitanswer\":\"<U+0001F197>\",\"submitanswertitle\":\"Submit Answer\",\"previoustopic\":\"<U+2B05>\",\"nexttopic\":\"<U+27A1>\",\"questionsubmit\":\"$t(button.submitanswer)\",\"questiontryagain\":\"<U+0001F501>\"},\"text\":{\"startover\":\"<U+23EE>\",\"areyousure\":\"<U+0001F914>\",\"youmustcomplete\":\"<U+26A0><U+FE0F> <U+0001F449> <U+0001F9D1><U+200D><U+0001F4BB>\",\"exercise\":\"\",\"exercise_plural\":\"\",\"inthissection\":\"\",\"code\":\"<U+0001F4BB>\",\"enginecap\":\"$t(text.code) {{engine}}\",\"oxfordcomma\":\"\"}}},\"eu\":{\"translation\":{\"button\":{\"runcode\":\"Kodea egikaritu\",\"runcodetitle\":\"$t(button.runcode) ({{kbd}})\",\"hint\":\"Laguntza\",\"hint_plural\":\"Laguntza\",\"hinttitle\":\"$t(button.hint)\",\"hintnext\":\"Aurreko laguntza\",\"hintprev\":\"Hurrengo laguntza\",\"solution\":\"Ebazpena\",\"solutiontitle\":\"$t(button.solution)\",\"copyclipboard\":\"Arbelean kopiatu\",\"startover\":\"Berrabiarazi\",\"startovertitle\":\"$t(button.startover)\",\"continue\":\"Jarraitu\",\"submitanswer\":\"Erantzuna bidali\",\"submitanswertitle\":\"$t(button.submitanswer)\",\"previoustopic\":\"Aurreko atala\",\"nexttopic\":\"Hurrengo atala\",\"questionsubmit\":\"$t(button.submitanswer)\",\"questiontryagain\":\"Berriro saiatu\"},\"text\":{\"startover\":\"Berrabiarazi\",\"areyousure\":\"Berriro hasi nahi duzu? (egindako lana galdu egingo da)\",\"youmustcomplete\":\"Aurrera egin baino lehen atal honetako\",\"exercise\":\"ariketa egin behar duzu.\",\"exercise_plural\":\"ariketak egin behar dituzu.\",\"inthissection\":\"\",\"code\":\"Kodea\",\"enginecap\":\"$t(text.code) {{engine}}\",\"quiz\":\"Galdetegia\",\"oxfordcomma\":\"\"}}},\"de\":{\"translation\":{\"button\":{\"runcode\":\"Code ausführen\",\"runcodetitle\":\"$t(button.runcode) ({{kbd}})\",\"hint\":\"Tipp\",\"hint_plural\":\"Tipps\",\"hinttitle\":\"$t(button.hint)\",\"hintnext\":\"Nächster Tipp\",\"hintprev\":\"Vorheriger Tipp\",\"solution\":\"Lösung\",\"solutiontitle\":\"$t(button.solution)\",\"copyclipboard\":\"In die Zwischenablage kopieren\",\"startover\":\"Neustart\",\"startovertitle\":\"$t(button.startover)\",\"continue\":\"Weiter\",\"submitanswer\":\"Antwort einreichen\",\"submitanswertitle\":\"$t(button.submitanswer)\",\"previoustopic\":\"Vorheriges Kapitel\",\"nexttopic\":\"Nächstes Kapitel\",\"questionsubmit\":\"$t(button.submitanswer)\",\"questiontryagain\":\"Nochmal versuchen\"},\"text\":{\"startover\":\"Neustart\",\"areyousure\":\"Bist du sicher, dass du neustarten willst? (der gesamte Lernfortschritt wird gelöscht)\",\"youmustcomplete\":\"Vervollstädinge\",\"exercise\":\"die Übung\",\"exercise_plural\":\"die Übungen\",\"inthissection\":\"in diesem Kapitel, bevor du fortfährst.\",\"code\":\"Code\",\"enginecap\":\"$t(text.code) {{engine}}\",\"quiz\":\"Quiz\",\"blank\":\"Lücke\",\"blank_plural\":\"Lücken\",\"pleasereplaceblank\":\"Bitte ersetze {{blank}} mit gültigem Code.\",\"unparsable\":\"Dies scheint kein gültiger R Code zu sein. R kann deinen Text nicht in einen gültigen Befehl übersetzen. Du hast vielleicht vergessen, die Lücke zu füllen, einen Unterstrich zu entfernen, ein Komma zwischen Argumente zu setzen oder ein eröffnendes <code>&quot;<\\/code>, <code>'<\\/code>, <code>(<\\/code> oder <code>{<\\/code> mit einem zugehörigen <code>&quot;<\\/code>, <code>'<\\/code>, <code>)<\\/code> oder <code>}<\\/code> zu schließen.\\n\",\"and\":\"und\",\"or\":\"oder\",\"listcomma\":\", \",\"oxfordcomma\":\",\"}}},\"ko\":{\"translation\":{\"button\":{\"runcode\":\"<U+CF54><U+B4DC> <U+C2E4><U+D589>\",\"runcodetitle\":\"$t(button.runcode) ({{kbd}})\",\"hint\":\"<U+D78C><U+D2B8>\",\"hint_plural\":\"<U+D78C><U+D2B8><U+B4E4>\",\"hinttitle\":\"$t(button.hint)\",\"hintnext\":\"<U+B2E4><U+C74C> <U+D78C><U+D2B8>\",\"hintprev\":\"<U+C774><U+C804> <U+D78C><U+D2B8>\",\"solution\":\"<U+C194><U+B8E8><U+C158>\",\"solutiontitle\":\"$t(button.solution)\",\"copyclipboard\":\"<U+D074><U+B9BD><U+BCF4><U+B4DC><U+C5D0> <U+BCF5><U+C0AC>\",\"startover\":\"<U+C7AC><U+D559><U+C2B5>\",\"startovertitle\":\"$t(button.startover)\",\"continue\":\"<U+B2E4><U+C74C> <U+D559><U+C2B5><U+C73C><U+B85C>\",\"submitanswer\":\"<U+C815><U+B2F5> <U+C81C><U+CD9C>\",\"submitanswertitle\":\"$t(button.submitanswer)\",\"previoustopic\":\"<U+C774><U+C804> <U+D1A0><U+D53D>\",\"nexttopic\":\"<U+B2E4><U+C74C> <U+D1A0><U+D53D>\",\"questionsubmit\":\"$t(button.submitanswer)\",\"questiontryagain\":\"<U+C7AC><U+C2DC><U+B3C4>\"},\"text\":{\"startover\":\"<U+C7AC><U+D559><U+C2B5>\",\"areyousure\":\"<U+B2E4><U+C2DC> <U+C2DC><U+C791> <U+D558><U+C2DC><U+ACA0><U+C2B5><U+B2C8><U+AE4C>? (<U+BAA8><U+B4E0> <U+C608><U+C81C><U+C758> <U+C9C4><U+D589> <U+C815><U+BCF4><U+AC00> <U+C7AC><U+C124><U+C815><U+B429><U+B2C8><U+B2E4>)\",\"youmustcomplete\":\"<U+B2F9><U+C2E0><U+C740> <U+C644><U+B8CC><U+D574><U+C57C> <U+D569><U+B2C8><U+B2E4>\",\"exercise\":\"<U+C5F0><U+C2B5><U+BB38><U+C81C>\",\"exercise_plural\":\"<U+C5F0><U+C2B5><U+BB38><U+C81C><U+B4E4>\",\"inthissection\":\"<U+C774> <U+C139><U+C158><U+C744> <U+C2E4><U+D589><U+D558><U+AE30> <U+C804><U+C5D0>\",\"code\":\"<U+CF54><U+B4DC>\",\"enginecap\":\"$t(text.code) {{engine}}\",\"quiz\":\"<U+D034><U+C988>\",\"blank\":\"<U+ACF5><U+BC31>\",\"blank_plural\":\"<U+ACF5><U+BC31><U+B4E4>\",\"exercisecontainsblank\":\"<U+C774> <U+C5F0><U+C2B5><U+BB38><U+C81C><U+C5D0><U+B294> {{count}}<U+AC1C><U+C758> $t(text.blank)<U+C774> <U+D3EC><U+D568><U+B418><U+C5B4> <U+C788><U+C2B5><U+B2C8><U+B2E4>.\",\"pleasereplaceblank\":\"{{blank}}<U+B97C> <U+C720><U+D6A8><U+D55C> <U+CF54><U+B4DC><U+B85C> <U+BC14><U+AFB8><U+C2ED><U+C2DC><U+C624>.\",\"unparsable\":\"<U+C774><U+AC83><U+C740> <U+C720><U+D6A8><U+D55C> R <U+CF54><U+B4DC><U+AC00> <U+C544><U+B2D0> <U+C218> <U+C788><U+C2B5><U+B2C8><U+B2E4>. R<U+C740> <U+D14D><U+C2A4><U+D2B8><U+B97C> <U+C644><U+C804><U+D55C> <U+BA85><U+B839><U+C73C><U+B85C> <U+BCC0><U+D658><U+D558><U+B294> <U+BC29><U+BC95><U+C744> <U+ACB0><U+C815><U+D560> <U+C218> <U+C5C6><U+C2B5><U+B2C8><U+B2E4>. <U+B2F9><U+C2E0><U+C740> <U+ACF5><U+BC31><U+C774><U+B098> <U+BC11><U+C904><U+C744> <U+B300><U+CCB4><U+D558><U+C5EC> <U+CC44><U+C6B0><U+AE30>, <U+C778><U+C218><U+B97C> <U+CEF4><U+B9C8><U+B85C> <U+AD6C><U+BD84><U+D558><U+AE30>, <U+B610><U+B294> <code>&quot;<\\/code>, <code>'<\\/code>, <code>(<\\/code> , <code>{<\\/code><U+B85C> <U+C2DC><U+C791><U+D558><U+B294> <U+AD6C><U+BB38><U+C744> <U+B2EB><U+B294> <code>&quot;<\\/code>, <code>'<\\/code>, <code>)<\\/code>, <code>}<\\/code><U+C744> <U+C78A><U+C5C8><U+C744> <U+C218><U+B3C4> <U+C788><U+C2B5><U+B2C8><U+B2E4>.\\n\",\"and\":\"<U+ADF8><U+B9AC><U+ACE0>\",\"or\":\"<U+D639><U+C740>\",\"listcomma\":\", \",\"oxfordcomma\":\"\"}}}}}<\/script>"]},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.10.1.9020"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["tutorial-format"]},{"type":"character","attributes":{},"value":["0.10.1.9020"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["rmarkdown/templates/tutorial/resources"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["tutorial-format.js"]},{"type":"character","attributes":{},"value":["tutorial-format.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.10.1.9020"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["jquery"]},{"type":"character","attributes":{},"value":["3.6.0"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/3.6.0"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["jquery-3.6.0.min.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["jquerylib"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.1.4"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["navigation"]},{"type":"character","attributes":{},"value":["1.1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["rmd/h/navigation-1.1"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["tabsets.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["rmarkdown"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["2.13"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["highlightjs"]},{"type":"character","attributes":{},"value":["9.12.0"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["rmd/h/highlightjs"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["highlight.js"]},{"type":"character","attributes":{},"value":["default.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["rmarkdown"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["2.13"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["jquery"]},{"type":"character","attributes":{},"value":["3.6.0"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/3.6.0"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["jquery-3.6.0.min.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["jquerylib"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.1.4"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["font-awesome"]},{"type":"character","attributes":{},"value":["5.1.0"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["rmd/h/fontawesome"]}]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["css/all.css","css/v4-shims.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["rmarkdown"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["2.13"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["bootbox"]},{"type":"character","attributes":{},"value":["4.4.0"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/bootbox"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["bootbox.min.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.10.1.9020"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["idb-keyvalue"]},{"type":"character","attributes":{},"value":["3.2.0"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/idb-keyval"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["idb-keyval-iife-compat.min.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[false]},{"type":"character","attributes":{},"value":["0.10.1.9020"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["tutorial"]},{"type":"character","attributes":{},"value":["0.10.1.9020"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/tutorial"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["tutorial.js"]},{"type":"character","attributes":{},"value":["tutorial.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.10.1.9020"]}]}]}
+</script>
+<!--/html_preserve-->
+<!--html_preserve-->
+<script type="application/shiny-prerendered" data-context="execution_dependencies">
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87]}},"value":[{"type":"character","attributes":{},"value":["assertthat","backports","base","base64enc","bslib","cellranger","checkmate","cli","colorspace","compiler","crayon","curl","data.table","datasets","DBI","digest","dplyr","ellipsis","epikit","evaluate","fansi","fastmap","flair","fontawesome","forcats","foreign","generics","ggplot2","glue","gradethis","graphics","grDevices","grid","gtable","haven","highr","hms","htmltools","htmlwidgets","httpuv","introexercises","janitor","jquerylib","jsonlite","knitr","later","learnr","lifecycle","lubridate","magrittr","markdown","methods","mime","munsell","openxlsx","pillar","pkgconfig","promises","purrr","R6","Rcpp","readxl","repr","rio","rlang","rmarkdown","rprojroot","rstudioapi","sass","scales","shiny","skimr","snakecase","stats","stringi","stringr","tibble","tidyselect","tools","utf8","utils","vctrs","withr","xfun","xtable","yaml","zip"]},{"type":"character","attributes":{},"value":["0.2.1","1.4.1","4.1.3","0.1-3","0.3.1","1.1.0","2.0.0","3.2.0","2.0-3","4.1.3","1.5.1","4.3.2","1.14.2","4.1.3","1.1.2","0.6.29","1.0.8","0.3.2","0.1.2","0.15","1.0.3","1.1.0","0.0.2","0.2.2","0.5.1","0.8-82","0.1.2","3.3.5","1.6.2","0.2.7.9000","4.1.3","4.1.3","4.1.3","0.3.0","2.4.3","0.9","1.1.1","0.5.2","1.5.4","1.6.5","0.1.0","2.1.0","0.1.4","1.8.0","1.38","1.3.0","0.10.1.9020","1.0.1","1.8.0","2.0.3","1.1","4.1.3","0.12","0.5.0","4.2.5","1.7.0","2.0.3","1.2.0.1","0.3.4","2.5.1","1.0.8.3","1.4.0","1.1.4","0.5.29","1.0.2","2.13","2.0.3","0.13","0.4.1","1.2.0","1.7.1","2.1.4","0.11.0","4.1.3","1.7.6","1.4.0","3.1.6","1.1.2","4.1.3","1.2.2","4.1.3","0.4.1","2.5.0","0.30","1.8-4","2.3.5","2.2.0"]}]}]}
+</script>
+<!--/html_preserve-->
+</div>
+</div>
+
+</div> <!-- topics -->
+
+<div class="topicsContainer">
+<div class="topicsPositioner">
+<div class="band">
+<div class="bandContent topicsListContainer">
+
+<!-- begin doc-metadata -->
+<div id="doc-metadata">
+<h2 class="title toc-ignore" style="display:none;">Applied Epi - More
+data cleaning</h2>
+</div>
+<!-- end doc-metadata -->
+
+</div> <!-- bandContent.topicsListContainer -->
+</div> <!-- band -->
+</div> <!-- topicsPositioner -->
+</div> <!-- topicsContainer -->
+
+
+</div> <!-- bandContent page -->
+</div> <!-- pageContent band -->
+
+
+
+<!-- Build Tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("section-TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<script>
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+
+</body>
+
+</html>

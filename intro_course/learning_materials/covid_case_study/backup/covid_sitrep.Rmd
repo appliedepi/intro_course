@@ -1,15 +1,14 @@
 ---
 title: "Covid-19 outbreak situation report"
 author: "Case study exercise for Applied Epi R course"
-date: "30 June 2021"
+date: "21 June 2021"
 output:
   word_document: default
   html_document: default
 params:
-  surveillance_date: '2021-06-30'
-  select_date:
-    label: "Date of report:"
-    value: "`r Sys.Date()`"
+  data_date:
+    label: "Date of data:"
+    value: "2021-06-21"
     input: date
 ---
 
@@ -78,26 +77,6 @@ pacman::p_load(
 
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/// define_reporting_periods \\\
---------------------------------------------------------------------------------
-Here we use the date you want to report on, defined in parameters (params) at
-top of script to create a date object for filtering datasets, plots/tables, etc. 
-
-We also create a week object to make grouping data easier. In this scenario we 
-have defined the week to start on Mondays (day 1 of the week) 
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-```{r define_reporting_periods}
-
-# create a date object from the parameter
-# Minus 7 days surveillance date to account for lag in reporting lab results
-surveillance_date <- ymd(params$surveillance_date) - 7
-
-```
-
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 /// import \\\
 --------------------------------------------------------------------------------
 
@@ -116,9 +95,9 @@ https://epirhandbook.com/import-and-export.html
 
 ```{r import}
 # import the raw case data set and city populations
-linelist_raw <- import(here("learning_materials", "covid_case_study", "covid_example_data.xlsx"))
+linelist_raw <- import(here("intro_course", "learning_materials", "covid_case_study", "covid_example_data.xlsx"))
 
-city_pops <- import(here("learning_materials", "covid_case_study", "city_pops.xlsx"))
+city_pops <- import(here("intro_course", "learning_materials", "covid_case_study", "city_pops.xlsx"))
 
 ```
 
@@ -208,30 +187,7 @@ linelist <- linelist_raw %>%
     date_positive       = pos_sampledt,
     lat                 = latitude_jitt,
     lon                 = longitude_jitt
-    )
-
-```
-
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/// clean_dates \\\
---------------------------------------------------------------------------------
-
-Here we are going to clean the date variables 
-
-In the class we have taught using the {lubridate} functions ymd(), mdy(), and dmy(), which also should correspond to the format in the raw data.
-
-The {base} way to convert columns to Date class is with as.Date(). If the
-current format is YYYY-MM-DD or YYYY/MM/DD then no other arguments are needed. 
-If the format is different, specify it to the argument format= (for more detail see: 
-https://epirhandbook.com/working-with-dates.html#convert-to-date )
-
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-```{r clean_dates}
-
-linelist <- linelist %>% 
+    ) %>%  
   
   # convert all date columns to date type 
   mutate(
@@ -239,71 +195,45 @@ linelist <- linelist %>%
     date_onset =        ymd(date_onset),
     date_hospitalized = ymd(date_hospitalized)) %>% 
   
-  # remove cases reported after the surveillance_date (for this report)
-  filter(date_report <= surveillance_date)  
+  # remove cases reported after the data_date (for this report)
+  filter(date_report <= ymd(params$data_date)) %>% 
   
-  # remove onset, hospitalisation, and death dates prior to 2020
-  # mutate(
-  #   date_onset        = replace(date_onset, date_onset < ymd("2020-01-01"), NA),
-  #   date_hospitalized = replace(date_hospitalized, date_hospitalized < ymd("2020-01-01"), NA)
-  #   ) %>%
-     
-  # create an "epiweek" column from the report date 
-  # floor_date() rounds down to the closest week
-  # mutate(epiweek = floor_date(date_report,
-  #                         # round by weeks
-  #                         unit = "week", 
-  #                         # define week to start on Sunday
-  #                         week_start = 7))
-  #
+  # filter to confirmed cases only
+  filter(confirmed_case == "Yes") %>% 
 
-```
-
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/// clean_categories \\\
---------------------------------------------------------------------------------
-
-create age groups based on the age variable using 
-the age_categories() function from {epikit}. It is also possible to create 
-age groups using the {dplyr} case_when() function - but is more involved. 
-
-For more details see: 
-https://epirhandbook.com/cleaning-data-and-core-functions.html#column-creation-and-transformation
-https://epirhandbook.com/cleaning-data-and-core-functions.html#re-code-values
-https://epirhandbook.com/characters-and-strings.html?q=regex#regular-expressions-regex
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-```{r clean_categories}
-
-linelist <- linelist %>% 
-     
-     # create age group variable
-     mutate(
+  # create age group variable
+  mutate(
        age_group = age_categories(age,
         # define break points
         lower = 0,
         upper = 70,
         by    = 10)) %>% 
 
-     # convert "Unknown" to NA in the column gender
-     mutate(gender = na_if(gender, "Unknown")) %>% 
+  # convert "Unknown" to NA in the column gender
+  mutate(gender = na_if(gender, "Unknown")) %>% 
 
-     # convert the race values to title case 
-     mutate(race = str_to_title(race)) %>% 
-     
-     # filter to confirmed cases only
-     filter(confirmed_case == "Yes")
+  # (optional) convert the race values to title case 
+  mutate(race = str_to_title(race)) 
 ```
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/// Summary bullets \\\
+--------------------------------------------------------------------------------
+
+Embed dynamic r code into the bullet text as below.
+Use format() to specify how dates should be displayed
+Use fmt_count() from {epikit} to quickly format a count and proportion
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 
 
 # Summary 
 
-- As of `r format(surveillance_date, format = "%B %d %Y")`, Fulton County has 
+- As of `r format(ymd(params$data_date), format = "%B %d %Y")`, Fulton County has 
 recorded `r nrow(linelist)` confirmed cases of COVID-19.  
 
-- As of `r format(surveillance_date, format = "%B %d %Y")`, Fulton County has 
+- As of `r format(ymd(params$data_date), format = "%B %d %Y")`, Fulton County has 
 recorded `r fmt_count(linelist, died == "Yes")` deaths.  
 
 - Among all confirmed cases of COVID-19 in Fulton County, `r fmt_count(linelist, hospitalized == "Yes")`
@@ -311,6 +241,9 @@ required hospitalization.
 
 
 \pagebreak 
+
+
+
 
 # Demographics
 
@@ -327,19 +260,13 @@ https://epirhandbook.com/demographic-pyramids-and-likert-scales.html
 
 ```{r age_pyramid}
 # plot age pyramid 
-linelist %>% 
-  
- age_pyramid(
-  
+age_pyramid(
+  data = linelist,
   age_group = "age_group",
   split_by = "gender",
-  
-  # Show as percentages of total cases
-  proportional = TRUE,
-  
-  # remove guide line for mid-point
-  show_midpoint = FALSE) +
-  
+  proportional = TRUE,       # Show as percentages of total cases
+  show_midpoint = FALSE) +   # remove guide line for mid-point
+
   # set theme to basic 
   theme_minimal() +
   
@@ -358,6 +285,17 @@ linelist %>%
 
 \pagebreak 
 
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/// epicurve \\\
+--------------------------------------------------------------------------------
+
+The two main steps here are 
+1) Define the weekly breaks for the histogram
+2) Plot the histogram using those breaks
+3) see details in the code
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
 # Weekly epidemic curve by city  
 
 ```{r epicurve}
@@ -369,7 +307,12 @@ weekly_breaks <- seq.Date(
 
 
 # open a plot with the linelist data
-ggplot(linelist, mapping = aes(x = date_report, fill = fct_lump_n(city, 5))) +
+ggplot(
+     data = linelist,
+     mapping = aes(
+          x = date_report,
+          fill = fct_lump_n(city, 5))) +    # use fct_lump to show only top 5 cities
+                                            # see pivoting exercise for more info
   
   geom_histogram(
        breaks = weekly_breaks,  # use breaks defined above
@@ -394,7 +337,7 @@ ggplot(linelist, mapping = aes(x = date_report, fill = fct_lump_n(city, 5))) +
        x = "Date of report",
        y = "Number of cases",
        fill = "City",
-       caption = str_glue("Fake data for course exercise.\n{nrow(linelist)} cases shown by city of residence\nCases reported from {min(linelist$date_report)} to {max(linelist$date_report)}")) + 
+       caption = str_glue("Fake data for course exercise.\n{nrow(linelist)} cases shown by city of residence\nCases reported from {min(linelist$date_report)} to {max(linelist$date_report)} by Monday week")) + 
   
     theme_minimal()+
      
@@ -409,10 +352,16 @@ ggplot(linelist, mapping = aes(x = date_report, fill = fct_lump_n(city, 5))) +
 
 \pagebreak 
 
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/// race_hospital_table \\\
+--------------------------------------------------------------------------------
+
+We use tbl_summary() from {gtsummary} to make a fast table and run Chi-Square
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 ## Table of race and hospitalization  
 
-```{r}
+```{r race_hospital_table}
 # Compare race and died
 linelist %>% 
      select(race, hospitalized) %>% 
@@ -430,10 +379,12 @@ linelist %>%
 /// zip_counts \\\
 --------------------------------------------------------------------------------
 
-Here we use {dplyr} functions to get case counts based on ZIP Code and the 
-time periods created in the define_reporting_periods code chunk above. 
-We store as an object called zip_counts so that it can be merged with population
-in the chunks below. 
+Here we use {dplyr} functions to get case counts based on City. 
+Then we merge with the city populations, and use the added population counts
+to derive incidence per 10,000 populaton for each city.
+Finally, we remove unnecessary columns, and sort the rows by incidence, descending
+
+In the final chunk we print the table with flextable
 
 For more details see: 
 https://epirhandbook.com/descriptive-tables.html#dplyr-package
@@ -447,7 +398,7 @@ city_table <- linelist %>%
   # create new summary columns 
   summarise(
     total_cases  = n(),
-    recent_cases = sum(date_report > surveillance_date - 14)) %>% 
+    recent_cases = sum(date_report > ymd(params$data_date) - 14)) %>% 
 
   # join with zip code populations data frame
   left_join(city_pops, by = c("city")) %>% 

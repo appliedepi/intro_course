@@ -3,7 +3,9 @@ title: "COVID-19 case study tip sheet"
 subtitle: ""
 output: html_document
 theme: sandstone
-date: 'Date revised: 2022-03-20'
+date: 'Date revised: 2022-06-09'
+params:
+  data_date: "2021-06-21"
 ---
 
 
@@ -23,11 +25,44 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ```{r, echo=F}
-pacman::p_load(rio, here, epikit, tidyverse)
+pacman::p_load(rio, here, epikit, lubridate, tidyverse)
 combined <- import(here("intro_course", "data", "clean", "backup", "linelist_combined_20141201.rds"))
 ```
 
 In this sheet, you will find some hints and tips for re-creating the COVID-19 situation report.  
+
+## YAML
+
+Begin with the standard YAML. Recognize that the report is as of 21 June 2021, so you need to specify that date as a parameter called "data_date" (or another name) that you can use to filter the data throughout the report.  
+
+The easiest method is to simply add a `params` section to your YAML and add this date as a character value, as below. YAML is very specific about spaces, colons, and indentations.  
+
+`````
+---
+params:
+  datadate: "21 June 2021"
+---
+`````
+
+But this method is not the most easy for colleagues to edit. You can make the date selection by point-and-click interface using the below setup.  
+Now, if you click to "Knit with parameters", a pop-up window will ask you to select the `data_date`.
+
+`````
+---
+params:
+  data_date:
+    label: "Date of data:"
+    value: "2021-06-21"
+    input: date
+---
+`````
+
+**Either way** - you must reference this parameter in your R code as `params$data_date`, and it will be class *character*. So typically you will reference it as `ymd(params$data_date)`, if for example you are using it to filter cases.  
+
+```{r, echo=TRUE}
+ymd(params$data_date)
+class(ymd(params$data_date))
+```
 
 
 
@@ -38,8 +73,9 @@ In this sheet, you will find some hints and tips for re-creating the COVID-19 si
 - To display dates in a specific format, you can wrap the date in `format()` and supply the `strptime` syntax that you prefer, for example:
 
 ```{r, echo=T, eval=T}
-format(Sys.Date(), format = "%d %B, %Y")
+format(ymd(params$data_date), format = "%d %B, %Y")
 ```
+
 - To display counts and (%) quickly, you can use the `fmt_count()` function from {epikit}. This accepts the name of a data frame, and then a logical statement used to filter rows.  
 
 ```{r, echo=T, eval=T}
@@ -60,14 +96,14 @@ To get page breaks when you want them, insert **\\pagebreak** into the Rmd
 
 - Convert the important date columns to class "date" using one of the {lubridate} functions, `dmy()`, `mdy()`, or `ymd()`. **Use the function that corresponds to the how the dates are formatted  prior to applying the function.**  
 
-- If you are confident, consider creating a `data_date` or `report_date` value that you use as a cutoff (or with a 7 day delay). You could define this in the YAML `params`.  
+- The report is for *confirmed cases* before 21 June 2021, so do not forget to apply those criteria using `filter()`.  
 
 
 
 
 ## Age pyramid  
 
-- Use the {apyramid} package and its `age_pyramid()` function (don't forget to add {apyramid} to your packages!)   - This creates a ggplot object, so you can modify it by adding a `+` afterward and then use `labs()` to add labels like title and caption  
+- Use the {apyramid} package and its `age_pyramid()` function (don't forget to add {apyramid} to your packages!). This creates a ggplot object, so you can modify it by adding a `+` afterward and then use `labs()` to add labels like title and caption. Review the epidemiological plots exercise if you do not remember this function, or search for the package documentation.  
 
 ## Weekly epidemic curve, by city  
 
@@ -102,6 +138,8 @@ ggplot(data = linelist, mapping = aes(x = report_dt, fill = fct_lump_n(city, 5))
 
 - You will need to first use `group_by()` by city and then `summarise()` the number of cases per city.  
 - You add other columns using `sum()` and logical statements within (don't forget `na.rm = T`).  
+  - For example, to calculate cases reported in the 14 days prior to a `data_date` parameter, you could include this within the `summarise()`:  
+  - `recent_14d = sum(date_report >= ymd(params$data_date) - 14)`  
 - The final column for cumulative incidence is created by joining the summarized table to the data frame `city_pops`. You want to keep all the rows in the summarized table, but only the rows in `city_pops` that match.  
 - You then have the population data to calculate the number of cumulative cases per population. Use `(total_cases / population) * 10000` to calculate the incidence rate per 10000 population.  
 - You can use `round()` with `digits = 1` to get the rounding on the cumulative incidence.  
@@ -115,5 +153,5 @@ Review your `setup` chunk near the top and set `echo = FALSE` to not show the co
 
 ## Good luck!  
 
-Just do the best you can. This is not a test. It is part of the learning process. 
+Just do the best you can. This is not a test. It is a challenging exercise, but part of the learning process. 
      
