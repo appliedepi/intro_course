@@ -20,6 +20,7 @@ border_style = officer::fp_border(color="black", width=1)
 
 # Create table -----------------------------------------------------------
 vom_ftable <- surv %>% 
+  mutate(hospital = fct_explicit_na(hospital)) %>% 
   group_by(hospital) %>%                                     # get statistics for each hospital
   summarise(
     n_cases   = n(),                                         # number of rows (cases)

@@ -7,7 +7,7 @@ output:
 date: "`r Sys.Date()`"
 params:
   district: "West II"
-  publish_date: "2014-12-01"
+  data_date: "2014-12-01"
 ---
 
 ```{r setup, include=FALSE}
@@ -39,7 +39,7 @@ pacman::p_load(
 # Import each dataset
 
 # surveillance
-surv_raw <- import(here("surveillance_linelist_20141201.csv"))
+surv_raw <- import(here("data", "raw", "surveillance_linelist_20141201.csv"))
 
 # hospital datasets
 hosp_central  <- import(here("data", "raw", "hospitals", "20141201_hosp_central.csv"))
@@ -199,9 +199,9 @@ combined <- combined %>%
 
 
 ```{r}
-# Filter date_report before the publish_date parameter (defined in YAML heading), and KEEPS missing date_report
+# Filter date_report before the data_date parameter (defined in YAML heading), and KEEPS missing date_report
 combined <- combined %>% 
-  filter(date_report <= ymd(params$publish_date) | is.na(date_report))
+  filter(date_report <= ymd(params$data_date) | is.na(date_report))
 ```
 
 
@@ -215,7 +215,7 @@ export(combined, here("data", "linelist_combined_20141201.rds"))
 
 The outbreak of Ebola continues, although reported cases are decreasing in all districts following the surge in contract-tracing support provided by international partners.
 
-As of `r format(data_date, "%d %B, %Y")` there have been `r nrow(combined)` confirmed cases reported.  
+As of `r format(ymd(params$data_date), "%d %B, %Y")` there have been `r nrow(combined)` confirmed cases reported.  
 
 
 | Partner                                 | Arrived  | Activities                   |
@@ -249,7 +249,7 @@ age_pyramid(
   labs(title = str_glue("Age and gender of confirmed cases"),
        x = "Proportion of all cases",
        y = "Age group",
-       caption = str_glue("{nrow(combined)} cases were reported through {format(data_date, '%d %B, %Y')}. {fmt_count(combined, is.na(age))} cases are missing age and not shown. {fmt_count(combined, is.na(gender))} cases are missing gender and not shown."),
+       caption = str_glue("{nrow(combined)} cases were reported through {format(ymd(params$data_date), '%d %B, %Y')}. {fmt_count(combined, is.na(age))} cases are missing age and not shown. {fmt_count(combined, is.na(gender))} cases are missing gender and not shown."),
        fill = "Gender")
 
 
@@ -362,6 +362,7 @@ combined %>%
 ```{r}
 # table using {dplyr}
 hospital_table <- combined %>% 
+     mutate(hospital = fct_explicit_na(hospital, na_level = "Missing")) %>% 
      group_by(hospital) %>%                                     # get statistics for each hospital
      summarise(
           n_cases   = n(),                                         # number of rows (cases)
@@ -370,7 +371,18 @@ hospital_table <- combined %>%
           vomit_n   = sum(vomit == "yes", na.rm=T),                # number vomiting
           vomit_pct = percent(vomit_n / n_cases),                  # percent vomiting
           max_wt_male = max(wt_kg[gender == "male"], na.rm = T)) %>%     # max weight among men
-     flextable::qflextable()
+     flextable::qflextable() %>% 
+     set_header_labels(
+          values = c(
+               hospital = "Hospital",
+               n_cases = "Total cases",
+               max_onset = "Latest onset",
+               under5 = "Under 5 years",
+               vomit_n = "Vomit (n)",
+               vomit_pct = "Vomit (%)",
+               max_wt_male = "Max weight (males)"
+          )
+     )
 
 # print
 hospital_table
@@ -385,10 +397,12 @@ Below is a spotlight on hospital admissions and outcomes for patients reported i
 
 ```{r}
 combined %>% 
+  mutate(hospital = fct_explicit_na(hospital, na_level = "Missing")) %>% 
   filter(district == params$district) %>%   # filter data frame to the district in YAML
   drop_na(outcome) %>%                      # remove patients with missing outcome, for clarity
   tabyl(hospital, outcome) %>%              # begin the cross-tabulation    
   adorn_totals("both") %>%                  # add totals for both rows and columns
-  qflextable()
+  qflextable() %>% 
+  add_header_lines(str_glue("Outcomes in {params$district} district, by hospital"))
 
 ```
