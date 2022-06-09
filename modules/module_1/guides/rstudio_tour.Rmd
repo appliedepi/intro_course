@@ -1,9 +1,11 @@
 ---
 title: "RStudio tour"
-subtitle: "Instructor guide"
-output: html_document
-theme: sandstone
+subtitle: Instructor guide
 date: 'Date revised: 2022-03-02'
+output:
+  pdf_document: default
+  html_document: default
+theme: sandstone
 ---
 
 
