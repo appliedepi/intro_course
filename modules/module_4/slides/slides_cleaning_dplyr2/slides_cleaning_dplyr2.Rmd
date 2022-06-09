@@ -211,7 +211,7 @@ Let's use a smaller version to practice with, and explore some core R functions
 ```{r, echo=F}
 demo <- surv_raw %>% 
      head(5) %>% 
-     select(case_id, age, lab_confirmed, fever, epilink, `onset date`)
+     select(case_id, age, gender, lab_confirmed, fever, epilink)
 ```
 
 ```{r, eval=T}
@@ -277,9 +277,33 @@ Note how the column names in `demo` are old! It's because our changes have not y
 
 ---
 
-# `mutate()` to create columns  
+# `mutate()` to edit columns  
  
-`mutate()` is used to *create* new columns
+`mutate()` is also used to *edit* existing columns, such as *recoding* values
+
+Below, `recode()` is used inside `mutate()` to recode the gender column  
+
+--
+
+
+
+```{r, echo=TRUE, eval=TRUE}
+demo %>% 
+  mutate(gender = recode(gender,   # re-define gender as: 
+    'm' = 'male',                  # when "m", change to "male"   
+    'f' = 'female'))               # when "f", change to "female"
+```
+
+???
+Explain that there are many nuances to case_when() which you will practice in the breakout exercise
+
+
+
+---
+
+# `ifelse()` for simple logic  
+ 
+`ifelse()` within `mutate()` is used to apply simple recoding logic  
 
 ```{r, results = "asis", echo = FALSE}
 "The syntax is: new column name = a function that creates the new values:" %>%
@@ -307,13 +331,13 @@ decorate("mutate") %>%
 
 `ifelse()` applies a logical criteria to each row, returns one value if true, and returns another value if false.  
 
+
+
 ---
 
-# `mutate()` to edit columns  
+# Use `case_when()` for complex logic  
  
-`mutate()` is also used to *edit* existing columns, such as *recoding* values
-
-Below, `case_when()` is used inside `mutate()` to recode the gender column  
+`case_when()` is used to test a series of logical criteria against each row, and assign a corresponding new value. 
 
 --
 
@@ -326,7 +350,7 @@ Below, `case_when()` is used inside `mutate()` to recode the gender column
   cat()
 ```
 
-```{r mutate2, include = F}
+```{r mutate3, include = F}
 demo %>% 
   mutate(case_def = case_when(
     lab_confirmed == TRUE             ~ "Confirmed",
@@ -334,8 +358,8 @@ demo %>%
     TRUE                              ~ "To investigate"))
 ```
 
-```{r mutate2_flair, echo=F}
-decorate("mutate2") %>%
+```{r mutate3_flair, echo=F}
+decorate("mutate3") %>%
   flair("'Confirmed", color = "cornflowerblue") %>%
   flair("'Suspect'", color = "cornflowerblue") %>%
   flair("To investigate)", color = "cornflowerblue") %>%
@@ -351,73 +375,7 @@ The bottom `TRUE` criteria catches rows that did not meet any other criteria.
 ???
 Explain that there are many nuances to case_when() which you will practice in the breakout exercise
 
----
-# What about dates?
 
-It is important that R understands dates correctly (not as character values!)  
-
-.pull-left[
-
-The easiest method is to use functions from the {lubridate} package  
-
-**End goal**:  
-
-* YYYY-MM-DD  
-* `class()` of the column is "date" 
-
-More details in this [Epi R Handbook chapter](https://epirhandbook.com/en/working-with-dates.html)
-
-]
-
-.pull-right[
-```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
-# Using here() alone won't work because Rmd folder becomes the rendering root.
-# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
-# It dynamically creates the ../../etc filepath.
-
-knitr::include_graphics(xfun::relative_path(here::here("images", "data_cleaning", "Dates_500x500.png")))
-```
-
-]
-
-
----
-# {lubridate} functions  
-
-Use the {lubridate} function that aligns with the *current format*:  
-
-* `ymd()` for YYYY-MM-DD  
-* `dmy()` for DD-MM-YYYY  
-* `mdy()` for MM-DD-YYYY 
-
-Using the `tibble()` view, you can see the class of each column above the values
-
---
-
-.pull-left[
-
-```{r, eval=T, echo=T}
-demo %>% 
-  select(case_id, `onset date`) %>% 
-  tibble()
-```
-
-]
-
---
-
-.pull-right[
- 
-```{r, eval=T, echo=T}
-demo %>% 
-  select(case_id, `onset date`) %>% 
-  mutate(`onset date` = mdy(`onset date`)) %>%  #<<
-  tibble()
-```
-
-]
-
-.footnote[]
 
 
 
@@ -426,7 +384,7 @@ class: inverse, center, middle
 
 
 
-## Breakout  
+## Exercise  
 
 
 ```{r, eval = TRUE, echo = FALSE, out.width = "100%"}
