@@ -1,7 +1,7 @@
 ---
 title: "Introduction to R for<br>Applied Epidemiology"
 subtitle: "Joining data"
-author: "March 2022"
+author: "2022"
 date: '[contact@appliedepi.org](mailto:contact@appliedepi.org)'
 output:
   xaringan::moon_reader:
@@ -1036,7 +1036,7 @@ Another good check is to use the `count()` function to count the number of rows 
 ---
 class: inverse, center, middle  
 
-# Breakouts!
+# Exercise!
 
 ```{r, eval = TRUE, echo = FALSE, out.width = "50%"}
 # Using here() alone won't work because Rmd folder becomes the rendering root.

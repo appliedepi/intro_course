@@ -997,6 +997,43 @@ surv %>%
 
 
 
+---
+
+# `tbl_summary()`  
+
+* Adjust labels  
+
+.pull-left[
+
+```{r, echo=T, eval=F}
+surv %>% 
+  select(hospital, age_years, gender) %>% 
+  tbl_summary(
+       by = gender,
+       label = list(
+         age_years = "Age (years)", 
+         hospital = "Hospital"))     
+```
+
+See tips on customization in the [Epi R Handbook chapter on Descriptive tables](https://epirhandbook.com/en/descriptive-tables.html#tbl_gt)
+]
+
+--
+
+.pull-right[
+
+```{r, echo=F, eval=T}
+surv %>% 
+  select(hospital, age_years, gender) %>% 
+  tbl_summary(by = gender,
+              label = list(
+                   age_years = "Age (years)", #<<
+                   hospital = "Hospital"))    #<< 
+```
+
+]
+
+
 
 ---
 class: inverse, center, middle

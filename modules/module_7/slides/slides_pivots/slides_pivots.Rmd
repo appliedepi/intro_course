@@ -1,7 +1,7 @@
 ---
 title: "Introduction to R for<br>Applied Epidemiology"
 subtitle: "Pivoting data"
-author: "March 2022"
+author: "2022"
 date: '[contact@appliedepi.org](mailto:contact@appliedepi.org)'
 output:
   xaringan::moon_reader:
@@ -467,5 +467,5 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "joins_pivots",
 
 
 ---
-# Breakout  
+# Exercise  
 

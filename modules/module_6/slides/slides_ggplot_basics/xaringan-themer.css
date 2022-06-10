@@ -145,7 +145,7 @@ a, a > code {
   background-color: var(--title-slide-background-color);
   background-image: url("https://github.com/appliedepi/intro_course/raw/main/images/logo.png");
   background-size: 25%;
-  background-position: 95% 90%;
+  background-position: 95% 95%;
 }
 .title-slide .remark-slide-number {
   display: none;
