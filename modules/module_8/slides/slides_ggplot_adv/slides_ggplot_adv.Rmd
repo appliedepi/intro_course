@@ -1,7 +1,7 @@
 ---
 title: "Introduction to R for<br>Applied Epidemiology"
 subtitle: "More public health visualizations with {ggplot2}"
-author: "March 2022"
+author: "2022"
 date: '[contact@appliedepi.org](mailto:contact@appliedepi.org)'
 output:
   xaringan::moon_reader:
