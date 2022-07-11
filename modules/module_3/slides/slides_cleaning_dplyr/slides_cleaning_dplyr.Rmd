@@ -127,21 +127,6 @@ surv_raw <- rio::import(here::here("intro_course", "surveillance_linelist_201412
 ```
 
 
-.pull-left[
-## Tidy data 
-]
-
-.pull-right[
-
-```{r, eval = TRUE, echo = FALSE, out.width = "85%"}
-# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
-# It dynamically creates the ../../etc filepath.
-
-knitr::include_graphics(xfun::relative_path(here::here("images", "data_cleaning", "tidy_shelves.png")))
-```
-
-]
-
 ---
 # Today: objectives & schedule  
 
@@ -155,8 +140,8 @@ knitr::include_graphics(xfun::relative_path(here::here("images", "data_cleaning"
 outline <- dplyr::tribble(
   ~Time, ~Location, ~Topic,
   "10 minutes",      "Main",      "Review of previous module",
-  "30 minutes",     "Main",      "Tidy data and data cleaning",
-  "15 minutes",     "Main",      "Demo - data cleaning", 
+  "30 minutes",     "Main",      "Intro to data cleaning",
+  "15 minutes",     "Main",      "Demo of data cleaning", 
   "1h 30minutes",  "Breakouts",   "Exercise",
   "30 minutes",     "Main",      "Plenary debrief"
 )
@@ -247,150 +232,6 @@ Ask the participants to quickly write what makes a dataset clean, in their view,
 
 
 
----
-# Tidy data
-
-Clean data should also be "tidy". Below are 3 core principles of "tidy data":  
-
---
-
-1. Each **value** must have its own **cell**
-
---
-
-2. Each **variable** must have its own **column**
-
---
-
-3. Each **observation** must have its own **row**  
-
-
-
-
-.footnote[Source: [R for Data Science](https://r4ds.had.co.nz/tidy-data.html)]
-
-???
-
-
-
-
----
-# Values in their own cell  
-
-
-```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
-# CREATE EXAMPLE DATA
-#####################
-clean_data_example_5 <- data.frame(case = c("Case 1", "Case 2", "Case 3", "Case 4"), age = c("31, years", "24, years", "18, months", "33, years")) 
-
-clean_data_example_6 <- clean_data_example_5 %>%
-    separate(age, 
-           into = c("age", "age_unit"), 
-           sep = ", "
-           ) %>%
-  mutate(age = as.numeric(age))
-```
-
-.pull-left[
-
-**Messy:** What changes would make this dataset more tidy?  
-
-
-```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
-
-clean_data_example_5  %>%
-  knitr::kable()
-  
-```
-
-]
-
---
-
-.pull-right[
-
-**Tidy:** Age and the age unit are separated into distinct cells  
-
-```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
-
-clean_data_example_6  %>%
-  knitr::kable()
-
-```
-]
-
-
-???
-Let's start with an easy one...  
-
-
-
-
----
-
-# Terminology  
-
-Structurally, "data frames" in R consist of **columns** and **rows**.  
-
---
-
-However, **"variables"** and **"observations"** are more *abstract* concepts:  
-
-* **Variables** measure one *underlying attribute* (age, outcome, or date of onset)  
-* **Observations** relate to a *unit of analysis*  
-
---
-
-Ideally, they align: **columns = variables** and **rows = observations**  
-
-```{r, eval = TRUE, echo = FALSE, out.height = "65%"}
-# Using here() alone won't work because Rmd folder becomes the rendering root.
-# adding xfun::relative_path() creates a dynamic file path between the Rmd location and the here() path.
-# It dynamically creates the ../../etc filepath.
-knitr::include_graphics(xfun::relative_path(here::here("images", "data_cleaning", "tidy_image.png")))
-```
-
-.footnote[Image source: [R for Data Science](https://r4ds.had.co.nz/tidy-data.html)]
-
-
-
-
-
----
-# But it is not always clear...  
-
-.pull-left[
-
-```{r}
-long_example <- tribble(
-     ~country, ~January, ~February, ~March, 
-     "Mozambique", 3200,    3300,      4100,  
-     "Lesotho", 500,     750,       900,   
-     "South Africa", 5100, 6200, 8100,)
-          
-long_example %>%
-  knitr::kable()
-```
-
-* Is "January" a variable?  
-* Where is the variable "month"?  
-* Does it have its own column?  
-* Is each observation a row?  
-
-
-]
-
---
-
-.pull-right[
-
-```{r}
-long_example %>%
-  pivot_longer(cols=2:4, names_to="month", values_to = "cases") %>% 
-     knitr::kable()
-```
-
-]
 
 
 ---
