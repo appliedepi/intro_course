@@ -27,14 +27,16 @@ pacman::p_load(
      ################################
      remotes,  # install from github
      
-     # General data management
+     # general data management
      #########################
      tidyverse,    # includes many packages for tidy data wrangling and presentation
-     epitrix,      # Useful epi functions
+     lubridate,    # dates and times
+     stringr,      # handling characters
+     epitrix,      # useful epi functions
      
      
-     # statistics  
-     ############
+     # tables and statistics  
+     #######################
      janitor,      # tables and data cleaning
      gtsummary,    # making descriptive and statistical tables
 
@@ -46,6 +48,8 @@ pacman::p_load(
      gghighlight,      # highlight a subset
      ggrepel,          # smart labels
      ggExtra,          # fancy plots  
+     tsibble,          # epiweeks
+     viridis,          # colorblind-friendly scales
      scales,           # helper functions
      apyramid,         # age and sex pyramids
      
