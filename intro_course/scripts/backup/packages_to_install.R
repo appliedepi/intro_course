@@ -1,17 +1,30 @@
 
 # Essential R packages for the course "Introduction to R for applied epidemiology"
-# Offered by Applied Epi
+# Offered by Applied Epi (www.appliedepi.org)
 
-# If you encounter errors when trying to run this script, 
-# contact your instructor of point-of-contact.
+# INSTRUCTIONS:
+# 1. Ensure you have a good internet connection.  
+# 2. Highlight ALL of the text & code in this R script (this entire document).
+# 3. Click the "Run" button in the upper-right corner of this pane.
+# 4. R will run for some time as it downloads the R packages to your computer.
+#    You will see it processing the downloads in the "Console" below.
+#    If you see the word "warning" that is generally OK.
+#    If you see the word "error", something is wrong.
+# 5. After the downloads finish (the ">" appears again in the Console),
+#    test it by pasting the below text in the Console and pressing Enter:
+#    library(tidyverse)
+#    There should be no error message.
+# 6. Contact your instructor with questions
 
+
+# Below are R commands that automatically install the R packages
 
 # Ensures the package "pacman" is installed
 if (!require("pacman")) install.packages("pacman")
 
 
-# Packages available from CRAN
-##############################
+# Downloads and installs packages (if they are not already installed)
+#####################################################################
 pacman::p_load(
      
      # learning R
