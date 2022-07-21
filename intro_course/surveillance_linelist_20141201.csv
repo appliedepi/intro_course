@@ -1,6 +1,6 @@
 row_num,case_id,onset date,gender,age,age unit,hospital,wt (kg),ht (cm),fever,chills,cough,aches,vomit,temp,bmi,adm3_name_res,admin3pcod,adm3_name_det,lab_confirmed,date of report,lat,lon,epilink
 1,694928,11/9/2014,m,23,,Other,70,147,yes,no,yes,no,no,39.2,32.39390994,,SL040102,Central II,FALSE,11/9/2014,8.453538572,-13.20963625,no
-2,86340d,10/30/2014,f,1,years,Port Hospital,18,29,yes,no,yes,no,no,39.4,214.0309156,Mountain Rural,SL040102,Mountain Rural,TRUE,10/31/2014,8.470122275,-13.21314431,yes
+2,86340d,10/30/2014,f,1,years,Port Hospital,18,29,yes,no,yes,no,no,39.4,214.0309156,Mountain Rural,SL040102,Central II,TRUE,10/31/2014,8.470122275,-13.21314431,yes
 3,92d002,8/16/2014,f,16,years,,59,133,yes,no,yes,no,yes,39.3,33.35406185,Mountain Rural,SL040102,Mountain Rural,TRUE,8/20/2014,8.454882422,-13.21094789,yes
 4,544bd1,8/29/2014,f,10,years,,39,106,yes,no,yes,no,yes,39.3,34.70986116,East II,SL040204,East II,TRUE,8/30/2014,8.484896061,-13.22525323,yes
 5,6056ba,10/20/2014,f,0,years,,-11,24,yes,yes,yes,no,yes,38.6,-190.9722222,West III,SL040208,West III,TRUE,10/21/2014,8.467532548,-13.26645243,yes
@@ -23,7 +23,7 @@ row_num,case_id,onset date,gender,age,age unit,hospital,wt (kg),ht (cm),fever,ch
 22,668458,10/21/2014,m,19,years,St. Mark's Maternity Hospital (SMMH),68,153,no,yes,yes,no,no,37.2,29.0486565,West III,SL040208,West III,TRUE,10/23/2014,8.462788073,-13.26936217,yes
 23,7bb784,10/21/2014,m,9,months,Central Hospital,79,175,yes,no,yes,no,no,38.7,25.79591837,Mountain Rural,SL040102,Mountain Rural,TRUE,10/22/2014,8.463369754,-13.21540756,yes
 24,d74a9e,11/12/2014,m,18,years,Other,59,153,yes,no,yes,no,yes,38.9,25.20398137,East II,SL040204,East II,TRUE,11/12/2014,8.482723023,-13.212511,yes
-25,2772c3,10/24/2014,m,2,years,,30,67,yes,no,yes,no,no,39.8,66.83002896,Mountain Rural,SL040102,Mountain Rural,TRUE,10/25/2014,8.462216115,-13.22137963,yes
+25,2772c3,10/24/2014,m,2,years,,30,67,yes,no,yes,no,no,39.8,66.83002896,Mountain Rural,SL040102,Central II,TRUE,10/25/2014,8.462216115,-13.22137963,yes
 26,6f8014,11/17/2014,m,16,years,Central Hospital,63,141,yes,no,yes,no,no,38.7,31.68854685,West II,SL040207,West II,FALSE,11/19/2014,8.468414943,-13.24671087,yes
 27,212254,8/27/2014,m,1,years,Port Hospital,15,50,yes,no,yes,no,yes,38.6,60,East II,SL040204,East II,TRUE,8/31/2014,8.485828479,-13.22494186,yes
 28,cb8f4e,10/28/2014,f,21,years,Port Hospital,62,128,yes,yes,yes,no,no,38.9,37.84179688,East II,SL040204,East II,TRUE,10/29/2014,8.483078557,-13.21929155,yes
@@ -98,7 +98,7 @@ row_num,case_id,onset date,gender,age,age unit,hospital,wt (kg),ht (cm),fever,ch
 97,aba6e2,9/29/2014,Unknown,,years,Port Hospital,48,68,yes,no,yes,no,yes,38.7,103.8062284,West I,SL040206,West I,TRUE,10/1/2014,8.482729529,-13.24749571,yes
 98,e97396,9/26/2014,m,27,years,Port Hospital,65,115,yes,no,yes,no,no,38.1,49.14933837,West III,SL040208,West III,TRUE,9/27/2014,8.465053707,-13.26364781,yes
 99,c3c129,10/9/2014,m,23,years,,67,150,yes,yes,no,no,no,38.5,29.77777778,West II,SL040207,West II,TRUE,10/11/2014,8.469805662,-13.23692546,yes
-100,425730,9/15/2014,m,20,years,,60,114,yes,no,yes,no,no,38.5,46.16805171,Mountain Rural,SL040102,Mountain Rural,TRUE,9/22/2014,8.452485003,-13.21395846,yes
+100,425730,9/15/2014,m,20,years,,60,114,yes,no,yes,no,no,38.5,46.16805171,Mountain Rural,SL040102,Central II,TRUE,9/22/2014,8.452485003,-13.21395846,yes
 101,2955ba,10/12/2014,m,31,years,Central Hospital,72,205,yes,no,yes,no,yes,39.1,17.13265913,West III,SL040208,Central II,FALSE,10/13/2014,8.460007113,-13.25228778,yes
 102,00da2b,11/17/2014,f,10,years,Military Hospital,49,115,yes,no,yes,yes,yes,38.8,37.0510397,Mountain Rural,SL040102,Mountain Rural,TRUE,11/20/2014,8.453039876,-13.20896052,yes
 103,32d4ad,9/6/2014,f,10,years,Military Hospital,40,107,yes,no,yes,no,no,39.7,34.93754913,Central I,SL040201,Central I,TRUE,9/12/2014,8.474015863,-13.22309787,yes
@@ -133,7 +133,7 @@ row_num,case_id,onset date,gender,age,age unit,hospital,wt (kg),ht (cm),fever,ch
 132,37812a,10/21/2014,m,17,years,Port Hospital,60,158,no,no,yes,no,yes,36,24.03460984,East I,SL040203,East I,TRUE,10/24/2014,8.489789163,-13.21677089,yes
 133,d4d8c4,9/26/2014,m,45,years,,79,199,yes,yes,yes,no,no,39.2,19.94899119,Mountain Rural,SL040102,Mountain Rural,TRUE,9/27/2014,8.452634676,-13.20979108,yes
 134,ba66a6,10/1/2014,m,18,years,Military Hospital,70,162,no,no,yes,no,no,36.7,26.6727633,Mountain Rural,SL040102,Mountain Rural,TRUE,10/1/2014,8.461406656,-13.21515992,yes
-135,b9170e,10/7/2014,m,5,years,,53,90,yes,no,no,no,no,39.2,65.43209877,West II,SL040207,West II,TRUE,10/9/2014,8.468756402,-13.23796701,yes
+135,b9170e,10/7/2014,m,5,years,,53,90,yes,no,no,no,no,39.2,65.43209877,West II,SL040207,Central II,TRUE,10/9/2014,8.468756402,-13.23796701,yes
 136,1cf6fc,7/17/2014,m,28,years,Port Hospital,73,151,no,no,yes,yes,yes,37,32.01613964,East II,SL040204,East II,FALSE,7/22/2014,8.480400122,-13.21318556,yes
 137,ac0388,11/4/2014,f,12,years,Port Hospital,48,108,yes,no,yes,no,yes,39.2,41.15226337,Central II,SL040202,Central II,TRUE,11/7/2014,8.48998637,-13.23507303,yes
 138,b5c984,8/29/2014,m,17,years,,62,155,yes,no,yes,yes,no,38.7,25.80645161,West III,SL040208,West III,TRUE,8/31/2014,8.459610805,-13.25527036,yes
@@ -214,7 +214,7 @@ row_num,case_id,onset date,gender,age,age unit,hospital,wt (kg),ht (cm),fever,ch
 213,5c27ca,9/22/2014,f,2,years,,21,39,yes,no,yes,no,no,39.1,138.0670611,West III,SL040208,West III,TRUE,9/24/2014,8.484846588,-13.26331781,yes
 214,af3fea,11/6/2014,m,5,years,St. Mark's Maternity Hospital (SMMH),44,89,yes,no,no,no,yes,39.8,55.54854185,Mountain Rural,SL040102,Mountain Rural,TRUE,11/9/2014,8.451097554,-13.24084553,yes
 215,0f70b1,11/5/2014,f,27,years,,61,176,yes,no,no,no,no,39.7,19.69266529,West II,SL040207,West II,TRUE,11/6/2014,8.459933598,-13.23492775,yes
-216,0b2579,9/10/2014,f,10,years,Other,32,93,yes,no,yes,no,no,39.4,36.99849694,Mountain Rural,SL040102,Mountain Rural,FALSE,9/14/2014,8.469686126,-13.21404133,yes
+216,0b2579,9/10/2014,f,10,years,Other,32,93,yes,no,yes,no,no,39.4,36.99849694,Mountain Rural,SL040102,Central II,FALSE,9/14/2014,8.469686126,-13.21404133,yes
 217,cd7bff,11/2/2014,m,4,years,Military Hospital,47,81,yes,yes,yes,no,no,38.7,71.63542143,West II,SL040207,West II,TRUE,11/5/2014,8.469456056,-13.23400724,yes
 218,386c3e,11/14/2014,m,7,years,,40,118,yes,no,yes,no,yes,39,28.72737719,East I,SL040203,East I,TRUE,11/15/2014,8.489459078,-13.21452421,yes
 219,ca5f7a,10/15/2014,m,40,years,Central Hospital,75,224,no,no,no,no,no,37.4,14.9473852,Mountain Rural,SL040102,Mountain Rural,TRUE,10/18/2014,8.479737838,-13.22328567,yes
@@ -295,7 +295,7 @@ row_num,case_id,onset date,gender,age,age unit,hospital,wt (kg),ht (cm),fever,ch
 294,f1dd78,11/4/2014,Unknown,26,years,Central Hospital,62,180,yes,no,yes,no,yes,38.8,19.13580247,West III,SL040208,West III,TRUE,11/5/2014,8.456454809,-13.25492912,yes
 295,1d1c7d,9/21/2014,m,22,years,,67,168,yes,no,yes,no,no,39.6,23.73866213,East II,SL040204,East II,TRUE,9/25/2014,8.478602925,-13.21249122,yes
 296,dce5cc,5/17/2014,f,16,years,Other,55,145,yes,yes,yes,no,no,38.8,26.15933413,East II,SL040204,East II,FALSE,5/18/2014,8.483678863,-13.22084609,yes
-297,4a215f,10/14/2014,f,17,years,Other,55,133,yes,yes,yes,no,no,38.3,31.09276952,West I,SL040206,West I,TRUE,10/17/2014,8.478592341,-13.24868032,yes
+297,4a215f,10/14/2014,f,17,years,Other,55,133,yes,yes,yes,no,no,38.3,31.09276952,West I,SL040206,Central II,TRUE,10/17/2014,8.478592341,-13.24868032,yes
 298,922374,10/16/2014,f,0,years,,8,30,yes,no,yes,no,no,38.4,88.88888889,West III,SL040208,West III,TRUE,10/16/2014,8.47530013,-13.26677076,yes
 299,ca492f,11/1/2014,f,7,years,Port Hospital,25,81,yes,no,yes,no,no,38.8,38.10394757,Mountain Rural,SL040102,Mountain Rural,TRUE,11/1/2014,8.46424962,-13.22181764,yes
 300,7ff746,7/23/2014,f,8,years,Military Hospital,48,113,yes,no,yes,no,yes,39.5,37.5910408,Central I,SL040201,Central I,TRUE,7/26/2014,8.472976551,-13.22329009,yes
@@ -346,7 +346,7 @@ row_num,case_id,onset date,gender,age,age unit,hospital,wt (kg),ht (cm),fever,ch
 345,b345c5,10/13/2014,f,1,years,Other,12,44,yes,no,yes,yes,yes,39.2,61.98347107,West II,SL040207,West II,TRUE,10/14/2014,8.469415459,-13.22861161,yes
 346,bf302f,9/8/2014,m,14,years,Central Hospital,64,156,yes,no,yes,no,yes,39,26.29848784,West II,SL040207,West II,FALSE,9/18/2014,8.470843791,-13.23556384,yes
 347,1df3c0,10/21/2014,f,4,years,Military Hospital,35,64,,,,,,37.2,85.44921875,Mountain Rural,SL040102,Mountain Rural,TRUE,10/23/2014,8.467459202,-13.21362822,yes
-348,d5d56f,9/9/2014,m,4,years,Other,47,70,yes,no,yes,no,yes,38.6,95.91836735,West II,SL040207,West II,TRUE,9/11/2014,8.461235196,-13.2241303,yes
+348,d5d56f,9/9/2014,m,4,years,Other,47,70,yes,no,yes,no,yes,38.6,95.91836735,West II,SL040207,Central II,TRUE,9/11/2014,8.461235196,-13.2241303,yes
 349,dd44f3,9/20/2014,f,16,years,Other,59,135,yes,yes,yes,no,yes,38.4,32.37311385,West III,SL040208,West III,TRUE,9/22/2014,8.458679589,-13.26033721,yes
 350,882ab5,9/23/2014,m,27,years,Other,62,207,,,,,,37,14.46941586,Mountain Rural,SL040102,Mountain Rural,TRUE,9/24/2014,8.457969786,-13.21145553,yes
 351,e83194,10/26/2014,m,18,,Military Hospital,61,124,,,,,,37.3,39.67221644,East I,SL040203,East I,FALSE,10/28/2014,8.487413951,-13.21512348,yes
@@ -393,7 +393,7 @@ row_num,case_id,onset date,gender,age,age unit,hospital,wt (kg),ht (cm),fever,ch
 392,176b73,10/3/2014,f,24,years,,57,160,no,no,yes,no,no,36.3,22.265625,West III,SL040208,West III,TRUE,10/4/2014,8.478471288,-13.26280999,yes
 393,27adef,8/11/2014,m,3,years,,46,73,no,no,yes,no,no,36.9,86.32013511,West II,SL040207,West II,TRUE,8/14/2014,8.463045406,-13.23240227,yes
 394,679c45,10/28/2014,f,9,years,Military Hospital,39,131,yes,no,no,no,yes,38.8,22.72594837,Mountain Rural,SL040102,Mountain Rural,TRUE,10/28/2014,8.464961154,-13.21145729,yes
-395,f52668,11/18/2014,m,12,years,Central Hospital,64,154,yes,no,yes,no,no,38.8,26.98600101,Mountain Rural,SL040102,Mountain Rural,TRUE,11/18/2014,8.461706107,-13.21814168,yes
+395,f52668,11/18/2014,m,12,years,Central Hospital,64,154,yes,no,yes,no,no,38.8,26.98600101,Mountain Rural,SL040102,Central II,TRUE,11/18/2014,8.461706107,-13.21814168,yes
 396,d29e8c,8/26/2014,m,24,years,,61,167,yes,no,yes,no,no,38.7,21.87242282,West II,SL040207,West II,FALSE,8/30/2014,8.461488019,-13.22319448,yes
 397,82494c,11/8/2014,f,9,years,Port Hospital,52,102,yes,no,yes,no,no,38.9,49.98077662,East II,SL040204,East II,TRUE,11/8/2014,8.48595789,-13.22369036,yes
 398,00c3c7,11/16/2014,f,13,years,Port Hospital,62,139,yes,no,yes,no,no,39,32.08943636,West II,SL040207,West II,TRUE,11/17/2014,8.466387984,-13.23329077,yes
@@ -491,7 +491,7 @@ row_num,case_id,onset date,gender,age,age unit,hospital,wt (kg),ht (cm),fever,ch
 490,99358d,11/8/2014,m,23,years,,63,153,yes,no,yes,no,no,39.7,26.91272587,East II,SL040204,East II,TRUE,11/8/2014,8.483793472,-13.22617324,yes
 491,92ab68,7/19/2014,f,2,,Military Hospital,30,49,yes,yes,yes,no,no,39.1,124.9479384,West II,SL040207,West II,FALSE,7/20/2014,8.465171481,-13.23335167,yes
 492,f648f5,7/1/2014,f,1,years,,19,35,yes,no,yes,no,no,39,155.1020408,Mountain Rural,SL040102,Mountain Rural,TRUE,7/6/2014,8.468657771,-13.21624837,yes
-493,12d3e5,8/28/2014,m,43,years,,84,192,yes,no,yes,no,no,39.7,22.78645833,Central I,SL040201,Central I,TRUE,8/28/2014,8.472525333,-13.22581462,yes
+493,12d3e5,8/28/2014,m,43,years,,84,192,yes,no,yes,no,no,39.7,22.78645833,Central I,SL040201,Central II,TRUE,8/28/2014,8.472525333,-13.22581462,yes
 494,e0beeb,11/15/2014,m,4,years,,38,62,yes,no,yes,no,no,39.1,98.855359,Mountain Rural,SL040102,Mountain Rural,TRUE,11/15/2014,8.454831884,-13.24082658,yes
 495,16dcd2,9/1/2014,f,11,years,Military Hospital,37,114,yes,no,yes,no,no,38.8,28.47029855,West II,SL040207,West II,TRUE,9/7/2014,8.477332913,-13.23975304,yes
 496,355a4c,11/5/2014,f,1,years,Central Hospital,17,31,no,no,yes,no,yes,37.6,176.8990635,West III,SL040208,West III,FALSE,11/7/2014,8.45782891,-13.25865274,yes
