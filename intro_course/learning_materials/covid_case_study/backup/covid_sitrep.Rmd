@@ -95,9 +95,9 @@ https://epirhandbook.com/import-and-export.html
 
 ```{r import}
 # import the raw case data set and city populations
-linelist_raw <- import(here("intro_course", "learning_materials", "covid_case_study", "covid_example_data.xlsx"))
+linelist_raw <- import(here("learning_materials", "covid_case_study", "covid_example_data.xlsx"))
 
-city_pops <- import(here("intro_course", "learning_materials", "covid_case_study", "city_pops.xlsx"))
+city_pops <- import(here("learning_materials", "covid_case_study", "city_pops.xlsx"))
 
 ```
 

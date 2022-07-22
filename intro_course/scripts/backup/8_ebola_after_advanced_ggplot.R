@@ -16,6 +16,9 @@ pacman::p_load(
      epikit,       # creating age categories
      gtsummary,    # creating tables  
      scales,       # percents in tables  
+     viridis,      # color scales
+     tsibble,      # epiweeks
+     apyramid,     # age/sex pyramids
      flextable,    # for making pretty tables
      gghighlight,  # highlighting plot parts  
      ggExtra,      # special plotting functions

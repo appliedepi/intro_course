@@ -28,6 +28,7 @@ pacman::p_load(
      scales,
      gghighlight,
      tsibble,
+     viridis,
      ggExtra,
      flextable,
      tidyverse
