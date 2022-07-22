@@ -35,6 +35,7 @@ pacman::p_load(
      #############################
      here,     # file paths relative to R project root folder
      rio,      # import/export of many types of data
+     openxlsx, # special functions for handling Excel workbooks
 
      # package install and management
      ################################
